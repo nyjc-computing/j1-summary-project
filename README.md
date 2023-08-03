@@ -3,7 +3,7 @@
 ## Members
 
 - mr jsng
-- Member 2
+- mystery person
 - Member 3
 - Member 4
 
