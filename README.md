@@ -2,7 +2,7 @@
 
 ## Members
 
-- Member 1
+- Ethan Tse Chun Lam
 - Member 2
 - Member 3
 - Member 4
