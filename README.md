@@ -8,4 +8,3 @@
 - Member 4 Xue Xinyu
 
 <Description of your project>
-QAE
