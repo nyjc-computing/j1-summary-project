@@ -3,8 +3,8 @@
 ## Members
 
 - Noah
-- Ng Ling Kai
-- member 3
+- Ming Cong
+- Ling Kai
 - member 4
 
 <Description of your project>
