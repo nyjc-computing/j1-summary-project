@@ -3,7 +3,7 @@
 ## Members
 
 - Noah
-- Ming Cong
+- member 2
 - Ling Kai
 - member 4
 
