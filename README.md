@@ -4,7 +4,7 @@
 
 - Noah
 - Ng Ling Kai
-- Tan Ming Cong
-- Chong Jae Zen
+- member 3
+- member 4
 
 <Description of your project>
