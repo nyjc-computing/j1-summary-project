@@ -4,7 +4,7 @@
 
 - Noah
 - Ming Cong
-- Member 3
-- Member 4
+- Ling Kai
+- member 4
 
 <Description of your project>
