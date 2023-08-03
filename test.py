@@ -1,6 +1,6 @@
 #File for QAE
 
-from main import game
+from game import MUDGame
 
 def test_game():
     # Write code to test the game object here
