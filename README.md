@@ -3,7 +3,7 @@
 ## Members
 
 - Member 1
-- Member 2
+- Vincent Tse Chun Pan
 - Member 3
 - Member 4
 
