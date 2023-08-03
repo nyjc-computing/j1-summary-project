@@ -3,7 +3,7 @@
 ## Members
 
 - Noah
-- Member 2
+- Ming Cong
 - Member 3
 - Member 4
 
