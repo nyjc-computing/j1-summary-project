@@ -3,7 +3,7 @@
 ## Members
 
 - Member 1
-- Vincent
+- Member 2
 - Member 3
 - Member 4
 
