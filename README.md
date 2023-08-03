@@ -2,9 +2,9 @@
 
 ## Members
 
-- Member 1
-- Member 2
-- Member 3
+- Vincent
+- Ethan
 - Jiaxuan
+- Saathvik
 
 <Description of your project>
