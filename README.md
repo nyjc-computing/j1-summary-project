@@ -2,9 +2,10 @@
 
 ## Members
 
+- Zhi Rui
+- Rae
 - Sook Huey
-- Member 2
-- Member 3
-- Member 4
+- Eloise
 
 <Description of your project>
+Pac-Man inspired MUD
