@@ -4,7 +4,7 @@
 
 - Noah
 - member 2
-- Ling Kai
+- Ng Ling Kai
 - member 4
 
 <Description of your project>
