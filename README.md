@@ -5,6 +5,6 @@
 - Noah
 - Ming Cong
 - Ling Kai
-- member 4
+- Jae Zen
 
 <Description of your project>
