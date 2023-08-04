@@ -1,13 +1,24 @@
 class MUDGame:
     def __int__(self):
-        pass
-
-    def prompt(self):
-        pass
-        
+        self.spawn = Room('home')
+        self.gameOver = True
+    
     def run(self):
-        pass
+        while self.gameOver:
+            
 
-class roomGeneration:
-    def __init__(self):
-        pass
+
+class Room:
+    def __int__(self):
+        self.current = 
+        self.up = None
+        self.down = None
+        self.right = None
+        self.left = None
+        self.count = 1
+
+    def nextRoom(self, next):
+
+    def countRoom(self):
+        
+        
