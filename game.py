@@ -1,3 +1,4 @@
+import random
 class MUDGame:
     def __int__(self):
         self.spawn = Room('home', up='closed')
@@ -9,13 +10,26 @@ class MUDGame:
 
 
 class Room:
-    def __int__(self, type, up = None, down = None, left = None, right = None, number = 0):
+    def __init__(self, type, up = None, down = None, left = None, right = None, number = 0):
         self.current = type
         self.up = up
         self.down = down 
         self.right = right
         self.left = left
         self.count = number
+        connections = random.randint(1, 3)
+        next_rooms = [self.up, self.down, self.left, self.right]
+        for room in next_rooms:
+            if room != None:
+                next_rooms.remove(room)
+        while connections != 0:
+            next_room = random.randint(0, 2)
+            next_rooms[next_room] = 'closed'
+            next_rooms.remove(next_room)
+            connections = connections - 1
+            
+
+
 
     def nextRoom(self, next : str):
         if next.lower() == 'w':
@@ -49,4 +63,6 @@ class Room:
 
     def countRoom(self):
         return self.count + 1
-        
+
+    def 
+    
