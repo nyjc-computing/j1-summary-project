@@ -9,7 +9,3 @@ class Room:
 
     def start(self):
         print(f'############{self.name}############')
-
-
-def start_room():
-    pass
