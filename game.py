@@ -52,10 +52,6 @@ class MUDGame:
 #             next_rooms[next_room] = 'closed'
 #             next_rooms.remove(next_room)
 #             connections = connections - 1
-            
-
-
-
 #     def nextRoom(self, next : str):
 #         if next.lower() == 'w':
 #             if self.up == None:
