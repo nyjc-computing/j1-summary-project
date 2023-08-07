@@ -34,7 +34,7 @@ class Game:
         """
         pass
     
-    def sova(self, room: str) -> list:
+    def sova(self, room: str) -> None:
         """
         return creature presence and orb presence in a room
         adjacent to the player's
@@ -68,23 +68,28 @@ class Game:
         """
         pass
 
-    def move(self) -> None:
+    def move(self) -> Bool:
         """
         move the player into an adjacent room,
-        modifies health based on orbs/creatures,
-        advance turn
+        modifies health based on orbs/creatures/reyna
         """
         pass
     
     def prompt(self) -> None:
         """
         get the user's action
+        returns the selected action as a string
         """
         pass
 
-    def 
+    def reyna_turn(self) -> None:
+        """
+        Moves reyna to a room adjacent to her current
+        room randomly
+        """
+        pass
 
-
+    
 
 
 
@@ -103,4 +108,13 @@ class Game:
         
         while cont:
             self.desc()
-            self.prompt()
+            advance = False
+            while not advance:
+                action = self.prompt()
+                if action == move:
+                    self.move()
+                    advance = True
+                elif action == ability:
+                    self.ability()
+            self.reyna_turn()
+            
