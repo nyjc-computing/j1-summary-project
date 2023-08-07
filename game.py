@@ -1,14 +1,20 @@
+
+
+import room.py
+
 class game:
     def __init__(self):
         raise NotImplementedError
 
 def run():
-    # ask user for input (go left right front back) (use item/spell)
-    # ()
-    pass
-    
-    # update the data for user
+    # start of the game
+    print('Welcome to Hogwarts School of Witchcraft and Wizardry\n')
+    name = input('Key in what do you wish to be named: ')
+    print(f'\nWelcome {name}, in this game you can either move (up, down, left, right), attack or use objects\n')
+    decision = input('Do you wish to enter the school? (y/n): ')
+    while decision != 'y':
+        decision = input('\nDo you wish to enter the school? (y/n): ')
 
-map = [{'name': 'Room1','left': 'Room2', 'right': None, 'top': 'Room3', 'down': None}, 
-      {'name': 'Room2', 'left': None, 'right': None, 'top': None, 'down': None},
-      {'name': 'Room3','left': None, 'right': None, 'top': None, 'down': None}]
+def start_room():
+    # ask user for input (go left right up down) (use item) (attack)
+    
