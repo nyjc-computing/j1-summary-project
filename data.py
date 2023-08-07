@@ -1,7 +1,3 @@
-#Import
-import random
-
-
 class Room:
 
     def __init__(self, name: str, paths: list, creature: bool, reyna: bool,
