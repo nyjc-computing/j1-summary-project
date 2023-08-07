@@ -26,7 +26,7 @@ class Room:
             next_room = random.randint(0, 2)
             next_rooms[next_room] = 'closed'
             next_rooms.remove(next_room)
-            connections = connections - 1
+            connections -= 1
             
 
 
