@@ -6,6 +6,12 @@ class Game:
     def __init__(self):
         pass
 
+    def gameover(self) -> bool:
+        """
+        returns True if game is over, else return False
+        """
+        pass
+
     def intro(self) -> None:
         """
         print intro message, instructions, etc.
@@ -68,7 +74,7 @@ class Game:
         """
         pass
 
-    def move(self) -> Bool:
+    def move(self) -> None:
         """
         move the player into an adjacent room,
         modifies health based on orbs/creatures/reyna
@@ -102,11 +108,10 @@ class Game:
         self.intro()
         agent = self.agent_select()
         map = self.map_select()
-        cont = True
 
         kill me now please
         
-        while cont:
+        while not self.gameover():
             self.desc()
             advance = False
             while not advance:
