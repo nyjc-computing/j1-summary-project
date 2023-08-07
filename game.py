@@ -14,10 +14,10 @@ class MUDGame:
             player = Freddy()
         while not self.gameOver:
             self.current_room.display()
-            while not self.current_room.room_has_creature():
+            while not self.current_room.encounter():
                 self.current_room.prompt_movement()
-            while:
-                player.turn = True
+                if self.current_room.grid.position == []:
+                    
                 
                 
             # display current status
@@ -82,9 +82,11 @@ class MUDGame:
 #                 self.right = Room('creature', left = prev, number=countRoom())
 #                 self = self.right
 
-#     def countRoom(self):
-#         return self.count + 1
-
+#    def countRoom(self):
+#        return self.count + 1
+#    
+#    def has_door(self):
+#
 #class Grid:
 #    def __init__(self):
 #        self.grid = [{0:None, 1:None, 2:'creature'}]
