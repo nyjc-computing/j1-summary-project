@@ -16,7 +16,7 @@ class Labyrinth:
         self.boss_pos = [-1, -1] # Decided upon generation
         self.steve_pos = [-1, -1] # Decided upon generation
 
-    def generate(self):
+    def generate(self) -> None:
         raise NotImplementedError
     
     def move_steve(self, dir) -> None:
@@ -32,10 +32,13 @@ class Labyrinth:
         if dir == NORTH:
             return False
 
+    def _steve_useitem(item: Item) -> None:
+        raise NotImplementedError
+
 class Room:
     def __init__(self, x: int, y: int):
         self.coords = [x, y]
-        self.type = 
+        self.type = None
 
 
 
@@ -96,9 +99,6 @@ class Steve:
     def _discard_item(item: Item, num: int) -> None:
         raise NotImplementedError
 
-    def _use_item_from_inv(item: Item) -> None:
-        raise NotImplementedError
-
     def _equip_armour(self, armour_item: Item) -> None:
         raise NotImplementedError
         
@@ -113,12 +113,22 @@ class Steve:
 
 class Creature:
     def __init__(self, ...):
-        self._name = 
+        self.info = {}
+        for i in ["name", "max hitpoints", "moves"]:
+            self.info[i] = None
+        self.hitpoints = None
+        
 
 
+    def _setname(self, name: str) -> None:
+        self.info["name"] = name
 
-    def _getname():
-        return self.name
+    def _
+
+
+class Monster(Creature):
+    def __init__(self):
+        
 
 with open("content/items.json", "r") as f:
     items = json.load(f)
