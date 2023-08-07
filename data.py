@@ -7,36 +7,81 @@ NORTH = "NORTH"
 SOUTH = "SOUTH"
 WEST = "WEST"
 EAST = "EAST"
+NOVICE = "NOVICE"
+JOURNEYMAN = "JOURNEYMAN"
+MASTER = "MASTER"
 
 
 labsize = 10
 class Labyrinth:
     def __init__(self):
         self.lab = [[None] * labsize] * labsize
+        self.difficulty_level = None
         self.boss_pos = [-1, -1] # Decided upon generation
         self.steve_pos = [-1, -1] # Decided upon generation
 
-    def generate(self):
+    def generate(self) -> None:
         raise NotImplementedError
+        # self.difficulty_level = difficulty_level
+        # put in empty rooms
+        for x in range(labsize):
+            for y in range(labsize):
+                self.lab[x][y] = Room(x, y)
+        # set up walls
+
+        # choose position of Start room randomly
+
+        # choose position of Monster room randomly
+        
+        # give the rooms random contents
+
     
-    def move_steve(self, dir) -> None:
-        raise NotImplementedError
-        if dir == NORTH:
-            return None
+    
+    def move_steve(self, direction) -> bool:
+        if _can_move_here(self.steve_pos):
+            if direction == NORTH:
+                return None
+            if direction ==  SOUTH:
+                return None
+            if direction == EAST:
+                return None
+            if direction == WEST:
+                return None
 
-    def move_boss(self, dir):
-        raise NotImplementedError
+    def move_boss(self, direction):
+        shuffled_dirlist = random.shuffle([NORTH, SOUTH, EAST, WEST])
+        for randomdir in shuffled_dirlist:
+            if  _can_move_here(boss_pos, randomdir):
 
-    def _can_move_here(self, coords: list(int), dir):
+
+
+                return None
+                
+            
+
+    def _can_move_here(self, coords: list(int), direction):
         x, y = coords
-        if dir == NORTH:
+        if x < 0 or x >= labsize or y < 0 or y >= labsize: # this should not happen at all
+            raise IndexError("entity is not inside of maze")
+        raise NotImplementedError
+        if direction == NORTH:
             return False
 
-class Room:
-    def __init__(self, x: int, y: int):
-        self.coords = [x, y]
-        self.type = 
+    def _steve_useitem(item: Item) -> None:
+        raise NotImplementedError
 
+    def _monster_roar(self):
+        raise NotImplementedError
+
+
+
+class Room:
+    def __init__(self, x: int, y: int, type):
+        self.coords = [x, y]
+        self.type = type
+        self.creature = None
+        if self.type == CREATURE:
+            # randomly choose some creature from 
 
 
 
@@ -96,9 +141,6 @@ class Steve:
     def _discard_item(item: Item, num: int) -> None:
         raise NotImplementedError
 
-    def _use_item_from_inv(item: Item) -> None:
-        raise NotImplementedError
-
     def _equip_armour(self, armour_item: Item) -> None:
         raise NotImplementedError
         
@@ -113,12 +155,29 @@ class Steve:
 
 class Creature:
     def __init__(self, ...):
-        self._name = 
+        self.info = {}
+        for i in ["name", "max hitpoints", "moves"]:
+            self.info[i] = None
+        self.hitpoints = None
+        
 
 
+    def set_name(self, name: str) -> None:
+        self.info["name"] = name
 
-    def _getname():
-        return self.name
+    def set_maxhp(self, maxhp: int) -> None:
+        self.info["max hitpoints"] = maxhp
+        self.hitpoints = maxhp
+
+    def set_moves(self, moveslist: list) -> None:
+        self.info["moves"] = moveslist
+
+    def set_creature(self, moves)
+
+
+class Monster(Creature):
+    def __init__(self):
+        
 
 with open("content/items.json", "r") as f:
     items = json.load(f)
