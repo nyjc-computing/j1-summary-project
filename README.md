@@ -2,9 +2,9 @@
 
 ## Members
 
-- Member 1
-- Vincent Tse Chun Pan
-- Member 3
-- Member 4
+- Vincent
+- Ethan
+- Jiaxuan
+- Saathvik
 
 <Description of your project>
