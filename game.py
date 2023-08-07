@@ -14,9 +14,9 @@ class MUDGame:
             player = Freddy()
         while not self.gameOver:
             self.current_room.display()
-            while not data.current_room.grid.encounter:
-                data.prompt_movement()
-            while data.encounter():
+            while not self.current_room.room_has_creature():
+                self.current_room.prompt_movement()
+            while:
                 player.turn = True
                 
                 
