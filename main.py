@@ -1,4 +1,6 @@
 # Import statements
+from game import MUDGame
 
 if __name__ == "__main__":
-    pass
+    MUD = MUDGame()
+    MUD.run()
