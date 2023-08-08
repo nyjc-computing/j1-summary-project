@@ -4,7 +4,7 @@ class MUDGame:
     def __init__(self):
         # self.spawn = Room('home', up='closed')
         self.boss = data.spawn_boss()
-        self.current_room = data.start_room()
+        self.current_room = data.start_room()curr
         self.gameOver = False
     
     def run(self):
@@ -13,11 +13,31 @@ class MUDGame:
         if character.lower() == 'freddy':
             player = Freddy()
         while not self.gameOver:
-            self.current_room.display()
-            while not self.current_room.encounter():
-                self.current_room.prompt_movement()
+            while not self.current_room.is_encounter():
+                #moving in current room
+                self.current_room.display()
+                input = self.current_room.prompt_movement()
+                if input.lower() == 'w':
+                    self.current_room.grid.position = []
+                elif input.lower() == 's':
+                    self.current_room.grid.position = []
+                elif input.lower() == 'a':
+                    self.current_room.grid.position = []
+                else:
+                    self.current_room.grid.position = []
+                #entering next room
                 if self.current_room.grid.position == []:
-                    
+                    self.current_room.nextRoom()
+                    self.current_room.grid.position = []
+                    continue
+            #Combat Start
+            while self.current_room.is_encounter():
+                player.turn = True
+                player.prompt_action()
+            
+
+            
+            
                 
                 
             # display current status
