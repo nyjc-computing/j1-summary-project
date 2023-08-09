@@ -25,9 +25,9 @@ class MUDGame:
             # validate action
             # update game attributes
             # check game over
-            if self.boss.isDead():
-                self.gameOver = True
-                print('Congratulations!')
+            #if self.boss.isDead():
+                #self.gameOver = True
+                #print('Congratulations!')
             
 
 
