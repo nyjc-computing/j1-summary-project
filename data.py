@@ -28,8 +28,16 @@ class Grid:
 
 #Start
 def start_menu():
+    def start_menu():
     print('Welcome to FNAF:Reckoning!')
-    start = input("Type 'Start' to begin: ")
+    choice = input("Type 'Start' to begin or 'Info' for more information: ")
+    if choice == 'Start':
+        character_select()
+    elif choice == 'Info':
+        info()
+    else:
+        print("Please type either Start or Info." )
+        start_menu()
 
 def info():
     print('1. Freddy Fazbear')
