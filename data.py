@@ -92,4 +92,27 @@ class Enemy:
             target.take_damage(self.damage)
             self.damage -= 15
 
+
+#Rooms
+class Room:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.visited = False
+        self.contents = []
+
+    def enter(self):
+        self.visited = True
+        print(f"You have entered room ({self.x}, {self.y}).")
     
+class Grid:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+        self.rooms = [[Room(x, y) for y in range(height)] for x in range(width)]
+
+    def get_room(self, x, y):
+        if 0 <= x < self.width and 0 <= y < self.height:
+            return self.rooms[x][y]
+        else:
+            return None
