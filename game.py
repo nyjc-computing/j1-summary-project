@@ -5,7 +5,7 @@ class MUDGame:
         # self.spawn = Room('home', up='closed')
         self.enemy_list = []
         self.boss = data.spawn_boss()
-        self.current_room = data.start_room()curr
+        self.current_room = data.start_room()
         self.gameOver = False
     
     def run(self):
@@ -17,6 +17,7 @@ class MUDGame:
             while not self.current_room.is_encounter():
                 #moving in current room
                 self.current_room.display()
+                input = self.current_room.prompt_movement()
                 while input.lower() not in 'wasd':
                     input = self.current_room.prompt_movement()
                 if input.lower() == 'w':
@@ -35,10 +36,28 @@ class MUDGame:
                     continue
             #Combat Start
             while self.current_room.is_encounter():
-                enemy = self.enemy_list[random.randint(len(self.enemy_list))]
-                player.turn = True
-                action = player.prompt_action()
-                if action == player.skill_1:
+                enemy = Enemy()
+                input = player.attack()
+                while input not in '123':
+                    input = player.attack()
+                if input == '1':
+                    acc_list = [True] * 90 + [False] * 10
+                    if acc_list[random.randint(0, len(random.randint) - 1)] == True:
+                        enemy.take_damage(15)
+                    else:
+                        print(f'{player.name} missed.')
+                elif input == '2':
+                    acc_list = [True] * 40 + [False] * 60
+                    if acc_list[random.randint(0, len(random.randint) - 1)] == True:
+                        enemy.add_tag('asleep')
+                    else:
+                        print(f'{player.name} missed.')
+                elif input == '3'
+                    acc_list = [True] * 19 + [False] * 81
+                    if acc_list[random.randint(0, len(random.randint) - 1)] == True:
+                        enemy.take_damage(87)
+                    else:
+                        print(f'{player.name} missed.')
                     
                     
 
