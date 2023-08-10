@@ -1,5 +1,13 @@
 import random
 
+#accuracy
+def accuracy(num):
+    hit_chance = random.randint(1, 100)
+    if hit_chance > num:
+        False
+    else:
+        True
+
 #Characters and Enemies
 
 class Freddy:
@@ -29,27 +37,33 @@ class Freddy:
 
     def attack(self, target):
             print(f"Freddy attacks {target.name}!")
-            print('1. Mic Toss  90 acc  15 dmg                                                          2. Sing  40 acc - dmg                                                                3. The Bite  19 acc 87 dmg"')
+            print('1. Mic Toss  90 acc  15 dmg                                                          2. Sing  40 acc - dmg                                                                3. The Bite  19 acc 87 dmg')
             atk = input("Please select an ability to use: ")
             if atk == '1':    
                 print('Freddy used Mic Toss!')
-                #implement accuracy system
-                self.attacking += 15
-                print(f"{target.name} took {self.attacking} damage!")
-                target.take_damage(self.attacking)
-                self.attacking -= 15
+                if accuracy(90) == True:
+                    self.attacking += 15
+                    print(f"{target.name} took {self.attacking} damage!")
+                    target.take_damage(self.attacking)
+                    self.attacking -= 15
+                else:
+                    print('The attack missed!')
             if atk == '2':
                 print('Freddy used Sing!')
-                #implement accuracy system
-                print(f"{target.name} fell asleep!")
-                target.add_tag('sleep')
+                if accuracy(40) == True:
+                    print(f"{target.name} fell asleep!")
+                    target.add_tag('sleep')
+                else:
+                    print('The attack missed!')
             if atk == '3':
                 print('Freddy used The Bite!')
-                #implement accuracy system
-                self.attacking += 87
-                print(f"{target.name} took {self.attacking} damage!")
-                target.take_damage(self.attacking)
-                self.attacking -= 87
+                if accuracy(19) == True:
+                    self.attacking += 87
+                    print(f"{target.name} took {self.attacking} damage!")
+                    target.take_damage(self.attacking)
+                    self.attacking -= 87
+                else:
+                    print('The attack missed!')
             if atk < '1' or atk > '3':
                 print('Please select a valid ability.')
                 Freddy.attack()
@@ -58,7 +72,7 @@ class Freddy:
         if 'sleep' in target.tag:
             self.attacking += 5
 
-class Enemy:
+class GB:
     def __init__(self, name, tag=None, health=50, damage=0):
         self.name = name
         self.health = health
