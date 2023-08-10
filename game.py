@@ -10,7 +10,7 @@ class MUDGame:
     def run(self):
         data.start_menu()
         character = data.choose_character()
-        if character.lower() == 'freddy':
+        if character.lower() == 'Freddy':
             player = Freddy()
         while not self.gameOver:
             self.current_room.display()

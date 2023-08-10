@@ -116,3 +116,27 @@ class Grid:
             return self.rooms[x][y]
         else:
             return None
+
+#Start
+def start_menu():
+    print('Welcome to FNAF:Reckoning!')
+    start = input("Type 'Start' to begin: ")
+
+def character_select():
+    print('Characters:')
+    print('1. Freddy Fazbear')
+    print('2. Bonnie')
+    print('3. Chica')
+    print('4. Foxy')
+    cr = input('Please select your character: ')
+    if cr == 'Freddy':
+        print('You have selected Freddy Fazbear.')
+    elif 'Bonnie' in cr:
+        print('You have selected Bonnie.')
+    elif 'Chica' in cr:
+        print('You have selected Chica.')
+    elif 'Foxy' in cr:
+        print('You have selected Foxy.')
+    else:
+        print('Please enter a valid animatronic.')
+        character_select()
