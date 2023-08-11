@@ -1,5 +1,7 @@
 class Room:
-
+    """
+    This class encapsulates data for 
+    """
     def __init__(self, name):
         self.name = name
         self.enemy = None
