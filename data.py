@@ -95,7 +95,7 @@ def info():
         print('--------------------------------------------------------')
         info()
         
-    elif 'Back' in cr.lower():
+    elif 'back' in cr.lower():
         start_menu()
     else:
         print('Please enter a valid animatronic.')
