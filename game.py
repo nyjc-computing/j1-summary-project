@@ -32,7 +32,7 @@ class game:
 
     def run(self):
         # ask user for input (go left right up down) (use item) (attack)
-        print(f'#############   {self.room.name}   #############')
+        print(f'\n#############   {self.room.name}   #############')
 
         # prints which rooms are available to move to
         available = []
@@ -41,16 +41,14 @@ class game:
                 available.append(direction)
         
         # ask for movement
-        print('This room is currently connected to ')
+        print('This room is currently connected to: \n')
         for i in available:
             print(f'{i} ')
-        movement = input('Which direction do you wish to move in? (up, down, left, right): ')
-        while movement not in available:
+        decision = input('\nWhich direction do you wish to move in? (up, down, left, right): ')
+        while decision not in available:
             decision = input('Which direction do you wish to move in? (up, down, left, right): ')
 
         # if input = movement
         for direction in ('left', 'right', 'up', 'down'):
             if decision == direction:
                 self.room = getattr(self.room, direction)
-
-        
