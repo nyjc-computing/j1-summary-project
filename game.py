@@ -20,7 +20,7 @@ class game:
         self.end = False
         self.room = setup()
 
-    def run(self):
+    def intro(self):
         # start of the game
         print('Welcome to Hogwarts School of Witchcraft and Wizardry\n')
         name = input('Key in what do you wish to be named: ')
@@ -30,7 +30,7 @@ class game:
             self.end = True
     
 
-    def start_game(self):
+    def run(self):
         # ask user for input (go left right up down) (use item) (attack)
         print(f'#############   {self.room.name}   #############')
 
@@ -46,4 +46,11 @@ class game:
             print(f'{i} ')
         movement = input('Which direction do you wish to move in? (up, down, left, right): ')
         while movement not in available:
-            input('Which direction do you wish to move in? (up, down, left, right): ')
+            decision = input('Which direction do you wish to move in? (up, down, left, right): ')
+
+        # if input = movement
+        for direction in ('left', 'right', 'up', 'down'):
+            if decision == direction:
+                self.room = getattr(self.room, direction)
+
+        
