@@ -1,11 +1,9 @@
-
-
-import map.py
+from map import Room, setup
 
 class game:
     def __init__(self):
         self.end = False
-        self.room = map.py.setup()
+        self.room = setup()
 
     def run(self):
         # start of the game
