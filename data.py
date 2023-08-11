@@ -24,10 +24,13 @@ class Grid:
         else:
             return None
 
-    def move():
+    def move(self, x, y):
         pass
             
 def start_room() -> 'Room':
+    pass
+
+def get_position():
     pass
 
 
