@@ -8,31 +8,49 @@ def accuracy_calc(accuracy : int) -> bool:
 class MUDGame:
     def __init__(self):
         # self.spawn = Room('home', up='closed')
-        self.enemy_list = [data.GB()]
+        self.enemy_list = []
         self.boss = data.spawn_boss()
         self.current_room = data.start_room()
         self.gameOver = False
+        self.player1 = None
+        self.player2 = None
+        self.player3 = None
+        self.player4 = None
+        
     
     def run(self):
         data.start_menu()
         character = data.choose_character()
         if character.lower() == 'freddy':
-            player = Freddy()
+            self.player1 = Freddy()
         while not self.gameOver:
             while not self.current_room.is_encounter():
                 #moving in current room
                 self.current_room.display()
-                input = self.current_room.prompt_movement()
+                input = self.current_room.grid.prompt_movement()
                 while input.lower() not in 'wasd':
                     input = self.current_room.prompt_movement()
                 if input.lower() == 'w':
-                    self.current_room.grid.move()
+                    current_position = self.current_room.grid.get_position()
+                    current_position[1] = current_position[1] + 1
+                    self.current_room.grid.move(current_position)
                 elif input.lower() == 's':
-                    self.current_room.grid.move()
+                    current_position = self.current_room.grid.get_position()
+                    current_position[1] = current_position[1] - 1
+                    self.current_room.grid.move(current_position)
                 elif input.lower() == 'a':
-                    self.current_room.grid.move()
+                    current_position = self.current_room.grid.get_position()
+                    current_position[0] = current_position[0] - 1
+                    self.current_room.grid.move(current_position)
                 elif input.lower() == 'd':
-                    self.current_room.grid.move()
+                    current_position = self.current_room.grid.get_position()
+                    current_position[0] = current_position[0] + 1
+                    self.current_room.grid.move(current_position)
+                #Picking up items
+                if self.current_room.grid.is_item():
+                    item = self.current_room.grid.grid[current_position[0]][current_position[1]]['item']
+                    data.add_item(item)
+                        
                     
                 #entering next room
                 if self.current_room.grid.get_position():
@@ -41,25 +59,7 @@ class MUDGame:
                     continue
             #Combat Start
             while self.current_room.is_encounter():
-                enemy = Enemy()
-                input = player.attack()
-                while input not in '123':
-                    input = player.attack()
-                if input == '1':
-                    if accuracy_calc(90):
-                        enemy.take_damage(15)
-                    else:
-                        print(f'{player.name} missed.')
-                elif input == '2':
-                    if accuracy_calc(40):
-                        enemy.add_tag('asleep')
-                    else:
-                        print(f'{player.name} missed.')
-                elif input == '3':
-                    if accuracy_calc(19):
-                        enemy.take_damage(87)
-                    else:
-                        print(f'{player.name} missed.')
+                
                     
                     
 
