@@ -11,45 +11,50 @@ class Room:
 
 class Map:
 
-    def __init__(self, rooms):
-        pass
+    def __init__(self, roompaths: dict):
+        self.rooms = roompaths.keys()
+        self.paths = roompaths.values()
 
-    def arrange(rooms):
+    def arrange(rooms) -> None:
         pass
 
 
 class Character:
 
-    def __init__(self):
-        pass
+    def __init__(self, hp: int):
+        self.hp = hp
 
     class Player:
 
-        def hp(hp: int, self, creature: bool, buff: bool):  #Are we using buff?
+        def hp(self, creature: bool, buff: bool) -> None:  #Are we using buff?
             if creature:
-                pass
+                self.hp -= 30
             if buff:
-                pass
+                self.hp += 30
 
-    class Reyna:
-        pass
+        def win(self, reyna: bool) -> bool:
+            if reyna:
+                if self.hp >= 300:
+                    return True
+                else:
+                    return False
 
 
 # Randomly assign room name to every room
 #Create path network for map
 #Modify Character & its child classes later after discussion
 
-roomlist = [
-    "Spike Plant Hideout", "Breeze Bunker", "Haven Hold", "Bind Battlezone",
-    "Split Strategy Chamber", "Icebox Infiltration Point",
-    "Agent Training Arena", "Radiant Retreat", "Valorant Victory Vault",
-    "Phoenix's Firepit", "Viper's Venom Den", "Jett's Jetway",
-    "Killjoy's Contraption Corner", "Reyna's Soul Sanctuary",
-    "Sova's Surveillance Nest", "Cypher's Cipher Room",
-    "Astra's Astral Parlor", "Sage's Healing Haven", "Raze's Boombox Lounge",
-    "Brimstone's Inferno Lounge", "Omen's Shadowy Chamber",
-    "Yoru's Dimensional Den", "KAY/O's Tech Lab", "Skye's Nature Oasis",
-    "Team Valorant War Room", "Duelist Dueling Grounds",
-    "Spike Rush Social Spot", "Map Rotations Retreat",
-    "Ranked Grind Gathering", "Radiant Rendezvous"
-]
+roompaths = {
+    "T-side spawn": ["A lobby", "B lobby"],
+    "A lobby": ["T-side spawn", "A long", "Catwalk"],
+    "A long": ["A lobby", "A site"],
+    "A site": ["A long", "Garden", "CT-side spawn"],
+    "CT-side spawn": ["A site", "Market", "B site"],
+    "B site": ["CT-side spawn", "Market", "B main"],
+    "B main": ["B site", "B lobby"],
+    "B lobby": ["T-side spawn", "Tiles", "B main"],
+    "Tiles": ["B lobby", "Catwalk", "Garden", "Market"],
+    "Catwalk": ["A lobby", "Tiles", "Market", "Garden"],
+    "Garden": ["A site", "Market", "Catwalk", "Tiles"],
+    "Market": ["CT-side spawn", "B site", "Tiles", "Catwalk", "Garden"]
+}
