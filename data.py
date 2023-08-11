@@ -23,8 +23,10 @@ class Grid:
             return self.rooms[x][y]
         else:
             return None
-
-
+            
+def start_room() -> 'Room':
+    pass
+    
 
 #Start
 def start_menu():
@@ -211,7 +213,9 @@ class Freddy:
 
     def attack(self, target):
             print(f"Freddy attacks {target.name}!")
-            print('1. Mic Toss  90 acc  15 dmg                                                          2. Sing  40 acc - dmg                                                                3. The Bite  19 acc 87 dmg')
+            print('1. Mic Toss  90 acc  15 dmg')
+            print('2. Sing  40 acc - dmg')
+            print('3. The Bite  19 acc 87 dmg')
             atk = input("Please select an ability to use: ")
             if atk == '1':    
                 print('Freddy used Mic Toss!')
