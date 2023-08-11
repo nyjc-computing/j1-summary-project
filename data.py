@@ -28,12 +28,11 @@ class Grid:
 
 #Start
 def start_menu():
-    def start_menu():
     print('Welcome to FNAF:Reckoning!')
     choice = input("Type 'Start' to begin or 'Info' for more information: ")
-    if choice == 'Start':
+    if choice.lower() == 'start':
         character_select()
-    elif choice == 'Info':
+    elif choice.lower() == 'info':
         info()
     else:
         print("Please type either Start or Info." )
@@ -45,7 +44,7 @@ def info():
     print('3. Chica')
     print('4. Foxy')
     cr = input('Please select a character to read their description or Back to return to start menu: ')
-    if cr == 'Freddy':
+    if cr.lower() == 'freddy':
         print('HP: 100')
         print('Description: The lovable brown bear enters the dungeon, ready to face any and all challenges in his way. With his trusty microphone, Freddy faces fear head on as he ventures deeper into the spiraling depths of the abyss.')
         print('Ability: Lullaby - Freddy sings a lullaby, causing all nearby monsters (except the boss) to fall asleep (for 3 turns) , allowing Freddy to walk past them without alerting them.')
@@ -57,7 +56,7 @@ def info():
         print('--------------------------------------------------------')
         info()
         
-    elif 'Bonnie' in cr:
+    elif 'bonnie' in cr.lower():
         print('HP: 100')
         print('Description: Bonnie the bunny is here and he is ready to stir up a storm. He treads through the treacherous dungeon as he sends rumbles through each room, pathing a way for him to dive deeper into the dungeons.')
         print('Ability: Reverb - Bonnie strums his guitar, sending shockwaves in a specific direction towards enemies, hitting each of them for 10 damage each and immediately enters combat with them. This ability stacks up to 2 times.')
@@ -69,7 +68,7 @@ def info():
         print('--------------------------------------------------------')
         info()
         
-    elif 'Chica' in cr:
+    elif 'chica' in cr.lower():
         print('HP: 100')
         print('Description: Chica is afraid of the darkness, hence she brought her best friend along with her - cupcake. Cupcake reassures her constantly that everything will be fine and helps her get through the dungeons, yet honestly she just wants to go back to the pizzeria and feast on pizza. ')
         print("Ability: Cupcake - Chica throws her cupcake, causing it to explode in a 3x3 area once the cupcake comes into contact with a solid object, dealing 30 damage to enemies within its area.")
@@ -81,7 +80,7 @@ def info():
         print('--------------------------------------------------------')
         info()
         
-    elif 'Foxy' in cr:
+    elif 'foxy' in cr.lower():
         print('HP: 85')
         print('Description: Foxy brandishes his hook, waiting for his next unsuspecting prey to walk past him as he lurks in the shadows. His unique eyes allow him to adapt to the darkness, but is also the reason why he is largely deterred from light sources. Though Foxy may be seen as arrogant and boastful by others, his band members know that he just wants to be able to be someone to somebody, in this case a better teammate for his friends.')
         print('Ability: Scamper - Foxy dashes in a targeted direction, dealing 50 damage to any enemies in his way and takes 5 damage for each solid object hit.')
@@ -96,7 +95,7 @@ def info():
         print('--------------------------------------------------------')
         info()
         
-    elif 'Back' in cr:
+    elif 'Back' in cr.lower():
         start_menu()
     else:
         print('Please enter a valid animatronic.')
@@ -109,17 +108,18 @@ def character_select():
     print('3. Chica')
     print('4. Foxy')
     cr = input('Please select your character: ')
-    if cr == 'Freddy':
+    if cr.lower() == 'freddy':
         print('You have selected Freddy Fazbear.')
-    elif 'Bonnie' in cr:
+    elif 'bonnie' in cr.lower():
         print('You have selected Bonnie.')
-    elif 'Chica' in cr:
+    elif 'chica' in cr:
         print('You have selected Chica.')
-    elif 'Foxy' in cr:
+    elif 'foxy' in cr:
         print('You have selected Foxy.')
     else:
         print('Please enter a valid animatronic.')
         character_select()
+
 
 
 #accuracy
