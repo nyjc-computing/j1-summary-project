@@ -1,6 +1,21 @@
 import map.py
 
 class game:
+    '''a class that runs when the game runs
+
+    attributes
+    ----------
+    end : True when game ends, False otherwise
+    room : 
+
+    methods
+    -------
+    run() : runs when the game starts for the first time
+    start_game() : runs everytime the character choose an option
+    '''
+    
+
+    
     def __init__(self):
         self.end = False
         self.room = map.py.setup()
