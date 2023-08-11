@@ -8,9 +8,9 @@ class MUDGame:
     def __init__(self):
         self.gameover = False # default
         self.won = False # default
-        maze = Labyrinth()
-        maze.generate()
-        steve = Steve()
+        self.maze = Labyrinth()
+        self.maze.generate()
+        self.steve = Steve()
 
     
     def introduce(self): 
@@ -20,7 +20,14 @@ class MUDGame:
         username = input('Enter your username:')
         print(f'{username}, OH NO YOU ARE TRAPPED! \nYou will go through a series of rooms that may give you items or have ANGRY creatures wanting you DEAD :P \nKill them all, especially the boss to escape! \nGOOD LUCK ;D')
 
+    def gameover(self) -> bool:
+        return self.steve.isdead()
 
+    def show_status(self) -> 'str':
+        print(self.steve)
+
+    def show_options(self) -> :
+        menu = "1. Attack\n 2. Retreat"
 
 
     
