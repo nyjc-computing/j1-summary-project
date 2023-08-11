@@ -4,13 +4,7 @@ import random
 class Game:
 
     def __init__(self):
-        pass
-
-    def gameover(self) -> bool:
-        """
-        returns True if game is over, else return False
-        """
-        pass
+        self.gameover = False
 
     def intro(self) -> None:
         """
@@ -49,22 +43,26 @@ class Game:
         return agent[int(out)-1]
             
 
-    def map_select(self) -> str:
+    def map_select(self) -> list:
         """
         retrive map choice from player
-        return map name as string
+        return list of room objects
         """
-        return "ascent"
+        pass
 
-    def initialise(self, map: str) -> list:
+    def initialise(self, map: list, agent: string) -> list:
         """
-        creates and returns a dictionary of room objects
-        based on the selected map
-        key is the name of the room, value is the room object
+        scatters orbs and creatures through the map
+        sets starting positions for reyna and player
+        returns modified map
         """
         creatures = 5
         orbs = 8
-        pass
+        spawn_areas = map[1:-1]
+        #add player and reyna class
+        self.player_pos = map[0]
+        self.reyna_pos = map[-1]
+        return map
 
     def desc(self) -> str:
         """
@@ -153,7 +151,7 @@ class Game:
         self.intro()
         agent = self.agent_select()
         map = self.map_select()
-        self.initialise(map)
+        self.initialise(map, agent)
         
         while not self.gameover():
             self.desc()
