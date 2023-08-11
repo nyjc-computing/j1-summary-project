@@ -70,9 +70,7 @@ class Labyrinth:
 
         How bossroom is chosen:
         - e.g. labsize is set to 10 and startroom coords are [1, 7]
-        - bossroom is at the opposite of the labyrinth at [8, 2]
-
-        Startroom will be remembered throughout the game, the starting position of the boss will not be remembered. 
+        - bossroom is at the opposite of the square
         """
         # choose position of Start room randomly
         n = labsize // 4
