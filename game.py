@@ -39,16 +39,24 @@ class game:
         for direction in ('left', 'right', 'up', 'down'):
             if getattr(self.room, direction) != None:
                 available.append(direction)
-        
-        # ask for movement
         print('This room is currently connected to: \n')
         for i in available:
             print(f'{i} ')
-        decision = input('\nWhich direction do you wish to move in? (up, down, left, right): ')
-        while decision not in available:
-            decision = input('Which direction do you wish to move in? (up, down, left, right): ')
 
-        # if input = movement
-        for direction in ('left', 'right', 'up', 'down'):
-            if decision == direction:
-                self.room = getattr(self.room, direction)
+        # ask for input
+        decision = input('\nWhat do you wish to do? (move, attack): ')
+
+        if decision == 'move':
+            # if input = movement, ask for direction
+            movement = input('\nWhich direction do you wish to move in? (up, down, left, right): ')
+            while movement not in available:
+                movement = input('Which direction do you wish to move in? (up, down, left, right): ')
+    
+            # if input = movement, move in direction
+            for direction in ('left', 'right', 'up', 'down'):
+                if movement == direction:
+                    self.room = getattr(self.room, direction)
+
+        elif decision == 'attack':
+            # if input = attack, deal damage to monster
+            pass
