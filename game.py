@@ -1,3 +1,4 @@
+
 import random
 import data
 class MUDGame:
@@ -94,3 +95,4 @@ class MUDGame:
 #
 #    def encounter(self):
 #        self.encounter = True
+
