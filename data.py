@@ -23,10 +23,13 @@ class Grid:
             return self.rooms[x][y]
         else:
             return None
+
+    def move():
+        pass
             
 def start_room() -> 'Room':
     pass
-    
+
 
 #Start
 def start_menu():
