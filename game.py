@@ -1,5 +1,3 @@
-
-
 import map.py
 
 class game:
