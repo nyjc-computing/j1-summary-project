@@ -4,6 +4,7 @@ import data
 class MUDGame:
     def __init__(self):
         # self.spawn = Room('home', up='closed')
+        self.enemy_list = []
         self.boss = data.spawn_boss()
         self.current_room = data.start_room()
         self.gameOver = False
@@ -11,14 +12,58 @@ class MUDGame:
     def run(self):
         data.start_menu()
         character = data.choose_character()
-        if character.lower() == 'Freddy':
+        if character.lower() == 'freddy':
             player = Freddy()
         while not self.gameOver:
-            self.current_room.display()
-            while not self.current_room.encounter():
-                self.current_room.prompt_movement()
-                if self.current_room.grid.position == []:
+            while not self.current_room.is_encounter():
+                #moving in current room
+                self.current_room.display()
+                input = self.current_room.prompt_movement()
+                while input.lower() not in 'wasd':
+                    input = self.current_room.prompt_movement()
+                if input.lower() == 'w':
+                    self.current_room.grid.position = []
+                elif input.lower() == 's':
+                    self.current_room.grid.position = []
+                elif input.lower() == 'a':
+                    self.current_room.grid.position = []
+                elif input.lower() == 'd':
+                    self.current_room.grid.position = []
                     
+                #entering next room
+                if self.current_room.grid.position == []:
+                    self.current_room.nextRoom()
+                    self.current_room.grid.position = []
+                    continue
+            #Combat Start
+            while self.current_room.is_encounter():
+                enemy = Enemy()
+                input = player.attack()
+                while input not in '123':
+                    input = player.attack()
+                if input == '1':
+                    acc_list = [True] * 90 + [False] * 10
+                    if acc_list[random.randint(0, len(random.randint) - 1)] == True:
+                        enemy.take_damage(15)
+                    else:
+                        print(f'{player.name} missed.')
+                elif input == '2':
+                    acc_list = [True] * 40 + [False] * 60
+                    if acc_list[random.randint(0, len(random.randint) - 1)] == True:
+                        enemy.add_tag('asleep')
+                    else:
+                        print(f'{player.name} missed.')
+                elif input == '3'
+                    acc_list = [True] * 19 + [False] * 81
+                    if acc_list[random.randint(0, len(random.randint) - 1)] == True:
+                        enemy.take_damage(87)
+                    else:
+                        print(f'{player.name} missed.')
+                    
+                    
+
+            
+            
                 
                 
             # display current status
@@ -26,9 +71,9 @@ class MUDGame:
             # validate action
             # update game attributes
             # check game over
-            #if self.boss.isDead():
-                #self.gameOver = True
-                #print('Congratulations!')
+            if self.boss.isDead():
+                self.gameOver = True
+                print('Congratulations!')
             
 
 
