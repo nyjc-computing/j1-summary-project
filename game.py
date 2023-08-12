@@ -1,6 +1,22 @@
-
 import random
 import data
+
+def accuracy_calc(accuracy : int) -> bool:
+    temp = [True] * accuracy + [False] *(100 - accuracy)
+    return temp[random.randint(0, len(temp) - 100)]
+
+def defeat(players : list) -> bool:
+    for player in players:
+        if not player.is_defeated():
+            return False
+    return True
+
+def victory(enemies : list) -> bool:
+    for enemy in enemies:
+        if not enemy.is_defeated():
+            return False
+    return True
+    
 class MUDGame:
     def __init__(self):
         # self.spawn = Room('home', up='closed')
@@ -8,62 +24,99 @@ class MUDGame:
         self.boss = data.spawn_boss()
         self.current_room = data.start_room()
         self.gameOver = False
+        self.player1 = None
+        self.player2 = None
+        self.player3 = None
+        self.player4 = None
+        
     
     def run(self):
         data.start_menu()
         character = data.choose_character()
         if character.lower() == 'freddy':
-            player = Freddy()
+            self.player1 = Freddy()
         while not self.gameOver:
-            while not self.current_room.is_encounter():
-                #moving in current room
+            if not self.current_room.is_encounter():
+                #prompt movement
                 self.current_room.display()
-                input = self.current_room.prompt_movement()
+                input = self.current_room.grid.prompt_movement()
+                #entering next room
+                if self.current_room.grid.get_position() == [0, 2] and input == 'w':
+                    self.current_room.nextRoom(input)
+                    self.current_room.grid.move([4, 2])
+                    continue
+                elif self.current_room.grid.get_position() == [2, 0] and input == 'a':
+                    self.current_room.nextRoom(input)
+                    self.current_room.grid.move([2, 4])
+                    continue
+                elif self.current_room.grid.get_position() == [4, 2] and input == 's':
+                    self.current_room.nextRoom(input)
+                    self.current_room.grid.move([0, 2])
+                    continue
+                elif self.current_room.grid.get_position() == [2, 4] and input == 'd':
+                    self.current_room.nextRoom(input)
+                    self.current_room.grid.move([2, 0])
+                    continue
+                #moving in current room
                 while input.lower() not in 'wasd':
                     input = self.current_room.prompt_movement()
                 if input.lower() == 'w':
-                    self.current_room.grid.position = []
+                    current_position = self.current_room.grid.get_position()
+                    current_position[1] = current_position[1] + 1
+                    self.current_room.grid.move(current_position)
                 elif input.lower() == 's':
-                    self.current_room.grid.position = []
+                    current_position = self.current_room.grid.get_position()
+                    current_position[1] = current_position[1] - 1
+                    self.current_room.grid.move(current_position)
                 elif input.lower() == 'a':
-                    self.current_room.grid.position = []
+                    current_position = self.current_room.grid.get_position()
+                    current_position[0] = current_position[0] - 1
+                    self.current_room.grid.move(current_position)
                 elif input.lower() == 'd':
-                    self.current_room.grid.position = []
-                    
-                #entering next room
-                if self.current_room.grid.position == []:
-                    self.current_room.nextRoom()
-                    self.current_room.grid.position = []
-                    continue
+                    current_position = self.current_room.grid.get_position()
+                    current_position[0] = current_position[0] + 1
+                    self.current_room.grid.move(current_position)
+                #Picking up items
+                if self.current_room.grid.is_item():
+                    item = self.current_room.grid.grid[current_position[0]][current_position[1]]['item']
+                    data.add_item(item)
             #Combat Start
-            while self.current_room.is_encounter():
-                enemy = Enemy()
-                input = player.attack()
-                while input not in '123':
-                    input = player.attack()
-                if input == '1':
-                    acc_list = [True] * 90 + [False] * 10
-                    if acc_list[random.randint(0, len(random.randint) - 1)] == True:
-                        enemy.take_damage(15)
+            elif self.current_room.is_encounter():
+                #Determine turn order
+                player_list= [self.player1, self.player2, self.player3, self.player4]
+                enemy_list = self.current_room.grid.get_enemies()
+                turn_order = []
+                i = 0
+                while len(player_list) != 0 and len(enemy_list) != 0:
+                    if player_list[i] != None:
+                        turn_order.append(player_list[i])
                     else:
-                        print(f'{player.name} missed.')
-                elif input == '2':
-                    acc_list = [True] * 40 + [False] * 60
-                    if acc_list[random.randint(0, len(random.randint) - 1)] == True:
-                        enemy.add_tag('asleep')
-                    else:
-                        print(f'{player.name} missed.')
-                elif input == '3'
-                    acc_list = [True] * 19 + [False] * 81
-                    if acc_list[random.randint(0, len(random.randint) - 1)] == True:
-                        enemy.take_damage(87)
-                    else:
-                        print(f'{player.name} missed.')
-                    
-                    
-
-            
-            
+                        player_list.pop(i)
+                    turn_order.append(enemy_list[i])
+                    i += 1
+                #Combat
+                i = 0
+                while not defeat(player_list) and not victory(enemy_list):
+                    active_character = turn_order[i % (len(turn_order) - 1)]
+                    active_character.display_turn()
+                    if active_character in enemy_list:
+                        damage = active_character.attack(random.choice(player_list), )
+                    elif active_character in player_list:
+                        target = None
+                        action = active_character.prompt_action()
+                        if action == 'attack':
+                            skill = active_character.prompt_attack()
+                            damage = active_character.attack(enemy_list[target], skill)
+                            statuses = active_character.inflict_status(enemy_list[target], skill)
+                            if damage != None:
+                                target.take_dmg(damage)
+                            if statuses != None:
+                                target.set_status(statuses)
+                        elif action == 'target':
+                            target = active_character.target() - 1
+                        elif action == 'info':
+                            active_character.get_stats()
+                
                 
                 
             # display current status
