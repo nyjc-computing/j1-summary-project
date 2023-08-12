@@ -282,3 +282,12 @@ def sleep(target):
     while target.counter != 0:
         target.turn_end()
     target.remove_tag('sleep')
+
+def stun(target):
+    if target.has_tag('stun'):
+        target.counter -= 1
+    else:
+        target.counter += 1
+    while target.counter != 0:
+        target.turn_end()
+    target.remove_tag('stun')
