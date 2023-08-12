@@ -262,18 +262,6 @@ class Freddy:
         return tag in self.tag
 
 
-#Turns
-class Turn:
-    def __init__(self, turn):
-        self.turn = 1
-        
-    def turn_start(self):
-        print(f'Turn {self.turn}')
-    
-    def turn_end(self):
-        self.turn += 1
-
-
 #Status
 def sleep(target):
     if target.has_tag('sleep'):
