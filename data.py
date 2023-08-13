@@ -172,7 +172,8 @@ class GB:
     def turn_end(self):
         self.counter -= 1
 
-    def get_stats(self):
+    def get_stats(self, target):
+        print(f"{self.name}'s stats")
         print(f"HP: {self.health}")
         #print(f"Light level: {self.light}")
         if self.status == []:
@@ -180,6 +181,7 @@ class GB:
         else:
             for status in self.status:
                 print(f'Status: {status}')
+        target.prompt_action(self)
 
     def attack(self, target):
         if 'sleep' in self.status:
@@ -302,7 +304,8 @@ class Freddy:
     def display_turn(self):
         print(f"It is {self.name}'s turn.")
 
-    def get_stats(self):
+    def get_stats(self, target):
+        print(f"{self.name}'s stats")
         print(f"HP: {self.health}")
         #print(f"Light level: {self.light}")
         if self.status == []:
@@ -310,6 +313,46 @@ class Freddy:
         else:
             for status in self.status:
                 print(status)
+        back = input('Type Back to return.')
+        if back.lower() == 'back':
+            self.prompt_action(target)
+
+    def prompt_action(self, target):
+        print('1. Attack')
+        print('2. Stats')
+        print('3. Light Level')
+        dec = input('Please choose an action: ')
+        if dec == '1':
+            while self.health > 0 and target.health > 0:
+                self.display_turn()
+                self.attack(target)
+                if target.health > 0:
+                    target.attack(self)
+        elif dec == '2':
+            print('1. My stats')
+            print('2. Enemy stats')
+            stat = input("Choose who's stats you would like to inspect: ")
+            if stat == '1':
+                self.get_stats(self)
+            elif stat == '2':
+                target.get_stats(self)
+            else:
+                print('Please enter either 1 or 2.')
+                self.prompt_action(target)
+        elif dec == '3':
+            print('1. Light up')
+            print('2. Light down')
+            light = input('Please select whether you want to increase or decrease the light level: ')
+            if light == '1':
+                print('Light levels not implemented yet.')
+            elif light == '2':
+                print('Light levels not implemented yet.')
+            else:
+                print('Please enter either 1 or 2.')
+                self.prompt_action(target)
+        else:
+            print('Please enter either 1, 2 or 3.')
+            self.prompt_action(target)
 
 
 
