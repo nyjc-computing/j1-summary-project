@@ -109,24 +109,31 @@ def info():
         print('Please enter a valid animatronic.')
         info()
     
-def character_select():
+def choose_character():
     print('Characters:')
     print('1. Freddy Fazbear')
     print('2. Bonnie')
     print('3. Chica')
     print('4. Foxy')
-    cr = input('Please select your character: ')
+    cr = input('Please select your character or skip if you are ready to start the game: ')
     if cr.lower() == 'freddy':
         print('You have selected Freddy Fazbear.')
+        return 'freddy'
     elif 'bonnie' in cr.lower():
         print('You have selected Bonnie.')
+        return 'bonnie'
     elif 'chica' in cr:
         print('You have selected Chica.')
+        return 'chica'
     elif 'foxy' in cr:
         print('You have selected Foxy.')
+        return 'foxy'
+    elif 'skip' in cr.lower():
+        print('The game will begin.')
+        return 'skip'
     else:
         print('Please enter a valid animatronic.')
-        character_select()
+        return None
 
 
 
