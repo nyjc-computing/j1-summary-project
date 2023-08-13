@@ -1,8 +1,8 @@
 import random
 import data
 
-def accuracy_calc(accuracy : int) -> bool:
-    temp = [True] * accuracy + [False] *(100 - accuracy)
+def accuracy_calc(light : int) -> bool:
+    temp = [True] * light + [False] *(100 - light)
     return temp[random.randint(0, len(temp) - 100)]
 
 def defeat(players : list) -> bool:
@@ -20,7 +20,6 @@ def victory(enemies : list) -> bool:
 class MUDGame:
     def __init__(self):
         # self.spawn = Room('home', up='closed')
-        self.enemy_list = []
         self.boss = data.spawn_boss()
         self.current_room = data.start_room()
         self.gameOver = False
@@ -28,15 +27,39 @@ class MUDGame:
         self.player2 = None
         self.player3 = None
         self.player4 = None
-        
     
+    def set_player(self, player, character):
+        if player == 'self.player1':
+            self.player1 = character
+        elif player == 'self.player2':
+            self.player2 = character
+        elif player == 'self.player3':
+            self.player3 = character
+        elif player == 'self.player4':
+            self.player4 = character
+            
     def run(self):
         data.start_menu()
-        character = data.choose_character()
-        if character.lower() == 'freddy':
-            self.player1 = Freddy()
+        n = 1
+        for player in ['self.player1', 'self.player2', 'self.player3', 'self.player4']:
+            valid = False
+            while not valid:
+                character = data.choose_character(n)
+                if character != None:
+                    valid = True
+            if character.lower() == 'freddy':
+                self.set_player(player, Freddy())
+            elif character.lower() == 'bonnie':
+                self.set_player(player, Bonnie())
+            elif character.lower() == 'chica':
+                self.set_player(player, Chica())
+            elif character.lower() == 'foxy':
+                self.set_player(player, Foxy())
+            elif character.lower() == 'skip':
+                break
+            n = n + 1
         while not self.gameOver:
-            if not self.current_room.is_encounter():
+            if not self.current_room.grid.is_encounter():
                 #prompt movement
                 self.current_room.display()
                 input = self.current_room.grid.prompt_movement()
@@ -60,19 +83,19 @@ class MUDGame:
                 #moving in current room
                 while input.lower() not in 'wasd':
                     input = self.current_room.prompt_movement()
-                if input.lower() == 'w':
+                if input.lower() == 'w' and self.current_room.grid.get_position()[0] != 0:
                     current_position = self.current_room.grid.get_position()
                     current_position[1] = current_position[1] + 1
                     self.current_room.grid.move(current_position)
-                elif input.lower() == 's':
+                elif input.lower() == 's' and self.current_room.grid.get_position()[0] != 4:
                     current_position = self.current_room.grid.get_position()
                     current_position[1] = current_position[1] - 1
                     self.current_room.grid.move(current_position)
-                elif input.lower() == 'a':
+                elif input.lower() == 'a' and self.current_room.grid.get_position()[1] != 0:
                     current_position = self.current_room.grid.get_position()
                     current_position[0] = current_position[0] - 1
                     self.current_room.grid.move(current_position)
-                elif input.lower() == 'd':
+                elif input.lower() == 'd' and self.current_room.grid.get_position()[1] != 4:
                     current_position = self.current_room.grid.get_position()
                     current_position[0] = current_position[0] + 1
                     self.current_room.grid.move(current_position)
@@ -95,30 +118,62 @@ class MUDGame:
                     turn_order.append(enemy_list[i])
                     i += 1
                 #Combat
-                i = 0
+                k = 0
                 while not defeat(player_list) and not victory(enemy_list):
-                    active_character = turn_order[i % (len(turn_order) - 1)]
+                    active_character = turn_order[k % (len(turn_order) - 1)]
                     active_character.display_turn()
                     if active_character in enemy_list:
-                        damage = active_character.attack(random.choice(player_list), )
+                        target = random.choice(player_list)
+                        skill = random.randint(1, 2)
+                        hit = accuracy_calc(player_list[0].get_light())
+                        if not hit:
+                            #Attack miss message here
+                        else:
+                            damage = active_character.attack(target, skill)
+                            statuses = active_character.inflict_status(target, skill)
+                            heal = active_character.heal(active_character, skill)
+                            if damage != None:
+                                player_list[target].take_dmg(damage)
+                            if statuses != None:
+                                player_list[target].set_status(statuses)
+                            if heal != None:
+                                active_character.receive_heal(heal)
                     elif active_character in player_list:
                         target = None
                         action = active_character.prompt_action()
                         if action == 'attack':
                             skill = active_character.prompt_attack()
-                            damage = active_character.attack(enemy_list[target], skill)
-                            statuses = active_character.inflict_status(enemy_list[target], skill)
-                            if damage != None:
-                                target.take_dmg(damage)
-                            if statuses != None:
-                                target.set_status(statuses)
+                            hit = accuracy_calc(player_list[0].get_light())
+                            if not hit:
+                                #Attack miss message here
+                            else:
+                                damage = active_character.attack(enemy_list[target], skill)
+                                statuses = active_character.inflict_status(enemy_list[target], skill)
+                                heal = active_character.heal(active_character, skill)
+                                if damage != None:
+                                    enemy_list[target].take_dmg(damage)
+                                if statuses != None:
+                                    enemy_list[target].set_status(statuses)
+                                if heal != None:
+                                    active_character.receive_heal(heal) 
                         elif action == 'target':
                             target = active_character.target() - 1
+                            continue
                         elif action == 'info':
                             active_character.get_stats()
-                
-                
-                
+                            continue
+                        elif action == 'light':
+                            input = active_character.prompt_light()
+                            if input == 'increase':
+                                active_character.increase_light(10)
+                            elif input == 'decrease':
+                                active_character.decrease_light(10)
+                    for character in turn_order:
+                        if character.is_defeated():
+                            turn_order.remove(character)
+                    k = k + 1
+                if defeat(player_list):
+                    self.gameOver = True
             # display current status
             # prompt player for action
             # validate action
