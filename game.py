@@ -5,12 +5,14 @@ import random
 
 
 class MUDGame:
+    """This class encapsulates data for the main game implementation."""
     def __init__(self):
         self.gameover = False # default
         self.won = False # default
         self.maze = Labyrinth()
         self.maze.generate()
         self.steve = Steve()
+        self.items = Item()
 
     
     def introduce(self): 
@@ -26,36 +28,55 @@ class MUDGame:
     def show_status(self) -> 'str':
         print(self.steve)
 
-    def show_options(self) -> :
+    def show_options(self) -> str:
         menu = "1. Attack\n 2. Retreat"
+        print(menu)
+
+    def prompt_player(self) -> int:
+        self.opt = input('Please choose option 1 or 2:')
+        return self.opt
+
+    def validate(choice) -> bool:
+        if choice in ('12'):
+            if len(choice) == 1:
+                return True
+        return False
+
+    def do_action(self):
+        print(self.items)
+        total = len(self.items)
+        choice = input('Please choose your weapon.')
+        if len(choice) == 1:
+            if choice in range(len(self.items)):
+                steve._equip_armour()
 
 
     
-    def encounter(creature):
-        """
-        Options when encountering creatures
-        """
-        option = None
-        while option == None:
-            # loop to prompt valid input
-            print(f'You have encountered {creature}! \nDo you want to attack or escape?')
-            print('1. Attack \n2. Escape')
-            option = input('Your choice:')
-            if option == 1:
-                # player choose to attack creature
-                pass
-            elif option == 2:
-                # player choose to escape
-                chance = random.randint(1, 2)
-                if chance == 1:
-                    # player escapes
-                    pass
-                else:
-                    # player failed to escape
-                    # player receive damage
-                    pass
-            else:
-                option = None
+    # def encounter(creature):
+    #     """
+    #     Options when encountering creatures
+    #     """
+    #     option = None
+    #     while option == None:
+    #         # loop to prompt valid input
+    #         print(f'You have encountered {creature}! \nDo you want to attack or escape?')
+    #         print('1. Attack \n2. Escape')
+    #         option = input('Your choice:')
+    #         if option == 1:
+    #             # player choose to attack creature
+    #             pass
+    #         elif option == 2:
+    #             # player choose to escape
+    #             chance = random.randint(1, 2)
+    #             if chance == 1:
+    #                 # player escapes
+    #                 pass
+    #             else:
+    #                 # player failed to escape
+    #                 # player receive damage
+    #                 pass
+    #         else:
+    #             option = None
 
     
                     
@@ -79,10 +100,10 @@ class MUDGame:
             # show player action options
             choice = self.prompt_player()
             # prompt player to take actions
-            self.validate(choice)
+            if self.validate(choice):
             # validate choice
-            self.do_action()
-            self.update()
+                self.do_action()
+                self.update()
             # update
             
             
