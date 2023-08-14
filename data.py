@@ -274,8 +274,8 @@ class Labyrinth:
         if not self._can_move_here(self.steve_pos, direction):
             return False
         for i in range(4):
-            if direction = [NORTH, SOUTH, EAST, WEST][i]:
-            direction = DIRLIST[i]
+            if direction == [NORTH, SOUTH, EAST, WEST][i]:
+                direction = DIRLIST[i]
         x, y = self.steve_pos
         self.lab[x][y].steve_leaves()
         self.steve_pos = [x + direction[0], y + direction[1]]
@@ -288,10 +288,10 @@ class Labyrinth:
         this_x, this_y = this_coords
         if this_x not in self.posscoords or this_y not in self.poss_coords: # this should not happen at all
             raise IndexError("entity is not inside of maze")
-        thisroom = self.lab[x][y]
+        thisroom = self.lab[this_x][this_y]
         return thisroom.dir_is_accessible(direction)
 
-    def _steve_useitem(self, item: Item) -> None:
+    def _steve_useitem(self, item) -> None:
         raise NotImplementedError
 
     def _monster_roar(self):
@@ -368,7 +368,7 @@ class Room:
     def set_connected_True(self) -> None:
         self.connected = True
 
-    def set_access_True(direction) -> None:
+    def set_access_True(self, direction) -> None:
         if direction == NORTH:
             if self.mynorth is None:
                 raise ValueError(f'Room {self.coords} has no room to the north of it, access cannot be set.')
@@ -397,7 +397,7 @@ class Room:
     def get_neighbours_accessibility(self) -> list[bool]:
         outputlist = []
         for direction in [NORTH, SOUTH, EAST, WEST]:
-            outputlist.append(dir_is_accessile(direction))
+            outputlist.append(self.dir_is_accessible(direction))
         return outputlist # e.g. [False, True, True, False] according to N, S, E, W
 
     def dir_is_accessible(self, direction) -> bool:
@@ -476,7 +476,7 @@ class Steve:
     def _display_inventory(self) -> None:
         raise NotImplementedError
 
-    def _add_item_to_inv(new_item: Item, num: int) -> None:
+    def _add_item_to_inv(self, new_item: Item, num: int) -> None:
         for index, dict_ in enumerate(self._inventory): # Linear search through inventory
             if str(new_item) == str(dict_["item"]): # new_item is already in the inventory
                 self._inventory[index]["number"] += num
@@ -507,7 +507,7 @@ class Creature:
     
     -- METHODS --
     """
-    def __init__(self, ...):
+    def __init__(self):
         self.info = {}
         for i in ["name", "max hitpoints", "moves"]:
             self.info[i] = None
@@ -525,8 +525,8 @@ class Creature:
     def set_moves(self, moveslist: list) -> None:
         self.info["moves"] = moveslist
 
-    def set_creature(self, moves)
-
+    def set_creature(self, moves):
+        pass
 
 class Boss(Creature):
     """
@@ -535,7 +535,6 @@ class Boss(Creature):
     -- METHODS --
     """
     def __init__(self):
+        pass
         
 
-with open("content/items.json", "r") as f:
-    items = json.load(f)
