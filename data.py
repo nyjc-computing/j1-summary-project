@@ -13,19 +13,12 @@ class Room:
         print(f"You have entered ({self.x}, {self.y}).")
     
 class Grid:
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
-        self.rooms = [[Room(x, y) for y in range(height)] for x in range(width)]
+   def __init__(self, x=2, y=2):
+       self.grid = [{0:None, 1:None, 2:{'type' : 'creature', 'creatures' : []}, 3:{'type' : 'item', 'items':[]}, 4:None}]
+       self.coordinates = [x, y]
 
-    def get_room(self, x, y):
-        if 0 <= x < self.width and 0 <= y < self.height:
-            return self.rooms[x][y]
-        else:
-            return None
-
-    def move(self, x, y):
-        pass
+   def is_encounter(self):
+       if
             
 def start_room() -> 'Room':
     pass
@@ -322,37 +315,10 @@ class Freddy:
         print('2. Stats')
         print('3. Light Level')
         dec = input('Please choose an action: ')
-        if dec == '1':
-            while self.health > 0 and target.health > 0:
-                self.display_turn()
-                self.attack(target)
-                if target.health > 0:
-                    target.attack(self)
-        elif dec == '2':
-            print('1. My stats')
-            print('2. Enemy stats')
-            stat = input("Choose who's stats you would like to inspect: ")
-            if stat == '1':
-                self.get_stats(self)
-            elif stat == '2':
-                target.get_stats(self)
-            else:
-                print('Please enter either 1 or 2.')
-                self.prompt_action(target)
-        elif dec == '3':
-            print('1. Light up')
-            print('2. Light down')
-            light = input('Please select whether you want to increase or decrease the light level: ')
-            if light == '1':
-                print('Light levels not implemented yet.')
-            elif light == '2':
-                print('Light levels not implemented yet.')
-            else:
-                print('Please enter either 1 or 2.')
-                self.prompt_action(target)
+        if dec in ['attack', 'stats', 'light level']:
+            return dec
         else:
-            print('Please enter either 1, 2 or 3.')
-            self.prompt_action(target)
+            return None
 
 
 #Status
