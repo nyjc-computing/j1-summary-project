@@ -263,11 +263,3 @@ class Freddy:
 
 
 #Status
-def sleep(target):
-    if target.has_tag('sleep'):
-        target.counter -= 1
-    else:
-        target.counter += 3
-    while target.counter != 0:
-        target.turn_end()
-    target.remove_tag('sleep')
