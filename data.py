@@ -73,14 +73,14 @@ class Character:
             if creature:
                 self.hp -= 30
             if buff:
-                self.hp += 30
+                self.hp += 50
 
 
 # Randomly assign room name to every room
 #Create path network for map
 #Modify Character & its child classes later after discussion
 
-roompaths = {
+_roompaths = {
     "T-side spawn": ["A lobby", "B lobby"],
     "A lobby": ["T-side spawn", "A long", "Catwalk"],
     "A long": ["A lobby", "A site"],
@@ -94,3 +94,7 @@ roompaths = {
     "Garden": ["A site", "Market", "Catwalk", "Tiles"],
     "Market": ["CT-side spawn", "B site", "Tiles", "Catwalk", "Garden"]
 }
+
+roomlist = []
+for room in _roompaths:
+    roomlist.append(Room(room, _roompaths[room], False, False))
