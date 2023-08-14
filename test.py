@@ -1,15 +1,22 @@
 import game
-class CodeError(Exception):
-    pass
-roomlist = []
+import data
 
+class Test:
+    def __init__(self):
+        pass
 
-def boss_present():
-    if boss not in maze:
-        raise CodeError('You removed the end game method')
+    def valid_move(self, path, location):
+        if path not in roompaths[location]:
+            print('Invalid move')
+            return False
+        else:
+            return True
 
-def player_present():
-    if player not in maze:
-        raise CodeError('How did you even make this happen')
+    def player_presence(self, location):
+        if location not in map:
+            return False
+        else:
+            return True
 
-how write test without data structure
+    
+'how write test without data structure'
