@@ -94,7 +94,7 @@ class Labyrinth:
             for y in range(labsize):
                 self.lab[x][y] = Room(x, y)
         self._generate_place_steve_boss()
-        self._generate_maze()
+        self._generate_maze(self.steve_pos)
         # give the rooms contents
 
     def _generate_place_steve_boss(self) -> None:
@@ -451,7 +451,9 @@ class Item:
         self.info["type"] = type
         self.info["description"] = desc
 
-
+    def _use_item(self):
+        pass
+        
 DEFAULT_HITPOINTS = 20
 class Steve:
     """
@@ -500,6 +502,25 @@ class Steve:
             return True
         return False
                 
+
+"""
+class Creature:
+    def __init__(self, name: str, hitpoints: int, moves: list[str]) -> None:
+        self.name = name
+        self.hp = hitpoints
+        # Do some validation of moves
+        self.moves = moves
+
+    @classmethod
+    def from_dict(cls, info: dict) -> "Creature":
+        return Creature(
+            info["name],
+            info["max_hitpoints"],
+            info["moves"]
+        )
+
+creature = Creature.from_dict(info)
+"""
 
 class Creature:
     """
