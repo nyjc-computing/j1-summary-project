@@ -4,13 +4,7 @@ import random
 class Game:
 
     def __init__(self):
-        pass
-
-    def gameover(self) -> bool:
-        """
-        returns True if game is over, else return False
-        """
-        pass
+        self.gameover = False
 
     def intro(self) -> None:
         """
@@ -24,14 +18,51 @@ class Game:
         retrive agent choice from player
         return agent name as string
         """
-        pass
+        confirm = "n"
+        agents = ["jett, sova, omen, sage"]
+        while confirm.lower() == n:
+            print("""
+            Choose your agent:
+            [1] Jett: Dash into an adjacent 
+            room if you would otherwise 
+            die (does not refresh)\n
+            [2] Sova: Scan an adjacent room for 
+            information (cooldown: 1 turn)\n
+            [3] Omen: Move to any room on 
+            the map (cooldown: 5 turns)\n
+            [4] Sage: Block a path from your 
+            current room to an adjacent one 
+            (cooldown: 3 turns)\n\n
+            """)
+            out = input("Enter [1], [2], [3] or [4] to choose: ")
+            while int(out) not in range(1,5):
+                print("Invalid Choice\n")
+                out = input("Enter [1], [2], [3] or [4] to choose: ")
+            print(f"You have chosen {agent[int(out)-1]}.\n")
+            confirm = input("Confirm? (y/n): ")
+        return agent[int(out)-1]
+            
 
-    def map_select(self) -> str:
+    def map_select(self) -> list:
         """
         retrive map choice from player
-        return map name as string
+        return list of room objects
         """
         pass
+
+    def initialise(self, map: list, agent: string) -> list:
+        """
+        scatters orbs and creatures through the map
+        sets starting positions for reyna and player
+        returns modified map
+        """
+        creatures = 5
+        orbs = 8
+        spawn_areas = map[1:-1]
+        #add player and reyna class
+        self.player_pos = map[0]
+        self.reyna_pos = map[-1]
+        return map
 
     def desc(self) -> str:
         """
@@ -67,7 +98,7 @@ class Game:
         """
         pass
 
-    def ability(self, agent) -> None:
+    def ability(self) -> None:
         """
         uses the player's ability based on
         the agent they selected
@@ -76,17 +107,25 @@ class Game:
 
     def move(self) -> None:
         """
-        move the player into an adjacent room,
-        modifies health based on orbs/creatures/reyna
+        move the player into an adjacent room
+        or keeps them in the current one while
+        passing the turn
+        returns None
         """
         pass
     
-    def prompt(self) -> None:
+    def prompt(self) -> str:
         """
         get the user's action
         returns the selected action as a string
         """
-        pass
+        print("Choose an action:\n")
+        action = input()
+        while action.lower() not in ["move", "ability"]:
+            print("Invalid Choice")
+            print("Choose an action:\n")
+            action = input()
+        return action
 
     def reyna_turn(self) -> None:
         """
@@ -95,11 +134,15 @@ class Game:
         """
         pass
 
-    
+    def update(self) -> None:
+        """
+        adjust player hp based on presence of orbs, 
+        creatures, and reyna
+        returns None
+        """
+        pass
 
-
-
-    
+    #main loop
     def run(self):
         """
         run the game
@@ -108,18 +151,18 @@ class Game:
         self.intro()
         agent = self.agent_select()
         map = self.map_select()
-
-        kill me now please
+        self.initialise(map, agent)
         
         while not self.gameover():
             self.desc()
             advance = False
             while not advance:
                 action = self.prompt()
-                if action == move:
+                if action == "move":
                     self.move()
                     advance = True
-                elif action == ability:
+                elif action == "ability":
                     self.ability()
+            self.update()
             self.reyna_turn()
-            
+            self.update()
