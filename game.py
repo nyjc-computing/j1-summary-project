@@ -63,6 +63,12 @@ class MUDGame:
                 #prompt movement
                 self.current_room.display()
                 input = self.current_room.grid.prompt_movement()
+                while input.lower() not in 'wasd' or input.lower() != 'inventory':
+                    input = self.current_room.prompt_movement()
+                #Opening inventory
+                if input.lower() == 'inventory':
+                    data.display_inventory()
+                    continue
                 #entering next room
                 if self.current_room.grid.get_position() == [0, 2] and input == 'w':
                     self.current_room.nextRoom(input)
@@ -81,8 +87,6 @@ class MUDGame:
                     self.current_room.grid.move([2, 0])
                     continue
                 #moving in current room
-                while input.lower() not in 'wasd':
-                    input = self.current_room.prompt_movement()
                 if input.lower() == 'w' and self.current_room.grid.get_position()[0] != 0:
                     current_position = self.current_room.grid.get_position()
                     current_position[1] = current_position[1] + 1
