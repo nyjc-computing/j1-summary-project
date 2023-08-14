@@ -62,10 +62,11 @@ class Character:
          - win(self, reyna : bool)
         """
 
-        def __init__(self, agent: str):
+        def __init__(self, agent: str, hp : int):
             self.agent = agent
+            self.hp = hp
 
-        def hp(self, creature: bool, buff: bool) -> None:
+        def set_hp(self, creature: bool, buff: bool) -> None:
             """
             Increases hp by 50 if buff found, and
             decreases it by 30 if creature found, no return value
