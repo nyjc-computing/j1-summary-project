@@ -71,7 +71,7 @@ Choose your agent:
         for room in spawn_orbs:
             room.setorb(True)
             
-        self.player = data.Player(agent, 100)
+        self.player = data.Player(100, agent)
         self.player_cooldown = 0
 
         self.player_pos = self.map[0]
@@ -82,9 +82,9 @@ Choose your agent:
         describe the current room, presence of objects,
         available paths, current hp and ability usage options
         """
-        print(f"You are in {getattr(self.player_pos, 'name')}.")
+        print(f"\nYou are in {getattr(self.player_pos, 'name')}.")
         print(f"You have {getattr(self.player, 'hp')} hp.")
-        print(f"You can move to the following rooms: ")
+        print(f"\nYou can move to the following rooms: ")
         paths = getattr(self.player_pos, 'paths')
         for path in paths:
             print(path)
@@ -135,26 +135,27 @@ Choose your agent:
         passing the turn
         returns 1 if the turn passes, 0 if it does not
         """
-        rooms = data.roompaths
-        print("Where do you want to go?")
+        rooms = data.roomlist
+        print("\nWhere do you want to go?")
         paths = getattr(self.player_pos, 'paths')
         for i, path in enumerate(paths):
             print(f"[{i+1}]: {path}")
         print(f"[{len(paths)+1}]: Cancel action")
         loc = input("Choose a number: ")
-        while loc not in [str(x) for x in range(1, len(paths)+1)]:
+        while loc not in [str(x) for x in range(1, len(paths)+2)]:
             print("Invalid Input")
             loc = input("Choose a number: ")
-        if loc == len(paths) + 1:
+        if int(loc) == len(paths) + 1:
             return 0
         else:
-            loc = paths[loc-1]
+            loc = paths[int(loc)-1]
+            print(loc)
             for room in self.map:
                 if getattr(room, "name") == loc:
                     self.player_pos = room
                     return 1
-                else:
-                    print("something has gone very wrong")
+            else:
+                print("something has gone very wrong")
 
 
     def prompt(self) -> str:
@@ -162,11 +163,11 @@ Choose your agent:
         get the user's action
         returns the selected action as a string
         """
-        print("Choose an action 'Move' or 'ability':\n")
+        print("\nChoose an action 'Move' or 'Ability':")
         action = input()
         while action.lower() not in ["move", "ability"]:
             print("Invalid Choice")
-            print("Choose an action:\n")
+            print("Choose an action 'Move' or 'Ability':")
             action = input()
         return action
 
@@ -175,15 +176,15 @@ Choose your agent:
         Moves reyna to a room adjacent to her current
         room randomly
         """
-        rooms = data.roompaths
+        rooms = data.roomlist
         paths = getattr(self.reyna_pos, 'paths')
         move = random.choice(paths)
         for room in self.map:
             if getattr(room, "name") == move:
                 self.reyna_pos = room
                 return 1
-            else:
-                print("something has gone very wrong")
+        else:
+            print("something has gone very wrong")
 
     def update(self) -> None:
         """
@@ -191,10 +192,11 @@ Choose your agent:
         creatures, and reyna
         returns None
         """
+        print()
         if self.reyna_pos == self.player_pos:
             print("Reyna has found you!")
             self.gameover = True
-            if getattr(self.character, "hp") >= 300:
+            if getattr(self.player, "hp") >= 300:
                 self.win = True
                 print("Somehow, you manage to win the gunfight.")
             else:
@@ -202,14 +204,16 @@ Choose your agent:
 
         if getattr(self.player_pos, "creature"):
             print("There is utility in this room, you lose 30 hp handling it.")
-            self.character.set_hp(True, False)
-            if getattr(self.character, "hp") <= 0:
+            self.player.set_hp(True, False)
+            self.player_pos.setcreature(False)
+            if getattr(self.player, "hp") <= 0:
                 print("Unfortunately, it was enough to kill you.")
                 self.gameover = True
 
         if getattr(self.player_pos, "orb"):
             print("There is a shield orb in this room, you gain 50 hp.")
-            self.character.set_hp(False, True)
+            self.player.set_hp(False, True)
+            self.player_pos.setorb(False)
             
     #main loop
     def run(self):
@@ -236,3 +240,7 @@ Choose your agent:
             self.update()
             self.reyna_turn()
             self.update()
+        if self.win:
+            print("VICTORY")
+        else:
+            print("DEFEAT")
