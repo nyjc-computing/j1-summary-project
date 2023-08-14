@@ -18,5 +18,11 @@ class Test:
         else:
             return True
 
+    def end_state(self, player_hp):
+        if player_hp < 300:
+            return True
+        else:
+            return False
     
 'how write test without data structure'
+'what do i even test'
