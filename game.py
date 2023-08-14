@@ -1,6 +1,6 @@
 from map import Room, setup
 
-class game:
+class Game:
     '''a class that runs when the game runs
 
     attributes
@@ -19,14 +19,14 @@ class game:
     def __init__(self):
         self.end = False
         self.room = setup()
-
+        self.character = Character()
     def intro(self):
         # start of the game
         print('Welcome to Hogwarts School of Witchcraft and Wizardry\n')
-        name = input('Key in what do you wish to be named: ')
-        print(f'\nWelcome {name}, in this game you can either move (up, down, left, right), attack or use objects\n')
+        self.character.name = input('Key in what do you wish to be named: ')
+        print(f'\nWelcome {self.character.name}, in this game you can either move (up, down, left, right), attack or use objects\n')
         decision = input('Do you wish to enter the school? (y/n): ')
-        if decision == "n":
+        if decision == "n":''
             self.end = True
     
 
@@ -46,17 +46,23 @@ class game:
         # ask for input
         decision = input('\nWhat do you wish to do? (move, attack): ')
 
+        # if input = movement, ask for direction
         if decision == 'move':
-            # if input = movement, ask for direction
-            movement = input('\nWhich direction do you wish to move in? (up, down, left, right): ')
-            while movement not in available:
-                movement = input('Which direction do you wish to move in? (up, down, left, right): ')
-    
-            # if input = movement, move in direction
-            for direction in ('left', 'right', 'up', 'down'):
-                if movement == direction:
-                    self.room = getattr(self.room, direction)
+            self.move()
 
+        # if input = attack, deal damage to monster
         elif decision == 'attack':
-            # if input = attack, deal damage to monster
-            pass
+            self.character.attack()
+
+    def move(self):
+        movement = input('\nWhich direction do you wish to move in? (up, down, left, right): ')
+        while movement not in available:
+        movement = input('Which direction do you wish to move in? (up, down, left, right): ')
+
+        # if input = movement, move in direction
+        for direction in ('left', 'right', 'up', 'down'):
+            if movement == direction:
+                self.room = getattr(self.room, direction)
+    
+    def attack(self):
+        pass
