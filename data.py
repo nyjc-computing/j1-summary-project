@@ -24,6 +24,14 @@ class Grid:
         else:
             return None
 
+    def move(self, x, y):
+        pass
+            
+def start_room() -> 'Room':
+    pass
+
+def get_position():
+    pass
 
 
 #Start
@@ -31,7 +39,7 @@ def start_menu():
     print('Welcome to FNAF:Reckoning!')
     choice = input("Type 'Start' to begin or 'Info' for more information: ")
     if choice.lower() == 'start':
-        character_select()
+        choose_character()
     elif choice.lower() == 'info':
         info()
     else:
@@ -95,30 +103,37 @@ def info():
         print('--------------------------------------------------------')
         info()
         
-    elif 'Back' in cr.lower():
+    elif 'back' in cr.lower():
         start_menu()
     else:
         print('Please enter a valid animatronic.')
         info()
     
-def character_select():
+def choose_character():
     print('Characters:')
     print('1. Freddy Fazbear')
     print('2. Bonnie')
     print('3. Chica')
     print('4. Foxy')
-    cr = input('Please select your character: ')
+    cr = input('Please select your character or skip if you are ready to start the game: ')
     if cr.lower() == 'freddy':
         print('You have selected Freddy Fazbear.')
+        return 'freddy'
     elif 'bonnie' in cr.lower():
         print('You have selected Bonnie.')
+        return 'bonnie'
     elif 'chica' in cr:
         print('You have selected Chica.')
+        return 'chica'
     elif 'foxy' in cr:
         print('You have selected Foxy.')
+        return 'foxy'
+    elif 'skip' in cr.lower():
+        print('The game will begin.')
+        return 'skip'
     else:
         print('Please enter a valid animatronic.')
-        character_select()
+        return None
 
 
 
@@ -132,11 +147,11 @@ def accuracy(hit_chance):
 
 #Characters and Enemies
 class GB:
-    def __init__(self, name, tag=None, counter=0, health=50, damage=0):
+    def __init__(self, name, status=None, counter=0, health=50, damage=0):
         self.name = name
         self.health = health
         self.counter = counter
-        self.tag = tag if tag is not None else []
+        self.status = status if status is not None else []
         self.damage = damage
 
     def take_damage(self, damage: int):
@@ -144,21 +159,34 @@ class GB:
         if self.health <= 0:
             print(f"{self.name} has died!")
 
-    def add_tag(self, tag):
-        self.tag.append(tag)
+    def add_status(self, status):
+        self.status.append(status)
 
-    def remove_tag(self, tag):
-        if tag in self.tag:
-            self.tag.remove(tag)
+    def remove_status(self, status):
+        if status in self.status:
+            self.status.remove(status)
 
-    def has_tag(self, tag):
-        return tag in self.tag
+    def has_status(self, status):
+        return status in self.status
+
+    def turn_end(self):
+        self.counter -= 1
+
+    def get_stats(self, target):
+        print(f"{self.name}'s stats")
+        print(f"HP: {self.health}")
+        #print(f"Light level: {self.light}")
+        if self.status == []:
+            print('Status: No statuses.')
+        else:
+            for status in self.status:
+                print(f'Status: {status}')
+        target.prompt_action(self)
 
     def attack(self, target):
-        if 'sleep' in self.tag:
+        if 'sleep' in self.status:
             print(f'{self.name} is asleep!')
             sleep(self)
-            return
         else:
             print(f"{self.name} attacks {target.name}!")
             n = random.randint(1, 100)
@@ -178,15 +206,16 @@ class GB:
                     self.damage -= 15
                 else:
                     print('The attack missed!')
+        print('---------------------------------------------------------')
 
 
 
 class Freddy:
-    def __init__(self, name, tag=None, counter=0, attacking=0, health=100, inventory=None):
+    def __init__(self, name, status=None, counter=0, attacking=0, health=100, inventory=None):
         self.name = name
         self.health = health
         self.counter = counter
-        self.tag = tag if tag is not None else []
+        self.status = status if status is not None else []
         self.attacking = attacking
         self.inventory = inventory if inventory is not None else []
 
@@ -206,60 +235,143 @@ class Freddy:
         for item in self.inventory:
             print(item)
 
+    def add_status(self, status):
+        self.status.append(status)
+        
     def add_items(self, item):
         self.inventory.append(item)
 
     def attack(self, target):
             print(f"Freddy attacks {target.name}!")
-            print('1. Mic Toss  90 acc  15 dmg                                                          2. Sing  40 acc - dmg                                                                3. The Bite  19 acc 87 dmg')
+            print('1. Mic Toss  90 acc  15 dmg')
+            print('2. Sing  40 acc - dmg')
+            print('3. The Bite  19 acc 87 dmg')
             atk = input("Please select an ability to use: ")
             if atk == '1':    
                 print('Freddy used Mic Toss!')
                 if accuracy(90) == True:
+                    self.passive(target)
                     self.attacking += 15
                     print(f"{target.name} took {self.attacking} damage!")
                     target.take_damage(self.attacking)
                     self.attacking -= 15
+                    self.depassive(target)
                 else:
                     print('The attack missed!')
             if atk == '2':
                 print('Freddy used Sing!')
-                if target.has_tag('sleep'):
+                if target.has_status('sleep'):
                     print(f'{target.name} is already asleep!')
                     return
                 else:
-                    if accuracy(40) == True:
+                    if accuracy(100) == True:
                         print(f"{target.name} fell asleep!")
-                        target.add_tag('sleep')
                         sleep(target)
+                        target.add_status('sleep')
                     else:
                         print('The attack missed!')
             if atk == '3':
                 print('Freddy used The Bite!')
                 if accuracy(19) == True:
+                    self.passive(target)
                     self.attacking += 87
                     print(f"{target.name} took {self.attacking} damage!")
                     target.take_damage(self.attacking)
                     self.attacking -= 87
+                    self.depassive(target)
                 else:
                     print('The attack missed!')
             if atk < '1' or atk > '3':
                 print('Please select a valid ability.')
                 self.attack(target)
+            
     
     def passive(self, target):
-        if 'sleep' in target.tag:
+        if 'sleep' in target.status:
             self.attacking += 5
 
-    def add_tag(self, tag):
-        self.tag.append(tag)
+    def depassive(self, target):
+        if 'sleep' in target.status:
+            self.attacking -= 5
 
-    def remove_tag(self, tag):
-        if tag in self.tag:
-            self.tag.remove(tag)
+    def remove_status(self, status):
+        if status in self.status:
+            self.status.remove(status)
 
-    def has_tag(self, tag):
-        return tag in self.tag
+    def has_status(self, status):
+        return status in self.status
+
+    def display_turn(self):
+        print(f"It is {self.name}'s turn.")
+
+    def get_stats(self, target):
+        print(f"{self.name}'s stats")
+        print(f"HP: {self.health}")
+        #print(f"Light level: {self.light}")
+        if self.status == []:
+            print('Status: No statuses.')
+        else:
+            for status in self.status:
+                print(status)
+        back = input('Type Back to return.')
+        if back.lower() == 'back':
+            self.prompt_action(target)
+
+    def prompt_action(self, target):
+        print('1. Attack')
+        print('2. Stats')
+        print('3. Light Level')
+        dec = input('Please choose an action: ')
+        if dec == '1':
+            while self.health > 0 and target.health > 0:
+                self.display_turn()
+                self.attack(target)
+                if target.health > 0:
+                    target.attack(self)
+        elif dec == '2':
+            print('1. My stats')
+            print('2. Enemy stats')
+            stat = input("Choose who's stats you would like to inspect: ")
+            if stat == '1':
+                self.get_stats(self)
+            elif stat == '2':
+                target.get_stats(self)
+            else:
+                print('Please enter either 1 or 2.')
+                self.prompt_action(target)
+        elif dec == '3':
+            print('1. Light up')
+            print('2. Light down')
+            light = input('Please select whether you want to increase or decrease the light level: ')
+            if light == '1':
+                print('Light levels not implemented yet.')
+            elif light == '2':
+                print('Light levels not implemented yet.')
+            else:
+                print('Please enter either 1 or 2.')
+                self.prompt_action(target)
+        else:
+            print('Please enter either 1, 2 or 3.')
+            self.prompt_action(target)
 
 
 #Status
+def sleep(target):
+    if target.has_status('sleep'):
+        if target.counter != 0:
+            target.turn_end()
+        else:
+            target.remove_status('sleep')
+            print(f'{target.name} woke up!')
+    else:
+        target.counter += 3
+
+def corrupt(target):
+    if target.has_status('corrupt'):
+        if target.counter != 0:
+            target.turn_end()
+        else:
+            target.remove_status('corrupt')
+            print(f'{target.name} stabilised itself!')
+    else:
+        target.counter += 1
