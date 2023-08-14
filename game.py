@@ -11,7 +11,15 @@ class Game:
         print intro message, instructions, etc.
         returns nothing 
         """
-        pass
+        print("""
+        Welcome to the world of Valorant, a realm where strategic prowess and lightning reflexes collide to forge legends. As you step into this immersive MUD (Multi-User Dungeon) game, the echoes of battles past and the anticipation of those yet to come reverberate through the virtual landscapes. Prepare to embody the spirit of a true agent, wielding not just weapons, but your wit, tactics, and camaraderie with your teammates.
+
+In this digital realm, you are no longer just a player; you are an agent of destiny. As you navigate the intricate corridors and expansive arenas, your every decision influences the fate of the battle at hand. Valorant MUD takes the heart-pounding intensity of the tactical shooter to a new dimension, fusing it with the text-based adventure and immersive storytelling of a classic MUD game.
+
+From the hushed footsteps echoing through the corridors to the rapid exchange of intel amongst allies, every keystroke and command you enter shapes the unfolding drama. As you connect with players from across the globe, a synergy of tactics and strategies emerges, much like the synergy between agents on the battlefield. Each challenge you face is a chance to prove your mettle, each victory a testament to your skill, teamwork, and adaptability.
+
+Embark on this journey as an agent, and carve your legacy amidst the ever-evolving narrative of Valorant MUD. Are you prepared to embrace the role of an agent, to master your abilities, to seize victory through calculated actions, and to leave your indelible mark on this dynamic universe? The battlefield awaits, and your adventure begins now.
+        """)
 
     def agent_select(self) -> str:
         """
@@ -53,6 +61,8 @@ class Game:
     def initialise(self, map: list, agent: string) -> list:
         """
         scatters orbs and creatures through the map
+        creates player class
+        sets cooldown for player
         sets starting positions for reyna and player
         returns modified map
         """
@@ -70,6 +80,8 @@ class Game:
             room.setorb(True)
             
         self.player = data.Player(agent, 100)
+        self.player_cooldown = 0
+
         self.player_pos = map[0]
         self.reyna_pos = map[-1]
         
@@ -81,8 +93,14 @@ class Game:
         available paths, and ability usage options
         """
         print(f"You are in {getattr(self.player_pos, 'name')}.")
-        
-        pass
+        print(f"You can move to the following rooms: ")
+        paths = getattr(self.player_pos, 'paths')
+        for path in paths:
+            print(path)
+        if self.player_cooldown == 0:
+            print("You can use your ability.")
+        else:
+            print(f"{self.player_cooldown} turns until you can use your ability.")
     
     def sova(self, room: str) -> None:
         """
