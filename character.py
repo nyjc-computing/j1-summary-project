@@ -14,9 +14,9 @@ class Character:
     + attack():
     
     """
-    def __init__(self, name: str) -> None:
-        self.name = name
-        self.health = 0
+    def __init__(self) -> None:
+        self.name = 'Hero'
+        self.health = 100
         self.spell = None
         self.battle_points = 0
 
@@ -29,5 +29,8 @@ class Character:
         """
         enemyHP -= self.battle_points
         return enemyHP
+
+    def update_health(self, enemy_attack: int) -> int:
+        self.health -= enemy_attack
 
     

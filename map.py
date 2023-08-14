@@ -15,7 +15,7 @@ class Room:
     nil?
     """
     
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name = name
         self.enemy = None
         self.left = None
@@ -25,6 +25,18 @@ class Room:
 
     def __repr__(self):
         print(f"Room({self.name})")
+
+    def link_left(self, name: str):
+        self.left = name
+
+    def link_right(self, name: str):
+        self.right = name
+
+    def link_up(self, name: str):
+        self.up = name
+
+    def link_down(self, name: str):
+        self.down = name
 
 def setup():
     """

@@ -8,8 +8,7 @@ class Enemy:
     + spell: str
     + health: int
     + battle_points: int
-    + die: bool
-    + drop: str
+    + loot: str
 
     Methods
     -------
@@ -20,10 +19,9 @@ class Enemy:
     def __init__(self, name: str) -> None:
         self.name = name
         self.spell = None
-        self.health = 0
-        self.battle_points = 0
-        self.die = False
-        self.drop = None
+        self.health = 100
+        self.battle_points = 10
+        self.loot = None
 
     def __repr__(self) -> None:
         print(f"enemy{self.name}")
@@ -34,14 +32,20 @@ class Enemy:
         """
         characterHP -= self.battle_points
         return characterHP
-
-    def run(self) -> str:
+    
+    def is_dead(self) -> str:
         """
         checks if enemy is dead.
         returns the HP is it is not
         drops something if it is dead
         """
-        if self.die == True:
-            return self.drop
-        else:
-            return self.health
+        if self.health == 0:
+            return self.loot
+
+
+big_boss = Enemy('Voldemort')
+medium_boss = Enemy('LingKai')
+small_boss1 = Enemy('Basilisk')
+small_boss2 = Enemy('Dementors')
+
+enemies = [{big_boss]
