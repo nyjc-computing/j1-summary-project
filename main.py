@@ -1,8 +1,8 @@
 # Import statements
 
-from game import game
+from game import Game
 
 if __name__ == "__main__":
-    play = game()
+    play = Game()
     play.intro()
     play.run()
