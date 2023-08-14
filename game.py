@@ -52,7 +52,7 @@ class Game:
 
         # if input = attack, deal damage to monster
         elif decision == 'attack':
-            self.character.attack()
+            self.attack()
 
     def move(self):
         movement = input('\nWhich direction do you wish to move in? (up, down, left, right): ')
@@ -65,4 +65,4 @@ class Game:
                 self.room = getattr(self.room, direction)
     
     def attack(self):
-        pass
+        self.character.attack()
