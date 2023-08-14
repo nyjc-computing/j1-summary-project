@@ -1,0 +1,287 @@
+#File for data designer
+
+import json
+import random
+
+NORTH = "NORTH"
+SOUTH = "SOUTH"
+WEST = "WEST"
+EAST = "EAST"
+# NOVICE = "NOVICE"
+# JOURNEYMAN = "JOURNEYMAN"
+# MASTER = "MASTER"
+STARTROOM = "STARTROOM"
+
+
+CREATURE = "CREATURE"
+
+
+labsize = 10 # cannot be too small!!
+class Labyrinth:
+    def __init__(self):
+        self.lab = [[None] * labsize] * labsize
+        self.difficulty_level = None
+        self.boss_pos = [-1, -1] # Decided upon generation
+        self.steve_pos = [-1, -1] # Decided upon generation
+
+    def generate(self) -> None:
+        """Generates the maze by:
+        1. Filling in empty rooms in the empty maze
+        2. Chooses (somewhat) randomly which room is the startroom room where Steve is placed
+        3. Places the boss room opposite to startroom
+        4. Makes the rooms connected like a maze structure
+        5. Fills in the rooms with random contents (creatures and items)
+        
+        6. (Unimplemented functionality) Takes in a difficulty level and sets the game accordingly
+        
+        Requires the use of helper methods, namely:
+        _generate_place_steve_boss()
+        _generate_maze()
+        _generate_rooms_connected()
+        _generate_link_rooms()
+        """
+        raise NotImplementedError
+        # self.difficulty_level = difficulty_level
+        # put in empty rooms
+        for x in range(labsize):
+            for y in range(labsize):
+                self.lab[x][y] = Room(x, y)
+        self._generate_place_steve_boss()
+        
+        # set up walls
+
+        
+
+        
+        
+        # give the rooms random contents
+
+    def _generate_place_steve_boss():
+        """One of many helper methods of the generate() method.
+
+        Chooses a startroom somewhat randomly, places Steve there,
+        and places the boss in a room opposite of startroom
+
+        How startroom is chosen:
+        - The possible rooms to be picked are rooms nearer to the perimeter than the center.
+        - e.g. If the labyrinth is 10 by 10 rooms, the middle 6 by 6 rooms cannot be chosen as startroom. the surrounding 64 rooms can be chosen as rooms.
+        - Of the 64 rooms nearing the far sides of the labyrinth, one room is chosen at random.
+        - This means that labsize cannot be too small, or the generation may break. ie labsize cannot be less than 4.
+
+        How bossroom is chosen:
+        - e.g. labsize is set to 10 and startroom coords are [1, 7]
+        - bossroom is at the opposite of the square
+        """
+        # choose position of Start room randomly
+        n = labsize // 4
+        n = random.randint(-n, n - 1)
+        m = random.randint(0, labsize - 1)
+        
+        steve_x = random.randint(-n, n - 1)
+        m = labsize // 4
+        steve_y = random.randint(-m, m - 1)
+        self.lab[steve_x][steve_y].settype_startroom()
+        self.steve_pos = [steve_x, steve_y]
+        # choose position of Monster room opposite to where steve is
+        boss_x = labsize - 1 - steve_x
+        boss_y = labsize - 1 - steve_y
+        if (boss_x, boss_y) == (steve_x, steve_y): # if they happen to be placed in the same room
+            raise ValueError("Steve and the Boss have been put at the same location!")
+        self.lab[boss_x][boss_y].boss_enters()    
+
+    def _generate_maze(startroom_pos: list) -> None:
+        raise NotImplementedError
+    
+    def _generate_link_rooms(room1coords: list, room2coords: list) -> None:
+        raise NotImplementedError
+    
+    def _generate_rooms_connected() -> bool:
+        """
+        One of many helper methods of the generate() method.
+        
+        linearly search the rooms to check whether the rooms are connected to the startroom.
+        returns True if yes, returns False otherwise
+        
+        """
+        is_connected = True
+        for column in self.lab:
+            for room in column:
+                # room is an instance of the Room class
+                if not room.connected:
+                    return False
+        # Exit loop means that all rooms have connected attribute set as True
+        # means all rooms are connected by generate_maze
+        return True
+
+    def move_boss(self):
+        dirlist = [NORTH, SOUTH, EAST, WEST]
+        random.shuffle(dirlist)
+        for randomdir in dirlist:
+            if  _can_move_here(boss_pos, randomdir):
+
+
+
+                return None
+                
+    def move_steve(self, direction) -> bool:
+        if _can_move_here(self.steve_pos):
+            if direction == NORTH:
+                return None
+            if direction ==  SOUTH:
+                return None
+            if direction == EAST:
+                return None
+            if direction == WEST:
+                return None        
+
+    def _can_move_here(self, coords: list(int), direction):
+        x, y = coords
+        if x < 0 or x >= labsize or y < 0 or y >= labsize: # this should not happen at all
+            raise IndexError("entity is not inside of maze")
+        raise NotImplementedError
+        if direction == NORTH:
+            return False
+
+    def _steve_useitem(item: Item) -> None:
+        raise NotImplementedError
+
+    def _monster_roar(self):
+        raise NotImplementedError
+
+
+
+class Room:
+    def __init__(self, x: int, y: int):
+        self.coords = [x, y]
+        self.type = {"startroom?": False, "steve?": False, "creature": None, "item": None, "boss?": False}
+        self.connected = False
+        if y + 1 >= labsize:
+            self.mynorth = None
+        else:
+            self.mynorth = {"coords": [x, y + 1], "access": False}
+        if y <= 0:
+            self.mysouth = None
+        else:
+            self.mysouth = {"coords": [x, y - 1], "access": False}
+        if x + 1 >= labsize:
+            self.myeast = None
+        else:
+            self.myeast = {"coords": [x + 1, y], "access": False}
+        if x <= 0:
+            self.mywest = None
+        else:
+            self.mywest = {"coords": [x - 1, y], "access": False}
+
+    def settype_startroom() -> None:
+        self.type["startroom?"] = True
+        self.type["steve?"] = True
+        self.connected = True
+
+    def steve_leaves() -> None:
+        self.type["steve?"] = False
+
+    def steve_enters() -> None:
+        self.type["steve?"] = True
+
+    def boss_leaves() -> None:
+        self.type["boss?"] = False
+            
+    def boss_enters() -> None:
+        self.type["boss?"] = True
+
+class Item:
+    def __init__(self):
+        self.info = {}
+        for i in ["name", "item type", "description"]:
+            self.info[i] = None
+
+    def __repr__(self) -> str:
+        outputstr = ''
+        for key, value in self.info.items():
+            outputstr += key.capitalize() + ": " + value
+        return outputstr
+
+    def __str__(self) -> str:
+        outputstr = ''
+        for key, value in self.info.items():
+            outputstr += key.capitalize() + ": " + value
+        return outputstr
+
+    def set_nametypedesc(self, name: str, type: str, desc: str) -> None:
+        self.info["name"] = name
+        self.info["type"] = type
+        self.info["description"] = desc
+
+
+DEFAULT_HITPOINTS = 20
+class Steve:
+    def __init__(self, n: int):
+        self._inventory = [] # list of dict
+        # each dict in self.inventory describes an item, as well as the number of it in the inventory.
+        # e.g. {"item": Health_Potion, "number": 2}
+        # There should NOT be duplicate dicts in self.inventory e.g. 2 different dicts in self.inventory with "item" being Health_Potions
+        self.inv_slots_num = n
+        self.armour = {}
+        for slot in ["helmet", "chestplate", "leggings", "boots"]:
+            self.armour[i] = None
+        self.health = DEFAULT_HITPOINTS
+
+    def __repr__(self):
+        return f"Steve has {self.heatlh} HP."
+
+    def _display_inventory(self) -> None:
+        raise NotImplementedError
+
+    def _add_item_to_inv(new_item: Item, num: int) -> None:
+        for index, dict_ in enumerate(self._inventory): # Linear search through inventory
+            if str(new_item) == str(dict_["item"]): # new_item is already in the inventory
+                self._inventory[index]["number"] += num
+                return None
+        # If exit loop, inventory does not have any of new_item
+        # create a dict to add to self.inventory
+        self.inventory.append({"item": new_item, "number": num})
+        return None
+
+    def _discard_item(item: Item, num: int) -> None:
+        raise NotImplementedError
+
+    def _equip_armour(self, armour_item: Item) -> None:
+        raise NotImplementedError
+        
+    def _get_hurt(self, damage: int):
+        raise NotImplementedError
+
+    def isdead(self) -> bool:
+        if self.health <= 0:
+            return True
+        return False
+                
+
+class Creature:
+    def __init__(self, ...):
+        self.info = {}
+        for i in ["name", "max hitpoints", "moves"]:
+            self.info[i] = None
+        self.hitpoints = None
+        
+
+
+    def set_name(self, name: str) -> None:
+        self.info["name"] = name
+
+    def set_maxhp(self, maxhp: int) -> None:
+        self.info["max hitpoints"] = maxhp
+        self.hitpoints = maxhp
+
+    def set_moves(self, moveslist: list) -> None:
+        self.info["moves"] = moveslist
+
+    def set_creature(self, moves)
+
+
+class Monster(Creature):
+    def __init__(self):
+        
+
+with open("content/items.json", "r") as f:
+    items = json.load(f)
