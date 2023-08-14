@@ -156,18 +156,22 @@ class MUDGame:
                                     enemy_list[target].set_status(statuses)
                                 if heal != None:
                                     active_character.receive_heal(heal) 
-                        elif action == 'target':
+                        elif action.lower() == 'target':
                             target = active_character.target() - 1
                             continue
-                        elif action == 'info':
+                        elif action.lower() == 'stats':
                             active_character.get_stats()
                             continue
-                        elif action == 'light':
+                        elif action.lower() == 'light':
                             input = active_character.prompt_light()
                             if input == 'increase':
                                 active_character.increase_light(10)
-                            elif input == 'decrease':
+                            elif input.lower() == 'decrease':
                                 active_character.decrease_light(10)
+                            elif input.lower() == 'back':
+                                continue
+                        elif action.lower() == 'item':
+                            
                     for character in turn_order:
                         if character.is_defeated():
                             turn_order.remove(character)
