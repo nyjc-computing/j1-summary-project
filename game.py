@@ -48,7 +48,7 @@ class Game:
         retrive map choice from player
         return list of room objects
         """
-        pass
+        return data.roomlist
 
     def initialise(self, map: list, agent: string) -> list:
         """
@@ -56,12 +56,23 @@ class Game:
         sets starting positions for reyna and player
         returns modified map
         """
+        
         creatures = 5
         orbs = 8
         spawn_areas = map[1:-1]
-        #add player and reyna class
+        
+        spawn_creatures = random.sample(spawn_areas, creatures)
+        for room in spawn_creatures:
+            room.setcreature(True)  
+            
+        spawn_orbs = random.sample(spawn_areas, orbs)
+        for room in spawn_orbs:
+            room.setorb(True)
+            
+        self.player = data.Player(agent, 100)
         self.player_pos = map[0]
         self.reyna_pos = map[-1]
+        
         return map
 
     def desc(self) -> None:
