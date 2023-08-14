@@ -50,31 +50,31 @@ class Character:
     def __init__(self, hp: int):
         self.hp = hp
 
-    class Player:
+class Player(Character):
+    """
+    A sub class of Character class
+
+    Attributes:
+    agent : Name of agent
+    
+    Methods:
+     - hp(self, creature : bool, buff : bool)
+     - win(self, reyna : bool)
+    """
+
+    def __init__(self, hp : int, agent: str):
+        super().__init__(hp)
+        self.agent = agent
+
+    def set_hp(self, creature: bool, buff: bool) -> None:
         """
-        A sub class of Character class
-
-        Attributes:
-        agent : Name of agent
-        
-        Methods:
-         - hp(self, creature : bool, buff : bool)
-         - win(self, reyna : bool)
+        Increases hp by 50 if buff found, and
+        decreases it by 30 if creature found, no return value
         """
-
-        def __init__(self, agent: str, hp : int):
-            self.agent = agent
-            self.hp = hp
-
-        def set_hp(self, creature: bool, buff: bool) -> None:
-            """
-            Increases hp by 50 if buff found, and
-            decreases it by 30 if creature found, no return value
-            """
-            if creature:
-                self.hp -= 30
-            if buff:
-                self.hp += 50
+        if creature:
+            self.hp -= 30
+        if buff:
+            self.hp += 50
 
 
 # Randomly assign room name to every room
