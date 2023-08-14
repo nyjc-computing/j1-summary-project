@@ -64,11 +64,13 @@ class Game:
         self.reyna_pos = map[-1]
         return map
 
-    def desc(self) -> str:
+    def desc(self) -> None:
         """
         describe the current room, presence of objects,
         available paths, and ability usage options
         """
+        print(f"You are in {getattr(self.player_pos, 'name')}.")
+        
         pass
     
     def sova(self, room: str) -> None:
