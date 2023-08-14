@@ -355,7 +355,6 @@ class Freddy:
             self.prompt_action(target)
 
 
-
 #Status
 def sleep(target):
     if target.has_status('sleep'):
