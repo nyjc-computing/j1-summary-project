@@ -123,7 +123,7 @@ class Labyrinth:
         random.shuffle(nm)
         steve_x, steve_y = nm
         self.lab[steve_x][steve_y].settype_startroom()
-        self.steve_pos = mylist
+        self.steve_pos = nm
         # choose position of Monster room opposite to where steve is
         boss_x = labsize - 1 - steve_x
         boss_y = labsize - 1 - steve_y
@@ -145,7 +145,7 @@ class Labyrinth:
                         self._generate_force_connect([x, y])
             unconnected = self._generate_count_unconnected_rooms()
 
-    def _generate_force_connect(roomcoords: list[int]) -> None:
+    def _generate_force_connect(self, roomcoords: list[int]) -> None:
         """links holes in connectivity of maze to as many adjacent rooms as possible"""
         newdirlist = DIRLIST.copy()
         random.shuffle(newdirlist)
@@ -156,7 +156,7 @@ class Labyrinth:
                 if t not in self.posscoords:
                     possible = False
             if possible:
-                _generate_link_rooms(roomcoords, neighbourcoords)
+                self._generate_link_rooms(roomcoords, neighbourcoords)
                 
             
     def _generate_recursive_linking(self, thisroomcoords: list[int]) -> None:
@@ -257,17 +257,17 @@ class Labyrinth:
         dirlist = [NORTH, SOUTH, EAST, WEST]
         random.shuffle(dirlist)
         for randomdir in dirlist:
-            if self._can_move_here(boss_pos, randomdir):
+            if self._can_move_here(self.boss_pos, randomdir):
                 x, y = self.boss_pos
                 self.lab[x][y].boss_leaves()
                 for i in range(4):
                     if randomdir == [NORTH, SOUTH, EAST, WEST][i]:
                         randomdir = DIRLIST[i]
                 self.boss_pos = [x + randomdir[0], y + randomdir[1]]
-                x, y = sefl.boss_pos
+                x, y = self.boss_pos
                 self.lab[x][y].boss_leaves()
                 return None
-        raise RunTimeError(f"Boss cannot move because its room {self.boss_pos} is unlinked to neighbours.")
+        raise RuntimeError(f"Boss cannot move because its room {self.boss_pos} is unlinked to neighbours.")
                 
     def try_move_steve(self, direction) -> bool:
         raise NotImplementedError
@@ -467,7 +467,7 @@ class Steve:
         self.inv_slots_num = n
         self.armour = {}
         for slot in ["helmet", "chestplate", "leggings", "boots"]:
-            self.armour[i] = None
+            self.armour[slot] = None
         self.health = DEFAULT_HITPOINTS
 
     def __repr__(self):
