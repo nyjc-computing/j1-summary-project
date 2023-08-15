@@ -14,6 +14,8 @@ STARTROOM = "STARTROOM"
 DIRLIST = [[0, 1], [0, -1], [1, 0], [-1, 0]] # according to N, S, E, W
 
 
+
+
 CREATURE = "CREATURE"
 
 
@@ -419,7 +421,11 @@ class Room:
             return True
         raise ValueError("argument passed into dir_is_accessible() should be a direction value.")
         
-            
+
+FOODITEM = "FOODITEM"
+WEAPONITEM = "WEAPONITEM"
+ARMOURITEM = "ARMOURITEM"
+UTILITYITEM = "UTILITYITEM"
 
 class Item:
     """
@@ -441,10 +447,10 @@ class Item:
         return outputstr
 
     def __str__(self) -> str:
-        outputstr = ''
-        for key, value in self.info.items():
-            outputstr += key.capitalize() + ": " + value
-        return outputstr
+        name = self.info["name"]
+        if name is None:
+            return "EmptyItem"
+        return str(name)
 
     def set_nametypedesc(self, name: str, type: str, desc: str) -> None:
         self.info["name"] = name
@@ -471,14 +477,25 @@ class Steve:
         for slot in ["helmet", "chestplate", "leggings", "boots"]:
             self.armour[slot] = None
         self.health = DEFAULT_HITPOINTS
+        self.defense = 0
+        self.weapon = None
+        self.base_damage = 2 # default
 
     def __repr__(self):
         return f"Steve has {self.heatlh} HP."
 
     def _display_inventory(self) -> None:
-        raise NotImplementedError
+        if self.inventory == []:
+            print("You have no items in your inventory.\n")
+            return None
+        print("\nYou have:\n")
+        for i in self.inventory:
+            item, number = str(i["item"]), str(i["number"])
+            print(f"{number:>2} {item}")
+        print("\n")
+        return None
 
-    def _add_item_to_inv(self, new_item: Item, num: int) -> None:
+    def _add_item_to_inv(self, new_item: "Item", num: int) -> None:
         for index, dict_ in enumerate(self._inventory): # Linear search through inventory
             if str(new_item) == str(dict_["item"]): # new_item is already in the inventory
                 self._inventory[index]["number"] += num
@@ -491,11 +508,69 @@ class Steve:
     def _discard_item(item: Item, num: int) -> None:
         raise NotImplementedError
 
-    def _equip_armour(self, armour_item: Item) -> None:
+    def _equip_armour(self, armouritem: Item) -> None:
         raise NotImplementedError
+
+    def eat(self, fooditem: "Item") -> None:
+        #validation
+        foodindex = self.find_item(fooditem)
+        if foodindex == -1:
+            raise RuntimeError(f"{fooditem} cannot be consumed as Steve's inventory does not have it.")
+        if not fooditem.info["item type"] == FOODITEM:
+            raise ValueError(f"{fooditem} cannot be consumed as it is not food.")
+        # consumption
+        self.remove_item_from_inv(foodindex)
+        if str(fooditem) == "Rotten Flesh":
+            if self.health < 10:
+                i = 0
+            elif self.health < 15:
+                i = 1
+            else:
+                i = 2
+            mylist = [-1, -1, -1, 0, 0, 1, 1, 1][i, i + 6]
+            random.shuffle(mylist)
+            self.change_health(mylist[0])
+        elif str(fooditem) == "Apple":
+            self.change_health(2)
+        elif str(fooditem) == "Bread":
+            self.change_health(3)
+        elif str(fooditem) == "Steak":
+            self.change_health(5)
+        elif str(fooditem) == "Enchanted Golden Apple":
+            self.change_health(12)
+                
+            
+
+    def find_item(self, item: "Item") -> int:
+        """Linear search through inventory to find the index of the item"""
+        for i in self.inventory:
+            if str(i["item"]) == str(item):
+                return i
+        return -1 # return value is -1 when not found.
         
-    def _get_hurt(self, damage: int):
-        raise NotImplementedError
+    def remove_item_from_inv(self, index) -> None:
+        if index not in list(range(len(self.inventory))):
+            raise ValueError("Item that is trying to be removed from inventory has an index outside of the range of Steve's inventory.")
+        if self.inventory[index]["number"] == 1: # Steve has only 1 of this such item left
+            self.inventory.pop(index)
+            # This dict is removed as there are no more of such items in the inventory
+            return None
+        self.inventory[index]["number"] -= 1
+        return None
+        
+        
+            
+    def change_health(self, change: int) -> None:
+        if change == 0:
+            return None
+        prevhp = self.health
+        if change > 0:
+            self.health = min(self.health + change, 20)
+            print(f"you were healed by {self.health - prevhp} HP and now have {self.health}.")
+            return None
+        self.health = max(self.health + change, 0)
+        print(f"You got hurt by {prevhp - self.health} HP and have {self.health} left.")
+        return None
 
     def isdead(self) -> bool:
         if self.health <= 0:
