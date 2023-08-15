@@ -130,9 +130,7 @@ class MUDGame:
                         target = random.choice(player_list)
                         skill = random.randint(1, 2)
                         hit = accuracy_calc(player_list[0].get_light())
-                        if not hit:
-                            #Attack miss message here
-                        else:
+                        if hit:
                             damage = active_character.attack(target, skill)
                             statuses = active_character.inflict_status(target, skill)
                             heal = active_character.heal(active_character, skill)
@@ -142,15 +140,15 @@ class MUDGame:
                                 player_list[target].set_status(statuses)
                             if heal != None:
                                 active_character.receive_heal(heal)
+                        else:
+                            active_character.display_miss()
                     elif active_character in player_list:
                         target = None
                         action = active_character.prompt_action()
                         if action == 'attack':
                             skill = active_character.prompt_attack()
-                            hit = accuracy_calc(player_list[0].get_light())
-                            if not hit:
-                                #Attack miss message here
-                            else:
+                            hit = accuracy_calc(active_character.get_light())
+                            if hit:
                                 damage = active_character.attack(enemy_list[target], skill)
                                 statuses = active_character.inflict_status(enemy_list[target], skill)
                                 heal = active_character.heal(active_character, skill)
@@ -160,6 +158,8 @@ class MUDGame:
                                     enemy_list[target].set_status(statuses)
                                 if heal != None:
                                     active_character.receive_heal(heal) 
+                            else:
+                                active_character.display_miss()
                         elif action.lower() == 'target':
                             target = active_character.target() - 1
                             continue
@@ -175,7 +175,7 @@ class MUDGame:
                             elif input.lower() == 'back':
                                 continue
                         elif action.lower() == 'item':
-                            
+                    #Remove defeated characters        
                     for character in turn_order:
                         if character.is_defeated():
                             turn_order.remove(character)
