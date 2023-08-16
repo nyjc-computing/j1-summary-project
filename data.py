@@ -621,8 +621,9 @@ class Freddy:
         print('1. Attack')
         print('2. Stats')
         print('3. Light Level')
+        print('4. Item')
         dec = input('Please choose an action: ')
-        if dec in ['attack', 'stats', 'light level']:
+        if dec in ['attack', 'stats', 'light', 'item']:
             return dec
         else:
             return None
