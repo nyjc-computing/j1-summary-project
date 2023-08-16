@@ -186,8 +186,10 @@ class MUDGame:
                     k = k + 1
                 if defeat(player_list):
                     self.gameOver = True
-                    #Defeat Message
-            if self.boss.isDead():
-                self.gameOver = True
-                print('Congratulations!')
+                    #Defeat message
+                elif victory(enemy_list):
+                    #Victory message
+                    self.current_room.grid.clear_tile()
+                    break
+            #Code boss fight here
 
