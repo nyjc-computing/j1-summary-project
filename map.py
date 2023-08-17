@@ -1,19 +1,4 @@
 class Room:
-    """This class stores the rooms and the rooms connected to it
-
-    Attributes
-    ----------
-    + name: str
-    + enemy: str
-    + left: str
-    + right: str
-    + up: str
-    + down: str
-
-    Methods
-    -------
-    nil?
-    """
     
     def __init__(self, name: str):
         self.name = name
@@ -27,22 +12,44 @@ class Room:
         print(f"Room({self.name})")
 
     def link_left(self, name: str):
-        self.left = name
+        temp = Room(name)
+        temp.right = self
+        self.left = temp
 
     def link_right(self, name: str):
-        self.right = name
+        temp = Room(name)
+        temp.left = self
+        self.right = temp
 
     def link_up(self, name: str):
-        self.up = name
+        temp = Room(name)
+        temp.down = self
+        self.up = temp
 
     def link_down(self, name: str):
-        self.down = name
+        temp = Room(name)
+        temp.up = self
+        self.down = temp
 
+import Enemy
 def setup():
     """
     Generates 3 rooms, named room1, room2, room3 and links them together
     """
-    map = Room("room1")
-    map.left = Room("room2")
-    map.up = Room("room3")
-    return map
+    map = Room("Room1")
+    map.link_left("Room2")
+    map.link_up("Room3")
+    map.link_up("Room4")
+    boss = Enemy('Voldemort')
+    big_enemy = Enemy('Death Eater')
+    medium_enemy = Enemy('Basilisk')
+    small_enemy = Enemy('Dementors')
+
+    enemies = [{'room': 'Room1', 'enemy': small_enemy}, {'room': 'Room2', 'enemy': boss}, {'room': 'Room3', 'enemy': big_enemy}, {'room': 'Room4', 'enemy': medium_enemy}]
+
+    boss = Enemy('Voldemort')
+    big_enemy = Enemy('Death Eater')
+    medium_enemy = Enemy('Basilisk')
+    small_enemy = Enemy('Dementors')
+
+    return map and enemies
