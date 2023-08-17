@@ -632,6 +632,16 @@ class Freddy:
         else:
             return None
 
+    def prompt_light():
+        L = input('Do you want to increase or decrease your light level: ')
+        if 'increase' in L.lower():
+            return L
+        elif 'decrease' in L.lower():
+            return L
+        elif 'back' in L.lower():
+            return L
+        else:
+            print('Please choose either increase, decrease or back.')
 
 #Status
 def sleep(target):
