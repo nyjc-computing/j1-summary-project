@@ -2,10 +2,9 @@
 # from main import game
 
 import data
+import game
 
-from game import MUDGame
-
-test = MUDGame()
+test = game.MUDGame()
 
 def test():
 
