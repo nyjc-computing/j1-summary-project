@@ -12,13 +12,21 @@ class Game:
         print intro message, instructions, etc.
         returns nothing 
         """
-        print("""
-Welcome to Valorant.
+        print("""Welcome to Valorant.
         
-Your team all got killed by the Ranked Demon Reyna on the enemy team, you need to clutch. The Reyna will certainly one tap you the second you get into an encounter so the only way you're going to win this is by picking up enough shields (total 300hp) to not instantly die. Shield orbs can be found randomly throughout the map, and add 50hp to your character. There is still enemy utility scattered around the map, each piece you encounter will deduct 30hp from your character. You also have an agent ability, which will hopefully give you an edge over this no-lifer. 
+Your team all got killed by the Ranked Demon Reyna on the enemy team, 
+you need to clutch. 
+
+The Reyna will certainly one tap you the second you get into an encounter so the only way you're going to win this is by picking up enough shields (total 300hp) to not instantly die. 
+
+Shield orbs can be found randomly throughout the map, and add 50hp to your character. 
+
+There is still enemy utility scattered around the map, each piece you encounter will deduct 30hp from your character. 
+
+You also have an agent ability, which will hopefully give you an edge over this no-lifer. 
 
 Remember, Clutch or Gae.
-        """)
+=====================================================""")
 
     def agent_select(self) -> str:
         """
@@ -28,20 +36,22 @@ Remember, Clutch or Gae.
         confirm = "n"
         agents = ["jett","sova","omen","sage"]
         while confirm.lower() == "n":
-            print("""
-Choose your agent:
+            print("""Choose your agent:
+
 [1] Jett: Dash into an adjacent room if you would otherwise die (does not refresh)\n
 [2] Sova: Scan an adjacent room for information (cooldown: 1 turn)\n
 [3] Omen: Move to any room on the map (cooldown: 5 turns)\n
 [4] Sage: Block a path from your current room to an adjacent one permanently (cooldown: 3 turns)
-            """)
-            out = input("Enter [1], [2], [3] or [4] to choose: ")
+=====================================================""")
+            out = input("Enter 1, 2, 3 or 4 to choose: ")
             while out not in [str(x) for x in range(1,5)]:
                 print("Invalid Choice")
-                out = input("Enter [1], [2], [3] or [4] to choose: ")
+                out = input("Enter 1, 2, 3 or 4 to choose: ")
             print(f"\nYou have chosen {agents[int(out)-1]}.")
             confirm = input("Confirm? (y/n): ")
+            print("=====================================================")
         print("--GAME START--")
+        print("=====================================================")
         return agents[int(out)-1]
             
 
@@ -83,7 +93,7 @@ Choose your agent:
         describe the current room, presence of objects,
         available paths, current hp and ability usage options
         """
-        print(f"\nYou are in {getattr(self.player_pos, 'name')}.")
+        print(f"You are in {getattr(self.player_pos, 'name')}.")
         print(f"You have {getattr(self.player, 'hp')} hp.")
         print(f"\nYou can move to the following rooms: ")
         paths = getattr(self.player_pos, 'paths')
@@ -94,6 +104,7 @@ Choose your agent:
             print("You can use your ability.")
         else:
             print(f"{self.player_cooldown} turns until you can use your ability.")
+        print("=====================================================")
     
     def sova(self, room: str) -> None:
         """
@@ -147,6 +158,7 @@ Choose your agent:
             print("Invalid Input")
             loc = input("Choose a number: ")
         if int(loc) == len(paths) + 1:
+            print("=====================================================")
             return 0
         else:
             loc = paths[int(loc)-1]
@@ -154,6 +166,7 @@ Choose your agent:
             for room in self.map:
                 if getattr(room, "name") == loc:
                     self.player_pos = room
+                    print("=====================================================")
                     return 1
             else:
                 print("something has gone very wrong")
@@ -164,12 +177,13 @@ Choose your agent:
         get the user's action
         returns the selected action as a string
         """
-        print("\nChoose an action 'Move' or 'Ability':")
+        print("Choose an action 'Move' or 'Ability':")
         action = input()
         while action.lower() not in ["move", "ability"]:
             print("Invalid Choice")
             print("Choose an action 'Move' or 'Ability':")
             action = input()
+            
         return action.lower()
 
     def reyna_turn(self) -> None:
@@ -193,7 +207,6 @@ Choose your agent:
         creatures, and reyna
         returns None
         """
-        print()
         if self.reyna_pos == self.player_pos:
             print("Reyna has found you!")
             self.gameover = True
@@ -204,7 +217,7 @@ Choose your agent:
                 print("Reyna annihilates you before you can even register her presence.")
         else:
             if getattr(self.player_pos, "creature"):
-                print("There is utility in this room, you lose 30 hp handling it.")
+                print("There is utility in this room, you lose 30 hp handling it.\n")
                 self.player.set_hp(True, False)
                 self.player_pos.setcreature(False)
                 if getattr(self.player, "hp") <= 0:
@@ -212,7 +225,7 @@ Choose your agent:
                     self.gameover = True
     
             if getattr(self.player_pos, "orb"):
-                print("There is a shield orb in this room, you gain 50 hp.")
+                print("There is a shield orb in this room, you gain 50 hp.\n")
                 self.player.set_hp(False, True)
                 self.player_pos.setorb(False)
             
