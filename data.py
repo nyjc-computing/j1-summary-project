@@ -16,7 +16,7 @@ class Room:
             if room != None:
                 next_rooms.remove(room)
         while connections != 0:
-            next_room = random.randint(0, 2)
+            next_room = random.randint(0, len(next_rooms) - 1)
             next_rooms[next_room] = 'closed'
             next_rooms.remove(next_room)
             connections = connections - 1
@@ -154,7 +154,7 @@ class Grid:
         else:
             return False
             
-    def get_item(self, coordinates : list) -> str:
+    def get_items(self, coordinates : list) -> str:
         '''
         If user is on an item tile, return the item on that tile
         '''
@@ -378,7 +378,7 @@ class Springtrap:
                 print(f'Status: {status}')
 
     def encounter():
-        if Room.current_room() == '?':
+        #if current_room() == '?':
             print('You notice the pungent smell of decaying matter.')
             time.sleep(2)
             print('Then, you hear the clanking of metal wires and robotic movement.')
