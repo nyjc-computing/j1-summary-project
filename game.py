@@ -23,14 +23,20 @@ class MUDGame:
         print(f'{username}, OH NO YOU ARE TRAPPED! \nYou will go through a series of rooms that may give you items or have ANGRY creatures wanting you DEAD :P \nKill them all, especially the boss to escape! \nGOOD LUCK ;D')
 
     def game_is_over(self) -> bool:
-        if self.steve.isdead(): # other conditions
+        if self.steve.isdead() or self.boss.isdead(): # other conditions
             return True
 
     def show_status(self) -> 'str':
         print(self.steve)
 
-    def show_options(self) -> str:
-        menu = "1. Attack\n 2. Retreat"
+    def show_options(self, situation) -> str:
+        sit = str(situation)
+        if sit == 'creature':
+            menu = "1. Attack \n2. Retreat"
+        elif sit == 'item':
+            menu = '1. Pick Up \n2. Do not pick up'
+        elif sit == 'restart':
+            menu = '1. Yes \n2. No'
         print(menu)
 
     def prompt_player(self) -> int:
@@ -39,33 +45,39 @@ class MUDGame:
             opt = input('Please choose option 1 or 2:')
         return opt
 
-    def validate(choice) -> bool:
+    def isvalid(choice) -> bool:
         if choice in ('12'):
             if len(choice) == 1:
                 return True
         return False
 
-    def do_action(self):
-        print(self.items)
-        total = len(self.items)
-        choice = input('Please choose your weapon.')
-        # requires weapon list to be in number options
-        if len(choice) == 1:
-            if choice in range(len(self.items)):
-                self.steve._equip_armour(choice)
+    # def do_action(self):
+    #     print(self.items)
+    #     total = len(self.items)
+    #     choice = input('Please choose your weapon.')
+    #     # requires weapon list to be in number options
+    #     if len(choice) == 1:
+    #         if choice in range(len(self.items)):
+    #             self.steve._equip_armour(choice)
 
-    def show_losescreen(self):
-        print('Game Over !')
-                
-    def restart():
-        print('Try Again?')
-        print('1. Yes\n2. No')
-        choice = input()
 
     def attack(self):
-        x, y = maze.steve_pos()
-        room = Room(x, y)
-        while not self.steve_isdead() or self.creature.hitpoints == 0:
+        x, y =self.maze.steve_pos()
+        room = self.maze.get_current_pos()
+        while not self.steve_isdead() or self.creature.hitpoints <= 0:
+            print(self.steve)
+            
+            pass
+
+    def show_winscreen():
+        print('Congratulations! \nYou have escaped!')
+
+    def show_losescreen():
+        print("YOU DIED...\nDo you want to try again?")
+
+    def movesteve():
+        dir = input('Where are you going next? \n1. North \n2. East \n3.South \n4.West')
+        if try_move_steve(..., dir):
             pass
 
 
@@ -83,9 +95,9 @@ class MUDGame:
         self.introduce()
         while not self.game_is_over():
             self.show_status()
-            # show status
+            # show status: direction, hp, lvl, inventory
             if self.creature_encountered():
-                self.show_options()
+                self.show_options(creature)
                 # show player action options
                 option = self.prompt_player()
                 # prompt player to take actions
@@ -95,21 +107,34 @@ class MUDGame:
                         continue
                 else:
                     odds = random.randint(0, 100)
-                    if odds <= 80%
+                    if odds <= 80:
                         self.maze.try_move_steve(...)
                     else:
                         print()
                         self.attack()
                         if self.game_is_over():
                             continue
-                        
-                self.do_action()
-                self.update()
+            if self.item_found(...):
+                item = ...
+                self.show_options(item)
+                item_choice = self.prompt_player()
+                self.isvalid(item_choice)
+                if item_choice == 1:
+                    self.steve._add_item_to_inv(item)
+                self.movesteve()
                 # update
-            
-        self.show_losescreen()
-        restart_choice = self.restart()
-        if self.validate():
+        if self.steve.isdead():
+            self.show_losescreen()
+            self.show_options('restart')
+            restart_choice = self.prompt_player()
+            self.isvalid(restart_choice)
+            if restart_choice == 1:
+                self.run()
+            else:
+                print('Hope to see you again !')
+        else:
+            self.show_winscreen()
+
             
             
             
