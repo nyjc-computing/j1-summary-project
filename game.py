@@ -169,7 +169,7 @@ Choose your agent:
             print("Invalid Choice")
             print("Choose an action 'Move' or 'Ability':")
             action = input()
-        return action
+        return action.lower()
 
     def reyna_turn(self) -> None:
         """
