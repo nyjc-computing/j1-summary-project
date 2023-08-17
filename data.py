@@ -9,13 +9,13 @@ class Room:
     orb: A boolean for powerup presence
 
     Methods:
-    - getname
-    - getpaths
-    - hascreature
-    - hasorb
-    - setpaths
-    - setcreature
-    - setorb
+    - get_name
+    - get_paths
+    - has_creature
+    - has_orb
+    - set_paths
+    - set_creature
+    - set_orb
     """
 
     def __init__(self, name: str, paths: list, creature: bool, orb: bool):
@@ -67,7 +67,7 @@ class Character:
     hp : Health points of the character
 
     Method:
-    - gethp
+    - get_hp
     """
 
     def __init__(self, hp: int):
@@ -86,13 +86,17 @@ class Player(Character):
     agent : Name of agent
     
     Methods:
-     - hp(self, creature : bool, buff : bool)
-     - win(self, reyna : bool)
+     - get_agent
+     - set_hp
     """
 
     def __init__(self, hp: int, agent: str):
         super().__init__(hp)
         self.agent = agent
+
+    def get_agent(self):
+        """Returns name of agent chosen"""
+        return self.agent()
 
     def set_hp(self, creature: bool, buff: bool) -> None:
         """
