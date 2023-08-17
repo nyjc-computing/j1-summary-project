@@ -86,6 +86,10 @@ class Room:
         self.count += 1
         return self.count
 
+def start_room():
+    """Instantiates a spawn room"""
+    current_room = Room()
+    return current_room
 
 class Grid:
     def __init__(self, x, y):
