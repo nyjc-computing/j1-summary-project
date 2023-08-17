@@ -1,23 +1,28 @@
 import random
 import data
 
-def accuracy_calc(light : int) -> bool:
-    temp = [True] * light + [False] *(100 - light)
+
+def accuracy_calc(light: int) -> bool:
+    temp = [True] * light + [False] * (100 - light)
     return temp[random.randint(0, len(temp) - 100)]
 
-def defeat(players : list) -> bool:
+
+def defeat(players: list) -> bool:
     for player in players:
         if not player.is_defeated():
             return False
     return True
 
-def victory(enemies : list) -> bool:
+
+def victory(enemies: list) -> bool:
     for enemy in enemies:
         if not enemy.is_defeated():
             return False
     return True
-    
+
+
 class MUDGame:
+
     def __init__(self):
         # self.spawn = Room('home', up='closed')
         self.boss = data.spawn_boss()
@@ -27,7 +32,7 @@ class MUDGame:
         self.player2 = None
         self.player3 = None
         self.player4 = None
-    
+
     def set_player(self, player, character):
         if player == 'self.player1':
             self.player1 = character
@@ -37,11 +42,13 @@ class MUDGame:
             self.player3 = character
         elif player == 'self.player4':
             self.player4 = character
-            
+
     def run(self):
         data.start_menu()
         n = 1
-        for player in ['self.player1', 'self.player2', 'self.player3', 'self.player4']:
+        for player in [
+                'self.player1', 'self.player2', 'self.player3', 'self.player4'
+        ]:
             valid = False
             while not valid:
                 character = data.choose_character(n)
@@ -63,43 +70,56 @@ class MUDGame:
                 #prompt movement
                 self.current_room.display()
                 input = self.current_room.grid.prompt_movement()
-                while input.lower() not in 'wasd' or input.lower() != 'inventory':
+                while input.lower() not in 'wasd' or input.lower(
+                ) != 'inventory':
                     input = self.current_room.prompt_movement()
                 #Opening inventory
                 if input.lower() == 'inventory':
                     data.display_inventory()
                     continue
                 #entering next room
-                if self.current_room.grid.get_position() == [0, 2] and input == 'w':
+                if self.current_room.grid.get_position() == [
+                        0, 2
+                ] and input == 'w':
                     self.current_room.nextRoom(input)
                     self.current_room.grid.move([4, 2])
                     continue
-                elif self.current_room.grid.get_position() == [2, 0] and input == 'a':
+                elif self.current_room.grid.get_position() == [
+                        2, 0
+                ] and input == 'a':
                     self.current_room.nextRoom(input)
                     self.current_room.grid.move([2, 4])
                     continue
-                elif self.current_room.grid.get_position() == [4, 2] and input == 's':
+                elif self.current_room.grid.get_position() == [
+                        4, 2
+                ] and input == 's':
                     self.current_room.nextRoom(input)
                     self.current_room.grid.move([0, 2])
                     continue
-                elif self.current_room.grid.get_position() == [2, 4] and input == 'd':
+                elif self.current_room.grid.get_position() == [
+                        2, 4
+                ] and input == 'd':
                     self.current_room.nextRoom(input)
                     self.current_room.grid.move([2, 0])
                     continue
                 #moving in current room
-                if input.lower() == 'w' and self.current_room.grid.get_position()[0] != 0:
+                if input.lower(
+                ) == 'w' and self.current_room.grid.get_position()[0] != 0:
                     current_position = self.current_room.grid.get_position()
                     current_position[1] = current_position[1] + 1
                     self.current_room.grid.move(current_position)
-                elif input.lower() == 's' and self.current_room.grid.get_position()[0] != 4:
+                elif input.lower(
+                ) == 's' and self.current_room.grid.get_position()[0] != 4:
                     current_position = self.current_room.grid.get_position()
                     current_position[1] = current_position[1] - 1
                     self.current_room.grid.move(current_position)
-                elif input.lower() == 'a' and self.current_room.grid.get_position()[1] != 0:
+                elif input.lower(
+                ) == 'a' and self.current_room.grid.get_position()[1] != 0:
                     current_position = self.current_room.grid.get_position()
                     current_position[0] = current_position[0] - 1
                     self.current_room.grid.move(current_position)
-                elif input.lower() == 'd' and self.current_room.grid.get_position()[1] != 4:
+                elif input.lower(
+                ) == 'd' and self.current_room.grid.get_position()[1] != 4:
                     current_position = self.current_room.grid.get_position()
                     current_position[0] = current_position[0] + 1
                     self.current_room.grid.move(current_position)
@@ -110,7 +130,9 @@ class MUDGame:
             #Combat Start
             elif self.current_room.is_encounter():
                 #Determine turn order
-                player_list= [self.player1, self.player2, self.player3, self.player4]
+                player_list = [
+                    self.player1, self.player2, self.player3, self.player4
+                ]
                 enemy_list = self.current_room.grid.get_enemies()
                 turn_order = []
                 i = 0
@@ -132,8 +154,10 @@ class MUDGame:
                         hit = accuracy_calc(player_list[0].get_light())
                         if hit:
                             damage = active_character.attack(target, skill)
-                            statuses = active_character.inflict_status(target, skill)
-                            heal = active_character.heal(active_character, skill)
+                            statuses = active_character.inflict_status(
+                                target, skill)
+                            heal = active_character.heal(
+                                active_character, skill)
                             if damage != None:
                                 player_list[target].take_dmg(damage)
                             if statuses != None:
@@ -149,15 +173,18 @@ class MUDGame:
                             skill = active_character.prompt_attack()
                             hit = accuracy_calc(active_character.get_light())
                             if hit:
-                                damage = active_character.attack(enemy_list[target], skill)
-                                statuses = active_character.inflict_status(enemy_list[target], skill)
-                                heal = active_character.heal(active_character, skill)
+                                damage = active_character.attack(
+                                    enemy_list[target], skill)
+                                statuses = active_character.inflict_status(
+                                    enemy_list[target], skill)
+                                heal = active_character.heal(
+                                    active_character, skill)
                                 if damage != None:
                                     enemy_list[target].take_dmg(damage)
                                 if statuses != None:
                                     enemy_list[target].set_status(statuses)
                                 if heal != None:
-                                    active_character.receive_heal(heal) 
+                                    active_character.receive_heal(heal)
                             else:
                                 active_character.display_miss()
                         elif action.lower() == 'target':
@@ -175,14 +202,14 @@ class MUDGame:
                             elif input.lower() == 'back':
                                 continue
                         elif action.lower() == 'item':
-                    #Remove defeated characters        
-                    for character in turn_order:
-                        if character.is_defeated():
-                            turn_order.remove(character)
-                        if character in enemy_list:
-                            enemy_list.remove(character)
-                        elif character in player_list:
-                            player_list.remove(character)
+                            #Remove defeated characters
+                            for character in turn_order:
+                                if character.is_defeated():
+                                    turn_order.remove(character)
+                                if character in enemy_list:
+                                    enemy_list.remove(character)
+                                elif character in player_list:
+                                    player_list.remove(character)
                     k = k + 1
                 if defeat(player_list):
                     self.gameOver = True
@@ -192,4 +219,3 @@ class MUDGame:
                     self.current_room.grid.clear_tile()
                     break
             #Code boss fight here
-
