@@ -55,13 +55,13 @@ class MUDGame:
                 if character != None:
                     valid = True
             if character.lower() == 'freddy':
-                self.set_player(player, Freddy())
+                self.set_player(player, data.Freddy())
             elif character.lower() == 'bonnie':
-                self.set_player(player, Bonnie())
+                self.set_player(player, data.Bonnie())
             elif character.lower() == 'chica':
-                self.set_player(player, Chica())
+                self.set_player(player, data.Chica())
             elif character.lower() == 'foxy':
-                self.set_player(player, Foxy())
+                self.set_player(player, data.Foxy())
             elif character.lower() == 'skip':
                 break
             n = n + 1
@@ -217,13 +217,13 @@ class MUDGame:
                                 continue
                         elif action.lower() == 'item':
                             #Remove defeated characters
-                            for character in turn_order:
-                                if character.is_defeated():
-                                    turn_order.remove(character)
-                                if character in enemy_list:
-                                    enemy_list.remove(character)
-                                elif character in player_list:
-                                    player_list.remove(character)
+                        for character in turn_order:
+                            if character.is_defeated():
+                                turn_order.remove(character)
+                            if character in enemy_list:
+                                enemy_list.remove(character)
+                            elif character in player_list:
+                                player_list.remove(character)
                     k = k + 1
                 if defeat(player_list):
                     self.gameOver = True
