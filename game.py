@@ -45,13 +45,12 @@ class MUDGame:
 
     def run(self):
         data.start_menu()
-        n = 1
         for player in [
                 'self.player1', 'self.player2', 'self.player3', 'self.player4'
         ]:
             valid = False
             while not valid:
-                character = data.choose_character(n)
+                character = data.choose_character()
                 if character != None:
                     valid = True
             if character.lower() == 'freddy':
@@ -64,7 +63,6 @@ class MUDGame:
                 self.set_player(player, data.Foxy())
             elif character.lower() == 'skip':
                 break
-            n = n + 1
         while not self.gameOver:
             if not self.current_room.grid.is_encounter():
                 #prompt movement
@@ -72,7 +70,7 @@ class MUDGame:
                 input = self.current_room.grid.prompt_movement()
                 while input.lower() not in 'wasd' or input.lower(
                 ) != 'inventory':
-                    input = self.current_room.prompt_movement()
+                    input = self.current_room.grid.prompt_movement()
                 #Opening inventory
                 if input.lower() == 'inventory':
                     data.display_inventory()
@@ -142,7 +140,7 @@ class MUDGame:
                     items = self.current_room.grid.get_items()
                     data.add_item(items)
             #Combat Start
-            elif self.current_room.is_encounter():
+            elif self.current_room.grid.is_encounter():
                 #Determine turn order
                 player_list = [
                     self.player1, self.player2, self.player3, self.player4
