@@ -25,7 +25,7 @@ class Enemy:
         self.loot = None
 
     def __repr__(self) -> None:
-        print(f"enemy{self.name}")
+        print(f"enemy: {self.name}")
 
     def _is_dead(self) -> str:
         """
