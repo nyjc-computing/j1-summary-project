@@ -16,9 +16,9 @@ class Room:
             if room != None:
                 next_rooms.remove(room)
         while connections != 0:
-            next_room = random.randint(0, 2)
+            next_room = random.randint(0, len(next_rooms) - 1)
             next_rooms[next_room] = 'closed'
-            next_rooms.remove(next_room)
+            next_rooms.pop(next_room)
             connections = connections - 1
             
         self.grid = Grid(x, y)

@@ -25,7 +25,7 @@ class MUDGame:
 
     def __init__(self):
         # self.spawn = Room('home', up='closed')
-        self.boss = data.spawn_boss()
+        # self.boss = data.spawn_boss()
         self.current_room = data.start_room()
         self.gameOver = False
         self.player1 = None
