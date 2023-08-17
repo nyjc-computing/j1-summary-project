@@ -51,23 +51,27 @@ class MUDGame:
                 return True
         return False
 
-    # def do_action(self):
-    #     print(self.items)
-    #     total = len(self.items)
-    #     choice = input('Please choose your weapon.')
-    #     # requires weapon list to be in number options
-    #     if len(choice) == 1:
-    #         if choice in range(len(self.items)):
-    #             self.steve._equip_armour(choice)
-
-
     def attack(self):
         x, y =self.maze.steve_pos()
         room = self.maze.get_current_pos()
         while not self.steve_isdead() or self.creature.hitpoints <= 0:
             print(self.steve)
-            
-            pass
+            creature = self.room.get_creature()
+            print(f"{creature.info['name']} has {self.creature.get_health()} HP")
+            damage = self.steve....
+            self.creature.hitpoints -= damage
+            print(f'You attacked {creature.info['name']}')
+            self.steve.health -= creature.get_attack()
+
+    def creature_encountered():
+        if self.room.creature is None:
+            return False
+        return True
+
+    def item_found():
+        if self.room.item is None:
+            return False
+        return True
 
     def show_winscreen():
         print('Congratulations! \nYou have escaped!')
@@ -114,7 +118,7 @@ class MUDGame:
                         self.attack()
                         if self.game_is_over():
                             continue
-            if self.item_found(...):
+            if self.item_found():
                 item = ...
                 self.show_options(item)
                 item_choice = self.prompt_player()
