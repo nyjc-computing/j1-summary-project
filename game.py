@@ -78,6 +78,20 @@ class MUDGame:
                     data.display_inventory()
                     continue
                 #entering next room
+                if self.current_room.grid.get_position() == [0, 2] and input == 'w':
+                    self.current_room.next_room(input)
+                    self.current_room.grid.move([4, 2])
+                    continue
+                elif self.current_room.grid.get_position() == [2, 0] and input == 'a':
+                    self.current_room.next_room(input)
+                    self.current_room.grid.move([2, 4])
+                    continue
+                elif self.current_room.grid.get_position() == [4, 2] and input == 's':
+                    self.current_room.next_room(input)
+                    self.current_room.grid.move([0, 2])
+                    continue
+                elif self.current_room.grid.get_position() == [2, 4] and input == 'd':
+                    self.current_room.next_room(input)
                 if self.current_room.grid.get_position() == [
                         0, 2
                 ] and input == 'w':
