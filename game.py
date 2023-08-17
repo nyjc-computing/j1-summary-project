@@ -127,19 +127,42 @@ Remember, Clutch or Gae.
         """
         pass
     
-    def omen(self, room: str) -> None:
+    def omen(self) -> None:
         """
         moves player to any room
         """
-        pass
+        for i, room in enumerate(self.map):
+            print(f"[{i+1}]: {getattr(room, 'name')}")
+        print(f"[{len(self.map)+1}]: Cancel action")
+        choice = input("Choose a number: ")
+        while choice not in [str(x) for x in range(1, len(self.map)+2)]:
+            print("Invalid input")
+            choice = input("Choose a number: ")
+        if int(choice) == len(self.map)+1:
+            return None
+        else:
+            choice = self.map[int(choice)-1]
+            self.player_pos = choice
+            self.player_cooldown = 5
+            self.update()
 
     def ability(self) -> None:
         """
         uses the player's ability based on
         the agent they selected
         """
-        pass
-
+        if self.player_cooldown == 0:
+            agent = getattr(self.player, "agent")
+            if agent == "omen":
+                self.omen()
+            elif agent == "sova":
+                self.sova()
+            elif agent == "sage":
+                self.sage()
+            else:
+                print("jett's ability cannot be manually activated")
+        else:
+            print("Your ability is on cooldown.")
     def move(self) -> int:
         """
         move the player into an adjacent room
@@ -177,14 +200,14 @@ Remember, Clutch or Gae.
         get the user's action
         returns the selected action as a string
         """
-        print("Choose an action 'Move' or 'Ability':")
+        print("Choose an action, Move (1) or Ability (2):")
         action = input()
-        while action.lower() not in ["move", "ability"]:
+        while action.lower() not in ["1", "2"]:
             print("Invalid Choice")
-            print("Choose an action 'Move' or 'Ability':")
+            print("Choose an action, Move (1) or 'Ability' (2):")
             action = input()
             
-        return action.lower()
+        return action
 
     def reyna_turn(self) -> None:
         """
@@ -245,15 +268,27 @@ Remember, Clutch or Gae.
             advance = False
             while not advance:
                 action = self.prompt()
-                if action == "move":
+                if action == "1":
                     temp = self.move()
                     if temp == 1:
                         advance = True
-                elif action == "ability":
+                elif action == "2":
                     self.ability()
-            self.update()
-            self.reyna_turn()
-            self.update()
+                    if self.gameover == True:
+                        break
+                    else:
+                        self.desc()
+            if self.player_cooldown != 0:
+                self.player_cooldown -= 1
+            if self.gameover == True:
+                break
+            else:
+                self.update()
+            if self.gameover == True:
+                break
+            else:
+                self.reyna_turn()
+                self.update()
         if self.win:
             print("VICTORY")
         else:
