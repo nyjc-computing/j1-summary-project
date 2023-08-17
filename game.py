@@ -66,7 +66,7 @@ class MUDGame:
         while not self.gameOver:
             if not self.current_room.grid.is_encounter():
                 #prompt movement
-                self.current_room.display()
+                self.current_room.display_room()
                 input = self.current_room.grid.prompt_movement()
                 while input.lower() not in 'wasd' or input.lower(
                 ) != 'inventory':
