@@ -105,12 +105,14 @@ class Grid:
                 self.grid[random.randint(0, 4)][random.randint(0, 4)] = {'type' : 'creature', 'creatures':[]}
             i = i + 1
         k = 0
-        #Spawning items
-        # while k < 5:
-        #     if self.grid[random.randint(0, 4)][random.randint(0, 4)] == None:
-        #         self.grid[random.randint(0, 4)][random.randint(0, 4)] = {'type' : 'items', 'items':[]}
+        # Spawning items
+        while k < 5:
+            if self.grid[random.randint(0, 4)][random.randint(0, 4)] == None:
+                self.grid[random.randint(0, 4)][random.randint(0, 4)] = {'type' : 'items', 'items':[]}
+                k = k + 1
+        
         self.coordinates = [x, y]
-        k = k + 1
+        
         
     def get_position(self) -> list:
         '''
