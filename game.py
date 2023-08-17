@@ -66,4 +66,4 @@ class Game:
                 self.room = getattr(self.room, direction)
     
     def attack(self):
-        pass
+        self.character.attack()
