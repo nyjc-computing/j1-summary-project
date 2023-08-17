@@ -17,9 +17,10 @@ def test():
 
     try:
         test_spawn_room = data.start_room()
-        print(test_spawn_room)
     except:
         print("i can't spawn cuz the room is bugged")
+    else:
+        print("Spawn room test passed")
     
     # try:
     #     test.run()
