@@ -43,9 +43,3 @@ class Enemy:
             return self.loot
 
 
-big_boss = Enemy('Voldemort')
-medium_boss = Enemy('LingKai')
-small_boss1 = Enemy('Basilisk')
-small_boss2 = Enemy('Dementors')
-
-enemies = [{big_boss]

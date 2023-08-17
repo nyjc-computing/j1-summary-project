@@ -5,4 +5,5 @@ from game import Game
 if __name__ == "__main__":
     play = Game()
     play.intro()
-    play.run()
+while play.end == False:
+        play.run()
