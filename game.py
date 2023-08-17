@@ -22,7 +22,6 @@ def victory(enemies: list) -> bool:
 
 
 class MUDGame:
-
     def __init__(self):
         # self.spawn = Room('home', up='closed')
         # self.boss = data.spawn_boss()
@@ -33,6 +32,7 @@ class MUDGame:
         self.player3 = None
         self.player4 = None
 
+    
     def set_player(self, player, character):
         if player == 'self.player1':
             self.player1 = character
@@ -51,7 +51,7 @@ class MUDGame:
         ]:
             valid = False
             while not valid:
-                character = data.choose_character(n)
+                character = data.choose_character()
                 if character != None:
                     valid = True
             if character.lower() == 'freddy':
@@ -142,7 +142,7 @@ class MUDGame:
                     items = self.current_room.grid.get_items()
                     data.add_item(items)
             #Combat Start
-            elif self.current_room.is_encounter():
+            elif self.current_room.grid.is_encounter():
                 #Determine turn order
                 player_list = [
                     self.player1, self.player2, self.player3, self.player4

@@ -20,9 +20,9 @@ class Room:
             next_rooms[next_room] = 'closed'
             next_rooms.pop(next_room)
             connections = connections - 1
-            
+         
         self.grid = Grid(x, y)
-
+        
     def display_room(self):
         pass
 
@@ -106,9 +106,9 @@ class Grid:
             i = i + 1
         k = 0
         #Spawning items
-        while k < 5:
-            if self.grid[random.randint(0, 4)][random.randint(0, 4)] == None:
-                self.grid[random.randint(0, 4)][random.randint(0, 4)] = {'type' : 'items', 'items':[]}
+        # while k < 5:
+        #     if self.grid[random.randint(0, 4)][random.randint(0, 4)] == None:
+        #         self.grid[random.randint(0, 4)][random.randint(0, 4)] = {'type' : 'items', 'items':[]}
         self.coordinates = [x, y]
         k = k + 1
         
