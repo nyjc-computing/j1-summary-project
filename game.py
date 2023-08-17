@@ -93,10 +93,10 @@ Remember, Clutch or Gae.
         describe the current room, presence of objects,
         available paths, current hp and ability usage options
         """
-        print(f"You are in {getattr(self.player_pos, 'name')}.")
-        print(f"You have {getattr(self.player, 'hp')} hp.")
+        print(f"You are in {self.player_pos.get_name()}.")
+        print(f"You have {self.player.get_hp()} hp.")
         print(f"\nYou can move to the following rooms: ")
-        paths = getattr(self.player_pos, 'paths')
+        paths = self.player_pos.getpaths()
         for path in paths:
             print(path)
         print()
@@ -132,7 +132,7 @@ Remember, Clutch or Gae.
         moves player to any room
         """
         for i, room in enumerate(self.map):
-            print(f"[{i+1}]: {getattr(room, 'name')}")
+            print(f"[{i+1}]: {room.get_name()}")
         print(f"[{len(self.map)+1}]: Cancel action")
         choice = input("Choose a number: ")
         while choice not in [str(x) for x in range(1, len(self.map)+2)]:
@@ -172,7 +172,7 @@ Remember, Clutch or Gae.
         """
         rooms = data.roomlist
         print("\nWhere do you want to go?")
-        paths = getattr(self.player_pos, 'paths')
+        paths = self.player_pos.get_paths()
         for i, path in enumerate(paths):
             print(f"[{i+1}]: {path}")
         print(f"[{len(paths)+1}]: Cancel action")
@@ -187,7 +187,7 @@ Remember, Clutch or Gae.
             loc = paths[int(loc)-1]
             print(loc)
             for room in self.map:
-                if getattr(room, "name") == loc:
+                if room.get_name() == loc:
                     self.player_pos = room
                     print("=====================================================")
                     return 1
@@ -215,10 +215,10 @@ Remember, Clutch or Gae.
         room randomly
         """
         rooms = data.roomlist
-        paths = getattr(self.reyna_pos, 'paths')
+        paths = self.reyna_pos.get_paths()
         move = random.choice(paths)
         for room in self.map:
-            if getattr(room, "name") == move:
+            if room.get_name() == move:
                 self.reyna_pos = room
                 return 1
         else:
@@ -233,21 +233,21 @@ Remember, Clutch or Gae.
         if self.reyna_pos == self.player_pos:
             print("Reyna has found you!")
             self.gameover = True
-            if getattr(self.player, "hp") >= 300:
+            if self.player.get_hp() >= 300:
                 self.win = True
                 print("Somehow, you manage to win the gunfight.")
             else:
                 print("Reyna annihilates you before you can even register her presence.")
         else:
-            if getattr(self.player_pos, "creature"):
+            if self.player_pos.has_creature():
                 print("There is utility in this room, you lose 30 hp handling it.\n")
                 self.player.set_hp(True, False)
                 self.player_pos.setcreature(False)
-                if getattr(self.player, "hp") <= 0:
+                if self.player.get_hp() <= 0:
                     print("Unfortunately, it was enough to kill you.")
                     self.gameover = True
     
-            if getattr(self.player_pos, "orb"):
+            if self.player_pos.has_orb():
                 print("There is a shield orb in this room, you gain 50 hp.\n")
                 self.player.set_hp(False, True)
                 self.player_pos.setorb(False)
