@@ -76,11 +76,11 @@ Remember, Clutch or Gae.
         
         spawn_creatures = random.sample(spawn_areas, creatures)
         for room in spawn_creatures:
-            room.setcreature(True)
+            room.set_creature(True)
             
         spawn_orbs = random.sample(spawn_areas, orbs)
         for room in spawn_orbs:
-            room.setorb(True)
+            room.set_orb(True)
             
         self.player = data.Player(100, agent)
         self.player_cooldown = 0
@@ -96,7 +96,7 @@ Remember, Clutch or Gae.
         print(f"You are in {self.player_pos.get_name()}.")
         print(f"You have {self.player.get_hp()} hp.")
         print(f"\nYou can move to the following rooms: ")
-        paths = self.player_pos.getpaths()
+        paths = self.player_pos.get_paths()
         for path in paths:
             print(path)
         print()
@@ -152,7 +152,7 @@ Remember, Clutch or Gae.
         the agent they selected
         """
         if self.player_cooldown == 0:
-            agent = getattr(self.player, "agent")
+            agent = self.player.get_agent()
             if agent == "omen":
                 self.omen()
             elif agent == "sova":
@@ -242,7 +242,7 @@ Remember, Clutch or Gae.
             if self.player_pos.has_creature():
                 print("There is utility in this room, you lose 30 hp handling it.\n")
                 self.player.set_hp(True, False)
-                self.player_pos.setcreature(False)
+                self.player_pos.set_creature(False)
                 if self.player.get_hp() <= 0:
                     print("Unfortunately, it was enough to kill you.")
                     self.gameover = True
@@ -250,7 +250,7 @@ Remember, Clutch or Gae.
             if self.player_pos.has_orb():
                 print("There is a shield orb in this room, you gain 50 hp.\n")
                 self.player.set_hp(False, True)
-                self.player_pos.setorb(False)
+                self.player_pos.set_orb(False)
             
     #main loop
     def run(self):
