@@ -206,7 +206,11 @@ class MUDGame:
                             active_character.get_stats()
                             continue
                         elif action.lower() == 'light':
-                            input = active_character.prompt_light()
+                            valid = False
+                            while not valid:
+                                input = active_character.prompt_light()
+                                if input in ['back', 'increase', 'decrease']:
+                                    valid = True
                             if input == 'increase':
                                 active_character.increase_light(10)
                             elif input.lower() == 'decrease':
@@ -214,6 +218,7 @@ class MUDGame:
                             elif input.lower() == 'back':
                                 continue
                         elif action.lower() == 'item':
+                            continue
                             #Remove defeated characters
                         for character in turn_order:
                             if character.is_defeated():
