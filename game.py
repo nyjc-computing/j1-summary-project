@@ -21,6 +21,7 @@ class Game:
         self.end = False
         self.room = setup()
         self.character = Character()
+        
     def intro(self):
         # start of the game
         print('Welcome to Hogwarts School of Witchcraft and Wizardry\n')
@@ -33,7 +34,7 @@ class Game:
 
     def run(self):
         # ask user for input (go left right up down) (use item) (attack)
-        print(f'\n#############   {self.room.name}   #############')
+        print(f'\n=====================\n      {self.room.name}\n=====================')
 
         # prints which rooms are available to move to
         available = []
