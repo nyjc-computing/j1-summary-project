@@ -39,8 +39,9 @@ Choose your agent:
             while out not in [str(x) for x in range(1,5)]:
                 print("Invalid Choice")
                 out = input("Enter [1], [2], [3] or [4] to choose: ")
-            print(f"\nYou have chosen {agents[int(out)-1]}.\n")
+            print(f"\nYou have chosen {agents[int(out)-1]}.")
             confirm = input("Confirm? (y/n): ")
+        print("--GAME START--")
         return agents[int(out)-1]
             
 
@@ -201,19 +202,19 @@ Choose your agent:
                 print("Somehow, you manage to win the gunfight.")
             else:
                 print("Reyna annihilates you before you can even register her presence.")
-
-        if getattr(self.player_pos, "creature"):
-            print("There is utility in this room, you lose 30 hp handling it.")
-            self.player.set_hp(True, False)
-            self.player_pos.setcreature(False)
-            if getattr(self.player, "hp") <= 0:
-                print("Unfortunately, it was enough to kill you.")
-                self.gameover = True
-
-        if getattr(self.player_pos, "orb"):
-            print("There is a shield orb in this room, you gain 50 hp.")
-            self.player.set_hp(False, True)
-            self.player_pos.setorb(False)
+        else:
+            if getattr(self.player_pos, "creature"):
+                print("There is utility in this room, you lose 30 hp handling it.")
+                self.player.set_hp(True, False)
+                self.player_pos.setcreature(False)
+                if getattr(self.player, "hp") <= 0:
+                    print("Unfortunately, it was enough to kill you.")
+                    self.gameover = True
+    
+            if getattr(self.player_pos, "orb"):
+                print("There is a shield orb in this room, you gain 50 hp.")
+                self.player.set_hp(False, True)
+                self.player_pos.setorb(False)
             
     #main loop
     def run(self):
