@@ -44,8 +44,14 @@ class Game:
         for i in available:
             print(f'To the {i} is: {getattr(self.room, i)}')
 
-        # ask for input
-        decision = input('\nWhat do you wish to do? (move, attack): ')
+        # ask for input if have monster
+        if not self.room.been_here:
+            print(f'\nROAR!!! {self.room.enemy} is in the room')
+            decision = input('\nWhat do you wish to do? (move, attack): ')
+
+        # ask for input if character have gone to this room and monster is dead
+        else:
+            decision = input('\nWhat do you wish to do? (move): ')
 
         # if input = movement, ask for direction
         if decision == 'move':
@@ -76,3 +82,6 @@ class Game:
         else:
             # if victim is dead
             print(f'You dealt {attacker.battle_points} damage to {victim.name}. Enemy is now dead')
+
+    def use_item(self):
+        pass
