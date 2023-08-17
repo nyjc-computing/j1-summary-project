@@ -21,7 +21,7 @@ class Character:
         self.battle_points = 0
 
     def __repr__(self) -> str:
-        print(f"character{self.name}")
+        print(f"character: {self.name}")
 
     def attack(self, enemyHP) -> int:
         """
