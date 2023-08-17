@@ -50,6 +50,7 @@ class Character:
     def __init__(self, hp: int):
         self.hp = hp
 
+
 class Player(Character):
     """
     A sub class of Character class
@@ -62,7 +63,7 @@ class Player(Character):
      - win(self, reyna : bool)
     """
 
-    def __init__(self, hp : int, agent: str):
+    def __init__(self, hp: int, agent: str):
         super().__init__(hp)
         self.agent = agent
 
@@ -86,14 +87,14 @@ _roompaths = {
     "A lobby": ["T-side spawn", "A long", "Catwalk"],
     "A long": ["A lobby", "A site"],
     "A site": ["A long", "Garden", "CT-side spawn"],
-    "CT-side spawn": ["A site", "Market", "B site"],
     "B site": ["CT-side spawn", "Market", "B main"],
     "B main": ["B site", "B lobby"],
     "B lobby": ["T-side spawn", "Tiles", "B main"],
     "Tiles": ["B lobby", "Catwalk", "Garden", "Market"],
     "Catwalk": ["A lobby", "Tiles", "Market", "Garden"],
     "Garden": ["A site", "Market", "Catwalk", "Tiles"],
-    "Market": ["CT-side spawn", "B site", "Tiles", "Catwalk", "Garden"]
+    "Market": ["CT-side spawn", "B site", "Tiles", "Catwalk", "Garden"],
+    "CT-side spawn": ["A site", "Market", "B site"]
 }
 
 roomlist = []
