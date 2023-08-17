@@ -20,7 +20,7 @@ class Character:
         self.name = 'Hero'
         self.health = 100
         self.spell = None
-        self.battle_points = 0
+        self.battle_points = 10
 
     def __repr__(self) -> str:
         print(f"character: {self.name}")
