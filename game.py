@@ -89,49 +89,23 @@ class MUDGame:
                     self.current_room.grid.move([0, 2])
                     continue
                 elif self.current_room.grid.get_position() == [2, 4] and input == 'd':
-                    self.current_room.next_room(input)
-                if self.current_room.grid.get_position() == [
-                        0, 2
-                ] and input == 'w':
-                    self.current_room.nextRoom(input)
-                    self.current_room.grid.move([4, 2])
-                    continue
-                elif self.current_room.grid.get_position() == [
-                        2, 0
-                ] and input == 'a':
-                    self.current_room.nextRoom(input)
-                    self.current_room.grid.move([2, 4])
-                    continue
-                elif self.current_room.grid.get_position() == [
-                        4, 2
-                ] and input == 's':
-                    self.current_room.nextRoom(input)
-                    self.current_room.grid.move([0, 2])
-                    continue
-                elif self.current_room.grid.get_position() == [
-                        2, 4
-                ] and input == 'd':
                     self.current_room.nextRoom(input)
                     self.current_room.grid.move([2, 0])
                     continue
                 #moving in current room
-                if input.lower(
-                ) == 'w' and self.current_room.grid.get_position()[0] != 0:
+                if input.lower() == 'w' and self.current_room.grid.get_position()[0] != 0:
                     current_position = self.current_room.grid.get_position()
                     current_position[1] = current_position[1] + 1
                     self.current_room.grid.move(current_position)
-                elif input.lower(
-                ) == 's' and self.current_room.grid.get_position()[0] != 4:
+                elif input.lower() == 's' and self.current_room.grid.get_position()[0] != 4:
                     current_position = self.current_room.grid.get_position()
                     current_position[1] = current_position[1] - 1
                     self.current_room.grid.move(current_position)
-                elif input.lower(
-                ) == 'a' and self.current_room.grid.get_position()[1] != 0:
+                elif input.lower() == 'a' and self.current_room.grid.get_position()[1] != 0:
                     current_position = self.current_room.grid.get_position()
                     current_position[0] = current_position[0] - 1
                     self.current_room.grid.move(current_position)
-                elif input.lower(
-                ) == 'd' and self.current_room.grid.get_position()[1] != 4:
+                elif input.lower() == 'd' and self.current_room.grid.get_position()[1] != 4:
                     current_position = self.current_room.grid.get_position()
                     current_position[0] = current_position[0] + 1
                     self.current_room.grid.move(current_position)
