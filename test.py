@@ -6,9 +6,13 @@ from game import MUDGame
 test = MUDGame()
 
 def test():
+
+    try 
     try:
         test.run()
     except:
         print("The game cannot run lmao.")
+
+
     
     pass
