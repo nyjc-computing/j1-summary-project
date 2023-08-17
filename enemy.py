@@ -6,34 +6,28 @@ class Enemy:
     ----------
     + name: str
     + spell: str
-    + health: int
+    - health: int
     + battle_points: int
     + loot: str
 
     Methods
     -------
-    + attack(): does attack to the character
-    + run(): checks the state of the enemy
+    + set_health(): updates the enemy's health
+    - is_dead(): checks the state of the enemy
+    + get_health(): gets the health of the enemy
     
     """
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: str, health) -> None:
         self.name = name
         self.spell = None
-        self.health = 100
+        self._health = health
         self.battle_points = 10
         self.loot = None
 
     def __repr__(self) -> None:
         print(f"enemy{self.name}")
 
-    def attack(self, characterHP) -> None:
-        """
-        takes in an attribute characterHP and each time this method is called the character gets damaged by the battle points the enemy has
-        """
-        characterHP -= self.battle_points
-        return characterHP
-    
-    def is_dead(self) -> str:
+    def _is_dead(self) -> str:
         """
         checks if enemy is dead.
         returns the HP is it is not
@@ -42,4 +36,14 @@ class Enemy:
         if self.health == 0:
             return self.loot
 
+    def set_health(self, bp: int) -> None:
+        """
+        Updates the enemy's health
+        """
+        self.health -= bp
 
+    def get_health(self) -> int:
+        """
+        Returns the enemys health
+        """
+        return self.health
