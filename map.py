@@ -44,16 +44,12 @@ def setup():
     map.link_left("Room2")
     map.link_right("Room3")
     map.link_up("Room4")
-    boss = Enemy('Voldemort')
-    big_enemy = Enemy('Death Eater')
-    medium_enemy = Enemy('Basilisk')
-    small_enemy = Enemy('Dementors')
+    boss = Enemy('Voldemort', 5000)
+    big_enemy = Enemy('Death Eater', 1000)
+    medium_enemy = Enemy('Basilisk', 500)
+    small_enemy = Enemy('Dementors', 100)
+    
+    enemies = {'Room1': small_enemy, 'Room2': boss, 'Room3': big_enemy, 'Room4': medium_enemy}
 
-    enemies = [{'room': 'Room1', 'enemy': small_enemy}, {'room': 'Room2', 'enemy': boss}, {'room': 'Room3', 'enemy': big_enemy}, {'room': 'Room4', 'enemy': medium_enemy}]
-
-    boss = Enemy('Voldemort')
-    big_enemy = Enemy('Death Eater')
-    medium_enemy = Enemy('Basilisk')
-    small_enemy = Enemy('Dementors')
 
     return [map, enemies]

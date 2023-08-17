@@ -40,7 +40,7 @@ class Enemy:
         """
         Updates the enemy's health
         """
-        self.health -= bp
+        self.health += bp
 
     def get_health(self) -> int:
         """

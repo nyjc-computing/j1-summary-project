@@ -33,7 +33,7 @@ class Character:
     
     def set_health(self, bp: int) -> None:
         """Updates the character's health"""
-        self.health -= bp
+        self.health += bp
 
     def get_health(self) -> int:
         """Returns the character's health"""
