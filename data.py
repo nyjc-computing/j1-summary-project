@@ -471,7 +471,7 @@ class Steve:
         self.health = DEFAULT_HITPOINTS
 
     def __repr__(self):
-        return f"Steve has {self.heatlh} HP."
+        return f"Steve has {self.health} HP."
 
     def _display_inventory(self) -> None:
         raise NotImplementedError
@@ -504,29 +504,37 @@ class Steve:
 class Creature:
     """
     -- ATTRIBUTES --
-    
+    name: name
+    attack: damage stat
+    hitpoints: current health
+    maxhp: highest possible health
     -- METHODS --
+    get_attack
+    get_health
     """
-    def __init__(self):
-        self.info = {}
-        for i in ["name", "max hitpoints", "moves"]:
-            self.info[i] = None
-        self.hitpoints = None
-        
-
-
-    def set_name(self, name: str) -> None:
-        self.info["name"] = name
-
-    def set_maxhp(self, maxhp: int) -> None:
-        self.info["max hitpoints"] = maxhp
+    def __init__(self, name, maxhp, attack):
+        self.name = name
+        maxhp = self.generate_maxhp(maxhp, turn)
         self.hitpoints = maxhp
+        self.attack = self.generate_attack(attack, turn)
+        self.maxhp = maxhp
 
-    def set_moves(self, moveslist: list) -> None:
-        self.info["moves"] = moveslist
+    def __repr__(self):
+        return f"Name: {self.name}, HP:{self.hitpoints}/{self.maxhp}"
 
-    def set_creature(self, moves):
-        pass
+    def _generate_maxhp(self, maxhp: int, turn_number: int) -> None:
+        maxhp = int((maxhp * ((turn_number / 10) + 1) * random.randint(90, 110) / 100))
+        return maxhp
+        
+    def _generate_attack(self, attack: int, turn_number: int) -> None:
+        attack = int((attack) * ((turn_number / 10) + 1) * (random.randint(90, 110) / 100))
+        return attack
+        
+    def get_attack(self):
+        return self.attack
+
+    def get_health(self):
+        return self.hitpoints
 
 class Boss(Creature):
     """
@@ -537,4 +545,13 @@ class Boss(Creature):
     def __init__(self):
         pass
         
+def random_creature() -> "Creature":
+    creature_data = random.choice(creature_list)
+    return Creature(creature_data["name"], creature_data["base_hp"], creature_data["base_atk"])
 
+
+with open("content/creatures.json",'r', encoding = 'utf-8') as f:
+    creature_list = json.load(f)
+turn = 10
+test = random_creature()
+print(test)
