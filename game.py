@@ -19,7 +19,8 @@ class Game:
     
     def __init__(self):
         self.end = False
-        self.room = setup()
+        self.room = setup()[0]
+        self.enemy = setup()[1]
         self.character = Character()
         
     def intro(self):
@@ -34,7 +35,7 @@ class Game:
 
     def run(self):
         # ask user for input (go left right up down) (use item) (attack)
-        print(f'\n=========================\n        {self.room.name}\n=========================')
+        print(f'\n=========================\n        {self.room.name}\n=========================\n')
 
         # prints which rooms are available to move to
         available = []

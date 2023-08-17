@@ -1,3 +1,5 @@
+from enemy import Enemy
+
 class Room:
     
     def __init__(self, name: str):
@@ -10,6 +12,9 @@ class Room:
 
     def __repr__(self):
         print(f"Room({self.name})")
+
+    def __str__(self):
+        return self.name
 
     def link_left(self, name: str):
         temp = Room(name)
@@ -31,14 +36,13 @@ class Room:
         temp.up = self
         self.down = temp
 
-import Enemy
 def setup():
     """
     Generates 3 rooms, named room1, room2, room3 and links them together
     """
     map = Room("Room1")
     map.link_left("Room2")
-    map.link_up("Room3")
+    map.link_right("Room3")
     map.link_up("Room4")
     boss = Enemy('Voldemort')
     big_enemy = Enemy('Death Eater')
@@ -52,4 +56,4 @@ def setup():
     medium_enemy = Enemy('Basilisk')
     small_enemy = Enemy('Dementors')
 
-    return map and enemies
+    return [map, enemies]
