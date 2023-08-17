@@ -11,7 +11,9 @@ class Character:
 
     Method
     ------
-    + attack():
+    + set_health(): updates the character's health
+    + get_health(): gets the health of the character
+    - is_dead(): checks if the enemy is dead
     
     """
     def __init__(self) -> None:
@@ -23,14 +25,16 @@ class Character:
     def __repr__(self) -> str:
         print(f"character{self.name}")
 
-    def attack(self, enemyHP) -> int:
-        """
-        attacks the enemy and minus the enemy's hp
-        """
-        enemyHP -= self.battle_points
-        return enemyHP
-
-    def update_health(self, enemy_attack: int) -> int:
-        self.health -= enemy_attack
-
+    def _is_dead(self) -> bool:
+        """Checks if the enemy is dead"""
+        if self.health == 0:
+            return True
+        return False
     
+    def set_health(self, bp: int) -> None:
+        """Updates the character's health"""
+        self.health -= bp
+
+    def get_health(self) -> int:
+        """Returns the character's health"""
+        return self.health
