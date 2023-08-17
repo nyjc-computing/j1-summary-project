@@ -14,7 +14,7 @@ class Room:
         next_rooms = [self.up, self.down, self.left, self.right]
         for room in next_rooms:
             if room != None:
-                next_rooms.pop(room)
+                next_rooms.remove(room)
         while connections != 0:
             next_room = random.randint(0, len(next_rooms) - 1)
             next_rooms[next_room] = 'closed'
@@ -109,8 +109,8 @@ class Grid:
         while k < 5:
             if self.grid[random.randint(0, 4)][random.randint(0, 4)] == None:
                 self.grid[random.randint(0, 4)][random.randint(0, 4)] = {'type' : 'items', 'items':[]}
+            k = k + 1
         self.coordinates = [x, y]
-        k = k + 1
         
     def get_position(self) -> list:
         '''
