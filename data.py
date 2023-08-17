@@ -9,6 +9,10 @@ class Room:
     orb: A boolean for powerup presence
 
     Methods:
+    - getname
+    - getpaths
+    - hascreature
+    - hasorb
     - setpaths
     - setcreature
     - setorb
@@ -20,19 +24,35 @@ class Room:
         self.creature = creature
         self.orb = orb
 
-    def setpaths(self, paths: list):
+    def get_name(self) -> str:
+        """Returns name of room"""
+        return self.name
+
+    def get_paths(self) -> list:
+        """Return list of paths for the room"""
+        return self.paths
+
+    def has_creature(self) -> bool:
+        """Returns creature presence in room"""
+        return self.creature
+
+    def has_orb(self) -> bool:
+        """Returns orb presence in room"""
+        return self.orb
+
+    def set_paths(self, paths: list):
         """
         Allows for modification of the list of paths for the room
         """
         self.paths = paths
 
-    def setcreature(self, creature: bool):
+    def set_creature(self, creature: bool):
         """
         Allows for modification of the presence of a creature
         """
         self.creature = creature
 
-    def setorb(self, orb: bool):
+    def set_orb(self, orb: bool):
         """
         Allows for modification of the presence of an orb
         """
@@ -42,13 +62,20 @@ class Room:
 class Character:
     """
     A Character class for each character
-    Contains the following attribute only:
 
+    Attribrute:
     hp : Health points of the character
+
+    Method:
+    - gethp
     """
 
     def __init__(self, hp: int):
         self.hp = hp
+
+    def get_hp(self) -> int:
+        """returns hp value of player"""
+        return self.hp
 
 
 class Player(Character):
