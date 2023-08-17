@@ -53,7 +53,7 @@ class Game:
 
         # if input = attack, deal damage to monster
         elif decision == 'attack':
-            self.attack()
+            self.attack(self.character, self.enemy.get(self.room))
 
     def move(self, available):
         movement = input('\nWhich direction do you wish to move in? (up, down, left, right): ')
@@ -65,5 +65,14 @@ class Game:
             if movement == direction:
                 self.room = getattr(self.room, direction)
     
-    def attack(self):
-        self.character.attack()
+    def attack(self, attacker, victim):
+        # reduce enemy health base on battle point of character
+        victim.set_health(attacker.battle_points)
+
+        if victim.is_dead == False: 
+            # print health of enemy
+            print(f'You dealt {attacker.battle_points} damage to {victim.name}. Enemy still have {victim.get_health()} health')
+
+        else:
+            # if victim is dead
+            print(f'You dealt {attacker.battle_points} damage to {victim.name}. Enemy is now dead')
