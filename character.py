@@ -20,12 +20,15 @@ class Character:
         self.name = 'Hero'
         self.health = 100
         self.spell = None
-        self.battle_points = 10
+        self.battle_points = 1000
 
     def __repr__(self) -> str:
         print(f"character: {self.name}")
 
-    def _is_dead(self) -> bool:
+    def __str__(self):
+        return self.name
+
+    def is_dead(self) -> bool:
         """Checks if the enemy is dead"""
         if self.health == 0:
             return True
