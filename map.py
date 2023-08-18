@@ -9,6 +9,7 @@ class Room:
         self.right = None
         self.up = None
         self.down = None
+        self.is_fighting = False
 
     def __repr__(self):
         print(f"Room({self.name})")
@@ -35,6 +36,9 @@ class Room:
         temp = Room(name, enemy)
         temp.up = self
         self.down = temp
+
+    def set_is_fighting(self, boolean: bool):
+        self.is_fighting = bool
 
 def setup():
     """
