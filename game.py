@@ -119,14 +119,20 @@ Remember, Clutch or Gae.
         """
         pass
 
-    def jett(self, room: str) -> None:
+    def jett(self) -> None:
         """
         if player is about to die, moves player
         to an adjacent room of the player's choice
         and avoid death
         """
-        
-        pass
+        paths = self.player_pos.get_paths()
+        outcome = paths[random.randint(0, len(paths)-1)]
+        print("YOU MET REYNA! ABILITY ACTIVATED TO AVOID DEATH")
+        print(f"You are now in {outcome}.")
+        for room in self.map:
+                if room.get_name() == outcome:
+                    self.player_pos = room
+                    print("=====================================================")
     
     def omen(self) -> None:
         """
@@ -164,6 +170,7 @@ Remember, Clutch or Gae.
                 print("jett's ability cannot be manually activated")
         else:
             print("Your ability is on cooldown.")
+            
     def move(self) -> int:
         """
         move the player into an adjacent room
@@ -195,7 +202,6 @@ Remember, Clutch or Gae.
             else:
                 print("something has gone very wrong")
 
-
     def prompt(self) -> str:
         """
         get the user's action
@@ -215,7 +221,6 @@ Remember, Clutch or Gae.
         Moves reyna to a room adjacent to her current
         room randomly
         """
-        rooms = data.roomlist
         paths = self.reyna_pos.get_paths()
         move = random.choice(paths)
         for room in self.map:
@@ -232,12 +237,16 @@ Remember, Clutch or Gae.
         returns None
         """
         if self.reyna_pos == self.player_pos:
-            print("Reyna has found you!")
-            self.gameover = True
             if self.player.get_hp() >= 300:
+                print("Reyna has found you!")
                 self.win = True
                 print("Somehow, you manage to win the gunfight.")
+                self.gameover = True
+            elif self.player.get_agent() == "jett" and self.player_cooldown == 0:
+                self.jett()
             else:
+                self.gameover = True
+                print("Reyna has found you!")
                 print("Reyna annihilates you before you can even register her presence.")
         else:
             if self.player_pos.has_creature():
@@ -247,7 +256,6 @@ Remember, Clutch or Gae.
                 if self.player.get_hp() <= 0:
                     print("Unfortunately, it was enough to kill you.")
                     self.gameover = True
-    
             if self.player_pos.has_orb():
                 print("There is a shield orb in this room, you gain 50 hp.\n")
                 self.player.set_hp(False, True)
