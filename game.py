@@ -30,7 +30,7 @@ class Game:
     def intro(self):
         # start of the game
         print('Welcome to Hogwarts School of Witchcraft and Wizardry\n')
-        self.character.name = input('Key in what do you wish to be named: ')
+        self.character.name = input('Key in what you wish to be named: ')
         print(f'\nWelcome {self.character.name}, in this game you can either move (up, down, left, right), attack or use objects\n')
         decision = input('Do you wish to enter the school? (y/n): ')
         if decision == "n":
@@ -46,6 +46,7 @@ class Game:
             # if charcter have not been here print description
             if not self.room.get_been_here():
                 print(self.room.description)
+                #print("\n")
     
             # prints which rooms are available to move to
             available = []
@@ -53,7 +54,7 @@ class Game:
                 if getattr(self.room, direction) != None:
                     available.append(direction)
             for i in available:
-                print(f'To the {i} is: {getattr(self.room, i)}')
+                print(f'To the {i} is {getattr(self.room, i)}')
     
             # ask for input if have monster
             if self.room.enemy.get_health() != 0 or None:
@@ -92,7 +93,7 @@ class Game:
             self.while_fighting()
 
         # check if game is over
-        if self.charcter.is_dead():
+        if self.character.is_dead():
             print('\nHogwarts is not a school for the weak. Return when you are stronger')
             print('\nGAME OVER')
             self.end = True
@@ -125,10 +126,10 @@ class Game:
     def while_fighting(self):
         print(f'\n{self.room.enemy} currently has {self.room.enemy.get_health()} health')
         available = ['attack']
-        decision = input(print('What do you wish to do? (attack): '))
+        decision = input('What do you wish to do? (attack): ')
         # check for valid response
         while decision not in available:
-            decision = input(print('What do you wish to do? (attack): '))
+            decision = input('What do you wish to do? (attack): ')
         if decision == 'attack':
             self.attack(self.character, self.room.enemy)            
     
