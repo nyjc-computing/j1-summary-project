@@ -20,10 +20,10 @@ class Character:
         self.name = 'Hero'
         self.health = 100
         self.spell = None
-        self.battle_points = 0
+        self.battle_points = 10
 
     def __repr__(self) -> str:
-        print(f"character{self.name}")
+        print(f"character: {self.name}")
 
     def _is_dead(self) -> bool:
         """Checks if the enemy is dead"""
@@ -33,7 +33,7 @@ class Character:
     
     def set_health(self, bp: int) -> None:
         """Updates the character's health"""
-        self.health -= bp
+        self.health += bp
 
     def get_health(self) -> int:
         """Returns the character's health"""

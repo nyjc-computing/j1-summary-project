@@ -25,8 +25,8 @@ class Room:
     + get_is_fighting: gets the status of the character in the room
     + set_been_here(): updates the status of wether the character has been to this room
     + get_been_here(): gets the status of wether the character has been to this room
-    
     """
+    
     def __init__(self, name: str, enemy):
         self.name = name
         self.enemy = enemy

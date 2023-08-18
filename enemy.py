@@ -20,27 +20,34 @@ class Enemy:
     def __init__(self, name: str, health) -> None:
         self.name = name
         self.spell = None
-        self._health = health
+        self.health = health
         self.battle_points = 10
         self.loot = None
 
     def __repr__(self) -> None:
-        print(f"enemy{self.name}")
+        print(f"enemy: {self.name}")
 
-    def _is_dead(self) -> str:
+    def __str__(self):
+        return self.name
+
+    def is_dead(self) -> str:
         """
         checks if enemy is dead.
         returns the HP is it is not
         drops something if it is dead
         """
         if self.health == 0:
-            return self.loot
+            return True
+        return False
+
+    def died(self):
+        pass
 
     def set_health(self, bp: int) -> None:
         """
         Updates the enemy's health
         """
-        self.health -= bp
+        self.health += bp
 
     def get_health(self) -> int:
         """
