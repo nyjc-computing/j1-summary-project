@@ -600,7 +600,8 @@ class Freddy:
     def depassive(self, target):
         if 'sleep' in target.status:
             self.attacking -= 5
-
+    def inflict_status(self, status, count, potency=None):
+        pass
     def remove_status(self, status):
         if status in self.status:
             self.status.remove(status)
