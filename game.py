@@ -134,5 +134,11 @@ class Game:
     
     def use_item(self):
         print('\nWhich of the following item do you wish to use? :')
-        for item in self.character.item:
-            print(item)
+        for i, item in enumerate(self.character.item):
+            print(f"[{i}]: {item}")
+        choice = input("Choose an item: ")
+        while choice not in [str(x) for x in range(1, len(self.character.item)+1)]:
+            print("Invalid Choice")
+            choice = input("Choose an item: ")
+        
+        
