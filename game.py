@@ -95,7 +95,7 @@ Remember, Clutch or Gae.
         """
         print(f"You are in {self.player_pos.get_name()}.")
         print(f"You have {self.player.get_hp()} hp.")
-        print(f"\nYou can move to the following rooms: ")
+        print("\nYou can move to the following rooms: ")
         paths = self.player_pos.get_paths()
         for path in paths:
             print(path)
@@ -125,6 +125,7 @@ Remember, Clutch or Gae.
         to an adjacent room of the player's choice
         and avoid death
         """
+        
         pass
     
     def omen(self) -> None:
