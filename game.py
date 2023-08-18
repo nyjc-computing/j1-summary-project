@@ -194,13 +194,13 @@ class MUDGame:
                         elif action.lower() == 'item':
                             continue
                             #Remove defeated characters
-                        for character in turn_order:
-                            if character.is_defeated():
-                                turn_order.remove(character)
-                            if character in enemy_list:
-                                enemy_list.remove(character)
-                            elif character in player_list:
-                                player_list.remove(character)
+                    for character in turn_order:
+                        if character.is_defeated():
+                            turn_order.remove(character)
+                        if character in enemy_list:
+                            enemy_list.remove(character)
+                        elif character in player_list:
+                            player_list.remove(character)
                     k = k + 1
                 if defeat(player_list):
                     self.gameOver = True
