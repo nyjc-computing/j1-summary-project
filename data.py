@@ -424,33 +424,62 @@ class Room:
 class Item:
     """
     -- ATTRIBUTES --
-
-    + self.info: dict
     
     -- METHODS --
     """
-    def __init__(self):
-        self.info = {}
-        for i in ["name", "item type", "description"]:
-            self.info[i] = None
+    def __init__(self, name, item_type):
+        self.name = name
+        self.item_type = item_type
 
     def __repr__(self) -> str:
-        outputstr = ''
-        for key, value in self.info.items():
-            outputstr += key.capitalize() + ": " + value
+        outputstr = f"Name: {self.name}\nType: {self.item_type}"
         return outputstr
 
     def __str__(self) -> str:
-        outputstr = ''
-        for key, value in self.info.items():
-            outputstr += key.capitalize() + ": " + value
+        outputstr = f"Name: {self.name}\nType: {self.item_type}"
         return outputstr
 
-    def set_nametypedesc(self, name: str, type: str, desc: str) -> None:
-        self.info["name"] = name
-        self.info["type"] = type
-        self.info["description"] = desc
+class Food(Item):
+    def __init__(self, name, item_type, hprestore):
+        super().__init__(name, item_type)
+        self.hprestore = hprestore
 
+    def __repr__(self):
+        return super().__repr__() + f"\nRestores: {self.hprestore} HP"
+
+    def __str__(self):
+        return super().__str__() + f"\nRestores: {self.hprestore} HP"
+    
+    def get_restore(self):
+        return self.hprestore
+
+class Armor(Item):
+    def __init__(self, name, item_type, defence):
+        super().__init__(name, item_type)
+        self.defence = defence
+        
+    def __repr__(self):
+        return super().__repr__() + f"\nProvides: {self.defence} defence"
+
+    def __str__(self):
+        return super().__str__() + f"\nProvides: {self.defence} defence"
+        
+    def get_defence(self):
+        return self.defence
+
+class Weapon(Item):
+    def __init__(self, name, item_type, attack):
+        super().__init__(name, item_type)
+        self.attack = attack
+        
+    def __repr__(self):
+        return super().__repr__() + f"\nDoes: {self.attack} damage"
+
+    def __str__(self):
+        return super().__str__() + f"\nDoes: {self.attack} damage"
+        
+    def get_attack(self):
+        return self.attack
 
 DEFAULT_HITPOINTS = 20
 class Steve:
@@ -514,9 +543,9 @@ class Creature:
     """
     def __init__(self, name, maxhp, attack):
         self.name = name
-        maxhp = self.generate_maxhp(maxhp, turn)
+        maxhp = self._generate_maxhp(maxhp, turn)
         self.hitpoints = maxhp
-        self.attack = self.generate_attack(attack, turn)
+        self.attack = self._generate_attack(attack, turn)
         self.maxhp = maxhp
 
     def __repr__(self):
@@ -536,6 +565,9 @@ class Creature:
     def get_health(self):
         return self.hitpoints
 
+    def take_damage(self, damage):
+        self.hitpoints = self.hitpoints - damage
+
 class Boss(Creature):
     """
     -- ATTRIBUTES --
@@ -549,9 +581,31 @@ def random_creature() -> "Creature":
     creature_data = random.choice(creature_list)
     return Creature(creature_data["name"], creature_data["base_hp"], creature_data["base_atk"])
 
+item_type_list = ["Armor", "Food", "Weapon"]
+def random_item() -> "Item":
+    item_type = random.choice(item_type_list)
+    if item_type == "Armor":
+        item_data = random.choice(armor_list)
+        return Armor(item_data["name"], item_type, item_data["defence"])
+    elif item_type == "Food":
+        item_data = random.choice(food_list)
+        return Food(item_data["name"], item_type, item_data["hprestore"])
+    elif item_type == "Weapon":
+        item_data = random.choice(weapon_list)
+        return Weapon(item_data["name"], item_type, item_data["atk"])
+        
+    
 
 with open("content/creatures.json",'r', encoding = 'utf-8') as f:
     creature_list = json.load(f)
+with open("content/items/armor.json",'r', encoding = 'utf-8') as f:
+    armor_list = json.load(f)
+with open("content/items/food.json",'r', encoding = 'utf-8') as f:
+    food_list = json.load(f)
+with open("content/items/weapon.json",'r', encoding = 'utf-8') as f:
+    weapon_list = json.load(f)
 turn = 10
 test = random_creature()
 print(test)
+test2 = random_item()
+print(test2)
