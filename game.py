@@ -139,17 +139,7 @@ class MUDGame:
                         skill = random.randint(1, 2)
                         hit = accuracy_calc(player_list[0].get_light())
                         if hit:
-                            damage = active_character.attack(target, skill)
-                            statuses = active_character.inflict_status(
-                                target, skill)
-                            heal = active_character.heal(
-                                active_character, skill)
-                            if damage != None:
-                                player_list[target].take_dmg(damage)
-                            if statuses != None:
-                                player_list[target].set_status(statuses)
-                            if heal != None:
-                                active_character.receive_heal(heal)
+                            active_character.attack(target, skill)
                         else:
                             active_character.display_miss()
                     elif active_character in player_list:
@@ -159,18 +149,7 @@ class MUDGame:
                             skill = active_character.prompt_attack()
                             hit = accuracy_calc(active_character.get_light())
                             if hit:
-                                damage = active_character.attack(
-                                    enemy_list[target], skill)
-                                statuses = active_character.inflict_status(
-                                    enemy_list[target], skill)
-                                heal = active_character.heal(
-                                    active_character, skill)
-                                if damage != None:
-                                    enemy_list[target].take_dmg(damage)
-                                if statuses != None:
-                                    enemy_list[target].set_status(statuses)
-                                if heal != None:
-                                    active_character.receive_heal(heal)
+                                active_character.attack(enemy_list[target], skill)
                             else:
                                 active_character.display_miss()
                         elif action.lower() == 'target':
