@@ -7,12 +7,17 @@ class Game:
     attributes
     ----------
     end : True when game ends, False otherwise
-    room : 
+    room : class for monster in the room and rooms it is connected to (refer to map.py)
+    character : class for the character (refer to character.py)
 
     methods
     -------
-    run() : runs when the game starts for the first time
-    start_game() : runs everytime the character choose an option
+    intro() : runs when the game starts for the first time
+    run() : runs everytime the character choose an option
+    move() : method for character to traverse to different rooms
+    attack() : method for character to attack enemy and vise versa
+    while_fighting() : runs when character is in a fight, disabling move option
+    use_item(): method for character to use item
     '''
     
 
@@ -33,33 +38,65 @@ class Game:
     
 
     def run(self):
-        # ask user for input (go left right up down) (use item) (attack)
-        print(f'\n=========================\n        {self.room.name}\n=========================\n')
+        # if character is not fighting
+        if not self.room.get_is_fighting():
+            # ask user for input (go left right up down) (use item) (attack)
+            print(f'\n=========================\n        {self.room.name}\n=========================\n')
 
-        # prints which rooms are available to move to
-        available = []
-        for direction in ('left', 'right', 'up', 'down'):
-            if getattr(self.room, direction) != None:
-                available.append(direction)
-        for i in available:
-            print(f'To the {i} is: {getattr(self.room, i)}')
-
-        # ask for input if have monster
-        if not self.room.been_here:
-            print(f'\nROAR!!! {self.room.enemy} is in the room')
-            decision = input('\nWhat do you wish to do? (move, attack): ')
-
-        # ask for input if character have gone to this room and monster is dead
+            # if charcter have not been here print description
+            if not self.room.get_been_here():
+                print(self.room.description)
+    
+            # prints which rooms are available to move to
+            available = []
+            for direction in ('left', 'right', 'up', 'down'):
+                if getattr(self.room, direction) != None:
+                    available.append(direction)
+            for i in available:
+                print(f'To the {i} is: {getattr(self.room, i)}')
+    
+            # ask for input if have monster
+            if self.room.enemy.get_health() != 0 or None:
+                print(f'\nROAR!!! {self.room.enemy}, {self.room.enemy.description} is in the room')
+                # change available moves respectively
+                available_moves = ['attack']
+                decision = input('\nWhat do you wish to do? (attack): ')
+                while decision not in available_moves:
+                    decision = input('\nWhat do you wish to do? (attack): ')
+    
+            # ask for input if character have gone to this room and monster is dead
+            else:
+                available_moves = ['move']
+                decision = input('\nWhat do you wish to do? (move): ')
+                while decision not in available_moves:
+                    decision = input('\nWhat do you wish to do? (move): ')
+            
+            # if input = movement, ask for direction
+            if decision == 'move':
+                self.move(available)
+    
+            # if input = attack, deal damage to monster for the first time
+            elif decision == 'attack':
+                self.attack(self.character, self.room.enemy)
+                self.room.set_is_fighting(True)
+                # deal damage back to character if enemy is not dead
+                if not self.room.enemy.is_dead():
+                    self.attack(self.room.enemy, self.character)
+                    
+                # if enemy is dead drop loot
+                else:
+                    self.character.item += self.room.enemy.loot
+           
+        # if character is in the middle of fighting
         else:
-            decision = input('\nWhat do you wish to do? (move): ')
+            self.while_fighting()
 
-        # if input = movement, ask for direction
-        if decision == 'move':
-            self.move(available)
-
-        # if input = attack, deal damage to monster
-        elif decision == 'attack':
-            self.attack(self.character, self.room.enemy)
+        # check if game is over
+        if self.charcter.is_dead():
+            print('\nHogwarts is not a school for the weak. Return when you are stronger')
+            print('\nGAME OVER')
+            self.end = True
+        
 
     def move(self, available):
         movement = input('\nWhich direction do you wish to move in? (up, down, left, right): ')
@@ -73,15 +110,29 @@ class Game:
     
     def attack(self, attacker, victim):
         # reduce enemy health base on battle point of character
-        victim.set_health(attacker.battle_points)
+        victim.set_health(-attacker.battle_points)
 
         if  not victim.is_dead(): 
             # print health of enemy
-            print(f'You dealt {attacker.battle_points} damage to {victim.name}. Enemy still have {victim.get_health()} health')
+            print(f'{attacker} has dealt {attacker.battle_points} damage to {victim.name}. {victim} still have {victim.get_health()} health')
 
         else:
             # if victim is dead
-            print(f'You dealt {attacker.battle_points} damage to {victim.name}. Enemy is now dead')
+            print(f'{attacker} dealt {attacker.battle_points} damage to {victim.name}. {victim} is now dead')
+            self.room.is_fighting = False
+            
 
+    def while_fighting(self):
+        print(f'\n{self.room.enemy} currently has {self.room.enemy.get_health()} health')
+        available = ['attack']
+        decision = input(print('What do you wish to do? (attack): '))
+        # check for valid response
+        while decision not in available:
+            decision = input(print('What do you wish to do? (attack): '))
+        if decision == 'attack':
+            self.attack(self.character, self.room.enemy)            
+    
     def use_item(self):
-        pass
+        print('\nWhich of the following item do you wish to use? :')
+        for item in self.character.item:
+            print(item)

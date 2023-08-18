@@ -75,6 +75,9 @@ class Room:
         temp.up = self
         self.down = temp
 
+    def set_is_fighting(self, boolean: bool):
+        self.is_fighting = bool
+
 def setup():
     """
     Generates 3 rooms, named room1, room2, room3 and links them together
