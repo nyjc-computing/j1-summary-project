@@ -22,7 +22,6 @@ def victory(enemies: list) -> bool:
 
 
 class MUDGame:
-
     def __init__(self):
         # self.spawn = Room('home', up='closed')
         self.boss = data.Springtrap.encounter()
@@ -33,6 +32,7 @@ class MUDGame:
         self.player3 = None
         self.player4 = None
 
+    
     def set_player(self, player, character):
         if player == 'self.player1':
             self.player1 = character
