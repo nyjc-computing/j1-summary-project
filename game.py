@@ -131,7 +131,7 @@ class Game:
         while decision not in available:
             decision = input('What do you wish to do? (attack): ')
         if decision == 'attack':
-            self.attack(self.character, self.room.enemy)            
+            self.attack(self.character, self.room.enemy)
     
     def use_item(self):
         print('\nWhich of the following item do you wish to use? :')
