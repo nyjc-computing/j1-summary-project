@@ -95,6 +95,10 @@ Remember, Clutch or Gae.
         """
         print(f"You are in {self.player_pos.get_name()}.")
         print(f"You have {self.player.get_hp()} hp.")
+
+        if self.reyna_pos.get_name() in self.player_pos.get_paths():
+            print(f"\nYou hear footsteps nearby...Reyna is in {self.reyna_pos.get_name()}.")
+        
         print("\nYou can move to the following rooms: ")
         paths = self.player_pos.get_paths()
         for path in paths:
@@ -186,7 +190,6 @@ Remember, Clutch or Gae.
             return 0
         else:
             loc = paths[int(loc)-1]
-            print(loc)
             for room in self.map:
                 if room.get_name() == loc:
                     self.player_pos = room
