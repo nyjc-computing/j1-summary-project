@@ -22,7 +22,7 @@ class Enemy:
         self.spell = None
         self.health = health
         self.battle_points = 10
-        self.loot = None
+        self.loot = ''
 
     def __repr__(self) -> None:
         print(f"enemy: {self.name}")
@@ -30,13 +30,13 @@ class Enemy:
     def __str__(self):
         return self.name
 
-    def is_dead(self) -> str:
+    def is_dead(self) -> bool:
         """
         checks if enemy is dead.
         returns the HP is it is not
         drops something if it is dead
         """
-        if self.health == 0:
+        if self.health <= 0:
             return True
         return False
 

@@ -18,9 +18,9 @@ class Character:
     """
     def __init__(self) -> None:
         self.name = 'Hero'
-        self.health = 100
+        self.health = 1000
         self.spell = None
-        self.battle_points = 10
+        self.battle_points = 100
 
     def __repr__(self) -> str:
         print(f"character: {self.name}")

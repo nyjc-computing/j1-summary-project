@@ -1,5 +1,6 @@
 from enemy import Enemy
 
+
 class Room:
     """
     creates the room
@@ -79,9 +80,13 @@ def setup():
     """
     Generates 3 rooms, named room1, room2, room3 and links them together
     """
-    map = Room("Room1", Enemy('Dementors', 100))
-    map.link_left("Room2", Enemy('Basilisk', 500))
-    map.link_right("Room3", Enemy('Death Eater', 1000))
-    map.link_up("Room4", Enemy('Voldemort', 5000))
+    small_enemy = Enemy('Dementors', 100)
+    map = Room("Room1", small_enemy)
+    medium_enemy = Enemy('Basilisk', 500)
+    map.link_left("Room2", medium_enemy)
+    big_enemy = Enemy('Death Eater', 1000)
+    map.link_right("Room3", big_enemy)
+    boss = Enemy('Voldemort', 5000)
+    map.link_up("Room4", boss)
 
     return map
