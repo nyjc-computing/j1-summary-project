@@ -94,9 +94,9 @@ class Player(Character):
         super().__init__(hp)
         self.agent = agent
 
-    def get_agent(self):
+    def get_agent(self) -> str:
         """Returns name of agent chosen"""
-        return self.agent()
+        return self.agent
 
     def set_hp(self, creature: bool, buff: bool) -> None:
         """
