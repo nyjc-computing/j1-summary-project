@@ -13,6 +13,7 @@ class MUDGame:
         self.maze.generate()
         self.steve = Steve()
         self.creature = Creature()
+        self.steve_path = []
 
     
     def introduce(self): 
@@ -39,14 +40,20 @@ class MUDGame:
             menu = '1. Yes \n2. No'
         print(menu)
 
-    def prompt_player(self) -> int:
+    def prompt_player_2opt(self) -> int:
         opt = None
-        while not self.isvalid(opt):
+        while not self.isvalid_2opt(opt):
             opt = input('Please choose option 1 or 2:')
         return opt
 
-    def isvalid(choice) -> bool:
+    def isvalid_2opt(choice) -> bool:
         if choice in ('12'):
+            if len(choice) == 1:
+                return True
+        return False
+
+    def isvalid_4opt(choice) -> bool:
+        if choice in ('1234'):
             if len(choice) == 1:
                 return True
         return False
@@ -54,9 +61,9 @@ class MUDGame:
     def attack(self):
         x, y =self.maze.steve_pos()
         room = self.maze.get_current_pos()
+        creature = self.room.get_creature()
         while not self.steve_isdead() or self.creature.hitpoints <= 0:
             print(self.steve)
-            creature = self.room.get_creature()
             print(f"{creature.info['name']} has {self.creature.get_health()} HP")
             damage = self.steve....
             self.creature.hitpoints -= damage
@@ -80,9 +87,21 @@ class MUDGame:
         print("YOU DIED...\nDo you want to try again?")
 
     def movesteve():
-        dir = input('Where are you going next? \n1. North \n2. East \n3.South \n4.West')
-        if try_move_steve(..., dir):
-            pass
+        current_location = self.maze.get_current_pos
+        opt_dir = {'1':'North', '2':'East', '3':'South', '4':'West'}
+        available_dir = []
+        dir_provided = ''
+        for dir in opt_dir.values:
+            if try_move_steve(current_location, dir):
+                available_dir.append(dir)
+        for i in range(len(available_dir)):
+            dir_provided = dir_provided + str(i+1) + '. ' + available_dir[i] + ' '
+        print('Where are you going next? ' + dir_provided )
+        choice = input('Next location:')
+        # validate choice
+        # any chance that steve no dir/ only back to prev room?
+        # if no, should i remove the prev room from the options?
+    
 
 
     
@@ -98,12 +117,13 @@ class MUDGame:
         """
         self.introduce()
         while not self.game_is_over():
+            self.steve_path.append(self.maze.get_current_pos)
             self.show_status()
             # show status: direction, hp, lvl, inventory
             if self.creature_encountered():
-                self.show_options(creature)
+                self.show_options('creature')
                 # show player action options
-                option = self.prompt_player()
+                option = self.prompt_player_2opt()
                 # prompt player to take actions
                 if option == 1:
                     self.attack()
@@ -111,27 +131,26 @@ class MUDGame:
                         continue
                 else:
                     odds = random.randint(0, 100)
-                    if odds <= 80:
+                    if odds <= 40:
                         self.maze.try_move_steve(...)
+                        continue
                     else:
-                        print()
+                        print("Too late to escape!")
                         self.attack()
                         if self.game_is_over():
                             continue
             if self.item_found():
-                item = ...
+                item = self.room.get_item()
                 self.show_options(item)
-                item_choice = self.prompt_player()
-                self.isvalid(item_choice)
+                item_choice = self.prompt_player_2opt()
                 if item_choice == 1:
                     self.steve._add_item_to_inv(item)
-                self.movesteve()
+            self.movesteve()
                 # update
         if self.steve.isdead():
             self.show_losescreen()
             self.show_options('restart')
-            restart_choice = self.prompt_player()
-            self.isvalid(restart_choice)
+            restart_choice = self.prompt_player_2opt()
             if restart_choice == 1:
                 self.run()
             else:
