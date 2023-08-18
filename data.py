@@ -676,3 +676,6 @@ def infiltrated(target):
         target.remove_status('infiltrated')
     else:
         pass
+
+statuses = [{'name' : 'sleep', 'description' : 'Target cannot take action based on the count. At the end of the target\'s turn, reduce the count by 1.', 'count' : None}, 
+            {'name' : 'burning', 'description' : 'Target takes damage at the start of their turn based on the effect\'s potency. Then reduce it\'s count by 1.', 'count' : None, 'potency' : None}]
