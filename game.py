@@ -39,7 +39,7 @@ Remember, Clutch or Gae.
             print("""Choose your agent:
 
 [1] Jett: Dash into an adjacent room if you would otherwise die (does not refresh)\n
-[2] Sova: Scan an adjacent room for information (cooldown: 1 turn)\n
+[2] Sova: Scan an adjacent room for information (cooldown: 2 turn)\n
 [3] Omen: Move to any room on the map (cooldown: 5 turns)\n
 [4] Sage: Block a path from your current room to an adjacent one permanently (cooldown: 3 turns)
 =====================================================""")
@@ -106,18 +106,54 @@ Remember, Clutch or Gae.
             print(f"{self.player_cooldown} turns until you can use your ability.")
         print("=====================================================")
     
-    def sova(self, room: str) -> None:
+    def sova(self) -> None:
         """
         return creature presence and orb presence in a room
         adjacent to the player's
         """
-        pass
-
-    def sage(self, room: str) -> None:
+        paths = self.player_pos.get_paths()
+        for i in range(len(paths)):
+            print(f"[{i+1}]: {paths[i]}")
+        choice = int(input("Choose a path to scan: "))
+        while choice-1 > len(paths):
+            print("Invalid input")
+            choice = input("Choose a path to scan: ")
+        room = paths[choice-1]
+        origpos = self.player_pos
+        for i in self.map:
+            if i.get_name() == room:
+                self.player_pos = i
+        ustatus = self.player_pos.has_creature()
+        ostatus = self.player_pos.has_orb()
+        if ustatus == True and ostatus == True:
+            print(f"{room} has both an utility and an orb.")
+        elif ustatus == True and ostatus == False:
+            print(f"{room} has an utility.")
+        elif ustatus == False and ostatus == True:
+            print(f"{room} has an orb.")
+        else:
+            print(f"{room} has nothing inside.")
+        self.player_pos = origpos
+        self.player_cooldown = 2
+        print("=====================================================")
+        
+    def sage(self) -> None:
         """
         blocks a path between two rooms permanently
         """
-        pass
+        paths = self.player_pos.get_paths()
+        for i in range(len(paths)):
+            print(f"[{i+1}]: {paths[i]}")
+        choice = int(input("Choose a path to block off: "))
+        while choice-1 > len(paths):
+            print("Invalid input")
+            choice = input("Choose a path to block off: ")
+        blocked = paths[choice-1]
+        paths.remove(blocked)
+        self.player_pos.set_paths(paths)
+        self.player_cooldown = 3
+        print(f"{blocked} is successfully blocked.")
+        print("=====================================================")
 
     def jett(self) -> None:
         """
@@ -129,6 +165,7 @@ Remember, Clutch or Gae.
         outcome = paths[random.randint(0, len(paths)-1)]
         print("YOU MET REYNA! ABILITY ACTIVATED TO AVOID DEATH")
         print(f"You are now in {outcome}.")
+        self.player_cooldown = 999
         for room in self.map:
                 if room.get_name() == outcome:
                     self.player_pos = room
@@ -254,8 +291,11 @@ Remember, Clutch or Gae.
                 self.player.set_hp(True, False)
                 self.player_pos.set_creature(False)
                 if self.player.get_hp() <= 0:
-                    print("Unfortunately, it was enough to kill you.")
-                    self.gameover = True
+                    if self.player.get_agent() == "jett" and self.player_cooldown == 0:
+                        self.jett()
+                    else:
+                        print("Unfortunately, it was enough to kill you.")
+                        self.gameover = True
             if self.player_pos.has_orb():
                 print("There is a shield orb in this room, you gain 50 hp.\n")
                 self.player.set_hp(False, True)
