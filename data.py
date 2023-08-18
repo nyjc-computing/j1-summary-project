@@ -135,10 +135,11 @@ class Grid:
         '''
         Return true if user coordinates are currently on a creature tile.
         '''
-        if self.grid[self.get_position()[0]][self.get_position()[1]]['type'] == 'creature':
-            return True
-        else:
+        if self.grid[self.get_position()[0]][self.get_position()[1]] == None:
             return False
+        elif self.grid[self.get_position()[0]][self.get_position()[1]]['type'] == 'creature':
+            return True
+
 
     def get_enemies(self):
         '''
