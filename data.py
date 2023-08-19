@@ -139,7 +139,7 @@ class Grid:
             return False
         elif self.grid[self.get_position()[0]][self.get_position()[1]]['type'] == 'creature':
             return True
-
+        return False
 
     def get_enemies(self):
         '''
