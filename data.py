@@ -136,10 +136,11 @@ class Grid:
         '''
         Return true if user coordinates are currently on a creature tile.
         '''
-        if self.grid[self.get_position()[0]][self.get_position()[1]]['type'] == 'creature':
-            return True
-        else:
+        if self.grid[self.get_position()[0]][self.get_position()[1]] == None:
             return False
+        elif self.grid[self.get_position()[0]][self.get_position()[1]]['type'] == 'creature':
+            return True
+        return False
 
     def get_enemies(self):
         '''
@@ -601,7 +602,8 @@ class Freddy:
     def depassive(self, target):
         if 'sleep' in target.status:
             self.attacking -= 5
-
+    def inflict_status(self, status, count, potency=None):
+        pass
     def remove_status(self, status):
         if status in self.status:
             self.status.remove(status)
@@ -677,3 +679,6 @@ def infiltrated(target):
         target.remove_status('infiltrated')
     else:
         pass
+
+statuses = [{'name' : 'sleep', 'description' : 'Target cannot take action based on the count. At the end of the target\'s turn, reduce the count by 1.', 'count' : None}, 
+            {'name' : 'burning', 'description' : 'Target takes damage at the start of their turn based on the effect\'s potency. Then reduce it\'s count by 1.', 'count' : None, 'potency' : None}]
