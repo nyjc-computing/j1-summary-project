@@ -679,5 +679,6 @@ def infiltrated(target):
     else:
         pass
 
-statuses = [{'name' : 'sleep', 'description' : 'Target cannot take action based on the count. At the end of the target\'s turn, reduce the count by 1.', 'count' : None}, 
-            {'name' : 'burning', 'description' : 'Target takes damage at the start of their turn based on the effect\'s potency. Then reduce it\'s count by 1.', 'count' : None, 'potency' : None}]
+statuses = [{'name' : 'sleep', 'func_name' : sleep, 'description' : 'Target cannot take action based on the count. At the end of the target\'s turn, reduce the count by 1.', 'count' : None}, 
+            {'name' : 'corrupted', 'func_name' : corrupt, 'description' : 'Target attacks indiscriminately, At the end of the turn, reduce the count by 1.', 'count' : None},
+            {'name' : 'infiltrated', 'func_name' : infiltrated, 'description' : 'Target takes 10% more damage when attacked by Glitch Type enemies. Cannot be removed unless a new target is inflicted with this debuff.', 'count' : None}]
