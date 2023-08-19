@@ -1,5 +1,6 @@
 from enemy import Enemy
 
+
 class Room:
     """
     creates the room
@@ -90,5 +91,5 @@ def setup():
     map.link_left("Room2", Enemy('Basilisk', 500), "As you cautiously step into the dimly lit chamber, an uneasy weight settles in the pit of your stomach. The air feels heavy with a sense of foreboding, and the faint echo of your footsteps reverberates through the cold stone walls. The room is vast and cavernous, its architecture ancient and mysterious.\nA flicker of movement catches your eye, and your heart skips a beat. Slowly, almost languidly, a massive form emerges from the shadows. The basilisk, a creature of legend and terror, slithers forth with an eerie grace. Its scales, a mesmerizing tapestry of dark and iridescent shades, seem to absorb what little light dares to penetrate the chamber.")
     map.link_right("Room3", Enemy('Death Eater', 1000), "As you cautiously push open the creaking door to the abandoned classroom, a sense of unease washes over you. The air is heavy with the weight of neglect, and the room is dimly illuminated by the pale moonlight that filters through the dusty windows. The remnants of forgotten lessons lay scattered across desks, a silent testament to the room's disuse.\nAs you step further into the room, a sudden movement catches your eye. Out of the shadows, a figure materializes with an eerie swiftness. The darkness seems to cling to them, cloaking them in an aura of menace. The figure's robes billow softly, a whispering echo of their sinister intent.")
     map.link_up("Room4", Enemy('Voldemort', 5000), "Upon entering the Slytherin common room, a profound hush descends. The room is bathed in dim green light, casting an unsettling ambiance. At the heart of the chamber stands Voldemort, his presence commanding attention and trepidation. His features, pale and serpentine, are accentuated by the eerie glow.\nHis crimson gaze locks onto you, piercing and intense. The room seems to bend to his will, an extension of his dominance. The very air feels heavy, pregnant with the weight of his history and power. As he addresses you, his voice carries a chilling authority that leaves no room for dissent.")
-    
+  
     return map
