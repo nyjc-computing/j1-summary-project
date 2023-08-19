@@ -17,12 +17,13 @@ class Enemy:
     + get_health(): gets the health of the enemy
     
     """
-    def __init__(self, name: str, health) -> None:
+    def __init__(self, name: str, health, description) -> None:
         self.name = name
         self.spell = None
         self.health = health
         self.battle_points = 10
         self.loot = ''
+        self.description = description
 
     def __repr__(self) -> None:
         print(f"enemy: {self.name}")
