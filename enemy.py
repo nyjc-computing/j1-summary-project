@@ -23,7 +23,6 @@ class Enemy:
         self.health = health
         self.battle_points = 10
         self.loot = ''
-        self.description = description
 
     def __repr__(self) -> None:
         print(f"enemy: {self.name}")
