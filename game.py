@@ -146,14 +146,17 @@ class MUDGame:
                         target = None
                         action = active_character.prompt_action()
                         if action == 'attack':
+                            if target == None:
+                                print('Choose an enemy to target.')
+                                continue
                             skill = active_character.prompt_attack()
                             hit = accuracy_calc(active_character.get_light())
                             if hit:
-                                active_character.attack(enemy_list[target], skill)
+                                active_character.attack(target, skill)
                             else:
                                 active_character.display_miss()
                         elif action.lower() == 'target':
-                            target = active_character.target() - 1
+                            target = enemy_list[active_character.target() - 1]
                             continue
                         elif action.lower() == 'stats':
                             active_character.get_stats()
