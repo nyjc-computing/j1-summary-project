@@ -12,6 +12,7 @@ class Room:
         self.right = right
         self.left = left
         self.count = number
+
         if self.count <= 10:
             connections = random.randint(1, 3)
             next_rooms = [self.up, self.down, self.left, self.right]
@@ -23,9 +24,19 @@ class Room:
                 next_rooms[next_room] = 'closed'
                 next_rooms.pop(next_room)
                 connections = connections - 1
-            
+        connections = random.randint(1, 3)
+        next_rooms = [self.up, self.down, self.left, self.right]
+        for room in next_rooms:
+            if room != None:
+                next_rooms.remove(room)
+        while connections != 0:
+            next_room = random.randint(0, len(next_rooms) - 1)
+            next_rooms[next_room] = 'closed'
+            next_rooms.pop(next_room)
+            connections = connections - 1
+         
         self.grid = Grid(x, y)
-
+        
     def display_room(self):
         pass
 
@@ -109,12 +120,13 @@ class Grid:
                 self.grid[random.randint(0, 4)][random.randint(0, 4)] = {'type' : 'creature', 'creatures':[]}
             i = i + 1
         k = 0
-        #Spawning items
+        # Spawning items
         while k < 5:
             if self.grid[random.randint(0, 4)][random.randint(0, 4)] == None:
                 self.grid[random.randint(0, 4)][random.randint(0, 4)] = {'type' : 'items', 'items':[]}
             k = k + 1
         self.coordinates = [x, y]
+
         
     def get_position(self) -> list:
         '''
