@@ -405,7 +405,7 @@ class Springtrap:
             print(f'{self.name} is corrupted and cannot move!')
             self.turn_end()
         elif 'infiltrated' in self.status:
-            Status.infiltrated(self)
+            infiltrated(self)
         else:
             print(f"{self.name} attacks {target.name}!")
             n = random.randint(1, 3)
@@ -495,7 +495,7 @@ class Glitchtrap:
             print(f'{self.name} is corrupted and cannot move!')
             self.turn_end()
         elif 'infiltrated' in self.status:
-            Status.infiltrated(self)
+            infiltrated(self)
         else:
             print(f"{self.name} attacks {target.name}!")
             n = random.randint(1, 100)
@@ -506,7 +506,7 @@ class Glitchtrap:
                     target.take_damage(self.damage)
                     print(f"{target.name} took {self.damage} damage!")
                     self.damage -= 20
-                    Status.corrupt(target)
+                    corrupt(target)
                 else:
                     print('The attack missed!')
             if n > 15 and n < 31: #17% chance to use this attack
