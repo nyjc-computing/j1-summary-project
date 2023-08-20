@@ -328,7 +328,7 @@ class GB:
             print(f'{self.name} is corrupted and cannot move!')
             self.turn_end()
         elif 'infiltrated' in self.status:
-            Status.infiltrated(self)
+            infiltrated(self)
         else:
             print(f"{self.name} attacks {target.name}!")
             n = random.randint(1, 100)
