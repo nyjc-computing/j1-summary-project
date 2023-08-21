@@ -13,11 +13,41 @@ EAST = "EAST"
 STARTROOM = "STARTROOM"
 DIRLIST = [[0, 1], [0, -1], [1, 0], [-1, 0]] # according to N, S, E, W
 
+def is_adjacent(room1: list[int], room2: list[int]) -> bool:
+    xdiff = room1[0] - room2[0]
+    ydiff = room1[1] - room2[1]
+    for i in DIRLIST:
+        if [xdiff, ydiff] == i:
+            return True
+    return False
 
-CREATURE = "CREATURE"
-
+def direction_of(targetcoords: list[int], neighbourcoords: list[int]) -> "NORTH or SOUTH or EAST or WEST":
+    if not is_adjacent(targetcoords, neighbourcoords):
+        return None
+    xdiff = neighbourcoords[0] - targetcoords[0]
+    ydiff = neighbourcoords[1] - targetcoords[1]
+    if xdiff == 0:
+        if ydiff == 1:
+            return NORTH
+        elif ydiff == -1:
+            return SOUTH
+    elif ydiff == 0:
+        if xdiff == 1:
+            return EAST
+        if xdiff == -1:
+            return WEST
 
 labsize = 10 # cannot be too small!!
+def valid_coords(roomcoords: list[int]) -> bool:
+    if type(roomcoords) is not list:
+        return False
+    if len(roomcoords) != 2:
+        return False
+    i, j = roomcoords
+    if i not in list(range(labsize)) or j not in list(range(labsize)):
+        return False
+    return True
+
 class Labyrinth:
     """
     -- ATTRIBUTES --
@@ -39,40 +69,79 @@ class Labyrinth:
     
     """
     def __init__(self):
-        self.lab = [[None] * labsize] * labsize
+        nonelist = [None] * labsize
+        self.lab = []
+        for i in range(labsize):
+            self.lab.append(nonelist.copy())
         self.difficulty_level = None
         self.boss_pos = [-1, -1] # Decided upon generation
         self.steve_pos = [-1, -1] # Decided upon generation
         self.posscoords = list(range(labsize))
 
     def __repr__(self):
-        raise NotImplementedError
-        for y in labsize:
-            for x in labsize:
-                room = self.lab(x, y)
+        outputstr = ""
+        for y in range(labsize):
+            fulltopstr = ""
+            fullmidstr = ""
+            fullbottomstr = ""
+            for x in range(labsize):
+                room = self.lab[x][labsize - y - 1]
                 N, S, E, W = room.get_neighbours_accessibility()
-                output_per_room = []
-                # topstr = ""
-                # middlestr = ""
-                # bottomstr = " "
-                # if W:
-                #     topstr += 
-                # if N:
-                #     topstr += "| |"
-                # if room.steveishere() and room.bossishere():
-                #     middlestr += "X"
-                # elif room.steveishere():
-                #     middlestr += "S"
-                # elif room.bossishere():
-                #     middlestr += "B"
-                # else:
-                #     middlestr += "  "
-                # if S:
-                #     bottomstr += "| |"
-                # if 
+                if N:
+                    topstr = " || "
+                else:
+                    topstr = "    "
+                if S:
+                    bottomstr = " || "
+                else:
+                    bottomstr = "    "
+                if W:
+                    midstr = "="
+                else:
+                    midstr = " "
+                if room.steve_ishere():
+                    midstr += "S"
+                else:
+                    midstr += "/"
+                if room.boss_ishere():
+                    midstr += "B"
+                else:
+                    midstr += "/"
+                if E:
+                    midstr += "="
+                else:
+                    midstr += " "
+                fulltopstr += topstr
+                fullmidstr += midstr
+                fullbottomstr += bottomstr
+            outputstr += fulltopstr + "\n" + fullmidstr + "\n" + fullbottomstr + "\n"
+        return outputstr                    
+                
                     
-    
+
     def generate(self) -> None:
+        for x in range(labsize):
+            for y in range(labsize):
+                self.lab[x][y] = Room(x, y)
+        self._generate_place_steve_boss()
+        # self._generate_nowalls()
+        # zyxzyx
+
+    def _generate_nowalls(self) -> None:
+        for x in range(labsize):
+            for y in range(labsize):
+                this = self.lab[x][y]
+                for i in range(4):
+                    directionnum = DIRLIST[i]
+                    neighbourx, neighboury = x + directionnum[0], y + directionnum[1]
+                    if valid_coords([neighbourx, neighboury]):
+                        neighbour = self.lab[neighbourx][neighboury]
+                        direction = [NORTH, SOUTH, EAST, WEST][i]
+                        this.connect_dir(direction, neighbour)
+                        
+                                     
+        
+    def generate_random(self) -> None:
         """Generates the maze by:
         1. Filling in empty rooms in the empty maze
         2. Chooses (somewhat) randomly which room is the startroom room where Steve is placed
@@ -94,7 +163,8 @@ class Labyrinth:
             for y in range(labsize):
                 self.lab[x][y] = Room(x, y)
         self._generate_place_steve_boss()
-        self._generate_maze()
+        print(self) #xyzxyz
+        self._generate_maze(self.steve_pos)
         # give the rooms contents
 
     def _generate_place_steve_boss(self) -> None:
@@ -117,16 +187,18 @@ class Labyrinth:
         """
         # choose position of Start room randomly
         n = labsize // 4
-        n = random.randint(-n, n - 1)
+        n = random.randint(-n, n - 1) % labsize
         m = random.randint(0, labsize - 1)
         nm = [n, m]
         random.shuffle(nm)
         steve_x, steve_y = nm
         self.lab[steve_x][steve_y].settype_startroom()
-        self.steve_pos = nm
+        self.steve_pos = [steve_x, steve_y]
+        
         # choose position of Monster room opposite to where steve is
-        boss_x = labsize - 1 - steve_x
-        boss_y = labsize - 1 - steve_y
+        boss_x = labsize - 1 - (steve_x % labsize)
+        boss_y = labsize - 1 - (steve_y % labsize)
+        
         if (boss_x, boss_y) == (steve_x, steve_y): # if they happen to be placed in the same room
             raise ValueError("Steve and the Boss have been put at the same location.")
         self.lab[boss_x][boss_y].boss_enters()    
@@ -136,6 +208,8 @@ class Labyrinth:
         print("Loading: Generating maze...")
         self._generate_recursive_linking(startroom_pos)
         unconnected = self._generate_count_unconnected_rooms()
+        print(self) #xyzxyz
+        print("What") #xyzxyz
         print("Loading: Tying loose ends...")
         while unconnected != 0:
             for x in range(labsize):
@@ -151,14 +225,19 @@ class Labyrinth:
         random.shuffle(newdirlist)
         for i in range(4):
             neighbourcoords = [roomcoords[0] + newdirlist[i][0], roomcoords[1] + newdirlist[i][1]]
-            possible = True
-            for t in neighbourcoords:
-                if t not in self.posscoords:
-                    possible = False
-            if possible:
-                self._generate_link_rooms(roomcoords, neighbourcoords)
+            if valid_coords(neighbourcoords):
+                self._generate_link_rooms(roomcoords, neighbourcoords) # forcing a connection.
                 
-            
+    def _generate_is_linkable_by_recursive(self, roomcoords: list[int]) -> bool:
+        if not valid_coords(roomcoords):
+            return False
+        x, y = roomcoords
+        room_object = self.lab[x][y]
+        if room_object.is_connected_tostart(): # has access to 
+            return False
+        return True
+                     
+    
     def _generate_recursive_linking(self, thisroomcoords: list[int]) -> None:
         """
         Attempts to link a large number of rooms, recursively
@@ -177,42 +256,30 @@ class Labyrinth:
         thisroom = self.lab[x][y] # object thisroom object
         if not thisroom.is_connected_tostart():
             raise ValueError("Room that is trying to (recursively) link to others is not yet connected, should not happen.")
-        neighbours_statuses = thisroom.get_neighbours_statuses()
         # iteration through N, S, E, W:
         # checking whether they are linkable by rules
         # if linkable, there is a chance of linking
         for i in range(4):
-            if _generate_is_linkable_by_recursive(neighbours_statuses[i]):
+            neighbourcoords = [x + DIRLIST[i][0], y + DIRLIST[i][1]]
+            if self._generate_is_linkable_by_recursive(neighbourcoords):
                 odds = random.randint(1, 100)
-                if odds <= 50: # 50% chance of linking; 
-                    neighbourcoords = [x + DIRLIST[i][0], y + DIRLIST[i][1]]
+                if odds <= 58: # n% chance of linking; 
                     self._generate_link_rooms(thisroomcoords, neighbourcoords)
                     self._generate_recursive_linking(neighbourcoords) # recursion call
         # base case should be inherently built into this loop:
         # Recursion branch ends at a room where
         # 1. All adjacent rooms are not linkable
         # 2. By chance, the labyrinth chooses not to link this room to any other room.
-
-    def _generate_is_linkable_by_recursive(self, room_status: dict) -> bool:
-        if room_status is None:
-            return False
-        x, y = room_status["coords"]
-        room_object = self.lab[x][y]
-        if room_object.is_connected_to_start():
-            return False
-        return True
-                     
     
     def _generate_link_rooms(self, room1coords: list[int], room2coords: list[int]) -> None:
         # validation
-        x1, y1, x2, y2 = room1coords + room2coords
-        numbers = room1coords + room2coords
-        for i in numbers:
-            if i not in self.posscoords:
-                raise IndexError("_generate_link_rooms(): a room passed in has coords outside of labyrinth. Cannot be linked.")
+        x1, y1 = room1coords
+        x2, y2 = room2coords
+        if not valid_coords(room1coords) or not valid_coords(room2coords):
+            raise IndexError("_generate_link_rooms(): a room passed in has coords outside of labyrinth. Cannot be linked.")
         if x1 == x2 and y1 == y2:
             raise IndexError("_generate_link_rooms(): the same room is passed twice, cannot be linked.")
-        if not ((x1 == x2 and abs(y1 - y2) == 1) or (abs(x1 - x2) == 1 and y1 == y2)):
+        if not is_adjacent(room1coords, room2coords):
             raise IndexError("_generate_link_rooms(): non adjacent rooms are passed, cannot be linked.")
         # linking rooms
         room1 = self.lab[x1][y1]
@@ -223,18 +290,10 @@ class Labyrinth:
         if not room1.is_connected_tostart() and not room2.is_connected_tostart():
             # every linking must happen between rooms of which 1 MUST be connected.
             return None # no linking done if both are unconnected.
-        if x1 == x2 and y1 < y2:
-                room1.set_access_True(NORTH)
-                room2.set_access_True(SOUTH)
-        elif x1 == x2 and y1 > y2:
-                room1.set_access_True(SOUTH)
-                room2.set_access_True(NORTH)
-        elif x1 < x2 and y1 == y2:
-                room1.set_access_True(EAST)
-                room2.set_access_True(WEST)
-        elif x1 > x2 and y1 == y2:
-                room1.set_access_True(WEST)
-                room2.set_access_True(EAST)
+        # print(room1.coords) #xyzxyz
+        # print(room2.coords) #xyzxyz
+        room1.set_access(room2)
+        room2.set_access(room1)
             
     
     def _generate_count_unconnected_rooms(self) -> int:
@@ -253,6 +312,12 @@ class Labyrinth:
                     number_of_unconnected += 1 # counter
         return number_of_unconnected
 
+    def get_current_pos(self) -> "Room":
+        return self.steve_pos
+
+
+        
+
     def move_boss(self) -> None:
         dirlist = [NORTH, SOUTH, EAST, WEST]
         random.shuffle(dirlist)
@@ -270,7 +335,6 @@ class Labyrinth:
         raise RuntimeError(f"Boss cannot move because its room {self.boss_pos} is unlinked to neighbours.")
                 
     def try_move_steve(self, direction) -> bool:
-        raise NotImplementedError
         if not self._can_move_here(self.steve_pos, direction):
             return False
         for i in range(4):
@@ -285,10 +349,9 @@ class Labyrinth:
         
 
     def _can_move_here(self, this_coords: list[int], direction) -> bool:
-        this_x, this_y = this_coords
-        if this_x not in self.posscoords or this_y not in self.poss_coords: # this should not happen at all
+        if not valid_coords(this_coords): # this should not happen at all
             raise IndexError("entity is not inside of maze")
-        thisroom = self.lab[this_x][this_y]
+        thisroom = self.lab[this_coords[0]][this_coords[1]]
         return thisroom.dir_is_accessible(direction)
 
     def _steve_useitem(self, item) -> None:
@@ -297,6 +360,7 @@ class Labyrinth:
     def _monster_roar(self):
         raise NotImplementedError
 
+SOMEROOM = "SOMEROOM"
 class Room:
     """
     -- ATTRIBUTES --
@@ -318,27 +382,37 @@ class Room:
 
     
     """
+
     def __init__(self, x: int, y: int):
         self.coords = [x, y]
-        self.type = {"startroom?": False, "steve?": False, "creature": None, "item": None, "boss?": False}
+        self.type = {"startroom?": False, "steve?": False, "boss?": False}
         self.connected = False
+        self.creature = None
+        self.item = None
         # setting mynorth, mysouth, myeast, mywest status attributes where possible
+        self.mynorth = None
+        self.mysouth = None
+        self.myeast = None
+        self.mywest = None
         if y + 1 >= labsize:
             self.mynorth = None
         else:
-            self.mynorth = {"coords": [x, y + 1], "access": False}
+            self.mynorth = SOMEROOM
         if y <= 0:
             self.mysouth = None
         else:
-            self.mysouth = {"coords": [x, y - 1], "access": False}
+            self.mysouth = SOMEROOM
         if x + 1 >= labsize:
             self.myeast = None
         else:
-            self.myeast = {"coords": [x + 1, y], "access": False}
+            self.myeast = SOMEROOM
         if x <= 0:
             self.mywest = None
         else:
-            self.mywest = {"coords": [x - 1, y], "access": False}
+            self.mywest = SOMEROOM
+
+    def get_coords(self) -> list[int]:
+        return self.coords
 
     def settype_startroom(self) -> None:
         self.type["startroom?"] = True
@@ -346,52 +420,103 @@ class Room:
         self.connected = True
 
     def steve_leaves(self) -> None:
-        if not self.type["steve?"]: # Steve was not even here in this room in the first place
+        if not self.steve_ishere(): # Steve was not even here in this room in the first place
             raise RuntimeError(f"Steve is not in room {self.coords}, yet steve_leaves() is called.\nPossible desync between Labyrinth object's steve_pos attribute and this room object's type attribute values.")
         self.type["steve?"] = False
 
     def steve_enters(self) -> None:
-        if self.type["steve?"]:
+        if self.steve_ishere():
             raise RuntimeError(f"Steve is already in room {self.coords}, yet steve_enters() is called.\nPossible desync between Labyrinth object's steve_pos attribute and this room object's type attribute values.")
         self.type["steve?"] = True
 
     def boss_leaves(self) -> None:
-        if not self.type["boss?"]:
+        if not self.boss_ishere():
             raise RuntimeError(f"Boss is not in room {self.coords}, yet boss_leaves() is called.\nPossible desync between Labyrinth object's boss_pos attribute and this room object's type attribute values.")
         self.type["boss?"] = False
             
     def boss_enters(self) -> None:
-        if self.type["boss?"]:
+        if self.boss_ishere():
             raise RuntimeError(f"Boss is already in room {self.coords}, yet boss_enters() is called.\nPossible desync between Labyrinth object's boss_pos attribute and this room object's type attribute values.")
         self.type["boss?"] = True
 
+    def connect_dir(self, direction, neighbour: "Room") -> None:
+        if not isinstance(neighbour, Room):
+            print(self.coords, neighbour.coords)
+            raise ValueError(f"neighbour variable {neighbour} passed is not a room")
+        if not is_adjacent(self.coords, neighbour.coords):
+            print(self.coords, neighbour.coords)
+            raise RuntimeError("neighbour variable passed is not an adjacent room")
+
+        # makes assumptions that {direction} of this room is neighbour.
+        if direction == NORTH:
+            self.mynorth = neighbour
+        elif direction == SOUTH:
+            self.mysouth = neighbour
+        elif direction == EAST:
+            self.myeast = neighbour
+        elif direction == WEST:
+            self.mywest = neighbour
+        else:
+            raise ValueError("Direction passed is not of the right value")
+    
     def set_connected_True(self) -> None:
         self.connected = True
 
-    def set_access_True(self, direction) -> None:
+    def get_creature(self) -> "Creature":
+        return self.creature
+
+    def get_item(self) -> "Item":
+        return self.item
+
+    def set_creature(self, creature: "Creature") -> None:
+        if self.creature is not None:
+            return None
+        self.creature = creature
+        return None
+
+    def set_item(self, item: "Item") -> None:
+        if self.item is not None:
+            return None
+        self.item = item
+
+    def set_access(self, room: "Room") -> None:
+        targetx, targety = room.get_coords()
+        myx, myy = self.coords
+        xdiff = targetx - myx
+        ydiff = targety - myy
+        i = 0
+        directionnum = -1
+        while i < 4:
+            if DIRLIST[i] == [xdiff, ydiff]:
+                directionnum = i
+            i += 1
+        if directionnum == -1:
+            raise ValueError(f"set_access(), room {[targetx, targety]} is not adjacent to this room {self.coords}")
+        direction = [NORTH, SOUTH, EAST, WEST][directionnum]
         if direction == NORTH:
             if self.mynorth is None:
                 raise ValueError(f'Room {self.coords} has no room to the north of it, access cannot be set.')
-            self.mynorth["access"] = True
+            self.mynorth = room
         elif direction == SOUTH:
             if self.mysouth is None:
                 raise ValueError(f'Room {self.coords} has no room to the south of it, access cannot be set.')
-            self.mysouth["access"] = True
+            self.mysouth = room
         elif direction == EAST:
             if self.myeast is None:
                 raise ValueError(f'Room {self.coords} has no room to the east of it, access cannot be set.')
-            self.myeast["access"] = True
+            self.myeast = room
         elif direction == WEST:
             if self.mywest is None:
                 raise ValueError(f'Room {self.coords} has no room to the west of it, access cannot be set.')
-            self.mywest["access"] = True
+            self.mywest = room
         else:
-            raise ValueError(f'Room {self.coords} set_access_True() had argument passed that is not a direction value.')
+            raise ValueError(f'Room {self.coords} set_access() had argument passed that is not a direction value.')
+        
 
-    def is_connected_tostartroom(self) -> bool:
+    def is_connected_tostart(self) -> bool:
         return self.connected
 
-    def get_neighbours_statuses(self) -> list[bool]: # corresponding to N, S, E, W
+    def get_neighbours_statuses(self) -> list["Room or SOMEROOM or None"]: # corresponding to N, S, E, W
         return [self.mynorth, self.mysouth, self.myeast, self.mywest]
 
     def get_neighbours_accessibility(self) -> list[bool]:
@@ -402,24 +527,34 @@ class Room:
 
     def dir_is_accessible(self, direction) -> bool:
         if direction == NORTH:
-            if self.mynorth is None or not self.mynorth["access"]:
+            if not isinstance(self.mynorth, Room):
                 return False
             return True
         if direction == SOUTH:
-            if self.mysouth is None or not self.mysouth["access"]:
+            if not isinstance(self.mysouth, Room):
                 return False
             return True
         if direction == EAST:
-            if self.myeast is None or not self.myeast["access"]:
+            if not isinstance(self.myeast, Room):
                 return False
             return True
         if direction == WEST:
-            if self.mywest is None or not self.mywest["access"]:
+            if not isinstance(self.mywest, Room):
                 return False
             return True
         raise ValueError("argument passed into dir_is_accessible() should be a direction value.")
+
+    def steve_ishere(self) -> bool:
+        return self.type["steve?"]
+
+    def boss_ishere(self) -> bool:
+        return self.type["boss?"]
         
-            
+
+FOODITEM = "FOODITEM"
+WEAPONITEM = "WEAPONITEM"
+ARMOURITEM = "ARMOURITEM"
+UTILITYITEM = "UTILITYITEM"
 
 class Item:
     """
@@ -498,14 +633,25 @@ class Steve:
         for slot in ["helmet", "chestplate", "leggings", "boots"]:
             self.armour[slot] = None
         self.health = DEFAULT_HITPOINTS
+        self.defense = 0
+        self.weapon = None
+        self.base_damage = 2 # default
 
     def __repr__(self):
         return f"Steve has {self.health} HP."
 
     def _display_inventory(self) -> None:
-        raise NotImplementedError
+        if self.inventory == []:
+            print("You have no items in your inventory.\n")
+            return None
+        print("\nYou have:\n")
+        for i in self.inventory:
+            item, number = str(i["item"]), str(i["number"])
+            print(f"{number:>2} {item}")
+        print("\n")
+        return None
 
-    def _add_item_to_inv(self, new_item: Item, num: int) -> None:
+    def _add_item_to_inv(self, new_item: "Item", num: int) -> None:
         for index, dict_ in enumerate(self._inventory): # Linear search through inventory
             if str(new_item) == str(dict_["item"]): # new_item is already in the inventory
                 self._inventory[index]["number"] += num
@@ -518,17 +664,94 @@ class Steve:
     def _discard_item(item: Item, num: int) -> None:
         raise NotImplementedError
 
-    def _equip_armour(self, armour_item: Item) -> None:
+    def _equip_armour(self, armouritem: Item) -> None:
         raise NotImplementedError
+
+    def eat(self, fooditem: "Item") -> None:
+        #validation
+        foodindex = self.find_item(fooditem)
+        if foodindex == -1:
+            raise RuntimeError(f"{fooditem} cannot be consumed as Steve's inventory does not have it.")
+        if not fooditem.info["item type"] == FOODITEM:
+            raise ValueError(f"{fooditem} cannot be consumed as it is not food.")
+        # consumption
+        self.remove_item_from_inv(foodindex)
+        if str(fooditem) == "Rotten Flesh":
+            if self.health < 10:
+                i = 0
+            elif self.health < 15:
+                i = 1
+            else:
+                i = 2
+            mylist = [-1, -1, -1, 0, 0, 1, 1, 1][i: i + 6]
+            random.shuffle(mylist)
+            self.change_health(mylist[0])
+        elif str(fooditem) == "Apple":
+            self.change_health(2)
+        elif str(fooditem) == "Bread":
+            self.change_health(3)
+        elif str(fooditem) == "Steak":
+            self.change_health(5)
+        elif str(fooditem) == "Enchanted Golden Apple":
+            self.change_health(12)
+                
+            
+
+    def find_item(self, item: "Item") -> int:
+        """Linear search through inventory to find the index of the item"""
+        for i in self.inventory:
+            if str(i["item"]) == str(item):
+                return i
+        return -1 # return value is -1 when not found.
         
-    def _get_hurt(self, damage: int):
-        raise NotImplementedError
+    def remove_item_from_inv(self, index) -> None:
+        if index not in list(range(len(self.inventory))):
+            raise ValueError("Item that is trying to be removed from inventory has an index outside of the range of Steve's inventory.")
+        if self.inventory[index]["number"] == 1: # Steve has only 1 of this such item left
+            self.inventory.pop(index)
+            # This dict is removed as there are no more of such items in the inventory
+            return None
+        self.inventory[index]["number"] -= 1
+        return None
+        
+        
+            
+    def change_health(self, change: int) -> None:
+        if change == 0:
+            return None
+        prevhp = self.health
+        if change > 0:
+            self.health = min(self.health + change, 20)
+            print(f"you were healed by {self.health - prevhp} HP and now have {self.health}.")
+            return None
+        self.health = max(self.health + change, 0)
+        print(f"You got hurt by {prevhp - self.health} HP and have {self.health} left.")
+        return None
 
     def isdead(self) -> bool:
         if self.health <= 0:
             return True
         return False
                 
+
+"""
+class Creature:
+    def __init__(self, name: str, hitpoints: int, moves: list[str]) -> None:
+        self.name = name
+        self.hp = hitpoints
+        # Do some validation of moves
+        self.moves = moves
+
+    @classmethod
+    def from_dict(cls, info: dict) -> "Creature":
+        return Creature(
+            info["name],
+            info["max_hitpoints"],
+            info["moves"]
+        )
+
+creature = Creature.from_dict(info)
+"""
 
 class Creature:
     """
