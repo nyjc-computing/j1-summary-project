@@ -1,5 +1,6 @@
 from enemy import Enemy
 from item import Weapon
+from item import Potion
 
 class Room:
     """
@@ -79,6 +80,13 @@ class Room:
         temp.up = self
         self.down = temp
 
+gryffindor_sword = Weapon("Gryffindor SSSword", "You have obtained the Sword Of Gryffindor, which can only be held by a TRUE gryffindor! This sword does X2 damage to Basilisk!", 250)
+
+philosopher_stone = Weapon("Philosopher's SSStone", "You have obtained the Philosopher's Stone, which can only be held by a TRUE YOU! This stone does xtra 500 damage to Voldemort, meow!", 500)
+
+felix_felicis = Potion("Felix Felicis", "WOW, you have gotten a FELIX FELICIS potion! This potion gives you good luck! However, it is a single-use-item, and can only last for 1 room. Make goos use of it!", 1000)
+
+elixir_of_life = Potion("Elixir Of Life", "NICE, you've got the elixir of life! Use it wisely as it is a single-use-item! It heals 500 hp", 500)
 
 def setup():
     """
@@ -89,7 +97,7 @@ def setup():
     
     map.link_left("Room2", Enemy('Basilisk', 500), "As you cautiously step into the dimly lit chamber, an uneasy weight settles in the pit of your stomach. The air feels heavy with a sense of foreboding, and the faint echo of your footsteps reverberates through the cold stone walls. The room is vast and cavernous, its architecture ancient and mysterious.\nA flicker of movement catches your eye, and your heart skips a beat. Slowly, almost languidly, a massive form emerges from the shadows. The basilisk, a creature of legend and terror, slithers forth with an eerie grace. Its scales, a mesmerizing tapestry of dark and iridescent shades, seem to absorb what little light dares to penetrate the chamber.\n")
     
-    map.link_right("Room3", Enemy('Death Eater', 1000), "As you cautiously push open the creaking door to the abandoned classroom, a sense of unease washes over you. The air is heavy with the weight of neglect, and the room is dimly illuminated by the pale moonlight that filters through the dusty windows. The remnants of forgotten lessons lay scattered across desks, a silent testament to the room's disuse.\nAs you step further into the room, a sudden movement catches your eye. Out of the shadows, a figure materializes with an eerie swiftness. The darkness seems to cling to them, cloaking them in an aura of menace. The figure's robes billow softly, a whispering echo of their sinister intent.\n")
+    map.link_right("Room3", Enemy('Death Eater', 1000), "As you cautiously push open the creaking door to the abandoned classroom, a sense of unease washes over you. The air is heavy with the weight of neglect, and the room is dimly illuminated by the pale moonlight that filters through the dusty windows. The remnants of forgotten lessons lay scattered across desks, a silent testament to the room's disuse.\nAs you step further into the room, a sudden movement catches your eye. Out of the shadows, a figure materializes with an eerie swiftness. The darkness seems to cling to them, cloaking them in an aura of menace. The figure's robes billow softly, a whispering echo of their sinister intent.\n", philosopherStone)
     
     map.link_up("Room4", Enemy('Voldemort', 5000), "Upon entering the Slytherin common room, a profound hush descends. The room is bathed in dim green light, casting an unsettling ambiance. At the heart of the chamber stands Voldemort, his presence commanding attention and trepidation. His features, pale and serpentine, are accentuated by the eerie glow.\nHis crimson gaze locks onto you, piercing and intense. The room seems to bend to his will, an extension of his dominance. The very air feels heavy, pregnant with the weight of his history and power. As he addresses you, his voice carries a chilling authority that leaves no room for dissent.\n")
     

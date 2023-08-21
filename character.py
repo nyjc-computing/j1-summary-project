@@ -8,6 +8,8 @@ class Character:
     + health: int
     + spell: str
     + battle_points: int
+    + potion: list
+    + equip: class
 
     Method
     ------
@@ -16,13 +18,13 @@ class Character:
     - is_dead(): checks if the enemy is dead
     
     """
-
     def __init__(self) -> None:
         self.name = 'Hero'
         self.health = 1000
         self.spell = None
         self.battle_points = 100
-        self.item = []
+        self.potion = []
+        self.equip = None
 
     def __repr__(self) -> str:
         print(f"character: {self.name}")
