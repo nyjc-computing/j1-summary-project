@@ -359,7 +359,7 @@ Remember, Clutch or Gae.
             if self.gameover == True:
                 break
             else:
-                #self.reyna_turn()
+                self.reyna_turn()
                 self.update()
         if self.win:
             print("VICTORY")
