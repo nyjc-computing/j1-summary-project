@@ -10,6 +10,8 @@ class Character:
     + health: int
     + spell: str
     + battle_points: int
+    + potion: list
+    + equip: class
 
     Method
     ------
@@ -24,6 +26,8 @@ class Character:
         self.health = 1000
         self.spell = None
         self.battle_points = 100
+        self.potion = []
+        self.equip = None
         self.item = []
 
     def __repr__(self) -> str:
@@ -37,7 +41,7 @@ class Character:
         if self.health == 0:
             return True
         return False
-    
+
     def set_health(self, bp: int) -> None:
         """Updates the character's health"""
         self.health += bp
