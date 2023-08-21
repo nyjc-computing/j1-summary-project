@@ -86,6 +86,7 @@ def setup():
     """
     Generates 3 rooms, named room1, room2, room3 and links them together
     """
+    
     map = Room("Room1", Enemy('Dementors', 100), "Upon entering the room, and an icy shiver creeps up your spine. The air feels heavy and oppressive, as if it's suffocating under an invisible weight. The light that filters through the windows seems muted and lifeless, casting long, eerie shadows across the walls. In the center of the room, a figure stands, draped in tattered, dark robes that seem to drink in the feeble light.\n")
     
     map.link_left("Room2", Enemy('Basilisk', 500), "As you cautiously step into the dimly lit chamber, an uneasy weight settles in the pit of your stomach. The air feels heavy with a sense of foreboding, and the faint echo of your footsteps reverberates through the cold stone walls. The room is vast and cavernous, its architecture ancient and mysterious.\nA flicker of movement catches your eye, and your heart skips a beat. Slowly, almost languidly, a massive form emerges from the shadows. The basilisk, a creature of legend and terror, slithers forth with an eerie grace. Its scales, a mesmerizing tapestry of dark and iridescent shades, seem to absorb what little light dares to penetrate the chamber.\n")

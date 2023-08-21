@@ -134,6 +134,13 @@ class Game:
             self.attack(self.character, self.room.enemy)
     
     def use_item(self):
+        # change available items when needed
+        available_items = [weapon]
+        decision = input('\nWhich of the following item do you wish to use? (weapon):')
+        while decision not in available_items:
+                   decision = input('\nWhich of the following item do you wish to use? (weapon):')
+        if decision == 'weapon':
+            pass
         print('\nWhich of the following item do you wish to use? :')
         for i, item in enumerate(self.character.item):
             print(f"[{i}]: {item}")
@@ -141,5 +148,3 @@ class Game:
         while choice not in [str(x) for x in range(1, len(self.character.item)+1)]:
             print("Invalid Choice")
             choice = input("Choose an item: ")
-        
-        
