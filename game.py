@@ -69,6 +69,7 @@ class MUDGame:
             self.creature.hitpoints -= damage
             print(f'You attacked {creature.info['name']}')
             self.steve.health -= creature.get_attack()
+        pass
 
     def creature_encountered():
         if self.room.creature is None:
@@ -92,17 +93,24 @@ class MUDGame:
         available_dir = []
         dir_provided = ''
         for dir in opt_dir.values:
-            if try_move_steve(current_location, dir):
+            if self.maze.can_move_here(current_location, dir):
                 available_dir.append(dir)
         for i in range(len(available_dir)):
             dir_provided = dir_provided + str(i+1) + '. ' + available_dir[i] + ' '
-        print('Where are you going next? ' + dir_provided )
-        choice = input('Next location:')
-        # validate choice
-        # any chance that steve no dir/ only back to prev room?
-        # if no, should i remove the prev room from the options?
+        validity = False
+        while validity == False:
+            print('Where are you going next? ' + dir_provided )
+            choice = input('Next location:')
+            no_of_choice = len(available_dir)
+            valid_choice = ''
+            for i in range(no_of_choice):
+                valid_choice += str(i + 1)
+            if choice in valid_choice:
+                if len(choice) == 1:
+                    validity = True
+        self.maze.move_steve(current_location, available_dir[choice - 1])
     
-
+    
 
     
     
