@@ -150,8 +150,7 @@ class Labyrinth:
                         neighbour = self.lab[neighbourx][neighboury]
                         direction = [NORTH, SOUTH, EAST, WEST][i]
                         this.connect_dir(direction, neighbour)
-                        
-                                     
+                                                     
         
     def generate_random(self) -> None:
         """Generates the maze by:
