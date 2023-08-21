@@ -732,6 +732,10 @@ class Steve:
             return True
         return False
 
+    def take_damage(self, damage):
+        damage = int(damage * ((100 - self.get_defence())/100))
+        self.hitpoints = max(0, self.hitpoints - damage)
+
 class Creature:
     """
     -- ATTRIBUTES --
