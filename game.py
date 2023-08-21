@@ -12,8 +12,8 @@ class MUDGame:
         self.maze = Labyrinth()
         self.maze.generate()
         self.steve = Steve(0)
-        self.creature = Creature()
         self.steve_path = []
+        self.boss = Boss()
 
     
     def introduce(self): 
@@ -30,8 +30,7 @@ class MUDGame:
     def show_status(self) -> 'str':
         print(self.steve)
 
-    def show_options(self, situation) -> str:
-        sit = str(situation)
+    def show_options(self, sit: str) -> str:
         if sit == 'creature':
             menu = "1. Attack \n2. Retreat"
         elif sit == 'item':
@@ -115,7 +114,7 @@ class MUDGame:
         
     
     def restore_steve_hp(self):
-        
+        pass
     
     
     def run(self):
@@ -153,12 +152,11 @@ class MUDGame:
                             continue
             if self.item_found():
                 item = self.room.get_item()
-                self.show_options(item)
+                self.show_options('item')
                 item_choice = self.prompt_player_2opt()
                 if item_choice == 1:
                     self.steve._add_item_to_inv(item)
-                    
-            self.restore_steve_hp()
+
             self.movesteve()
             self.moveboss()
                 # update
