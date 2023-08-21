@@ -9,7 +9,7 @@ def test_lbr_init():
         import pdb; pdb.set_trace()
 
 lb = Labyrinth()
-
+lb.generate()
 # def test_lbr_repr():
 #     #not implemented
 #     pass
@@ -32,5 +32,3 @@ lb = Labyrinth()
 # test_lbr_repr()
 # test_lbr_generate()
 # test_game()
-
-lb.generate()
