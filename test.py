@@ -3,10 +3,8 @@ import data
 class Test:
     def __init__(self):
         pass
-
-<<<<<<< HEAD
     
-=======
+
     def valid_move(self, path, location):
         '''According to the UI this test is useless'''
         if path not in roompaths[location]:
@@ -30,7 +28,6 @@ class Test:
             return False
 
 'in summary my game programmer made this thing so idiot proof that i dont actually know how or what to write test cases for'
->>>>>>> main
 def valid_move(self, path, location):
         '''According to the UI this test is useless'''
         if path not in roompaths[location]:
