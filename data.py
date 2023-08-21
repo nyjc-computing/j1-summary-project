@@ -3,7 +3,7 @@ import time
 
 #Rooms
 class Room:
-    def __init__(self, boss = None, type = 'normal', x = 2, y = 2, up = None, down = None, left = None, right = None, number = 0):
+    def __init__(self, boss = None, type = 'normal', x = 2, y = 2, up = None, down = None, left = None, right = None, layer = 0, number = 0):
         #next rooms
         self.boss = boss
         self.type = type
@@ -11,7 +11,8 @@ class Room:
         self.down = down 
         self.right = right
         self.left = left
-        self.count = number
+        self.layer = layer
+        self.number = number
         connections = random.randint(1, 3)
         next_rooms = [self.up, self.down, self.left, self.right]
         ref_next_rooms = ['self.up', 'self.down', 'self.left', 'self.right']
@@ -20,43 +21,43 @@ class Room:
                 next_rooms.pop(i)
                 ref_next_rooms.pop(i)
         if self.type == 'start':
-            self.up = Room(down = self, number = self.countRoom())
-        elif self.count < 9:
+            self.up = Room(down = self, layer = self.countRoom())
+        elif self.count < 3:
             while connections != 0:
                 next_room = random.randint(0, len(next_rooms) - 1)
                 if ref_next_rooms[next_room] == 'self.up':
-                    self.up = Room(down = self, number=self.countRoom())
+                    self.up = Room(down = self, layer=self.count_layer(), number = count_room())
                     next_rooms.pop(next_room)
                     ref_next_rooms.pop(next_room)
                 elif ref_next_rooms[next_room] == 'self.down':
-                    self.down = Room(up = self, number=self.countRoom())
+                    self.down = Room(up = self, layer=self.count_layer())
                     next_rooms.pop(next_room)
                     ref_next_rooms.pop(next_room)
                 elif ref_next_rooms[next_room] == 'self.left':
-                    self.left = Room(right = self, number=self.countRoom())
+                    self.left = Room(right = self, layer=self.count_layer())
                     next_rooms.pop(next_room)
                     ref_next_rooms.pop(next_room)
                 elif ref_next_rooms[next_room] == 'self.right':
-                    self.right = Room(left = self, number=self.countRoom())
+                    self.right = Room(left = self, layer=self.count_layer())
                     next_rooms.pop(next_room)
                     ref_next_rooms.pop(next_room)
-                self.count = self.countRoom()
-        elif self.count == 9:
+                self.layer = self.countRoom()
+        elif self.layer == 3:
             next_room = random.randint(0, len(next_rooms) - 1)
             if ref_next_rooms[next_room] == 'self.up':
-                self.up = Room(down = self, type = 'boss', boss = Springtrap(), number=self.countRoom())
+                self.up = Room(down = self, type = 'boss', boss = Springtrap(), layer=self.count_layer())
                 next_rooms.pop(next_room)
                 ref_next_rooms.pop(next_room)
             elif ref_next_rooms[next_room] == 'self.down':
-                self.down = Room(up = self, type = 'boss', boss = Springtrap(), number=self.countRoom())
+                self.down = Room(up = self, type = 'boss', boss = Springtrap(), layer=self.count_layer())
                 next_rooms.pop(next_room)
                 ref_next_rooms.pop(next_room)
             elif ref_next_rooms[next_room] == 'self.left':
-                self.left = Room(right = self, type = 'boss', boss = Springtrap(), number=self.countRoom())
+                self.left = Room(right = self, type = 'boss', boss = Springtrap(), layer=self.count_layer())
                 next_rooms.pop(next_room)
                 ref_next_rooms.pop(next_room)
             elif ref_next_rooms[next_room] == 'self.right':
-                self.right = Room(left = self, type = 'boss', boss = Springtrap(), number=self.countRoom())
+                self.right = Room(left = self, type = 'boss', boss = Springtrap(), layer=self.count_layer())
                 next_rooms.pop(next_room)
                 ref_next_rooms.pop(next_room)
                 
@@ -107,9 +108,13 @@ class Room:
         '''
         return self
 
-    def countRoom(self):
-        self.count += 1
-        return self.count
+    def count_layer(self):
+        self.layer += 1
+        return self.layer
+
+    def count_room(self):
+        self.number = self.number + self.layer + 1
+        return self.number
         
     def is_boss(self):
         if self.type == 'boss':
