@@ -150,8 +150,7 @@ class Labyrinth:
                         neighbour = self.lab[neighbourx][neighboury]
                         direction = [NORTH, SOUTH, EAST, WEST][i]
                         this.connect_dir(direction, neighbour)
-                        
-                                     
+                                                     
         
     def generate_random(self) -> None:
         """Generates the maze by:
@@ -795,9 +794,9 @@ class Boss(Creature):
     -- METHODS --
     """
     def __init__(self):
-        super().__init__("King Warden", 100, 10):
+        super().__init__("King Warden", 100, 10)
 
-    def heal(hp: int) -> None:
+    def heal(self, hp: int) -> None:
         self.hitpoints = min(self.hitpoints + hp, self.maxhp)
         
 def random_creature() -> "Creature":
