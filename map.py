@@ -32,7 +32,7 @@ class Room:
     def __init__(self, name: str, enemy, description):
         self.name = name
         self.enemy = enemy
-        self.discription = discription
+        self.description = description
         self.left = None
         self.right = None
         self.up = None
