@@ -148,13 +148,26 @@ Remember, Clutch or Gae.
         paths = self.player_pos.get_paths()
         for i in range(len(paths)):
             print(f"[{i+1}]: {paths[i]}")
-        choice = int(input("Choose a path to block off: "))
-        while choice-1 > len(paths):
+        print(f"[{len(paths)+1}]: Cancel action")
+        choice = input("Choose a path to block off: ")
+        while choice not in [str(x) for x in range(1, len(paths)+2)]:
             print("Invalid input")
             choice = input("Choose a path to block off: ")
-        blocked = paths[choice-1]
+        if int(choice) == len(paths)+1:
+            return None
+            
+        blocked = paths[int(choice)-1]
         paths.remove(blocked)
         self.player_pos.set_paths(paths)
+
+        for room in self.map:
+            if room.get_name() == blocked:
+                temp = room
+                break
+        paths = temp.get_paths()
+        paths.remove(self.player_pos.get_name())
+        temp.set_paths(paths)
+        
         self.player_cooldown = 3
         print(f"{blocked} is successfully blocked.")
         print("=====================================================")
@@ -167,7 +180,7 @@ Remember, Clutch or Gae.
         """
         paths = self.player_pos.get_paths()
         outcome = paths[random.randint(0, len(paths)-1)]
-        print("YOU MET REYNA! ABILITY ACTIVATED TO AVOID DEATH")
+        print("You are about to die. You used dash to escape.")
         print(f"You are now in {outcome}.")
         self.player_cooldown = 999
         for room in self.map:
@@ -208,7 +221,7 @@ Remember, Clutch or Gae.
             elif agent == "sage":
                 self.sage()
             else:
-                print("jett's ability cannot be manually activated")
+                print("jett's ability cannot be manually activated\n")
         else:
             print("Your ability is on cooldown.")
             
@@ -247,13 +260,12 @@ Remember, Clutch or Gae.
         get the user's action
         returns the selected action as a string
         """
-        print("Choose an action, Move (1) or Ability (2):")
+        print("Choose an action, Move (1), Ability (2), Wait (3):")
         action = input()
-        while action.lower() not in ["1", "2"]:
+        while action.lower() not in ["1", "2", "3"]:
             print("Invalid Choice")
-            print("Choose an action, Move (1) or 'Ability' (2):")
+            print("Choose an action, Move (1), Ability (2), Wait (3):")
             action = input()
-            
         return action
 
     def reyna_turn(self) -> None:
@@ -290,15 +302,19 @@ Remember, Clutch or Gae.
                 print("Reyna annihilates you before you can even register her presence.")
         else:
             if self.player_pos.has_creature():
-                print("There is utility in this room, you lose 30 hp handling it.\n")
-                self.player.set_hp(True, False)
-                self.player_pos.set_creature(False)
-                if self.player.get_hp() <= 0:
+                if self.player.get_hp() <= 30:
                     if self.player.get_agent() == "jett" and self.player_cooldown == 0:
                         self.jett()
                     else:
-                        print("Unfortunately, it was enough to kill you.")
+                        print("There is utility in this room, you lose 30 hp handling it.\n")
+                        print("Unfortunately, it was enough to kill you.\n")
                         self.gameover = True
+                        return
+                else:
+                    print("There is utility in this room, you lose 30 hp handling it.\n")
+                    self.player.set_hp(True, False)
+                    self.player_pos.set_creature(False)
+                        
             if self.player_pos.has_orb():
                 print("There is a shield orb in this room, you gain 50 hp.\n")
                 self.player.set_hp(False, True)
@@ -330,6 +346,10 @@ Remember, Clutch or Gae.
                         break
                     else:
                         self.desc()
+                elif action == "3":
+                    print("You wait in your current room.")
+                    print("=====================================================")
+                    advance = True
             if self.player_cooldown != 0:
                 self.player_cooldown -= 1
             if self.gameover == True:
