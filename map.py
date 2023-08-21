@@ -59,28 +59,26 @@ class Room:
     def __str__(self):
         return self.name
 
-    def link_left(self, name: str, enemy, description):
+    def link_left(self, name: str, enemy: str, description: str):
         temp = Room(name, enemy, description)
         temp.right = self
         self.left = temp
 
-    def link_right(self, name: str, enemy, description):
+    def link_right(self, name: str, enemy: str, description: str):
         temp = Room(name, enemy, description)
         temp.left = self
         self.right = temp
 
-    def link_up(self, name: str, enemy, description):
+    def link_up(self, name: str, enemy: str, description: str):
         temp = Room(name, enemy, description)
         temp.down = self
         self.up = temp
 
-    def link_down(self, name: str, enemy, description):
+    def link_down(self, name: str, enemy: str, description: str):
         temp = Room(name, enemy, description)
         temp.up = self
         self.down = temp
 
-    def set_is_fighting(self, boolean: bool):
-        self.is_fighting = bool
 
 def setup():
     """

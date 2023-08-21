@@ -17,7 +17,8 @@ class Enemy:
     + get_health(): gets the health of the enemy
     
     """
-    def __init__(self, name: str, health) -> None:
+
+    def __init__(self, name: str, health: int) -> None:
         self.name = name
         self.spell = None
         self.health = health
