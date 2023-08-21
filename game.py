@@ -38,6 +38,12 @@ class Game:
     
 
     def run(self):
+        # if boss is dead, character wins the game
+        if self.room.enemy.name == 'Voldemort' and self.room.enemy.is_dead():
+            print('You have obtained the elder wand, thanks for saving the wizarding world :)')
+            self.end = True
+            return
+        
         # if character is not fighting
         if not self.room.get_is_fighting():
             # ask user for input (go left right up down) (use item) (attack)
@@ -46,6 +52,7 @@ class Game:
             # if charcter have not been here print description
             if not self.room.get_been_here():
                 print(self.room.description)
+                self.room.set_been_here(True)
                 #print("\n")
     
             # prints which rooms are available to move to
@@ -57,7 +64,7 @@ class Game:
                 print(f'To the {i} is {getattr(self.room, i)}')
     
             # ask for input if have monster
-            if self.room.enemy.get_health() != 0 or None:
+            if self.room.enemy.get_health() > 0:
                 #print(f'\nROAR!!! {self.room.enemy}, {self.room.enemy.description} is in the room')
                 # change available moves respectively
                 available_moves = ['attack']
@@ -78,8 +85,8 @@ class Game:
     
             # if input = attack, deal damage to monster for the first time
             elif decision == 'attack':
-                self.attack(self.character, self.room.enemy)
                 self.room.set_is_fighting(True)
+                self.attack(self.character, self.room.enemy)
                 # deal damage back to character if enemy is not dead
                 if not self.room.enemy.is_dead():
                     self.attack(self.room.enemy, self.character)
@@ -113,14 +120,14 @@ class Game:
         # reduce enemy health base on battle point of character
         victim.set_health(-attacker.battle_points)
 
-        if  not victim.is_dead(): 
+        if not victim.is_dead(): 
             # print health of enemy
             print(f'\n{attacker} has dealt {attacker.battle_points} damage to {victim.name}. {victim} still have {victim.get_health()} health')
 
         else:
             # if victim is dead
             print(f'{attacker} dealt {attacker.battle_points} damage to {victim.name}. {victim} is now dead')
-            self.room.is_fighting = False
+            self.room.set_is_fighting(False)
             
 
     def while_fighting(self):
@@ -132,19 +139,33 @@ class Game:
             decision = input('What do you wish to do? (attack): ')
         if decision == 'attack':
             self.attack(self.character, self.room.enemy)
+        if not self.room.enemy.is_dead():
+            self.attack(self.room.enemy, self.character)
+    
     
     def use_item(self):
         # change available items when needed
-        available_items = [weapon]
+        available_items = ['weapon']
         decision = input('\nWhich of the following item do you wish to use? (weapon):')
         while decision not in available_items:
                    decision = input('\nWhich of the following item do you wish to use? (weapon):')
         if decision == 'weapon':
-            pass
-        print('\nWhich of the following item do you wish to use? :')
-        for i, item in enumerate(self.character.item):
-            print(f"[{i}]: {item}")
-        choice = input("Choose an item: ")
-        while choice not in [str(x) for x in range(1, len(self.character.item)+1)]:
-            print("Invalid Choice")
+            print('\nWhich of the following weapon do you wish to equip? :')
+            for i, item in enumerate(self.character.item):
+                print(f"[{i}]: {item}")
             choice = input("Choose an item: ")
+            while choice not in [str(x) for x in range(1, len(self.character.item)+1)]:
+                print("Invalid Choice")
+                choice = input("Choose an weapon: ")
+
+            self.character.equip = choice
+
+        if decision == 'item':
+            print('\nWhich of the following item do you wish to use? :')
+            for i, item in enumerate(self.character.item):
+                print(f"[{i}]: {item}")
+            choice = input("Choose an item: ")
+            while choice not in [str(x) for x in range(1, len(self.character.item)+1)]:
+                print("Invalid Choice")
+                choice = input("Choose an item: ")
+    
