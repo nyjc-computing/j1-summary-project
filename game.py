@@ -11,7 +11,7 @@ class MUDGame:
         self.won = False # default
         self.maze = Labyrinth()
         self.maze.generate()
-        self.steve = Steve(0)
+        self.steve = Steve()
         self.steve_path = []
         self.boss = Boss()
 
