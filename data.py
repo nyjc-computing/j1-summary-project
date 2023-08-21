@@ -13,6 +13,18 @@ EAST = "EAST"
 STARTROOM = "STARTROOM"
 DIRLIST = [[0, 1], [0, -1], [1, 0], [-1, 0]] # according to N, S, E, W
 
+#STANLEY TEST
+
+
+
+
+
+
+
+
+
+
+
 def is_adjacent(room1: list[int], room2: list[int]) -> bool:
     xdiff = room1[0] - room2[0]
     ydiff = room1[1] - room2[1]
@@ -120,12 +132,12 @@ class Labyrinth:
                     
 
     def generate(self) -> None:
+        """Generates a maze without walls"""
         for x in range(labsize):
             for y in range(labsize):
                 self.lab[x][y] = Room(x, y)
         self._generate_place_steve_boss()
-        # self._generate_nowalls()
-        # zyxzyx
+        self._generate_nowalls()
 
     def _generate_nowalls(self) -> None:
         for x in range(labsize):
@@ -147,15 +159,11 @@ class Labyrinth:
         2. Chooses (somewhat) randomly which room is the startroom room where Steve is placed
         3. Places the boss room opposite to startroom
         4. Makes the rooms connected like a maze structure
-        5. Fills in the rooms with random contents (creatures and items)
-        
         6. (Unimplemented functionality) Takes in a difficulty level and sets the game accordingly
         
         Requires the use of helper methods, namely:
-        _generate_place_steve_boss()
-        _generate_maze()
-        _generate_count_unconnected_rooms()
-        _generate_link_rooms()
+
+        Too many LOL
         """
         # self.difficulty_level = difficulty_level
         # put in empty rooms
@@ -163,9 +171,8 @@ class Labyrinth:
             for y in range(labsize):
                 self.lab[x][y] = Room(x, y)
         self._generate_place_steve_boss()
-        print(self) #xyzxyz
         self._generate_maze(self.steve_pos)
-        # give the rooms contents
+    
 
     def _generate_place_steve_boss(self) -> None:
         """One of many helper methods of the generate() method.
@@ -208,8 +215,6 @@ class Labyrinth:
         print("Loading: Generating maze...")
         self._generate_recursive_linking(startroom_pos)
         unconnected = self._generate_count_unconnected_rooms()
-        print(self) #xyzxyz
-        print("What") #xyzxyz
         print("Loading: Tying loose ends...")
         while unconnected != 0:
             for x in range(labsize):
@@ -322,7 +327,7 @@ class Labyrinth:
         dirlist = [NORTH, SOUTH, EAST, WEST]
         random.shuffle(dirlist)
         for randomdir in dirlist:
-            if self._can_move_here(self.boss_pos, randomdir):
+            if self.can_move_here(self.boss_pos, randomdir):
                 x, y = self.boss_pos
                 self.lab[x][y].boss_leaves()
                 for i in range(4):
@@ -334,9 +339,9 @@ class Labyrinth:
                 return None
         raise RuntimeError(f"Boss cannot move because its room {self.boss_pos} is unlinked to neighbours.")
                 
-    def try_move_steve(self, direction) -> bool:
-        if not self._can_move_here(self.steve_pos, direction):
-            return False
+    def move_steve(self, direction) -> None:
+        if not self.can_move_here(self.steve_pos, direction):
+            raise ValueError("move_steve() attempted to move steve to a direction that is not possible.")
         for i in range(4):
             if direction == [NORTH, SOUTH, EAST, WEST][i]:
                 direction = DIRLIST[i]
@@ -345,10 +350,9 @@ class Labyrinth:
         self.steve_pos = [x + direction[0], y + direction[1]]
         x, y = self.steve_pos
         self.lab[x][y].steve_enters()
-        return True
         
 
-    def _can_move_here(self, this_coords: list[int], direction) -> bool:
+    def can_move_here(self, this_coords: list[int], direction) -> bool:
         if not valid_coords(this_coords): # this should not happen at all
             raise IndexError("entity is not inside of maze")
         thisroom = self.lab[this_coords[0]][this_coords[1]]
@@ -385,6 +389,7 @@ class Room:
 
     def __init__(self, x: int, y: int):
         self.coords = [x, y]
+        self.cleared = True
         self.type = {"startroom?": False, "steve?": False, "boss?": False}
         self.connected = False
         self.creature = None
@@ -423,11 +428,21 @@ class Room:
         if not self.steve_ishere(): # Steve was not even here in this room in the first place
             raise RuntimeError(f"Steve is not in room {self.coords}, yet steve_leaves() is called.\nPossible desync between Labyrinth object's steve_pos attribute and this room object's type attribute values.")
         self.type["steve?"] = False
+        self.cleared = True
 
     def steve_enters(self) -> None:
         if self.steve_ishere():
             raise RuntimeError(f"Steve is already in room {self.coords}, yet steve_enters() is called.\nPossible desync between Labyrinth object's steve_pos attribute and this room object's type attribute values.")
         self.type["steve?"] = True
+        if not self.cleared:
+            if random.randint(1, 100) <= 50: # 50% chance a creature spawn
+                self.creature = random_creature()
+                if random.randint(1, 100) <= 60: # if creature spawns, 60% chance an item spawns
+                    self.item = random_item()
+            elif random.randint(1, 100) <= 40: # if no creature spawned, 40% chance an item spawns
+                self.item = random_item()
+                
+        
 
     def boss_leaves(self) -> None:
         if not self.boss_ishere():
@@ -589,9 +604,10 @@ class Food(Item):
         return self.hprestore
 
 class Armor(Item):
-    def __init__(self, name, item_type, defence):
+    def __init__(self, name, item_type, defence, armor_slot):
         super().__init__(name, item_type)
         self.defence = defence
+        self.armor_slot = armor_slot
         
     def __repr__(self):
         return super().__repr__() + f"\nProvides: {self.defence} defence"
@@ -623,17 +639,15 @@ class Steve:
     
     -- METHODS --
     """
-    def __init__(self, n: int):
+    def __init__(self):
         self._inventory = [] # list of dict
         # each dict in self.inventory describes an item, as well as the number of it in the inventory.
         # e.g. {"item": Health_Potion, "number": 2}
         # There should NOT be duplicate dicts in self.inventory e.g. 2 different dicts in self.inventory with "item" being Health_Potions
-        self.inv_slots_num = n
         self.armour = {}
         for slot in ["helmet", "chestplate", "leggings", "boots"]:
             self.armour[slot] = None
         self.health = DEFAULT_HITPOINTS
-        self.defense = 0
         self.weapon = None
         self.base_damage = 2 # default
 
@@ -661,41 +675,30 @@ class Steve:
         self.inventory.append({"item": new_item, "number": num})
         return None
 
-    def _discard_item(item: Item, num: int) -> None:
-        raise NotImplementedError
+    def _discard_item(self, item: Item, num: int) -> None:
+        for index, dict_ in enumerate(self._inventory): # Linear search through inventory
+            if str(item) == str(dict_["item"]): # new_item is already in the inventory
+                self._inventory[index]["number"] -= num
+                if self._inventory[index]["number"] <=0:
+                    self._inventory[index] = None
+                return None
+        print("Error: Item is not in inventory.")
+        return None
 
-    def _equip_armour(self, armouritem: Item) -> None:
-        raise NotImplementedError
-
+    def equip_armour(self, armouritem: Item) -> None:
+        self.armour[armouritem.armor_slot] = armouritem
+        return None
+        
     def eat(self, fooditem: "Item") -> None:
         #validation
         foodindex = self.find_item(fooditem)
         if foodindex == -1:
             raise RuntimeError(f"{fooditem} cannot be consumed as Steve's inventory does not have it.")
-        if not fooditem.info["item type"] == FOODITEM:
+        if not fooditem.item_type == "Food":
             raise ValueError(f"{fooditem} cannot be consumed as it is not food.")
         # consumption
         self.remove_item_from_inv(foodindex)
-        if str(fooditem) == "Rotten Flesh":
-            if self.health < 10:
-                i = 0
-            elif self.health < 15:
-                i = 1
-            else:
-                i = 2
-            mylist = [-1, -1, -1, 0, 0, 1, 1, 1][i: i + 6]
-            random.shuffle(mylist)
-            self.change_health(mylist[0])
-        elif str(fooditem) == "Apple":
-            self.change_health(2)
-        elif str(fooditem) == "Bread":
-            self.change_health(3)
-        elif str(fooditem) == "Steak":
-            self.change_health(5)
-        elif str(fooditem) == "Enchanted Golden Apple":
-            self.change_health(12)
-                
-            
+        self.heal_health(fooditem.hprestore)
 
     def find_item(self, item: "Item") -> int:
         """Linear search through inventory to find the index of the item"""
@@ -714,9 +717,7 @@ class Steve:
         self.inventory[index]["number"] -= 1
         return None
         
-        
-            
-    def change_health(self, change: int) -> None:
+    def heal_health(self, change: int) -> None:
         if change == 0:
             return None
         prevhp = self.health
@@ -728,30 +729,26 @@ class Steve:
         print(f"You got hurt by {prevhp - self.health} HP and have {self.health} left.")
         return None
 
+    def get_defence(self):
+        defence = 0
+        for armor in self.armour.values():
+            defence += armor.get_defence()
+        return defence
+
+    def equip_weapon(self, weapon):
+        self.weapon = weapon
+        
+    def get_attack(self):
+        return self.base_damage + self.weapon.get_attack()
+
     def isdead(self) -> bool:
         if self.health <= 0:
             return True
         return False
-                
 
-"""
-class Creature:
-    def __init__(self, name: str, hitpoints: int, moves: list[str]) -> None:
-        self.name = name
-        self.hp = hitpoints
-        # Do some validation of moves
-        self.moves = moves
-
-    @classmethod
-    def from_dict(cls, info: dict) -> "Creature":
-        return Creature(
-            info["name],
-            info["max_hitpoints"],
-            info["moves"]
-        )
-
-creature = Creature.from_dict(info)
-"""
+    def take_damage(self, damage):
+        damage = int(damage * ((100 - self.get_defence())/100))
+        self.hitpoints = max(0, self.hitpoints - damage)
 
 class Creature:
     """
@@ -788,7 +785,7 @@ class Creature:
     def get_health(self):
         return self.hitpoints
 
-    def take_damage(self, damage):
+    def take_damage(self, damage: int):
         self.hitpoints = self.hitpoints - damage
 
 class Boss(Creature):
@@ -798,7 +795,10 @@ class Boss(Creature):
     -- METHODS --
     """
     def __init__(self):
-        pass
+        super().__init__("King Warden", 100, 10):
+
+    def heal(hp: int) -> None:
+        self.hitpoints = min(self.hitpoints + hp, self.maxhp)
         
 def random_creature() -> "Creature":
     creature_data = random.choice(creature_list)
@@ -809,7 +809,7 @@ def random_item() -> "Item":
     item_type = random.choice(item_type_list)
     if item_type == "Armor":
         item_data = random.choice(armor_list)
-        return Armor(item_data["name"], item_type, item_data["defence"])
+        return Armor(item_data["name"], item_type, item_data["defence"], item_data["slot"])
     elif item_type == "Food":
         item_data = random.choice(food_list)
         return Food(item_data["name"], item_type, item_data["hprestore"])
