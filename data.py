@@ -85,7 +85,7 @@ class Labyrinth:
             fullmidstr = ""
             fullbottomstr = ""
             for x in range(labsize):
-                room = self.lab[x][y]
+                room = self.lab[x][labsize - y - 1]
                 N, S, E, W = room.get_neighbours_accessibility()
                 if N:
                     topstr = " || "
@@ -95,7 +95,7 @@ class Labyrinth:
                     bottomstr = " || "
                 else:
                     bottomstr = "    "
-                if E:
+                if W:
                     midstr = "="
                 else:
                     midstr = " "
@@ -124,7 +124,8 @@ class Labyrinth:
             for y in range(labsize):
                 self.lab[x][y] = Room(x, y)
         self._generate_place_steve_boss()
-        self._generate_nowalls()
+        # self._generate_nowalls()
+        # zyxzyx
 
     def _generate_nowalls(self) -> None:
         for x in range(labsize):
@@ -186,13 +187,13 @@ class Labyrinth:
         """
         # choose position of Start room randomly
         n = labsize // 4
-        n = random.randint(-n, n - 1)
+        n = random.randint(-n, n - 1) % labsize
         m = random.randint(0, labsize - 1)
         nm = [n, m]
         random.shuffle(nm)
         steve_x, steve_y = nm
         self.lab[steve_x][steve_y].settype_startroom()
-        self.steve_pos = nm
+        self.steve_pos = [steve_x, steve_y]
         
         # choose position of Monster room opposite to where steve is
         boss_x = labsize - 1 - (steve_x % labsize)
@@ -262,7 +263,7 @@ class Labyrinth:
             neighbourcoords = [x + DIRLIST[i][0], y + DIRLIST[i][1]]
             if self._generate_is_linkable_by_recursive(neighbourcoords):
                 odds = random.randint(1, 100)
-                if odds <= 50: # 50% chance of linking; 
+                if odds <= 58: # n% chance of linking; 
                     self._generate_link_rooms(thisroomcoords, neighbourcoords)
                     self._generate_recursive_linking(neighbourcoords) # recursion call
         # base case should be inherently built into this loop:
@@ -289,6 +290,8 @@ class Labyrinth:
         if not room1.is_connected_tostart() and not room2.is_connected_tostart():
             # every linking must happen between rooms of which 1 MUST be connected.
             return None # no linking done if both are unconnected.
+        # print(room1.coords) #xyzxyz
+        # print(room2.coords) #xyzxyz
         room1.set_access(room2)
         room2.set_access(room1)
             
@@ -310,7 +313,7 @@ class Labyrinth:
         return number_of_unconnected
 
     def get_current_pos(self) -> "Room":
-        return self.lab[self.steve_pos[0], self.steve_pos[1]]
+        return self.steve_pos
 
 
         
@@ -508,6 +511,7 @@ class Room:
             self.mywest = room
         else:
             raise ValueError(f'Room {self.coords} set_access() had argument passed that is not a direction value.')
+        
 
     def is_connected_tostart(self) -> bool:
         return self.connected
@@ -762,7 +766,12 @@ mylab = Labyrinth()
 mylab.generate_random()
 print(mylab.steve_pos)
 print(mylab)
-wallless = Labyrinth()
-wallless.generate()
-print("\n\n\n")
-print(wallless)
+
+# allwall = Labyrinth()
+# allwall.generate()
+# print("\n\n\n")
+# print(allwall)
+# coords = allwall.get_current_pos()
+# print(coords)
+# allwall._generate_link_rooms(coords, [coords[0], coords[1] - 1])
+# print(allwall)
