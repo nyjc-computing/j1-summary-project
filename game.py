@@ -1,5 +1,5 @@
 #File containing the code for the game
-import data
+from data import *
 import random
 
 
@@ -11,7 +11,7 @@ class MUDGame:
         self.won = False # default
         self.maze = Labyrinth()
         self.maze.generate()
-        self.steve = Steve()
+        self.steve = Steve(0)
         self.creature = Creature()
         self.steve_path = []
 
@@ -67,16 +67,16 @@ class MUDGame:
             print(f"{creature.info['name']} has {self.creature.get_health()} HP")
             # damage = self.steve....
             self.creature.hitpoints -= damage
-            print(f'You attacked {creature.info['name']}')
+            print(f'You attacked {creature.info["name"]}')
             self.steve.health -= creature.get_attack()
         pass
 
-    def creature_encountered():
+    def creature_encountered(self):
         if self.room.creature is None:
             return False
         return True
 
-    def item_found():
+    def item_found(self):
         if self.room.item is None:
             return False
         return True
@@ -87,7 +87,7 @@ class MUDGame:
     def show_losescreen():
         print("YOU DIED...\nDo you want to try again?")
 
-    def movesteve():
+    def movesteve(self):
         current_location = self.maze.get_current_pos
         opt_dir = {'1':'North', '2':'East', '3':'South', '4':'West'}
         available_dir = []
@@ -109,9 +109,13 @@ class MUDGame:
                 if len(choice) == 1:
                     validity = True
         self.maze.move_steve(current_location, available_dir[choice - 1])
-    
-    
 
+    def moveboss(self):
+        self.maze.move_boss()
+        
+    
+    def restore_steve_hp(self):
+        
     
     
     def run(self):
@@ -153,7 +157,10 @@ class MUDGame:
                 item_choice = self.prompt_player_2opt()
                 if item_choice == 1:
                     self.steve._add_item_to_inv(item)
+                    
+            self.restore_steve_hp()
             self.movesteve()
+            self.moveboss()
                 # update
         if self.steve.isdead():
             self.show_losescreen()
