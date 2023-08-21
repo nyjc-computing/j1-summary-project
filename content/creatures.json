@@ -1,1 +1,1 @@
-#data for creatures
+[{"name": "Zombie", "base_hp": 20, "base_atk": 5},{"name": "Creeper", "base_hp": 5, "base_atk": 15}]
