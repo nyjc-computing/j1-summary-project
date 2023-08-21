@@ -8,7 +8,7 @@ def increment_total_rooms():
     return total_rooms + 1
     
 class Room:
-    def __init__(self, boss = None, type = 'normal', x = 2, y = 2, up = None, down = None, left = None, right = None, layer = 0, number = 0):
+    def __init__(self, boss = None, type = 'normal', x = 2, y = 2, up = None, down = None, left = None, right = None, layer = 1, number = 0):
         #next rooms
         self.boss = boss
         self.type = type
@@ -18,7 +18,7 @@ class Room:
         self.left = left
         self.layer = layer
         self.number = number
-        connections = random.randint(1, 3)
+        connections = random.randint(2, 3)
         next_rooms = [self.up, self.down, self.left, self.right]
         ref_next_rooms = ['self.up', 'self.down', 'self.left', 'self.right']
         for i in range(len(next_rooms)):
@@ -26,8 +26,10 @@ class Room:
                 next_rooms.pop(i)
                 ref_next_rooms.pop(i)
         if self.type == 'start':
+            #Start Room
             self.up = Room(down = self)
-        elif total_rooms <= 5:
+        elif total_rooms < 10 and self.layer < 3:
+            #Normal Room
             while connections != 0:
                 next_room = random.randint(0, len(next_rooms) - 1)
                 if ref_next_rooms[next_room] == 'self.up':
@@ -37,18 +39,22 @@ class Room:
                     ref_next_rooms.pop(next_room)
                 elif ref_next_rooms[next_room] == 'self.down':
                     self.down = Room(up = self, layer=self.count_layer())
+                    increment_total_rooms()
                     next_rooms.pop(next_room)
                     ref_next_rooms.pop(next_room)
                 elif ref_next_rooms[next_room] == 'self.left':
                     self.left = Room(right = self, layer=self.count_layer())
+                    increment_total_rooms()
                     next_rooms.pop(next_room)
                     ref_next_rooms.pop(next_room)
                 elif ref_next_rooms[next_room] == 'self.right':
                     self.right = Room(left = self, layer=self.count_layer())
+                    increment_total_rooms()
                     next_rooms.pop(next_room)
                     ref_next_rooms.pop(next_room)
                 self.layer = self.countRoom()
-        elif self.layer == 3:
+        #Boss Room
+        if self.number == 7:
             next_room = random.randint(0, len(next_rooms) - 1)
             if ref_next_rooms[next_room] == 'self.up':
                 self.up = Room(down = self, type = 'boss', boss = Springtrap(), layer=self.count_layer())
