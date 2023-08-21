@@ -15,6 +15,7 @@ class MUDGame:
         self.steve_path = []
         self.boss = Boss()
 
+
     
     def introduce(self): 
         """
@@ -59,14 +60,14 @@ class MUDGame:
         return False
 
     def attack(self):
-        x, y =self.maze.steve_pos()
-        room = self.maze.get_current_pos()
-        creature = self.room.get_creature()
-        while not self.steve_isdead() or self.creature.hitpoints <= 0:
+        x, y = self.maze.get_current_pos()
+        room = Room(x, y)
+        creature = room.get_creature()
+        while not self.steve.isdead() or self.creature.hitpoints <= 0:
             print(self.steve)
             print(f"{creature.info['name']} has {self.creature.get_health()} HP")
             damage = self.steve.get_attack()
-            self.creature.hitpoints -= damage
+            creature.hitpoints -= damage
             print(f'You attacked {creature.info["name"]}')
             self.steve.health -= creature.get_attack()
 
