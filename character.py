@@ -82,6 +82,7 @@ class Character:
     + get_mana_flask(self) -> int
     + set_items(self, item : Item) -> None
     + get_items(self) -> list[Item]
+
     """
     
     def __init__(self) -> None:
@@ -212,3 +213,4 @@ class Character:
 
     def get_items(self) -> list[Item]:
         return self.items
+

@@ -245,6 +245,7 @@ class Game:
                 user.set_health_flask(1)
                 self.set_loot(None)
     
+<<<<<<< HEAD
             elif loot.get_name() == "Flask of Cerulean Tears":
                 print(f"\nYou found a {loot.get_name()}, a powerful flask")
                 time.sleep(1)
@@ -722,10 +723,10 @@ class Game:
                 time.sleep(1)
                 
     def display_room_name(self) -> None:
-        print("\n=========================")
+        print(".")
         space = " "*int((25-len(self.room.get_name()))/2)
         print(f"{space}{self.room.get_name()}{space}")
-        print("=========================")
+        print(".")
         time.sleep(1)
 
     def display_room_description(self) -> None:
@@ -791,3 +792,57 @@ class Game:
     def die(self) -> None:
         self.end_game()
         self.end = True
+=======
+    def use_item(self):
+        # change available items when needed
+        available_items = ['weapon', 'potion']
+        decision = input('\nWhich of the following item do you wish to use? (weapon, potion):')
+        while decision not in available_items:
+                   decision = input('\nWhich of the following item do you wish to use? (weapon, potion):')
+            
+        if decision == 'weapon':
+            self.use_weapon()
+
+        elif decision == 'potion':
+            self.use_potion()
+
+        else:
+            raise ValueError(f'{decision}')
+            
+    def use_weapon(self) -> None:
+        choice = self.prompt_user_choice(self.character.weapon, '\nChoose a weapon to equip: ')
+        
+        # remove battle points from weapon currently
+        if self.character.equip != None:
+            self.character.battle_points -= self.character.equip.attack
+        # add battle points from new weapon
+        self.character.equip = self.character.weapon[choice]
+        self.character.battle_points += self.character.weapon[choice].attack
+
+    def use_potion(self) -> None:
+        choice = self.prompt_user_choice(self.character.potion, "\nChoose a potion to consume: ")
+
+        # add effects from consumable
+        if self.character.potion[choice].attack != 0:
+            self.character.battle_points += self.character.potion[choice].attack
+        if self.character.potion[choice].heal != 0:
+            self.character.set_health(self.character.potion[choice].heal)
+
+        # remove potion from list of potion available
+        self.character.potion.pop(choice)
+
+    def prompt_user_choice(self, items: list, question: str) -> int:        
+        for i, item in enumerate(items):
+            print(f"[{i}]: {item}")
+        choice = None
+        while not choice:
+            choice = input(question + " ")
+            if not choice.isdecimal():
+                print("Invalid choice")
+                continue
+            if int(choice) >= len(items):
+                print("Invalid choice")
+                continue
+            return int(choice)
+            
+>>>>>>> 1231531 (lazy)
