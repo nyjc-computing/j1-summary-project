@@ -1,5 +1,6 @@
 from enemy import Enemy
 from item import Weapon
+from item import Potion
 
 class Room:
     """
@@ -79,9 +80,13 @@ class Room:
         temp.up = self
         self.down = temp
 
-sword = Weapon("Gryffindor SSSword", "You have obtained the Sword Of Gryffindor, which can only be held by a TRUE gryffindor! This sword does X2 damage to Basilisk!", 250)
+gryffindor_sword = Weapon("Gryffindor SSSword", "You have obtained the Sword Of Gryffindor, which can only be held by a TRUE gryffindor! This sword does X2 damage to Basilisk!", 250)
 
-philosopherStone = Weapon("Philosopher's SSStone", "You have obtained the Philosopher's Stone, which can only be held by a TRUE YOU! This stone does xtra 500 damage to Voldemort, meow!", 500)
+philosopher_stone = Weapon("Philosopher's SSStone", "You have obtained the Philosopher's Stone, which can only be held by a TRUE YOU! This stone does xtra 500 damage to Voldemort, meow!", 500)
+
+felix_felicis = Potion("Felix Felicis", "WOW, you have gotten a FELIX FELICIS potion! This potion gives you good luck! However, it is a single-use-item, and can only last for 1 room. Make goos use of it!", 1000)
+
+elixir_of_life = Potion("Elixir Of Life", "NICE, you've got the elixir of life! Use it wisely as it is a single-use-item! It heals 500 hp", 500)
 
 def setup():
     """
