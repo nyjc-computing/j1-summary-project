@@ -65,11 +65,13 @@ class MUDGame:
         creature = room.get_creature()
         while not self.steve.isdead() or self.creature.hitpoints <= 0:
             print(self.steve)
-            print(f"{creature.info['name']} has {self.creature.get_health()} HP")
+            print(f"{creature.get_name()} has {self.creature.get_health()} HP")
             damage = self.steve.get_attack()
-            creature.hitpoints -= damage
-            print(f'You attacked {creature.info["name"]}')
-            self.steve.health -= creature.get_attack()
+            creature.take_damage(damage)
+            print(f'You attacked {creature.get_name()}')
+            damage = creature.get_attack()
+            self.steve.take_damage(damage)
+        room.set_creature_None()
 
     def creature_encountered(self):
         if self.room.creature is None:
@@ -157,6 +159,8 @@ class MUDGame:
                 item_choice = self.prompt_player_2opt()
                 if item_choice == 1:
                     self.steve._add_item_to_inv(item)
+            if self.boss_encountered():
+                
 
             self.movesteve()
             self.moveboss()
