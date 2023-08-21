@@ -59,6 +59,12 @@ class Room:
         self.orb = orb
 
 def make_map(map : str) -> dict:
+    """
+    Function takes in the name of the map as input by
+    the user.
+    It then returns the dictionary of room objects for
+    the map if the map name is valid, else it returns -1
+    """
     if map == 'ascent':
         _roompaths = {
     "T-side spawn": ["A lobby", "B lobby"],
@@ -73,14 +79,14 @@ def make_map(map : str) -> dict:
     "Garden": ["A site", "Market", "Catwalk", "Tiles"],
     "Market": ["CT-side spawn", "B site", "Tiles", "Catwalk", "Garden"],
     "CT-side spawn": ["A site", "Market", "B site"]
-             }
+                     }
     elif map == 'haven':
         _roompaths = {}
     elif map == 'breeze':
         _roompaths = {}
         pass
     else:
-        return 'No such map.'
+        return -1
         
     rooms = {}
     for room in _roompaths:
