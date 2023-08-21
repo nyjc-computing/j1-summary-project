@@ -191,4 +191,5 @@ class MUDGame:
                     #Victory message
                     self.current_room.grid.clear_tile()
                     break
-            #Code boss fight here
+            elif self.current_room.is_boss():
+                
