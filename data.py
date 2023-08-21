@@ -433,7 +433,7 @@ class Room:
         if self.steve_ishere():
             raise RuntimeError(f"Steve is already in room {self.coords}, yet steve_enters() is called.\nPossible desync between Labyrinth object's steve_pos attribute and this room object's type attribute values.")
         self.type["steve?"] = True
-        if not self.cleared:
+        if not self.cleared and not self.type["boss?"]:
             if random.randint(1, 100) <= 50: # 50% chance a creature spawn
                 self.creature = random_creature()
                 if random.randint(1, 100) <= 60: # if creature spawns, 60% chance an item spawns
@@ -472,6 +472,10 @@ class Room:
             self.mywest = neighbour
         else:
             raise ValueError("Direction passed is not of the right value")
+    
+    def set_creature_None(self) -> None:
+        """When the creature is killed"""
+        self.creature = None
     
     def set_connected_True(self) -> None:
         self.connected = True
@@ -738,6 +742,8 @@ class Steve:
         self.weapon = weapon
         
     def get_attack(self):
+        if self.weapon is None:
+            return self.base_damage
         return self.base_damage + self.weapon.get_attack()
 
     def isdead(self) -> bool:
@@ -760,7 +766,7 @@ class Creature:
     get_attack
     get_health
     """
-    def __init__(self, name, maxhp, attack):
+    def __init__(self, name: str, maxhp: int, attack: int):
         self.name = name
         maxhp = self._generate_maxhp(maxhp, turn)
         self.hitpoints = maxhp
@@ -773,6 +779,9 @@ class Creature:
     def _generate_maxhp(self, maxhp: int, turn_number: int) -> None:
         maxhp = int((maxhp * ((turn_number / 10) + 1) * random.randint(90, 110) / 100))
         return maxhp
+
+    def get_name(self) -> None:
+        return self.name
         
     def _generate_attack(self, attack: int, turn_number: int) -> None:
         attack = int((attack) * ((turn_number / 10) + 1) * (random.randint(90, 110) / 100))
@@ -785,7 +794,7 @@ class Creature:
         return self.hitpoints
 
     def take_damage(self, damage: int):
-        self.hitpoints = self.hitpoints - damage
+        self.hitpoints = max(0, self.hitpoints - damage)
 
 class Boss(Creature):
     """
