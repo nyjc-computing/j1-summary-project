@@ -766,7 +766,7 @@ class Creature:
     get_attack
     get_health
     """
-    def __init__(self, name, maxhp, attack):
+    def __init__(self, name: str, maxhp: int, attack: int):
         self.name = name
         maxhp = self._generate_maxhp(maxhp, turn)
         self.hitpoints = maxhp
@@ -779,6 +779,9 @@ class Creature:
     def _generate_maxhp(self, maxhp: int, turn_number: int) -> None:
         maxhp = int((maxhp * ((turn_number / 10) + 1) * random.randint(90, 110) / 100))
         return maxhp
+
+    def get_name(self) -> None:
+        return self.name
         
     def _generate_attack(self, attack: int, turn_number: int) -> None:
         attack = int((attack) * ((turn_number / 10) + 1) * (random.randint(90, 110) / 100))
@@ -791,7 +794,7 @@ class Creature:
         return self.hitpoints
 
     def take_damage(self, damage: int):
-        self.hitpoints = self.hitpoints - damage
+        self.hitpoints = max(0, self.hitpoints - damage)
 
 class Boss(Creature):
     """
