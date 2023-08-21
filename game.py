@@ -144,28 +144,41 @@ class Game:
         decision = input('\nWhich of the following item do you wish to use? (weapon):')
         while decision not in available_items:
                    decision = input('\nWhich of the following item do you wish to use? (weapon):')
+            
         if decision == 'weapon':
-            print('\nWhich of the following weapon do you wish to equip? :')
-            for i, item in enumerate(self.character.item):
-                print(f"[{i}]: {item}")
-            choice = input("Choose an item: ")
-            while choice not in range(len(self.character.item)):
-                print("Invalid Choice")
-                choice = input("Choose an weapon (the number of the weapon): ")
+            self.use_weapon()
 
-            # remove battle points from weapon currently
-            if self.character.equip != None:
-                self.character.battle_points -= self.character.equip.attack
-            # add battle points from new weapon
-            self.character.equip = self.character.item[choice]
-            self.character.battle_points += self.character.item[choice].attack
+        elif decision == 'consumable':
+            self.use_consumable()
 
-        if decision == 'item':
-            print('\nWhich of the following item do you wish to use? :')
-            for i, item in enumerate(self.character.item):
-                print(f"[{i}]: {item}")
-            choice = input("Choose an item: ")
-            while choice not in [str(x) for x in range(1, len(self.character.item)+1)]:
-                print("Invalid Choice")
-                choice = input("Choose an item: ")
-    
+        else:
+            raise ValueError(f'{decision}')
+            
+    def use_weapon(self) -> None:
+        choice = self.prompt_user_choice(self.character.item, 'Choose a weapon')
+        
+        # remove battle points from weapon currently
+        if self.character.equip != None:
+            self.character.battle_points -= self.character.equip.attack
+        # add battle points from new weapon
+        self.character.equip = self.character.item[choice]
+        self.character.battle_points += self.character.item[choice].attack
+
+    def use_consumable(self) -> None:
+        choice = self.prompt_user_choice(self.character.item, "Choose a consumable:")
+       # haven't implement
+
+    def prompt_user_choice(self, items: list, question: str) -> int:        
+        for i, item in enumerate(items):
+            print(f"[{i}]: {item}")
+        choice = None
+        while not choice:
+            choice = input(question + " ")
+            if not choice.isdecimal():
+                print("Invalid choice")
+                continue
+            if int(choice) >= len(items):
+                print("Invalid choice")
+                continue
+            return int(choice)
+            
