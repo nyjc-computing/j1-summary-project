@@ -1,1 +1,1 @@
-[{"name": "Iron Helmet", "defence": 5}, {"name": "Iron Chestplate", "defence": 10}, {"name": "Iron Leggings", "defence": 7}, {"name": "Iron Boots", "defence": 3}]
+[{"name": "Iron Helmet", "defence": 5, "slot": "helmet"}, {"name": "Iron Chestplate", "defence": 10, "slot": "chestplate"}, {"name": "Iron Leggings", "defence": 7, "slot": "leggings"}, {"name": "Iron Boots", "defence": 3, "slot": "boots"}]
