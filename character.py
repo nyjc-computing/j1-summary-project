@@ -1,3 +1,5 @@
+from item import Item
+
 class Character:
     """
     creates the character
@@ -14,6 +16,7 @@ class Character:
     + set_health(): updates the character's health
     + get_health(): gets the health of the character
     - is_dead(): checks if the enemy is dead
+    
     
     """
     def __init__(self) -> None:
@@ -42,3 +45,12 @@ class Character:
     def get_health(self) -> int:
         """Returns the character's health"""
         return self.health
+
+    def pick_up(self, item: Item) -> None:
+        """add the monster item to respective attribute of player based on weapon type"""
+        if item.type == 'weapon':
+            self.weapon += item
+        elif item.type == 'potion':
+            self.potion += item
+        else:
+            raise ValueError(f'{item.type}')
