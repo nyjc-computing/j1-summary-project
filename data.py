@@ -3,60 +3,79 @@ import time
 
 #Rooms
 class Room:
-    def __init__(self, type = 'normal', rooms_list = [], x = 2, y = 2, up = None, down = None, left = None, right = None, number = 0):
+    def __init__(self, boss = None, type = 'normal', x = 2, y = 2, up = None, down = None, left = None, right = None, number = 0):
         #next rooms
+        self.boss = boss
         self.type = type
-        self.rooms_list =  rooms_list + [self]
         self.up = up
         self.down = down 
         self.right = right
         self.left = left
         self.count = number
-
-        if self.count <= 10:
-            connections = random.randint(1, 3)
-            next_rooms = [self.up, self.down, self.left, self.right]
-            for room in next_rooms:
-                if room != None:
-                    next_rooms.remove(room)
-            while connections != 0:
-                next_room = random.randint(0, len(next_rooms) - 1)
-                next_rooms[next_room] = 'closed'
-                next_rooms.pop(next_room)
-                connections = connections - 1
         connections = random.randint(1, 3)
         next_rooms = [self.up, self.down, self.left, self.right]
-        for room in next_rooms:
-            if room != None:
-                next_rooms.remove(room)
-        while connections != 0:
+        ref_next_rooms = ['self.up', 'self.down', 'self.left', 'self.right']
+        for i in range(len(next_rooms)):
+            if next_rooms[i] != None:
+                next_rooms.pop(i)
+                ref_next_rooms.pop(i)
+        if self.type == 'start':
+            self.up = Room(down = self, number = self.countRoom())
+        elif self.count < 9:
+            while connections != 0:
+                next_room = random.randint(0, len(next_rooms) - 1)
+                if ref_next_rooms[next_room] == 'self.up':
+                    self.up = Room(down = self, number=self.countRoom())
+                    next_rooms.pop(next_room)
+                    ref_next_rooms.pop(next_room)
+                elif ref_next_rooms[next_room] == 'self.down':
+                    self.down = Room(up = self, number=self.countRoom())
+                    next_rooms.pop(next_room)
+                    ref_next_rooms.pop(next_room)
+                elif ref_next_rooms[next_room] == 'self.left':
+                    self.left = Room(right = self, number=self.countRoom())
+                    next_rooms.pop(next_room)
+                    ref_next_rooms.pop(next_room)
+                elif ref_next_rooms[next_room] == 'self.right':
+                    self.right = Room(left = self, number=self.countRoom())
+                    next_rooms.pop(next_room)
+                    ref_next_rooms.pop(next_room)
+                self.count = self.countRoom()
+        elif self.count == 9:
             next_room = random.randint(0, len(next_rooms) - 1)
-            next_rooms[next_room] = 'closed'
-            next_rooms.pop(next_room)
-            connections = connections - 1
-         
-        self.grid = Grid(x, y)
+            if ref_next_rooms[next_room] == 'self.up':
+                self.up = Room(down = self, type = 'boss', boss = Springtrap(), number=self.countRoom())
+                next_rooms.pop(next_room)
+                ref_next_rooms.pop(next_room)
+            elif ref_next_rooms[next_room] == 'self.down':
+                self.down = Room(up = self, type = 'boss', boss = Springtrap(), number=self.countRoom())
+                next_rooms.pop(next_room)
+                ref_next_rooms.pop(next_room)
+            elif ref_next_rooms[next_room] == 'self.left':
+                self.left = Room(right = self, type = 'boss', boss = Springtrap(), number=self.countRoom())
+                next_rooms.pop(next_room)
+                ref_next_rooms.pop(next_room)
+            elif ref_next_rooms[next_room] == 'self.right':
+                self.right = Room(left = self, type = 'boss', boss = Springtrap(), number=self.countRoom())
+                next_rooms.pop(next_room)
+                ref_next_rooms.pop(next_room)
+                
+        self.grid = Grid(type = type, x = x, y = y)
         
     def display_room(self):
         pass
 
     def is_next_room(self, next : str) -> bool:
-        if next.lower() == 'w':
-            if self.up == None:
-                return False
-            return True
-        elif next.lower() == 'a':
-            if self.left == None:
-                return False
-            return True
-        elif next.lower() == 's':
-            if self.down == None:
-                return False
-            return True
-        elif next.lower() == 'd':
-            if self.right == None:
-                return False
-            return True
+        next = next.lower()
+        if next == 'w':
+            return self.up is not None
+        elif next == 'a':
+            return self.left is not None
+        elif next == 's':
+            return self.down is not None
+        elif next == 'd':
+            return self.right is not None
+        raise ValueError(f'Please put in w, a, s or d. Got {next}.')
 
     def next_room(self, next : str) -> None:
         '''
@@ -66,29 +85,21 @@ class Room:
             if self.up == None:
                 print('It seems that this door is locked.')
             else:
-                prev = self
-                self.up = Room(rooms_list = self.rooms_list, up = prev, number=self.countRoom())
                 self = self.up
         if next.lower() == 's':
             if self.down == None:
                 print('It seems that this door is locked.')
             else:
-                prev = self
-                self.down = Room(rooms_list = self.rooms_list, down = prev, number=self.countRoom())
                 self = self.down
         if next.lower() == 'a':
             if self.left == None:
                 print('It seems that this door is locked.')
             else:
-                prev = self
-                self.left = Room(rooms_list = self.rooms_list, right = prev, number=self.countRoom())
                 self = self.left
         if next.lower() == 'd':
             if self.right == None:
                 print('It seems that this door is locked.')
             else:
-                prev = self
-                self.right = Room(rooms_list = self.rooms_list, left = prev, number=self.countRoom())
                 self = self.right
     def current_room(self) -> 'Room':
         '''
@@ -99,26 +110,48 @@ class Room:
     def countRoom(self):
         self.count += 1
         return self.count
+        
+    def is_boss(self):
+        if self.type == 'boss':
+            return True
+        return False
 
-
+    def get_boss(self):
+        '''
+        Return the boss.
+        '''
+        return self.boss
+        
 def start_room():
     """Instantiates a spawn room"""
     current_room = Room()
     return current_room
 
 class Grid:
-    def __init__(self, x, y):
+    def __init__(self, type, x, y):
+        self.type = type
         self.grid = [{0 : None, 1 : None, 2 : None, 3 : None, 4 : None},
                     {0 : None, 1 : None, 2 : None, 3 : None, 4 : None},
                     {0 : None, 1 : None, 2 : None, 3 : None, 4 : None},
                     {0 : None, 1 : None, 2 : None, 3 : None, 4 : None},
                     {0 : None, 1 : None, 2 : None, 3 : None, 4 : None}]
         i = 0
+        if type == 'normal':
         #Spawning creatures
-        while i < 5:
-            if self.grid[random.randint(0, 4)][random.randint(0, 4)] == None:
-                self.grid[random.randint(0, 4)][random.randint(0, 4)] = {'type' : 'creature', 'creatures':[]}
-            i = i + 1
+            while i < 5:
+                if self.grid[random.randint(0, 4)][random.randint(0, 4)] == None:
+                    self.grid[random.randint(0, 4)][random.randint(0, 4)] = {'type' : 'creature', 'creatures':[]}
+                i = i + 1
+            k = 0
+        #Spawning items
+            while k < 5:
+                if self.grid[random.randint(0, 4)][random.randint(0, 4)] == None:
+                    self.grid[random.randint(0, 4)][random.randint(0, 4)] = {'type' : 'items', 'items':[]}
+                k = k + 1
+            while i < 5:
+                if self.grid[random.randint(0, 4)][random.randint(0, 4)] == None:
+                    self.grid[random.randint(0, 4)][random.randint(0, 4)] = {'type' : 'creature', 'creatures':[]}
+                i = i + 1
         k = 0
         # Spawning items
         while k < 5:
@@ -181,7 +214,7 @@ class Grid:
         After a defeating a creature or picking up an item, remove it from the grid
         '''
         self.grid[self.get_position()[0]][self.get_position()[1]] = None
-        
+
 
 
 #Start
