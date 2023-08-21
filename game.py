@@ -60,6 +60,13 @@ Remember, Clutch or Gae.
         retrive map choice from player
         gets map
         """
+        maps = ["Ascent", "Haven", "Breeze"]
+        for i, a in enumerate(maps):
+            print(f"[{i+1}]: {a}")
+        choice = input("Enter a number to choose a map: ")
+        while choice not in [str(x) for x in range(1, len(maps)+1)]:
+            print("Invalid Input")
+            choice = input("Enter a number to choose a map: ")
         self.map = data.roomlist
 
     def initialise(self, agent: str) -> None:
