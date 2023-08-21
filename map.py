@@ -1,6 +1,5 @@
 from enemy import Enemy
-from item import Weapon
-from item import Potion
+from item import Weapon, Potion
 
 class Room:
     """
@@ -30,7 +29,7 @@ class Room:
     + get_been_here(): gets the status of wether the character has been to this room
     """
    
-    def __init__(self, name: str, enemy, description):
+    def __init__(self, name: str, enemy, description, loot = None):
         self.name = name
         self.enemy = enemy
         self.description = description
@@ -41,6 +40,7 @@ class Room:
         self.been_here = False
         self.is_fighting = False
         self.description = description
+        self.loot = loot
 
     def __repr__(self):
         print(f"Room({self.name})")
@@ -60,22 +60,22 @@ class Room:
     def __str__(self):
         return self.name
 
-    def link_left(self, name: str, enemy: str, description: str):
+    def link_left(self, name: str, enemy: str, description: str, loot = None):
         temp = Room(name, enemy, description)
         temp.right = self
         self.left = temp
 
-    def link_right(self, name: str, enemy: str, description: str):
+    def link_right(self, name: str, enemy: str, description: str, loot = None):
         temp = Room(name, enemy, description)
         temp.left = self
         self.right = temp
 
-    def link_up(self, name: str, enemy: str, description: str):
+    def link_up(self, name: str, enemy: str, description: str, loot = None):
         temp = Room(name, enemy, description)
         temp.down = self
         self.up = temp
 
-    def link_down(self, name: str, enemy: str, description: str):
+    def link_down(self, name: str, enemy: str, description: str, loot = None):
         temp = Room(name, enemy, description)
         temp.up = self
         self.down = temp
@@ -97,7 +97,7 @@ def setup():
     
     map.link_left("Room2", Enemy('Basilisk', 500), "As you cautiously step into the dimly lit chamber, an uneasy weight settles in the pit of your stomach. The air feels heavy with a sense of foreboding, and the faint echo of your footsteps reverberates through the cold stone walls. The room is vast and cavernous, its architecture ancient and mysterious.\nA flicker of movement catches your eye, and your heart skips a beat. Slowly, almost languidly, a massive form emerges from the shadows. The basilisk, a creature of legend and terror, slithers forth with an eerie grace. Its scales, a mesmerizing tapestry of dark and iridescent shades, seem to absorb what little light dares to penetrate the chamber.\n")
     
-    map.link_right("Room3", Enemy('Death Eater', 1000), "As you cautiously push open the creaking door to the abandoned classroom, a sense of unease washes over you. The air is heavy with the weight of neglect, and the room is dimly illuminated by the pale moonlight that filters through the dusty windows. The remnants of forgotten lessons lay scattered across desks, a silent testament to the room's disuse.\nAs you step further into the room, a sudden movement catches your eye. Out of the shadows, a figure materializes with an eerie swiftness. The darkness seems to cling to them, cloaking them in an aura of menace. The figure's robes billow softly, a whispering echo of their sinister intent.\n", philosopherStone)
+    map.link_right("Room3", Enemy('Death Eater', 1000), "As you cautiously push open the creaking door to the abandoned classroom, a sense of unease washes over you. The air is heavy with the weight of neglect, and the room is dimly illuminated by the pale moonlight that filters through the dusty windows. The remnants of forgotten lessons lay scattered across desks, a silent testament to the room's disuse.\nAs you step further into the room, a sudden movement catches your eye. Out of the shadows, a figure materializes with an eerie swiftness. The darkness seems to cling to them, cloaking them in an aura of menace. The figure's robes billow softly, a whispering echo of their sinister intent.\n", philosopher_stone)
     
     map.link_up("Room4", Enemy('Voldemort', 5000), "Upon entering the Slytherin common room, a profound hush descends. The room is bathed in dim green light, casting an unsettling ambiance. At the heart of the chamber stands Voldemort, his presence commanding attention and trepidation. His features, pale and serpentine, are accentuated by the eerie glow.\nHis crimson gaze locks onto you, piercing and intense. The room seems to bend to his will, an extension of his dominance. The very air feels heavy, pregnant with the weight of his history and power. As he addresses you, his voice carries a chilling authority that leaves no room for dissent.\n")
     

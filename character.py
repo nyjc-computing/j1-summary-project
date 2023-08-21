@@ -25,6 +25,7 @@ class Character:
         self.battle_points = 100
         self.potion = []
         self.equip = None
+        self.item = []
 
     def __repr__(self) -> str:
         print(f"character: {self.name}")
