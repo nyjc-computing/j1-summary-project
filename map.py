@@ -28,10 +28,10 @@ class Room:
     + get_been_here(): gets the status of wether the character has been to this room
     """
     
-    def __init__(self, name: str, enemy, discription: str):
+    def __init__(self, name: str, enemy, description: str):
         self.name = name
         self.enemy = enemy
-        self.discription = discription
+        self.discription = description
         self.left = None
         self.right = None
         self.up = None
