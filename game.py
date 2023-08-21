@@ -65,7 +65,7 @@ class MUDGame:
         while not self.steve_isdead() or self.creature.hitpoints <= 0:
             print(self.steve)
             print(f"{creature.info['name']} has {self.creature.get_health()} HP")
-            damage = self.steve....
+            # damage = self.steve....
             self.creature.hitpoints -= damage
             print(f'You attacked {creature.info['name']}')
             self.steve.health -= creature.get_attack()
