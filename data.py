@@ -433,7 +433,7 @@ class Room:
         if self.steve_ishere():
             raise RuntimeError(f"Steve is already in room {self.coords}, yet steve_enters() is called.\nPossible desync between Labyrinth object's steve_pos attribute and this room object's type attribute values.")
         self.type["steve?"] = True
-        if not self.cleared:
+        if not self.cleared and not self.type["boss?"]:
             if random.randint(1, 100) <= 50: # 50% chance a creature spawn
                 self.creature = random_creature()
                 if random.randint(1, 100) <= 60: # if creature spawns, 60% chance an item spawns
@@ -472,6 +472,10 @@ class Room:
             self.mywest = neighbour
         else:
             raise ValueError("Direction passed is not of the right value")
+    
+    def set_creature_None(self) -> None:
+        """When the creature is killed"""
+        self.creature = None
     
     def set_connected_True(self) -> None:
         self.connected = True
@@ -738,6 +742,8 @@ class Steve:
         self.weapon = weapon
         
     def get_attack(self):
+        if self.weapon is None:
+            return self.base_damage
         return self.base_damage + self.weapon.get_attack()
 
     def isdead(self) -> bool:
