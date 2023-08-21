@@ -589,9 +589,10 @@ class Food(Item):
         return self.hprestore
 
 class Armor(Item):
-    def __init__(self, name, item_type, defence):
+    def __init__(self, name, item_type, defence, armor_slot):
         super().__init__(name, item_type)
         self.defence = defence
+        self.armor_slot = armor_slot
         
     def __repr__(self):
         return super().__repr__() + f"\nProvides: {self.defence} defence"
@@ -633,7 +634,6 @@ class Steve:
         for slot in ["helmet", "chestplate", "leggings", "boots"]:
             self.armour[slot] = None
         self.health = DEFAULT_HITPOINTS
-        self.defense = 0
         self.weapon = None
         self.base_damage = 2 # default
 
@@ -661,41 +661,30 @@ class Steve:
         self.inventory.append({"item": new_item, "number": num})
         return None
 
-    def _discard_item(item: Item, num: int) -> None:
-        raise NotImplementedError
+    def _discard_item(self, item: Item, num: int) -> None:
+        for index, dict_ in enumerate(self._inventory): # Linear search through inventory
+            if str(item) == str(dict_["item"]): # new_item is already in the inventory
+                self._inventory[index]["number"] -= num
+                if self._inventory[index]["number"] <=0:
+                    self._inventory[index] = None
+                return None
+        print("Error: Item is not in inventory.")
+        return None
 
-    def _equip_armour(self, armouritem: Item) -> None:
-        raise NotImplementedError
-
+    def equip_armour(self, armouritem: Item) -> None:
+        self.armour[armouritem.armor_slot] = armouritem
+        return None
+        
     def eat(self, fooditem: "Item") -> None:
         #validation
         foodindex = self.find_item(fooditem)
         if foodindex == -1:
             raise RuntimeError(f"{fooditem} cannot be consumed as Steve's inventory does not have it.")
-        if not fooditem.info["item type"] == FOODITEM:
+        if not fooditem.item_type == "Food":
             raise ValueError(f"{fooditem} cannot be consumed as it is not food.")
         # consumption
         self.remove_item_from_inv(foodindex)
-        if str(fooditem) == "Rotten Flesh":
-            if self.health < 10:
-                i = 0
-            elif self.health < 15:
-                i = 1
-            else:
-                i = 2
-            mylist = [-1, -1, -1, 0, 0, 1, 1, 1][i: i + 6]
-            random.shuffle(mylist)
-            self.change_health(mylist[0])
-        elif str(fooditem) == "Apple":
-            self.change_health(2)
-        elif str(fooditem) == "Bread":
-            self.change_health(3)
-        elif str(fooditem) == "Steak":
-            self.change_health(5)
-        elif str(fooditem) == "Enchanted Golden Apple":
-            self.change_health(12)
-                
-            
+        self.heal_health(fooditem.hprestore)
 
     def find_item(self, item: "Item") -> int:
         """Linear search through inventory to find the index of the item"""
@@ -714,9 +703,7 @@ class Steve:
         self.inventory[index]["number"] -= 1
         return None
         
-        
-            
-    def change_health(self, change: int) -> None:
+    def heal_health(self, change: int) -> None:
         if change == 0:
             return None
         prevhp = self.health
@@ -728,30 +715,22 @@ class Steve:
         print(f"You got hurt by {prevhp - self.health} HP and have {self.health} left.")
         return None
 
+    def get_defence(self):
+        defence = 0
+        for armor in self.armour.values():
+            defence += armor.get_defence()
+        return defence
+
+    def equip_weapon(self, weapon):
+        self.weapon = weapon
+        
+    def get_attack(self):
+        return self.base_damage + self.weapon.get_attack()
+
     def isdead(self) -> bool:
         if self.health <= 0:
             return True
         return False
-                
-
-"""
-class Creature:
-    def __init__(self, name: str, hitpoints: int, moves: list[str]) -> None:
-        self.name = name
-        self.hp = hitpoints
-        # Do some validation of moves
-        self.moves = moves
-
-    @classmethod
-    def from_dict(cls, info: dict) -> "Creature":
-        return Creature(
-            info["name],
-            info["max_hitpoints"],
-            info["moves"]
-        )
-
-creature = Creature.from_dict(info)
-"""
 
 class Creature:
     """
@@ -809,7 +788,7 @@ def random_item() -> "Item":
     item_type = random.choice(item_type_list)
     if item_type == "Armor":
         item_data = random.choice(armor_list)
-        return Armor(item_data["name"], item_type, item_data["defence"])
+        return Armor(item_data["name"], item_type, item_data["defence"], item_data["slot"])
     elif item_type == "Food":
         item_data = random.choice(food_list)
         return Food(item_data["name"], item_type, item_data["hprestore"])
