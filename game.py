@@ -125,13 +125,19 @@ class MUDGame:
                 while len(player_list) != 0 and len(enemy_list) != 0:
                     if player_list[i] != None:
                         turn_order.append(player_list[i])
-                    else:
-                        player_list.pop(i)
                     turn_order.append(enemy_list[i])
+                    player_list.pop(i)
+                    enemy_list.pop(i)
                     i += 1
                 #Combat
+                player_list = [self.player1, self.player2, self.player3, self.player4]
+                enemy_list = self.current_room.grid.get_enemies()
                 k = 0
                 while not defeat(player_list) and not victory(enemy_list):
+                    if active_character.has_status('sleep'):
+                        active_character.display_is_asleep()
+                        k = k + 1
+                        continue
                     active_character = turn_order[k % (len(turn_order) - 1)]
                     active_character.display_turn()
                     if active_character in enemy_list:
@@ -192,4 +198,26 @@ class MUDGame:
                     self.current_room.grid.clear_tile()
                     break
             elif self.current_room.is_boss():
-                
+                boss = self.current_room.get_boss()
+                boss.encounter()
+                #Determine turn order
+                player_list = [
+                    self.player1, self.player2, self.player3, self.player4
+                ]
+                enemy_list = [boss]
+                turn_order = []
+                i = 0
+                while len(player_list) != 0 and len(enemy_list) != 0:
+                    if player_list[i] != None:
+                        turn_order.append(player_list[i])
+                    else:
+                        player_list.pop(i)
+                    turn_order.append(enemy_list[i])
+                    i += 1
+                while not defeat(player_list) and not victory(enemy_list):
+                    if active_character.has_status('sleep'):
+                        active_character.display_is_asleep()
+                        k = k + 1
+                        continue
+                    active_character = turn_order[k % (len(turn_order) - 1)]
+                    active_character.display_turn()
