@@ -58,6 +58,34 @@ class Room:
         """
         self.orb = orb
 
+def make_map(map : str) -> dict:
+    if map == 'ascent':
+        _roompaths = {
+    "T-side spawn": ["A lobby", "B lobby"],
+    "A lobby": ["T-side spawn", "A long", "Catwalk"],
+    "A long": ["A lobby", "A site"],
+    "A site": ["A long", "Garden", "CT-side spawn"],
+    "B site": ["CT-side spawn", "Market", "B main"],
+    "B main": ["B site", "B lobby"],
+    "B lobby": ["T-side spawn", "Tiles", "B main"],
+    "Tiles": ["B lobby", "Catwalk", "Garden", "Market"],
+    "Catwalk": ["A lobby", "Tiles", "Market", "Garden"],
+    "Garden": ["A site", "Market", "Catwalk", "Tiles"],
+    "Market": ["CT-side spawn", "B site", "Tiles", "Catwalk", "Garden"],
+    "CT-side spawn": ["A site", "Market", "B site"]
+             }
+    elif map == 'haven':
+        _roompaths = {}
+    elif map == 'breeze':
+        _roompaths = {}
+        pass
+    else:
+        return 'No such map.'
+        
+    rooms = {}
+    for room in _roompaths:
+        rooms[room] = Room(room, _roompaths[room], False, False)
+    return rooms
 
 class Character:
     """
@@ -107,27 +135,3 @@ class Player(Character):
             self.hp -= 30
         if buff:
             self.hp += 50
-
-
-# Randomly assign room name to every room
-#Create path network for map
-#Modify Character & its child classes later after discussion
-
-_roompaths = {
-    "T-side spawn": ["A lobby", "B lobby"],
-    "A lobby": ["T-side spawn", "A long", "Catwalk"],
-    "A long": ["A lobby", "A site"],
-    "A site": ["A long", "Garden", "CT-side spawn"],
-    "B site": ["CT-side spawn", "Market", "B main"],
-    "B main": ["B site", "B lobby"],
-    "B lobby": ["T-side spawn", "Tiles", "B main"],
-    "Tiles": ["B lobby", "Catwalk", "Garden", "Market"],
-    "Catwalk": ["A lobby", "Tiles", "Market", "Garden"],
-    "Garden": ["A site", "Market", "Catwalk", "Tiles"],
-    "Market": ["CT-side spawn", "B site", "Tiles", "Catwalk", "Garden"],
-    "CT-side spawn": ["A site", "Market", "B site"]
-}
-
-roomlist = []
-for room in _roompaths:
-    roomlist.append(Room(room, _roompaths[room], False, False))
