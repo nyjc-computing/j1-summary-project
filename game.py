@@ -58,7 +58,7 @@ class Game:
     
             # ask for input if have monster
             if self.room.enemy.get_health() != 0 or None:
-                print(f'\nROAR!!! {self.room.enemy}, {self.room.enemy.description} is in the room')
+                #print(f'\nROAR!!! {self.room.enemy}, {self.room.enemy.description} is in the room')
                 # change available moves respectively
                 available_moves = ['attack']
                 decision = input('\nWhat do you wish to do? (attack): ')
@@ -115,7 +115,7 @@ class Game:
 
         if  not victim.is_dead(): 
             # print health of enemy
-            print(f'{attacker} has dealt {attacker.battle_points} damage to {victim.name}. {victim} still have {victim.get_health()} health')
+            print(f'\n{attacker} has dealt {attacker.battle_points} damage to {victim.name}. {victim} still have {victim.get_health()} health')
 
         else:
             # if victim is dead
@@ -131,7 +131,7 @@ class Game:
         while decision not in available:
             decision = input('What do you wish to do? (attack): ')
         if decision == 'attack':
-            self.attack(self.character, self.room.enemy)            
+            self.attack(self.character, self.room.enemy)
     
     def use_item(self):
         # change available items when needed
@@ -141,6 +141,7 @@ class Game:
                    decision = input('\nWhich of the following item do you wish to use? (weapon):')
         if decision == 'weapon':
             pass
+        print('\nWhich of the following item do you wish to use? :')
         for i, item in enumerate(self.character.item):
             print(f"[{i}]: {item}")
         choice = input("Choose an item: ")
