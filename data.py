@@ -58,6 +58,59 @@ class Room:
         """
         self.orb = orb
 
+def make_map(map : str) -> dict:
+    """
+    Function takes in the name of the map as input by
+    the user.
+    It then returns the dictionary of room objects for
+    the map if the map name is valid, else it returns -1
+    """
+    if map == 'ascent':
+        _roompaths = {
+    "T-side spawn": ["A lobby", "B lobby"],
+    "A lobby": ["T-side spawn", "A main", "Catwalk"],
+    "A main": ["A lobby", "A site"],
+    "A site": ["A main", "Garden", "CT-side spawn"],
+    "B site": ["CT-side spawn", "Market", "B main"],
+    "B main": ["B site", "B lobby"],
+    "B lobby": ["T-side spawn", "Tiles", "B main"],
+    "Tiles": ["B lobby", "Catwalk", "Garden", "Market"],
+    "Catwalk": ["A lobby", "Tiles", "Market", "Garden"],
+    "Garden": ["A site", "Market", "Catwalk", "Tiles"],
+    "Market": ["CT-side spawn", "B site", "Tiles", "Catwalk", "Garden"],
+    "CT-side spawn": ["A site", "Market", "B site"]
+                     }
+    elif map == 'haven':
+        _roompaths = {
+    "T-side spawn" : ["A garden", "Grass", "C lobby"],
+    "A garden" : ["T-side Spawn", "Mid window", "A lobby"],
+    "A lobby" : ["A garden", "A short", "A long"],
+    "A long" : ["A lobby", "A site"],
+    "A short" : ["A lobby", "A site"],
+    "A site" : ["A long", "A short", "A link"],
+    "A link" : ["A site", "Heaven", "B site", "CT-side spawn"],
+    "Heaven" : ["A link", "A site"],
+    "B site" : ["A link", "Mid", "C link"],
+    "C link" : ["B site", "C window", "C site", "CT-side spawn"],
+    "C site" : ["C link", "C long", "Garage"],
+    "C long" : ["C site", "C lobby"],
+    "Mid" : ["Mid window", "B site", "Grass"],
+    "Grass" : ["T-side spawn", "Mid", "Garage"],
+    "Garage" : ["C site", "Garage window", "Grass"],
+    "Garage window" : ["Garage", "C link"],
+    "C lobby" : ["T-side spawn", "C long"],
+    "CT-side spawn" : ["A link", "C link"]
+                     }
+    elif map == 'breeze':
+        _roompaths = {}
+        pass
+    else:
+        return -1
+        
+    rooms = {}
+    for room in _roompaths:
+        rooms[room] = Room(room, _roompaths[room], False, False)
+    return rooms
 
 class Character:
     """
@@ -107,27 +160,3 @@ class Player(Character):
             self.hp -= 30
         if buff:
             self.hp += 50
-
-
-# Randomly assign room name to every room
-#Create path network for map
-#Modify Character & its child classes later after discussion
-
-_roompaths = {
-    "T-side spawn": ["A lobby", "B lobby"],
-    "A lobby": ["T-side spawn", "A long", "Catwalk"],
-    "A long": ["A lobby", "A site"],
-    "A site": ["A long", "Garden", "CT-side spawn"],
-    "B site": ["CT-side spawn", "Market", "B main"],
-    "B main": ["B site", "B lobby"],
-    "B lobby": ["T-side spawn", "Tiles", "B main"],
-    "Tiles": ["B lobby", "Catwalk", "Garden", "Market"],
-    "Catwalk": ["A lobby", "Tiles", "Market", "Garden"],
-    "Garden": ["A site", "Market", "Catwalk", "Tiles"],
-    "Market": ["CT-side spawn", "B site", "Tiles", "Catwalk", "Garden"],
-    "CT-side spawn": ["A site", "Market", "B site"]
-}
-
-roomlist = []
-for room in _roompaths:
-    roomlist.append(Room(room, _roompaths[room], False, False))
