@@ -12,54 +12,55 @@ class Room:
         self.right = right
         self.left = left
         self.count = number
-
-        if self.count <= 10:
-            connections = random.randint(1, 3)
-            next_rooms = [self.up, self.down, self.left, self.right]
-            ref_next_rooms = ['self.up', 'self.down', 'self.left', 'self.right']
-            for i in range(len(next_rooms)):
-                if next_rooms[i] != None:
-                    next_rooms.pop(i)
-                    ref_next_rooms.pop(i)
+        connections = random.randint(1, 3)
+        next_rooms = [self.up, self.down, self.left, self.right]
+        ref_next_rooms = ['self.up', 'self.down', 'self.left', 'self.right']
+        for i in range(len(next_rooms)):
+            if next_rooms[i] != None:
+                next_rooms.pop(i)
+                ref_next_rooms.pop(i)
+        if self.type == 'start':
+            self.up = Room(down = self, number = self.countRoom())
+        elif self.count < 9:
             while connections != 0:
                 next_room = random.randint(0, len(next_rooms) - 1)
                 if ref_next_rooms[next_room] == 'self.up':
-                    if self.count == 9:
-                        self.up = Room(boss = Springtrap(), type = 'boss', number=self.countRoom)
                     self.up = Room(down = self, number=self.countRoom())
                     next_rooms.pop(next_room)
                     ref_next_rooms.pop(next_room)
                 elif ref_next_rooms[next_room] == 'self.down':
-                    if self.count == 9:
-                        self.down = Room(boss = Springtrap(), type = 'boss', number=self.countRoom)
                     self.down = Room(up = self, number=self.countRoom())
                     next_rooms.pop(next_room)
                     ref_next_rooms.pop(next_room)
                 elif ref_next_rooms[next_room] == 'self.left':
-                    if self.count == 9:
-                        self.left = Room(boss = Springtrap(), type = 'boss', number=self.countRoom)
                     self.left = Room(right = self, number=self.countRoom())
                     next_rooms.pop(next_room)
                     ref_next_rooms.pop(next_room)
                 elif ref_next_rooms[next_room] == 'self.right':
-                    if self.count == 9:
-                        self.right = Room(boss = Springtrap(), type = 'boss', number=self.countRoom)
                     self.right = Room(left = self, number=self.countRoom())
                     next_rooms.pop(next_room)
                     ref_next_rooms.pop(next_room)
-                connections = connections - 1
-        connections = random.randint(1, 3)
-        next_rooms = [self.up, self.down, self.left, self.right]
-        for room in next_rooms:
-            if room != None:
-                next_rooms.remove(room)
-        while connections != 0:
+                self.count = self.countRoom()
+        elif self.count == 9:
             next_room = random.randint(0, len(next_rooms) - 1)
-            next_rooms[next_room] = 'closed'
-            next_rooms.pop(next_room)
-            connections = connections - 1
-         
-        self.grid = Grid(x, y)
+            if ref_next_rooms[next_room] == 'self.up':
+                self.up = Room(down = self, type = 'boss', boss = Springtrap(), number=self.countRoom())
+                next_rooms.pop(next_room)
+                ref_next_rooms.pop(next_room)
+            elif ref_next_rooms[next_room] == 'self.down':
+                self.down = Room(up = self, type = 'boss', boss = Springtrap(), number=self.countRoom())
+                next_rooms.pop(next_room)
+                ref_next_rooms.pop(next_room)
+            elif ref_next_rooms[next_room] == 'self.left':
+                self.left = Room(right = self, type = 'boss', boss = Springtrap(), number=self.countRoom())
+                next_rooms.pop(next_room)
+                ref_next_rooms.pop(next_room)
+            elif ref_next_rooms[next_room] == 'self.right':
+                self.right = Room(left = self, type = 'boss', boss = Springtrap(), number=self.countRoom())
+                next_rooms.pop(next_room)
+                ref_next_rooms.pop(next_room)
+                
+        self.grid = Grid(type = type, x = x, y = y)
         
     def display_room(self):
         pass
@@ -109,11 +110,17 @@ class Room:
     def countRoom(self):
         self.count += 1
         return self.count
-
+        
     def is_boss(self):
         if self.type == 'boss':
             return True
         return False
+
+    def get_boss(self):
+        '''
+        Return the boss.
+        '''
+        return self.boss
         
 def start_room():
     """Instantiates a spawn room"""
@@ -122,13 +129,14 @@ def start_room():
 
 class Grid:
     def __init__(self, type, x, y):
+        self.type = type
         self.grid = [{0 : None, 1 : None, 2 : None, 3 : None, 4 : None},
                     {0 : None, 1 : None, 2 : None, 3 : None, 4 : None},
                     {0 : None, 1 : None, 2 : None, 3 : None, 4 : None},
                     {0 : None, 1 : None, 2 : None, 3 : None, 4 : None},
                     {0 : None, 1 : None, 2 : None, 3 : None, 4 : None}]
         i = 0
-        if type != 'start':
+        if type == 'normal':
         #Spawning creatures
             while i < 5:
                 if self.grid[random.randint(0, 4)][random.randint(0, 4)] == None:
@@ -206,7 +214,7 @@ class Grid:
         After a defeating a creature or picking up an item, remove it from the grid
         '''
         self.grid[self.get_position()[0]][self.get_position()[1]] = None
-        
+
 
 
 #Start
