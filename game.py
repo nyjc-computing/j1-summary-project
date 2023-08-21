@@ -149,11 +149,16 @@ class Game:
             for i, item in enumerate(self.character.item):
                 print(f"[{i}]: {item}")
             choice = input("Choose an item: ")
-            while choice not in [str(x) for x in range(1, len(self.character.item)+1)]:
+            while choice not in range(len(self.character.item)):
                 print("Invalid Choice")
-                choice = input("Choose an weapon: ")
+                choice = input("Choose an weapon (the number of the weapon): ")
 
-            self.character.equip = choice
+            # remove battle points from weapon currently
+            if self.character.equip != None:
+                self.character.battle_points -= self.character.equip.attack
+            # add battle points from new weapon
+            self.character.equip = self.character.item[choice]
+            self.character.battle_points += self.character.item[choice].attack
 
         if decision == 'item':
             print('\nWhich of the following item do you wish to use? :')
