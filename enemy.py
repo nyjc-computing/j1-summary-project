@@ -18,7 +18,7 @@ class Enemy:
     
     """
 
-    def __init__(self, name: str, health: int) -> None:
+    def __init__(self, name: str, health: int, loot = None) -> None:
         self.name = name
         self.spell = None
         self.health = health
