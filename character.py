@@ -10,6 +10,7 @@ class Character:
     + battle_points: int
     + potion: list
     + equip: class
+    + item: list
 
     Method
     ------

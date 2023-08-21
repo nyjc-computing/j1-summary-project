@@ -41,7 +41,7 @@ class Potion:
     """
 
     def __init__(self, name: str, description: str, attack: int, heal: int) -> None:
-        self.type = 'potion'
+        self.type = 'Potion'
         self.name = name
         self.description = description
         self.attack = attack
