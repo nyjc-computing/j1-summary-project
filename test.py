@@ -14,4 +14,4 @@ def test_lbr_init():
 from game import MUDGame
 
 mg = MUDGame()
-mg
+mg.show_options('restart')
