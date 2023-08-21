@@ -2,6 +2,11 @@ import random
 import time
 
 #Rooms
+total_rooms = 0
+def increment_total_rooms():
+    global total_rooms
+    return total_rooms + 1
+    
 class Room:
     def __init__(self, boss = None, type = 'normal', x = 2, y = 2, up = None, down = None, left = None, right = None, layer = 0, number = 0):
         #next rooms
@@ -21,12 +26,13 @@ class Room:
                 next_rooms.pop(i)
                 ref_next_rooms.pop(i)
         if self.type == 'start':
-            self.up = Room(down = self, layer = self.countRoom())
-        elif self.count < 3:
+            self.up = Room(down = self)
+        elif total_rooms <= 5:
             while connections != 0:
                 next_room = random.randint(0, len(next_rooms) - 1)
                 if ref_next_rooms[next_room] == 'self.up':
-                    self.up = Room(down = self, layer=self.count_layer(), number = count_room())
+                    self.up = Room(down = self, layer=self.count_layer(), number = self.count_room())
+                    increment_total_rooms()
                     next_rooms.pop(next_room)
                     ref_next_rooms.pop(next_room)
                 elif ref_next_rooms[next_room] == 'self.down':
@@ -109,12 +115,10 @@ class Room:
         return self
 
     def count_layer(self):
-        self.layer += 1
-        return self.layer
+       return self.layer + 1
 
     def count_room(self):
-        self.number = self.number + self.layer + 1
-        return self.number
+        return self.number + 1
         
     def is_boss(self):
         if self.type == 'boss':
