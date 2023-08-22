@@ -79,7 +79,6 @@ class Room:
         pass
 
     def is_next_room(self, next : str) -> bool:
-        next = next.lower()
         if next == 'w':
             return self.up is not None
         elif next == 'a':
@@ -88,32 +87,22 @@ class Room:
             return self.down is not None
         elif next == 'd':
             return self.right is not None
-        raise ValueError(f'Please put in w, a, s or d. Got {next}.')
 
-    def next_room(self, next : str) -> None:
+    def next_room(self, next : str) -> 'Room':
         '''
         User moves to next room. Depending on the input, move to room above, below, left or right. Also, check if next room for given input exists.
         '''
-        if next.lower() == 'w':
-            if self.up == None:
-                print('It seems that this door is locked.')
-            else:
-                self = self.up
-        if next.lower() == 's':
-            if self.down == None:
-                print('It seems that this door is locked.')
-            else:
-                self = self.down
-        if next.lower() == 'a':
-            if self.left == None:
-                print('It seems that this door is locked.')
-            else:
-                self = self.left
-        if next.lower() == 'd':
-            if self.right == None:
-                print('It seems that this door is locked.')
-            else:
-                self = self.right
+        next = next.lower()
+        if not self.is_next_room(next):
+            print('It seems that this door is locked.')
+        elif next == 'w':
+            return self.up
+        elif next == 's':
+            return self.down
+        elif next == 'a':
+            return self.left
+        elif next == 'd':
+            return self.right
     def current_room(self) -> 'Room':
         '''
         Returns the current room
@@ -139,7 +128,7 @@ class Room:
         
 def start_room():
     """Instantiates a spawn room"""
-    current_room = Room()
+    current_room = Room(type = 'start')
     return current_room
 
 class Grid:
@@ -187,6 +176,9 @@ class Grid:
         '''
         print("Type 'wasd' to move, open the inventory by typing 'inventory'")
         action = input('Type an action:')
+        if action not in 'wasd' or action != 'inventory':
+            print(f"Type w, a, s or d or 'inventory'. Got {action}.")
+            return None
         return action
         
     def move(self, position : list):
