@@ -2,6 +2,7 @@
 
 import json
 import random
+import math
 
 NORTH = "NORTH"
 SOUTH = "SOUTH"
@@ -12,6 +13,7 @@ EAST = "EAST"
 # MASTER = "MASTER"
 STARTROOM = "STARTROOM"
 DIRLIST = [[0, 1], [0, -1], [1, 0], [-1, 0]] # according to N, S, E, W
+PI = 3.14159265359
 
 #STANLEY TEST
 
@@ -360,8 +362,88 @@ class Labyrinth:
     def _steve_useitem(self, item) -> None:
         raise NotImplementedError
 
-    def _monster_roar(self):
-        raise NotImplementedError
+    def give_sound_clue(self):
+        dx, dy = self.sb_xy_distance()
+        if dx == 0 and dy == 0: # They are in the same room, a clue doesn't need to be given LOL
+            return None
+        i = random.randint(0, 100)
+        if i <= 20:
+            i = random.randint(0, 2)
+            if i == 0:
+                print("The warmth of the torch comforts you.")
+            elif i == 1:
+                print("There was dead silence, so silent you hear your heart tremble.")
+            else:
+                print("A silent whine was heard in the distance. It might just be any creature out there.")
+            return None
+        r, dirstr = r_dir_calc(dx, dy)
+        if r < 3:
+            i = random.randint(0, 2)
+            if i == 0:
+                print("The torches suddenly blew out without wind, leaving you in darkness. A series of intense heartbeats echoed, sending chills down to your spine. The torhces were then relit slowly, perhaps magically.")
+            else:
+                print("A blood-curdling roar seemed to shake the entire room with it. You flinched with no control over your body.")
+            print("You must be close to the king warden.")
+        elif r < 6:
+            i = random.randint(1, 100)
+            if i == 1:
+                print("You hear a rawr.")
+                print("Easter egg achieved!")
+            else:
+                print("A hair-raising, wrathful whine from afar stuns you, shattering the stillness of cold air.")
+        elif r < 10:
+            print("Distant but colossal footsteps were heard.")
+        else:
+            print("Hardly audible footsteps were heard.")   
+        print(f"The sound seemed to come from {dirstr}.")
+
+    def r_dir_calc(self, dx, dy) -> tuple[float, str]:
+        dx, dy = self.sb_xy_distance()
+        if dx == 0 and dy == 0:
+            return None
+        r = math.sqrt((dx ** 2) + (dy ** 2)) # Pythagorean theorem
+        basic = abs(math.atan(dy/dx))
+        if dy > 0:
+            if dx > 0:
+                theta = basic # 1st quadrant
+            elif dx < 0:
+                theta = PI - basic # 2nd quadrant
+            else:
+                theta = PI / 2 # up
+        elif dy < 0:
+            if dx < 0:
+                theta = PI + basic # 3rd quadrant
+            elif dx > 0:
+                theta = 2 * PI - basic # 4th quadrant
+            else:
+                theta = 3 * PI / 2 # down
+        elif dy == 0:
+            if dx > 0:
+                theta = 0 # right
+            if dx < 0:
+                theta = PI # left
+        dirstr = None
+        dirstrlist = ["EAST", "NORTHEAST", "NORTH", "NORTHWEST", "WEST", "SOUTHWEST", "SOUTH", "SOUTHEAST"]
+        if theta <= PI / 8 or theta > 15 * PI / 8:
+            dirstr = dirstrlist[0]
+        lowerbound = PI / 8
+        upperbound = lowerbound + PI / 4
+        i = 1
+        while i <= 7 and dirstr is not None:
+            if i > lowerbound and i <= upperbound:
+                dirstr = dirstrlist[i]
+            i += 1
+            lowerbound += PI / 4
+            upperbound += PI / 4
+        if dirstr is None:
+            raise MathError("Person who implemented r_dir_calc() has a skill issue")
+        return r, dirstr
+        
+        
+    def sb_xy_distance(self) -> list[int]:
+        xdiff = self.boss_pos[0] - self.steve_pos[0]
+        ydiff = self.boss_pos[1] - self.steve_pos[1]
+        return [xdiff, ydiff]
 
 SOMEROOM = "SOMEROOM"
 class Room:
