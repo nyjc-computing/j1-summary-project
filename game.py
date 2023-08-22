@@ -147,6 +147,9 @@ class MUDGame:
                     elif active_character in player_list:
                         target = None
                         action = active_character.prompt_action()
+                        if active_character.has_status('corrupted'):
+                            target = random.choice(turn_order)
+                            action = 'attack'
                         if action == 'attack':
                             if target == None:
                                 print('Choose an enemy to target.')
@@ -159,19 +162,14 @@ class MUDGame:
                         elif action.lower() == 'stats':
                             active_character.get_stats()
                             continue
-                        elif action.lower() == 'light':
-                            valid = False
-                            while not valid:
-                                input = active_character.prompt_light()
-                                if input in ['back', 'increase', 'decrease']:
-                                    valid = True
-                            if input == 'increase':
-                                active_character.increase_light(10)
-                            elif input.lower() == 'decrease':
-                                active_character.decrease_light(10)
-                            elif input.lower() == 'back':
-                                continue
                         elif action.lower() == 'item':
+                            active_character.display_inventory()
+                            if active_character.is_use_item(self):
+                                active_character.use_item()
+                            else:
+                                continue
+                        else:
+                            print('Select a valid action to take.')
                             continue
                     #Remove defeated characters
                     for character in turn_order:
