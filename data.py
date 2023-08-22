@@ -143,25 +143,18 @@ class Grid:
         if type == 'normal':
         #Spawning creatures
             while i < 5:
-                if self.grid[random.randint(0, 4)][random.randint(0, 4)] == None:
-                    self.grid[random.randint(0, 4)][random.randint(0, 4)] = {'type' : 'creature', 'creatures':[]}
+                if self.grid[random.randint(0, 4)][random.randint(0, 4)] == None:                    
+                    self.grid[random.randint(0, 4)][random.randint(0, 4)] = {'type' : 'creature', 'creatures':[GB(), GB()]}
                 i = i + 1
             k = 0
         #Spawning items
             while k < 5:
                 if self.grid[random.randint(0, 4)][random.randint(0, 4)] == None:
-                    self.grid[random.randint(0, 4)][random.randint(0, 4)] = {'type' : 'items', 'items':[]}
+                    random_item = random.choice(all_items)
+                    self.grid[random.randint(0, 4)][random.randint(0, 4)] = {'type' : 'item', 'item' : random_item}
+                    
+                    
                 k = k + 1
-            while i < 5:
-                if self.grid[random.randint(0, 4)][random.randint(0, 4)] == None:
-                    self.grid[random.randint(0, 4)][random.randint(0, 4)] = {'type' : 'creature', 'creatures':[]}
-                i = i + 1
-        k = 0
-        # Spawning items
-        while k < 5:
-            if self.grid[random.randint(0, 4)][random.randint(0, 4)] == None:
-                self.grid[random.randint(0, 4)][random.randint(0, 4)] = {'type' : 'items', 'items':[]}
-            k = k + 1
         self.coordinates = [x, y]
 
         
@@ -176,10 +169,7 @@ class Grid:
         '''
         print("Type 'wasd' to move, open the inventory by typing 'inventory'")
         action = input('Type an action:')
-        if action not in 'wasd' or action != 'inventory':
-            print(f"Type w, a, s or d or 'inventory'. Got {action}.")
-            return None
-        return action
+        return action.lower()
         
     def move(self, position : list):
         '''
@@ -211,12 +201,13 @@ class Grid:
         else:
             return False
             
-    def get_items(self, coordinates : list) -> str:
+    def get_item(self) -> str:
         '''
         If user is on an item tile, return the item on that tile
         '''
-        return self.grid[self.get_position()[0]][self.get_position()[1]]['items']
-    def remove(self):
+        return self.grid[self.get_position()[0]][self.get_position()[1]]['item']['name']
+        
+    def remove_item(self):
         '''
         After a defeating a creature or picking up an item, remove it from the grid
         '''
@@ -385,7 +376,7 @@ class GB:
                 return True
         return False
 
-    def get_stats(self, target):
+    def get_stats(self):
         print(f"{self.name}'s stats")
         print(f"HP: {self.health}" / 50)
         if self.status == []:
@@ -461,7 +452,7 @@ class Springtrap:
                 return True
         return False
 
-    def get_stats(self, target):
+    def get_stats(self):
         print(f"{self.name}'s stats")
         print(f"HP: {self.health} / 300")
         if self.status == []:
@@ -554,7 +545,7 @@ class Glitchtrap:
                 return True
         return False
 
-    def get_stats(self, target):
+    def get_stats(self):
         print(f"{self.name}'s stats")
         print(f"HP: {self.health} / 250")
         if self.status == []:
@@ -655,7 +646,7 @@ class Freddy:
                 consumable = item['consumable']
                 print(f'Item : {name}  /\t Description : {description}  /\t Effect : {effect}  /\t Consumable : {consumable}')
 
-    def add_items(self, item):
+    def add_item(self, item):
         global player_inventory
         global all_items
         for it in all_items:
@@ -713,19 +704,41 @@ class Freddy:
     def is_defeated(self):
         if self.health <= 0:
             print('You died!')
+            
+    def display_turn(self):
+        print(f"It is {self.name}'s turn.")
 
+    def prompt_action(self, target):
+        print('Select one of the following actions:')
+        print('1. Attack')
+        print('2. Target')
+        print('3. Stats')
+        print('4. Item')
+        dec = input('Please choose an action: ')
+        dec = dec.lower()
+        if dec in ['attack', 'target', 'stats', 'item']:
+            return dec
+        else:
+            return None
+    
     def target(self):
         print('To target enemies, input a number, with the leftmost enemy being 1.')
         target = input('Choose an enemy to target: ')
         return target
+        
+    def prompt_check(self):
+        print("Type 'enemy' to see enemy stats, 'party' to see party stats, 'back' to cancel this action.")
+        check = input("Choose to check enemy or party stats: ")
+        return check.lower()
         
     def prompt_attack(self):
         print(f"{self.name}'s Attacks:'")
         print('1. Mic Toss  90 acc  15 dmg')
         print('2. Sing  40 acc - dmg')
         print('3. The Bite  19 acc 87 dmg')
-        atk = input("Please select an ability to use: ")
-        return atk
+        print("Type 'back' to return cancel the attack. Use the numbers corresponding to each ability to attack.")
+        atk = input("Select an ability to use: ")
+        return atk.lower()
 
     def attack(self, target, atk):
         damage = 0
@@ -753,9 +766,7 @@ class Freddy:
                 target.take_damage(damage)
             else:
                 print('The attack missed!')
-        if atk < '1' or atk > '3':
-            print('Please select a valid ability.')
-            self.attack(target)
+
             
     def passive(self, damage, target):
         if target.has_status(damage):
@@ -782,7 +793,7 @@ class Freddy:
                 return True
         return False
 
-    def get_stats(self, target):
+    def get_stats(self):
         print(f"{self.name}'s stats")
         print(f"HP: {self.health}")
         if self.status == []:
@@ -794,21 +805,6 @@ class Freddy:
                 turns = st['count']
                 print(f'Status : {name} , Description : {description} , Turns Remaining : {turns}')
 
-    def display_turn(self):
-        print(f"It is {self.name}'s turn.")
-
-    def prompt_action(self, target):
-        print('Select one of the following actions:')
-        print('1. Attack')
-        print('2. Target')
-        print('3. Stats')
-        print('4. Item')
-        dec = input('Please choose an action: ')
-        dec = dec.lower()
-        if dec in ['attack', 'target', 'stats', 'item']:
-            return dec
-        else:
-            return None
 
 
 

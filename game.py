@@ -67,51 +67,54 @@ class MUDGame:
             if not self.current_room.grid.is_encounter():
                 #prompt movement
                 self.current_room.display_room()
-                input = self.current_room.grid.prompt_movement()
-                while input == None:
-                    input = self.current_room.grid.prompt_movement()
+                move = self.current_room.grid.prompt_movement()
+                while move not in ['w', 'a', 's', 'd', 'inventory']:
+                    print(f"Type w, a, s or d or 'inventory'. Got {move}.")
+                    move = self.current_room.grid.prompt_movement()
                 #Opening inventory
-                if input.lower() == 'inventory':
+                if move == 'inventory':
                     data.display_inventory()
                     continue
                 #entering next room
-                if self.current_room.grid.get_position() == [0, 2] and input == 'w' and self.current_room.is_next_room(input):
-                    self.current_room.next_room(input)
+                if self.current_room.grid.get_position() == [0, 2] and move == 'w' and self.current_room.is_next_room(move):
+                    self.current_room.next_room(move)
                     self.current_room.grid.move([4, 2])
                     continue
-                elif self.current_room.grid.get_position() == [2, 0] and input == 'a' and self.current_room.is_next_room(input):
-                    self.current_room.next_room(input)
+                elif self.current_room.grid.get_position() == [2, 0] and move == 'a' and self.current_room.is_next_room(move):
+                    self.current_room.next_room(move)
                     self.current_room.grid.move([2, 4])
                     continue
-                elif self.current_room.grid.get_position() == [4, 2] and input == 's' and self.current_room.is_next_room(input):
-                    self.current_room.next_room(input)
+                elif self.current_room.grid.get_position() == [4, 2] and move == 's' and self.current_room.is_next_room(move):
+                    self.current_room.next_room(move)
                     self.current_room.grid.move([0, 2])
                     continue
-                elif self.current_room.grid.get_position() == [2, 4] and input == 'd'  and self.current_room.is_next_room(input):
-                    self.current_room.nextRoom(input)
+                elif self.current_room.grid.get_position() == [2, 4] and move == 'd'  and self.current_room.is_next_room(move):
+                    self.current_room.nextRoom(move)
                     self.current_room.grid.move([2, 0])
                     continue
                 #moving in current room
-                if input.lower() == 'w' and self.current_room.grid.get_position()[0] != 0:
+                if move == 'w' and self.current_room.grid.get_position()[0] != 0:
                     current_position = self.current_room.grid.get_position()
                     current_position[1] = current_position[1] + 1
                     self.current_room.grid.move(current_position)
-                elif input.lower() == 's' and self.current_room.grid.get_position()[0] != 4:
+                elif move == 's' and self.current_room.grid.get_position()[0] != 4:
                     current_position = self.current_room.grid.get_position()
                     current_position[1] = current_position[1] - 1
                     self.current_room.grid.move(current_position)
-                elif input.lower() == 'a' and self.current_room.grid.get_position()[1] != 0:
+                elif move == 'a' and self.current_room.grid.get_position()[1] != 0:
                     current_position = self.current_room.grid.get_position()
                     current_position[0] = current_position[0] - 1
                     self.current_room.grid.move(current_position)
-                elif input.lower() == 'd' and self.current_room.grid.get_position()[1] != 4:
+                elif move == 'd' and self.current_room.grid.get_position()[1] != 4:
                     current_position = self.current_room.grid.get_position()
                     current_position[0] = current_position[0] + 1
                     self.current_room.grid.move(current_position)
                 #Picking up items
                 if self.current_room.grid.is_item():
-                    items = self.current_room.grid.get_items()
-                    data.add_item(items)
+                    item = self.current_room.grid.get_item()
+                    print(f'You obtained {item}.')
+                    self.player1.add_item(item)
+                    self.current_room.grid.remove_item()
             #Combat Start
             elif self.current_room.grid.is_encounter():
                 #Determine turn order
@@ -155,19 +158,33 @@ class MUDGame:
                                 print('Choose an enemy to target.')
                                 continue
                             skill = active_character.prompt_attack()
-                            active_character.attack(target, skill)
+                            while skill not in ['1', '2', '3', 'back']:
+                                print("Please select a valid action.")
+                                skill = active_character.prompt_attack()
+                            if skill == 'back':
+                                continue
+                            else:
+                                active_character.attack(target, skill)
                         elif action.lower() == 'target':
                             target = enemy_list[active_character.target() - 1]
                             continue
-                        elif action.lower() == 'stats':
-                            active_character.get_stats()
+                        elif action.lower() == 'check':
+                            check = active_character.prompt_check()
+                            while check not in ['back', 'enemy', 'party']:
+                                print('Please select a valid action.')
+                                check = active_character.prompt_check()
+                            if check == 'enemy':
+                                for enemy in enemy_list:
+                                    enemy.get_stats()
+                            elif check == 'party':
+                                for ally in player_list:
+                                    ally.get_stats()
                             continue
                         elif action.lower() == 'item':
                             active_character.display_inventory()
                             if active_character.is_use_item(self):
                                 active_character.use_item()
-                            else:
-                                continue
+                            continue
                         else:
                             print('Select a valid action to take.')
                             continue
