@@ -134,19 +134,16 @@ class MUDGame:
                 k = 0
                 while not defeat(player_list) and not victory(enemy_list):
                     active_character = turn_order[k % (len(turn_order) - 1)]
-                    if active_character.has_status('sleep'):
+                    if active_character.has_status('sleeping'):
                         active_character.display_is_asleep()
                         k = k + 1
                         continue
                     active_character.display_turn()
                     if active_character in enemy_list:
                         target = random.choice(player_list)
-                        skill = random.randint(1, 2)
-                        hit = accuracy_calc(player_list[0].get_light())
-                        if hit:
-                            active_character.attack(target, skill)
-                        else:
-                            active_character.display_miss()
+                        if active_character.has_status('corrupted'):
+                            target = random.choice(turn_order)
+                        active_character.attack(target)
                     elif active_character in player_list:
                         target = None
                         action = active_character.prompt_action()
@@ -155,11 +152,7 @@ class MUDGame:
                                 print('Choose an enemy to target.')
                                 continue
                             skill = active_character.prompt_attack()
-                            hit = accuracy_calc(active_character.get_light())
-                            if hit:
-                                active_character.attack(target, skill)
-                            else:
-                                active_character.display_miss()
+                            active_character.attack(target, skill)
                         elif action.lower() == 'target':
                             target = enemy_list[active_character.target() - 1]
                             continue
@@ -180,7 +173,7 @@ class MUDGame:
                                 continue
                         elif action.lower() == 'item':
                             continue
-                            #Remove defeated characters
+                    #Remove defeated characters
                     for character in turn_order:
                         if character.is_defeated():
                             turn_order.remove(character)
@@ -188,6 +181,8 @@ class MUDGame:
                             enemy_list.remove(character)
                         elif character in player_list:
                             player_list.remove(character)
+                    #Reduce count of status effects
+                    active_character.remove_status()
                     k = k + 1
                 if defeat(player_list):
                     self.gameOver = True

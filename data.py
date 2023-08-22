@@ -87,15 +87,15 @@ class Room:
             return self.down is not None
         elif next == 'd':
             return self.right is not None
+        else:
+            print('It seems that this door is locked.')
 
     def next_room(self, next : str) -> 'Room':
         '''
         User moves to next room. Depending on the input, move to room above, below, left or right. Also, check if next room for given input exists.
         '''
         next = next.lower()
-        if not self.is_next_room(next):
-            print('It seems that this door is locked.')
-        elif next == 'w':
+        if next == 'w':
             return self.up
         elif next == 's':
             return self.down
@@ -328,198 +328,244 @@ def choose_character():
 
 
 #accuracy
-def accuracy(hit_chance):
-    miss_chance = random.randint(1, 100)
-    if miss_chance > hit_chance:
-        return False
-    else:
+def accuracy(target, accuracy):
+    if target.has_status('phantom'):
+        accuracy -= 10
+    hit = [True] * accuracy + [False] * (100 - accuracy)
+    if hit:
         return True
+    else:
+        return False
+#Status
+statuses = [{'name' : 'sleep', 'description' : 'Target cannot take action based on the count. At the end of the target\'s turn, reduce the count by 1.', 'count' : None}, 
+            {'name' : 'corrupted', 'description' : 'Target attacks indiscriminately, At the end of the turn, reduce the count by 1.', 'count' : None},
+            {'name' : 'infiltrated', 'description' : 'Target takes 10% more damage when attacked by Glitch Type enemies.', 'count' : None},
+           {'name' : 'phantom', 'description' : 'Target has an increased chance to dodge all attacks.' , 'count' : None}]
 
+def infiltrated(damage):
+    return abs(damage * 110 / 100)
+    
 #Characters and Enemies
 class GB:
-    def __init__(self, name, status=None, counter=0, health=50, damage=0):
-        self.name = name
+    def __init__(self, status=None, health=50):
+        self.name = 'Glitch Bunny'
         self.health = health
-        self.counter = counter
         self.status = status if status is not None else []
-        self.damage = damage
 
     def take_damage(self, damage: int):
         self.health -= damage
-        # if self.health <= 0:
-        #     print(f"{self.name} has died!")
 
-    def add_status(self, status):
-        self.status.append(status)
-
-    def remove_status(self, status):
-        if status in self.status:
-            self.status.remove(status)
+    def is_defeated(self):
+        if self.health <= 0:
+            print(f"{self.name} has died!")
+            return True
+        return False
+        
+    def display_turn(self):
+        print(f"It is {self.name}'s turn.")
+        
+    def add_status(self, status, turns):
+        for st in statuses:
+            if st['name'] == status:
+                temp = st.copy()
+                temp['count'] = turns
+                self.status.append(temp)
+                
+    def remove_status(self):
+        for st in self.status:
+            st['counter'] -= 1
+            if st['counter'] == 0:
+                name = st['name']
+                print(f'{self.name} is no longer {name}!')
+                self.status.remove(st)
 
     def has_status(self, status):
-        return status in self.status
-
-    def turn_end(self):
-        self.counter -= 1
+        for st in self.status:
+            if st['name'] == status:
+                return True
+        return False
 
     def get_stats(self, target):
         print(f"{self.name}'s stats")
         print(f"HP: {self.health}")
-        #print(f"Light level: {self.light}")
         if self.status == []:
             print('Status: No statuses.')
         else:
-            for status in self.status:
-                print(f'Status: {status}')
+            for st in self.status:
+                name = st['name']
+                description = st['description']
+                turns = st['count']
+                print(f'Status : {name} \t, Description : {description} \t, Turns Remaining : {turns}')
 
     def attack(self, target):
-        if 'sleep' in self.status:
-            print(f'{self.name} is asleep!')
-            self.turn_end()
-        elif 'corrupt' in self.status:
-            print(f'{self.name} is corrupted and cannot move!')
-            self.turn_end()
-        elif 'infiltrated' in self.status:
-            infiltrated(self)
-        else:
-            print(f"{self.name} attacks {target.name}!")
-            n = random.randint(1, 100)
-            if n < 50:
-                if accuracy(80) == True:
-                    print(f"{self.name} used Bash!")
-                    self.damage += 10
-                    target.take_damage(self.damage)
-                    self.damage -= 10
-                else:
-                    print('The attack missed!')
+        print(f"{self.name} attacks {target.name}!")
+        n = random.randint(1, 100)
+        if n < 50:
+            if accuracy(50, target) == True:
+                print(f"{self.name} used Bash!")
+                damage = 10
+                if target.has_status('infiltrated'):
+                    damage = infiltrated(damage)
+                target.take_damage(damage)
+                print(f'{target.name} took {damage} damage.')
             else:
-                if accuracy(80) == True:
-                    print(f"{self.name} used Ram!")
-                    self.damage += 15
-                    target.take_damage(self.damage)
-                    self.damage -= 15
-                else:
-                    print('The attack missed!')
+                print('The attack missed!')
+        else:
+            if accuracy(50, target) == True:
+                print(f"{self.name} used Ram!")
+                damage = 15
+                if target.has_status('infiltrated'):
+                    damage = infiltrated(damage)
+                target.take_damage(damage)
+                print(f'{target.name} took {damage} damage.')
+            else:
+                print('The attack missed!')
         print('---------------------------------------------------------')
 
 
 class Springtrap:
-    def __init__(self, name, evasion=20, status=None, counter=0, health=300, damage=0):
-        self.name = name
+    def __init__(self, status=None, health=300):
+        self.name = 'Springtrap'
         self.health = health
-        self.evasion = evasion
-        self.counter = counter
         self.status = status if status is not None else []
-        self.damage = damage
 
     def take_damage(self, damage: int):
         self.health -= damage
-        #Glitchtrap.spawn()
 
-    def add_status(self, status):
-        self.status.append(status)
+    def is_defeated(self):
+        if self.health <= 0:
+            print(f"{self.name} has died!")
+            return True
+        return False        
 
-    def remove_status(self, status):
-        if status in self.status:
-            self.status.remove(status)
+    def display_turn(self):
+        print(f"It is {self.name}'s turn.")
+            
+    def add_status(self, status, turns):
+        for st in statuses:
+            if st['name'] == status:
+                temp = st.copy()
+                temp['count'] = turns
+                self.status.append(temp)
+                
+    def remove_status(self):
+        for st in self.status:
+            st['counter'] -= 1
+            if st['counter'] == 0:
+                name = st['name']
+                print(f'{self.name} is no longer {name}!')
+                self.status.remove(st)
 
     def has_status(self, status):
-        return status in self.status
-
-    def turn_end(self):
-        self.counter -= 1
+        for st in self.status:
+            if st['name'] == status:
+                return True
+        return False
 
     def get_stats(self, target):
         print(f"{self.name}'s stats")
         print(f"HP: {self.health}")
-        #print(f"Light level: {self.light}")
         if self.status == []:
             print('Status: No statuses.')
         else:
-            for status in self.status:
-                print(f'Status: {status}')
+            for st in self.status:
+                name = st['name']
+                description = st['description']
+                turns = st['count']
+                print(f'Status : {name} \t, Description : {description} \t, Turns Remaining : {turns}')
 
-    def encounter():
-        if Room.current_room() == '?':
-            print('You notice the pungent smell of decaying matter.')
-            time.sleep(2)
-            print('Then, you hear the clanking of metal wires and robotic movement.')
-            time.sleep(2)
-            print('Finally, you see him.')
-            time.sleep(2)
-            print('Springtrap.')
+    def encounter(self):
+        print('You notice the pungent smell of decaying matter.')
+        time.sleep(2)
+        print('Then, you hear the clanking of metal wires and robotic movement.')
+        time.sleep(2)
+        print('Finally, you see him.')
+        time.sleep(2)
+        print('Springtrap.')
         
     def attack(self, target):
-        if 'sleep' in self.status:
-            print(f'{self.name} is asleep!')
-            self.turn_end()
-        elif 'corrupt' in self.status:
-            print(f'{self.name} is corrupted and cannot move!')
-            self.turn_end()
-        elif 'infiltrated' in self.status:
-            infiltrated(self)
-        else:
-            print(f"{self.name} attacks {target.name}!")
-            n = random.randint(1, 3)
-            if n == '1':
-                print(f'{self.name} used Phantom Mirage!')
-                #reduce target's accuracy
-            if n == '2':
-                if accuracy(40) == True:
-                    print(f'{self.name} used Decaying Grasp!')
-                    self.damage += 30
-                    target.take_damage(self.damage)
-                    self.damage -= 30
-                    #reduce target's attack
-                else:
-                    print('The attack missed!')
-            if n == '3':
-                if accuracy(15) == True:
-                    print(f'{self.name} used Eternal Torment!')
-                    self.damage += 85
-                    target.take_damage(self.damage)
-                    self.damage -= 85
-                else:
-                    print('The attack missed!')
+        print(f"{self.name} attacks {target.name}!")
+        n = random.randint(1, 3)
+        if n == '1':
+            print(f'{self.name} used Phantom Mirage!')
+            self.add_status('phantom', 1)
+            damage = 7
+            if target.has_status('infiltrated'):
+                damage = infiltrated(damage)            
+            target.take_damage(damage)
+            print(f'{target.name} took {damage} damage.')
+        if n == '2':
+            if accuracy(40, target) == True:
+                print(f'{self.name} used Decaying Grasp!')
+                damage = 30
+                if target.has_status('infiltrated'):
+                    damage = infiltrated(damage)
+                target.take_damage(damage)
+                print(f'{target.name} took {damage} damage.')
+            else:
+                print('The attack missed!')
+        if n == '3':
+            if accuracy(15, target) == True:
+                print(f'{self.name} used Eternal Torment!')
+                damage = 60
+                if target.has_status('infiltrated'):
+                    damage = infiltrated(damage)
+                target.take_damage(damage)
+                print(f'{target.name} took {damage} damage.')
+            else:
+                print('The attack missed!')
         print('---------------------------------------------------------')
 
 
 
 class Glitchtrap:
-    def __init__(self, name, status=None, counter=0, health=250, damage=0):
-            self.name = name
+    def __init__(self, status=None, health=250):
+            self.name = 'Glitchtrap'
             self.health = health
-            self.counter = counter
             self.status = status if status is not None else []
-            self.damage = damage
     
     def take_damage(self, damage: int):
-            self.health -= damage
-            if self.health <= 0:
-                print(f"{self.name} has died!")
-    
-    def add_status(self, status):
-            self.status.append(status)
-    
-    def remove_status(self, status):
-            if status in self.status:
-                self.status.remove(status)
-    
+        self.health -= damage
+
+    def is_defeated(self):
+        if self.health <= 0:
+            print(f"{self.name} has died!")
+
+    def display_turn(self):
+        print(f"It is {self.name}'s turn.")
+        
+    def add_status(self, status, turns):
+        for st in statuses:
+            if st['name'] == status:
+                temp = st.copy()
+                temp['count'] = turns
+                self.status.append(temp)
+                
+    def remove_status(self):
+        for st in self.status:
+            st['counter'] -= 1
+            if st['counter'] == 0:
+                name = st['name']
+                print(f'{self.name} is no longer {name}!')
+                self.status.remove(st)
+
     def has_status(self, status):
-            return status in self.status
-    
-    def turn_end(self):
-            self.counter -= 1
-    
+        for st in self.status:
+            if st['name'] == status:
+                return True
+        return False
+
     def get_stats(self, target):
         print(f"{self.name}'s stats")
         print(f"HP: {self.health}")
-        #print(f"Light level: {self.light}")
         if self.status == []:
             print('Status: No statuses.')
         else:
-            for status in self.status:
-                print(f'Status: {status}')
+            for st in self.status:
+                name = st['name']
+                description = st['description']
+                turns = st['count']
+                print(f'Status : {name} , Description : {description} , Turns Remaining : {turns}')
 
     def spawn():
         if Springtrap.health <= 0:
@@ -540,69 +586,67 @@ class Glitchtrap:
             print('Glitchtrap: This is only the beginning.')
     
     def attack(self, target):
-        if 'sleep' in self.status:
-            print(f'{self.name} is asleep!')
-            self.turn_end()
-        elif 'corrupt' in self.status:
-            print(f'{self.name} is corrupted and cannot move!')
-            self.turn_end()
-        elif 'infiltrated' in self.status:
-            infiltrated(self)
-        else:
-            print(f"{self.name} attacks {target.name}!")
-            n = random.randint(1, 100)
-            if n > 30 and n < 60: #28% chance to use this attack
-                print(f'{self.name} used Corrupt!')
-                if accuracy(50) == True:   
-                    self.damage += 20
-                    target.take_damage(self.damage)
-                    print(f"{target.name} took {self.damage} damage!")
-                    self.damage -= 20
-                    corrupt(target)
-                else:
-                    print('The attack missed!')
-            if n > 15 and n < 31: #17% chance to use this attack
-                print(f'{self.name} used Digital Infiltration!')
-                if accuracy(30) == True:
-                    target.add_status('infiltrated')
-                    print(f"{self.name} infiltrated {target.name}'s system!")
-                else:
-                    print('The attack missed!')
-            if n >= 2 and n < 16: #14% chance to use this attack
-                print(f'{self.name} used System Overload!')
-                if accuracy(40) == True:
-                    self.damage += 40
-                    target.take_damage(self.damage) #somehow make it hit all players
-                    print(f"{target.name} took {self.damage} damage!")
-                    self.damage -= 40
-                else:
-                    print('The attack missed!')
-            if n >= 60: #40% chance to use this attack
-                print(f'{self.name} used Pixel Blast!')
-                if accuracy(70) == True:
-                    self.damage += 15
-                    target.take_damage(self.damage)
-                    print(f"{target.name} took {self.damage} damage!")
-                    self.damage -= 15
-                else:
-                    print('The attack missed!')
-            if n == 1:  #1% chance to use this attack
-                print(f'{self.name} hit the Griddy!') 
-                print('You were fascinated and stared in awe.')
+        print(f"{self.name} attacks {target.name}!")
+        n = random.randint(1, 100)
+        if n > 30 and n < 60: #28% chance to use this attack
+            print(f'{self.name} used Corrupt!')
+            if accuracy(50) == True:   
+                self.damage = 20
+                target.take_damage(self.damage)
+                print(f"{target.name} took {self.damage} damage!")
+                print(f"{target.name} is corrupted!")
+                self.damage -= 20
+            else:
+                print('The attack missed!')
+        if n > 15 and n < 31: #17% chance to use this attack
+            print(f'{self.name} used Digital Infiltration!')
+            if accuracy(30) == True:
+                target.add_status('infiltrated')
+                print(f"{self.name} infiltrated {target.name}'s system!")
+            else:
+                print('The attack missed!')
+        if n >= 2 and n < 16: #14% chance to use this attack
+            print(f'{self.name} used System Overload!')
+            if accuracy(40) == True:
+                self.damage += 40
+                target.take_damage(self.damage) #somehow make it hit all players
+                print(f"{target.name} took {self.damage} damage!")
+                self.damage -= 40
+            else:
+                print('The attack missed!')
+        if n >= 60: #40% chance to use this attack
+            print(f'{self.name} used Pixel Blast!')
+            if accuracy(70) == True:
+                self.damage += 15
+                target.take_damage(self.damage)
+                print(f"{target.name} took {self.damage} damage!")
+                self.damage -= 15
+            else:
+                print('The attack missed!')
+        if n == 1:  #1% chance to use this attack
+            print(f'{self.name} hit the Griddy!') 
+            print('You were fascinated and stared in awe.')
 
 
 class Freddy:
-    def __init__(self, name, status=None, counter=0, attacking=0, health=100, inventory=None):
-        self.name = name
+    def __init__(self, status=None, attacking=0, health=100, inventory=None):
+        self.name = 'Freddy Fazbear'
         self.health = health
-        self.counter = counter
         self.status = status if status is not None else []
         self.attacking = attacking
         self.inventory = inventory if inventory is not None else []
-
+        
+    def inventory(self, item):
+        print(f"{self.name}'s Inventory:")
+        for item in self.inventory:
+            print(item)
+        
+    def add_items(self, item):
+        self.inventory.append(item)
+        
     def heal(self, amnt):
         self.health += amnt
-        print(f"Freddy healed {amnt} hp!")
+        print(f"{self.name} healed {amnt} hp!")
 
     def take_damage(self, damage_taken):
         self.health -= damage_taken
@@ -610,20 +654,6 @@ class Freddy:
         print(f'HP left:{self.health}')
         if self.health <= 0:
             print('You died!')
-
-    def inventory(self, item):
-        print(f"{self.name}'s Inventory:")
-        for item in self.inventory:
-            print(item)
-
-    def turn_end(self):
-        self.counter -= 1
-    
-    def add_status(self, status):
-        self.status.append(status)
-        
-    def add_items(self, item):
-        self.inventory.append(item)
 
     def prompt_attack(self):
         print(f"{self.name} is about to attack!")
@@ -634,47 +664,36 @@ class Freddy:
         return atk
 
     def attack(self, target, atk):
-        if 'sleep' in self.status:
-            print(f'{self.name} is asleep!')
-            self.turn_end()
-        elif 'corrupt' in self.status:
-            print(f'{self.name} is corrupted and cannot move!')
-            self.turn_end()
-        elif 'infiltrated' in self.status:
-            infiltrated(self)
-        else:
-            if atk == '1':
-                print('Freddy used Mic Toss!')
-                if accuracy(90) == True:
-                    self.passive(target)
-                    self.attacking += 15
-                    print(f"{target.name} took {self.attacking} damage!")
-                    target.take_damage(self.attacking)
-                    self.attacking -= 15
-                    self.depassive(target)
-                else:
-                    print('The attack missed!')
-            if atk == '2':
-                print('Freddy used Sing!')
-                if accuracy(40) == True:
-                    target.add_status('sleep')
-                    sleep(target)
-                else:
-                    print('The attack missed!')
-            if atk == '3':
-                print('Freddy used The Bite!')
-                if accuracy(19) == True:
-                    self.passive(target)
-                    self.attacking += 87
-                    print(f"{target.name} took {self.attacking} damage!")
-                    target.take_damage(self.attacking)
-                    self.attacking -= 87
-                    self.depassive(target)
-                else:
-                    print('The attack missed!')
-            if atk < '1' or atk > '3':
-                print('Please select a valid ability.')
-                self.attack(target)
+        if atk == '1':
+            print('Freddy used Mic Toss!')
+            if accuracy(90) == True:
+                self.attacking += 15
+                print(f"{target.name} took {self.attacking} damage!")
+                target.take_damage(self.attacking)
+                self.attacking -= 15
+                self.depassive(target)
+            else:
+                print('The attack missed!')
+        if atk == '2':
+            print('Freddy used Sing!')
+            if accuracy(40) == True:
+                target.add_status('sleeping')
+            else:
+                print('The attack missed!')
+        if atk == '3':
+            print('Freddy used The Bite!')
+            if accuracy(19) == True:
+                self.passive(target)
+                self.attacking += 87
+                print(f"{target.name} took {self.attacking} damage!")
+                target.take_damage(self.attacking)
+                self.attacking -= 87
+                self.depassive(target)
+            else:
+                print('The attack missed!')
+        if atk < '1' or atk > '3':
+            print('Please select a valid ability.')
+            self.attack(target)
             
     def passive(self, target):
         if 'sleep' in target.status:
@@ -683,28 +702,43 @@ class Freddy:
     def depassive(self, target):
         if 'sleep' in target.status:
             self.attacking -= 5
-    def inflict_status(self, status, count, potency=None):
-        pass
-    def remove_status(self, status):
-        if status in self.status:
-            self.status.remove(status)
+            
+    def add_status(self, status, turns):
+        for st in statuses:
+            if st['name'] == status:
+                temp = st.copy()
+                temp['count'] = turns
+                self.status.append(temp)
+                
+    def remove_status(self):
+        for st in self.status:
+            st['counter'] -= 1
+            if st['counter'] == 0:
+                name = st['name']
+                print(f'{self.name} is no longer {name}!')
+                self.status.remove(st)
 
     def has_status(self, status):
-        return status in self.status
+        for st in self.status:
+            if st['name'] == status:
+                return True
+        return False
+
+    def get_stats(self, target):
+        print(f"{self.name}'s stats")
+        print(f"HP: {self.health}")
+        if self.status == []:
+            print('Status: No statuses.')
+        else:
+            for st in self.status:
+                name = st['name']
+                description = st['description']
+                turns = st['count']
+                print(f'Status : {name} , Description : {description} , Turns Remaining : {turns}')
 
     def display_turn(self):
         print(f"It is {self.name}'s turn.")
 
-    def get_stats(self):
-        print(f"{self.name}'s stats")
-        print(f"HP: {self.health}")
-        #print(f"Light level: {self.light}")
-        if self.status == []:
-            print('Status: No statuses.')
-        else:
-            for status in self.status:
-                print(f'Status: {status}')
-            
     def prompt_action(self, target):
         print('1. Attack')
         print('2. Stats')
@@ -1109,40 +1143,3 @@ class Foxy:
         else:
             print('Please choose either increase, decrease or back.')
 
-#Status
-def sleep(target):
-    if target.has_status('sleep'):
-        if target.counter != 0:
-            print(f'{target} is already asleep!')
-        else:
-            target.remove_status('sleep')
-            print(f'{target.name} woke up!')
-    else:
-        target.counter += 3
-        print(f'{target} fell asleep!')
-
-
-def corrupt(target):
-    if target.has_status('corrupt'):
-        if target.counter != 0:
-            print(f'{target.name} is already corrupted!')
-        else:
-            target.remove_status('corrupt')
-            if target.health > 0:
-                print(f'{target.name} stabilised itself!')
-    else:
-        target.counter += 1
-        print(f'{target.name} has been corrupted!')
-        target.add_status('corrupt')
-
-
-def infiltrated(target):
-    if target.has_status('infiltrated'):
-        print(f'{target.name} was infiltrated by Glitchtrap, causing them to lose a turn!')
-        target.remove_status('infiltrated')
-    else:
-        pass
-
-statuses = [{'name' : 'sleep', 'func_name' : sleep, 'description' : 'Target cannot take action based on the count. At the end of the target\'s turn, reduce the count by 1.', 'count' : None}, 
-            {'name' : 'corrupted', 'func_name' : corrupt, 'description' : 'Target attacks indiscriminately, At the end of the turn, reduce the count by 1.', 'count' : None},
-            {'name' : 'infiltrated', 'func_name' : infiltrated, 'description' : 'Target takes 10% more damage when attacked by Glitch Type enemies. Cannot be removed unless a new target is inflicted with this debuff.', 'count' : None}]
