@@ -139,7 +139,7 @@ class Room:
         
 def start_room():
     """Instantiates a spawn room"""
-    current_room = Room()
+    current_room = Room(type = 'start')
     return current_room
 
 class Grid:
