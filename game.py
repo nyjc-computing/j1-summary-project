@@ -50,8 +50,6 @@ Remember, Clutch or Gae.
             print(f"\nYou have chosen {agents[int(out)-1]}.")
             confirm = input("Confirm? (y/n): ")
             print("=====================================================")
-        print("--GAME START--")
-        print("=====================================================")
         return agents[int(out)-1]
             
 
@@ -67,7 +65,15 @@ Remember, Clutch or Gae.
         while choice not in [str(x) for x in range(1, len(maps)+1)]:
             print("Invalid Input")
             choice = input("Enter a number to choose a map: ")
-        self.map = data.roomlist
+        if int(choice) == 1:
+            self.map = data.make_map("ascent")
+        elif int(choice) == 2:
+            self.map = data.make_map("haven")
+        elif int(choice) == 3:
+            self.map = data.make_map("breeze")
+        print("=====================================================")
+        print("--GAME START--")
+        print("=====================================================")
 
     def initialise(self, agent: str) -> None:
         """
@@ -79,21 +85,22 @@ Remember, Clutch or Gae.
         
         creatures = 5
         orbs = 8
-        spawn_areas = self.map[1:-1]
+        rooms = list(self.map.keys())
+        spawn_areas = rooms[1:-1]
         
         spawn_creatures = random.sample(spawn_areas, creatures)
         for room in spawn_creatures:
-            room.set_creature(True)
+            self.map[room].set_creature(True)
             
         spawn_orbs = random.sample(spawn_areas, orbs)
         for room in spawn_orbs:
-            room.set_orb(True)
+            self.map[room].set_orb(True)
             
         self.player = data.Player(100, agent)
         self.player_cooldown = 0
 
-        self.player_pos = self.map[0]
-        self.reyna_pos = self.map[-1]
+        self.player_pos = self.map[rooms[0]]
+        self.reyna_pos = self.map[rooms[-1]]
 
     def desc(self) -> None:
         """
@@ -125,21 +132,23 @@ Remember, Clutch or Gae.
         paths = self.player_pos.get_paths()
         for i in range(len(paths)):
             print(f"[{i+1}]: {paths[i]}")
-        choice = int(input("Choose a path to scan: "))
-        while choice-1 > len(paths):
+        print(f"[{len(paths)+1}]: Cancel action")
+        choice = input("Choose a path to scan: ")
+        while choice not in [str(x) for x in range(1, len(paths)+2)]:
             print("Invalid input")
             choice = input("Choose a path to scan: ")
-        room = paths[choice-1]
+        if int(choice) == len(paths) + 1:
+            print("=====================================================")
+            return None
+        room = paths[int(choice)-1]
         origpos = self.player_pos
-        for i in self.map:
-            if i.get_name() == room:
-                self.player_pos = i
+        self.player_pos = self.map[room]
         ustatus = self.player_pos.has_creature()
         ostatus = self.player_pos.has_orb()
         if ustatus == True and ostatus == True:
-            print(f"{room} has both an utility and an orb.")
+            print(f"{room} has both utility and an orb.")
         elif ustatus == True and ostatus == False:
-            print(f"{room} has an utility.")
+            print(f"{room} has utility.")
         elif ustatus == False and ostatus == True:
             print(f"{room} has an orb.")
         else:
@@ -167,10 +176,7 @@ Remember, Clutch or Gae.
         paths.remove(blocked)
         self.player_pos.set_paths(paths)
 
-        for room in self.map:
-            if room.get_name() == blocked:
-                temp = room
-                break
+        temp = self.map[blocked]
         paths = temp.get_paths()
         paths.remove(self.player_pos.get_name())
         temp.set_paths(paths)
@@ -190,27 +196,25 @@ Remember, Clutch or Gae.
         print("You are about to die. You used dash to escape.")
         print(f"You are now in {outcome}.")
         self.player_cooldown = 999
-        for room in self.map:
-                if room.get_name() == outcome:
-                    self.player_pos = room
-                    print("=====================================================")
+        self.player_pos = self.map[outcome]
+        print("=====================================================")
     
     def omen(self) -> None:
         """
         moves player to any room
         """
-        for i, room in enumerate(self.map):
-            print(f"[{i+1}]: {room.get_name()}")
-        print(f"[{len(self.map)+1}]: Cancel action")
+        rooms = list(self.map.keys())
+        for i, room in enumerate(rooms):
+            print(f"[{i+1}]: {room}")
+        print(f"[{len(rooms)+1}]: Cancel action")
         choice = input("Choose a number: ")
-        while choice not in [str(x) for x in range(1, len(self.map)+2)]:
+        while choice not in [str(x) for x in range(1, len(rooms)+2)]:
             print("Invalid input")
             choice = input("Choose a number: ")
-        if int(choice) == len(self.map)+1:
+        if int(choice) == len(rooms)+1:
             return None
         else:
-            choice = self.map[int(choice)-1]
-            self.player_pos = choice
+            self.player_pos = self.map[rooms[int(choice)-1]]
             self.player_cooldown = 5
             self.update()
 
@@ -239,7 +243,6 @@ Remember, Clutch or Gae.
         passing the turn
         returns 1 if the turn passes, 0 if it does not
         """
-        rooms = data.roomlist
         print("\nWhere do you want to go?")
         paths = self.player_pos.get_paths()
         for i, path in enumerate(paths):
@@ -254,13 +257,9 @@ Remember, Clutch or Gae.
             return 0
         else:
             loc = paths[int(loc)-1]
-            for room in self.map:
-                if room.get_name() == loc:
-                    self.player_pos = room
-                    print("=====================================================")
-                    return 1
-            else:
-                print("something has gone very wrong")
+            self.player_pos = self.map[loc]
+            print("=====================================================")
+            return 1
 
     def prompt(self) -> str:
         """
@@ -282,12 +281,7 @@ Remember, Clutch or Gae.
         """
         paths = self.reyna_pos.get_paths()
         move = random.choice(paths)
-        for room in self.map:
-            if room.get_name() == move:
-                self.reyna_pos = room
-                return 1
-        else:
-            print("something has gone very wrong")
+        self.reyna_pos = self.map[move]
 
     def update(self) -> None:
         """
