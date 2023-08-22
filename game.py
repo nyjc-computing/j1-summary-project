@@ -68,27 +68,26 @@ class MUDGame:
                 #prompt movement
                 self.current_room.display_room()
                 input = self.current_room.grid.prompt_movement()
-                while input.lower() not in 'wasd' or input.lower(
-                ) != 'inventory':
+                while input == None:
                     input = self.current_room.grid.prompt_movement()
                 #Opening inventory
                 if input.lower() == 'inventory':
                     data.display_inventory()
                     continue
                 #entering next room
-                if self.current_room.grid.get_position() == [0, 2] and input == 'w':
+                if self.current_room.grid.get_position() == [0, 2] and input == 'w' and self.current_room.is_next_room(input):
                     self.current_room.next_room(input)
                     self.current_room.grid.move([4, 2])
                     continue
-                elif self.current_room.grid.get_position() == [2, 0] and input == 'a':
+                elif self.current_room.grid.get_position() == [2, 0] and input == 'a' and self.current_room.is_next_room(input):
                     self.current_room.next_room(input)
                     self.current_room.grid.move([2, 4])
                     continue
-                elif self.current_room.grid.get_position() == [4, 2] and input == 's':
+                elif self.current_room.grid.get_position() == [4, 2] and input == 's' and self.current_room.is_next_room(input):
                     self.current_room.next_room(input)
                     self.current_room.grid.move([0, 2])
                     continue
-                elif self.current_room.grid.get_position() == [2, 4] and input == 'd':
+                elif self.current_room.grid.get_position() == [2, 4] and input == 'd'  and self.current_room.is_next_room(input):
                     self.current_room.nextRoom(input)
                     self.current_room.grid.move([2, 0])
                     continue
@@ -125,14 +124,20 @@ class MUDGame:
                 while len(player_list) != 0 and len(enemy_list) != 0:
                     if player_list[i] != None:
                         turn_order.append(player_list[i])
-                    else:
-                        player_list.pop(i)
                     turn_order.append(enemy_list[i])
+                    player_list.pop(i)
+                    enemy_list.pop(i)
                     i += 1
                 #Combat
+                player_list = [self.player1, self.player2, self.player3, self.player4]
+                enemy_list = self.current_room.grid.get_enemies()
                 k = 0
                 while not defeat(player_list) and not victory(enemy_list):
                     active_character = turn_order[k % (len(turn_order) - 1)]
+                    if active_character.has_status('sleep'):
+                        active_character.display_is_asleep()
+                        k = k + 1
+                        continue
                     active_character.display_turn()
                     if active_character in enemy_list:
                         target = random.choice(player_list)
@@ -146,14 +151,17 @@ class MUDGame:
                         target = None
                         action = active_character.prompt_action()
                         if action == 'attack':
+                            if target == None:
+                                print('Choose an enemy to target.')
+                                continue
                             skill = active_character.prompt_attack()
                             hit = accuracy_calc(active_character.get_light())
                             if hit:
-                                active_character.attack(enemy_list[target], skill)
+                                active_character.attack(target, skill)
                             else:
                                 active_character.display_miss()
                         elif action.lower() == 'target':
-                            target = active_character.target() - 1
+                            target = enemy_list[active_character.target() - 1]
                             continue
                         elif action.lower() == 'stats':
                             active_character.get_stats()
@@ -188,4 +196,27 @@ class MUDGame:
                     #Victory message
                     self.current_room.grid.clear_tile()
                     break
-            #Code boss fight here
+            elif self.current_room.is_boss():
+                boss = self.current_room.get_boss()
+                boss.encounter()
+                #Determine turn order
+                player_list = [
+                    self.player1, self.player2, self.player3, self.player4
+                ]
+                enemy_list = [boss]
+                turn_order = []
+                i = 0
+                while len(player_list) != 0 and len(enemy_list) != 0:
+                    if player_list[i] != None:
+                        turn_order.append(player_list[i])
+                    else:
+                        player_list.pop(i)
+                    turn_order.append(enemy_list[i])
+                    i += 1
+                while not defeat(player_list) and not victory(enemy_list):
+                    if active_character.has_status('sleep'):
+                        active_character.display_is_asleep()
+                        k = k + 1
+                        continue
+                    active_character = turn_order[k % (len(turn_order) - 1)]
+                    active_character.display_turn()
