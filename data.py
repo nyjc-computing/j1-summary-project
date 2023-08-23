@@ -238,7 +238,6 @@ def info(cr):
     if cr == 'freddy':
         print('HP: 100')
         print('Description: The lovable brown bear enters the dungeon, ready to face any and all challenges in his way. With his trusty microphone, Freddy faces fear head on as he ventures deeper into the spiraling depths of the abyss.')
-        print('Ability: Lullaby - Freddy sings a lullaby, causing all nearby monsters (except the boss) to fall asleep (for 3 turns) , allowing Freddy to walk past them without alerting them.')
         print('Passive: Freddy does increased damage against enemies that are asleep.')
         print('Attacks:')
         print('1. Mic Toss')
@@ -249,33 +248,27 @@ def info(cr):
     elif cr == 'bonnie':
         print('HP: 100')
         print('Description: Bonnie the bunny is here and he is ready to stir up a storm. He treads through the treacherous dungeon as he sends rumbles through each room, pathing a way for him to dive deeper into the dungeons.')
-        print('Ability: Reverb - Bonnie strums his guitar, sending shockwaves in a specific direction towards enemies, hitting each of them for 10 damage each and immediately enters combat with them. This ability stacks up to 2 times.')
-        print('Passive: If there are more enemies than Bonnie in the room, Bonnie increases his attacks by 5 damage.')
+        print('Passive: Bonnie increases his attacks by a random amount if enemies are resonating with him.')
         print('Attacks:')
         print('1. Rift')
-        print('2. Gatecrash')
+        print('2. Guitar crash')
         print("3. Rock 'n' Roll")
         print('--------------------------------------------------------')
         
     elif cr == 'chica':
         print('HP: 100')
         print('Description: Chica is afraid of the darkness, hence she brought her best friend along with her - cupcake. Cupcake reassures her constantly that everything will be fine and helps her get through the dungeons, yet honestly she just wants to go back to the pizzeria and feast on pizza. ')
-        print("Ability: Cupcake - Chica throws her cupcake, causing it to explode in a 3x3 area once the cupcake comes into contact with a solid object, dealing 30 damage to enemies within its area.")
-        print('Passive: Chica’s cupcake acts as a light source, however her fear gauge increases quicker when she is in the dark.')
+        print("Passive: Chica's cupcake heals her and when destroyed, explodes and deals damage to the opponent.")
         print('Attacks:')
-        print('1. Pizza Slice')
-        print('2. Decoy')
+        print('1. Pizza slice')
+        print('2. Cupcake decoy')
         print("3. Devour")
         print('--------------------------------------------------------')
         
     elif cr == 'foxy':
-        print('HP: 85')
+        print('HP: 100')
         print('Description: Foxy brandishes his hook, waiting for his next unsuspecting prey to walk past him as he lurks in the shadows. His unique eyes allow him to adapt to the darkness, but is also the reason why he is largely deterred from light sources. Though Foxy may be seen as arrogant and boastful by others, his band members know that he just wants to be able to be someone to somebody, in this case a better teammate for his friends.')
-        print('Ability: Scamper - Foxy dashes in a targeted direction, dealing 50 damage to any enemies in his way and takes 5 damage for each solid object hit.')
-        print('Passive:')
-        print('Foxy regenerates 5 hp each time he defeats an enemy.')
-        print('Foxy does not have a fear bar but light causes him to take 5 damage when he comes into contact with it.')
-        print('When Foxy’s health falls below 50%, the damage of his skills increases by 30%.')
+        print('Passive: When Foxy has below half of his health, his hunter instincts kick in and he increases his attack.')
         print('Attacks:')
         print('1. Yar-Har')
         print('2. Harvest Moon')
@@ -1173,17 +1166,19 @@ class Foxy:
 
     def attack(self, target, atk):
         damage = 0
-        damage += self.passive(target)
         damage += self.item_equipped['damage']
         if atk == '1':
             print(f'{self.name} used Yar-Har on {target.name}!')
             if accuracy(90, target) == True:
                 damage += 15
+                self.passive(self)
+                if self.has_status('Nightfall'):
+                    damage += 15
+                    self.heal(20)
+                    print(f"{self.name} leeched {target.name}'s health!")
                 print(f"{target.name} took {damage} damage!")
                 target.take_damage(damage)
-                if self.has_status('Nightfall'):
-                    print(f"{self.name} leeched {target.name}'s health!")
-                    self.heal(20)
+                
             else:
                 print('The attack missed!')
         if atk == '2':
@@ -1194,18 +1189,20 @@ class Foxy:
             print(f"{self.name} used Death Grip on {target.name}"!)
             if accuracy(25, target) == True:
                 damage += 125
+                self.passive(self)
+                if self.has_status('Nightfall'):
+                    damage += 15
+                    self.heal(20)    
+                    print(f"{self.name} leeched {target.name}'s health!")
                 print(f"{target.name} took {damage} damage!")
                 target.take_damage(damage)
-                if self.has_status('Nightfall'):
-                    print(f"{self.name} leeched {target.name}'s health!")
-                    self.heal(20)
             else:
                 print('The attack missed!')
 
             
     def passive(self):
-        if self.has_status('Nightfall'):
-            return 15
+        if self.health < 50:
+            damage = instinct(damage)
             
     def add_status(self, status, turns):
         for st in statuses:
