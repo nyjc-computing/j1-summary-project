@@ -1,5 +1,7 @@
-from enemy import Enemy
-from item import Weapon, Potion
+from enemy import *
+from weapon import *
+from armour import *
+from spell import *
 
 class Room:
     """
@@ -29,21 +31,17 @@ class Room:
     + get_been_here(): gets the status of wether the character has been to this room
     """
    
-    def __init__(self, name: str, enemy, description, loot = None):
-        self.name = name
-        self.enemy = enemy
-        self.description = description
+    def __init__(self):
+        self.name = ""
+        self.enemy = None
+        self.description = ""
         self.left = None
         self.right = None
-        self.up = None
-        self.down = None
+        self.forward = None
+        self.back = None
         self.been_here = False
         self.is_fighting = False
-        self.description = description
-        self.loot = loot
-
-    def __repr__(self):
-        print(f"Room({self.name})")
+        self.loot = None
 
     def set_been_here(self, status: bool) -> None:
         self.been_here = status
@@ -57,49 +55,211 @@ class Room:
     def get_is_fighting(self) -> bool:
         return self.is_fighting
     
-    def __str__(self):
-        return self.name
-
-    def link_left(self, name: str, enemy: str, description: str, loot = None):
-        temp = Room(name, enemy, description)
+    def link_left(self, room):
+        temp = room
         temp.right = self
         self.left = temp
 
-    def link_right(self, name: str, enemy: str, description: str, loot = None):
-        temp = Room(name, enemy, description)
+    def get_left(self):
+        return self.left
+
+    def link_right(self, room):
+        temp = room
         temp.left = self
         self.right = temp
 
-    def link_up(self, name: str, enemy: str, description: str, loot = None):
-        temp = Room(name, enemy, description)
-        temp.down = self
-        self.up = temp
+    def get_right(self):
+        return self.right
 
-    def link_down(self, name: str, enemy: str, description: str, loot = None):
-        temp = Room(name, enemy, description)
-        temp.up = self
-        self.down = temp
+    def link_forward(self, room):
+        temp = room
+        temp.back = self
+        self.forward = temp
 
-gryffindor_sword = Weapon("Gryffindor SSSword", "You have obtained the Sword Of Gryffindor, which can only be held by a TRUE gryffindor! This sword does X2 damage to Basilisk!", 250)
+    def get_forward(self):
+        return self.forward
 
-philosopher_stone = Weapon("Philosopher's SSStone", "You have obtained the Philosopher's Stone, which can only be held by a TRUE YOU! This stone does xtra 500 damage to Voldemort, meow!", 500)
+    def link_back(self, room):
+        temp = room
+        temp.forward = self
+        self.back = temp
 
-felix_felicis = Potion("Felix Felicis", "WOW, you have gotten a FELIX FELICIS potion! This potion gives you good luck! However, it is a single-use-item, make good use of it! It increase attack by 1000", 1000, 0)
+    def get_back(self):
+        return self.back
 
-elixir_of_life = Potion("Elixir Of Life", "NICE, you've got the elixir of life! Use it wisely as it is a single-use-item! It heals 500 hp", 0, 500)
+    def set_enemy(self, enemy):
+        self.enemy = enemy
 
-def setup():
-    """
-    Generates 3 rooms, named room1, room2, room3 and links them together
-    """
+    def get_enemy(self):
+        return self.enemy
 
-    
-    map = Room("Room1", Enemy('Dementors', 100), "Upon entering the room, and an icy shiver creeps up your spine. The air feels heavy and oppressive, as if it's suffocating under an invisible weight. The light that filters through the windows seems muted and lifeless, casting long, eerie shadows across the walls. In the center of the room, a figure stands, draped in tattered, dark robes that seem to drink in the feeble light.\n", gryffindor_sword)
-    
-    map.link_left("Room2", Enemy('Basilisk', 500), "As you cautiously step into the dimly lit chamber, an uneasy weight settles in the pit of your stomach. The air feels heavy with a sense of foreboding, and the faint echo of your footsteps reverberates through the cold stone walls. The room is vast and cavernous, its architecture ancient and mysterious.\nA flicker of movement catches your eye, and your heart skips a beat. Slowly, almost languidly, a massive form emerges from the shadows. The basilisk, a creature of legend and terror, slithers forth with an eerie grace. Its scales, a mesmerizing tapestry of dark and iridescent shades, seem to absorb what little light dares to penetrate the chamber.\n", elixir_of_life)
-    
-    map.link_right("Room3", Enemy('Death Eater', 1000), "As you cautiously push open the creaking door to the abandoned classroom, a sense of unease washes over you. The air is heavy with the weight of neglect, and the room is dimly illuminated by the pale moonlight that filters through the dusty windows. The remnants of forgotten lessons lay scattered across desks, a silent testament to the room's disuse.\nAs you step further into the room, a sudden movement catches your eye. Out of the shadows, a figure materializes with an eerie swiftness. The darkness seems to cling to them, cloaking them in an aura of menace. The figure's robes billow softly, a whispering echo of their sinister intent.\n", felix_felicis)
-    
-    map.link_up("Room4", Enemy('Voldemort', 5000), "Upon entering the Slytherin common room, a profound hush descends. The room is bathed in dim green light, casting an unsettling ambiance. At the heart of the chamber stands Voldemort, his presence commanding attention and trepidation. His features, pale and serpentine, are accentuated by the eerie glow.\nHis crimson gaze locks onto you, piercing and intense. The room seems to bend to his will, an extension of his dominance. The very air feels heavy, pregnant with the weight of his history and power. As he addresses you, his voice carries a chilling authority that leaves no room for dissent.\n")
-    
-    return map
+    def set_name(self, name):
+        self.name = name
+        
+    def get_name(self):
+        return self.name
+
+    def set_description(self, description):
+        self.description = description
+
+    def get_description(self):
+        return self.description
+        
+class Dirtmouth(Room):
+    def __init__(self):
+        super().__init__()
+        self.set_enemy(Radiance())
+        self.set_name("Dirtmouth")
+        self.set_description("You stepped into Dirtmouth, a haunting cliffside town in the depths of Hallownest, standing as a silent sentinel overlooking a dark and mysterious underground world. Its dilapidated buildings and eerie stillness set the tone for your perilous journey")
+        self.link_left(Midgar())
+        self.link_right(HyruleKingdom())
+        self.link_forward(TheEnd())
+
+class CelestialResort(Room):
+    def __init__(self):
+        super().__init__()
+        self.set_enemy(MrOshiro())
+        self.set_name("Celestial Resort")
+        self.set_description("")
+        self.link_back(Ascent())
+
+class TheForge(Room):
+    def __init__(self):
+        super().__init__()
+        self.set_enemy(HighDragun())
+        self.set_name("The Forge")
+        self.set_description("")
+        self.link_forward(Mementos())
+
+class StormveilCastle(Room):
+    def __init__(self):
+        super().__init__()
+        self.set_enemy(GodrickTheGrafted())
+        self.set_name("Stormveil Castle")
+        self.set_description("")
+        self.link_forward(Kamurocho())
+        self.link_right(TheHallow())
+
+class ApertureLab(Room):
+    def __init__(self):
+        super().__init__()
+        self.set_enemy(Glados())
+        self.set_name("Aperture Lab")
+        self.set_description("")
+        self.link_forward(StormveilCastle())
+        self.link_back(TowerOfFate())
+
+class Zebes(Room):
+    def __init__(self):
+        super().__init__()
+        self.set_enemy(Ridley())
+        self.set_name("Zebes")
+        self.set_description("")
+
+class Bunker(Room):
+    def __init__(self):
+        super().__init__()
+        self.set_enemy(Emil())
+        self.set_name("Bunker")
+        self.set_description("")
+
+class Asphodel(Room):
+    def __init__(self):
+        super().__init__()
+        self.set_enemy(BoneHyrda())
+        self.set_name("Asphodel")
+        self.set_description("")
+        self.link_back(Commencement())
+        self.link_forward(GreenhillZone())
+
+class KingdomOfKu(Room):
+    def __init__(self):
+        super().__init__()
+        self.set_enemy(GeneralMugen())
+        self.set_name("Kingdom of Ku")
+        self.set_description("")
+        self.link_right(Bunker())
+        self.link_forward(Zebes())
+
+class GreenhillZone(Room):
+    def __init__(self):
+        super().__init__()
+        self.set_enemy(DoctorEggman())
+        self.set_name("Greenhill Zone")
+        self.set_description("")
+        self.link_forward(KingdomOfKu())
+
+class TheHallow(Room):
+    def __init__(self):
+        super().__init__()
+        self.set_enemy(MoonLord())
+        self.set_name("The Hallow")
+        self.set_description("")
+
+class Commencement(Room):
+    def __init__(self):
+        super().__init__()
+        self.set_enemy(Mithrix())
+        self.set_name("Commencement")
+        self.set_description("")
+
+class Midgar(Room):
+    def __init__(self):
+        super().__init__()
+        self.set_enemy(Sephiroth())
+        self.set_name("Midgar")
+        self.set_description("")
+        self.link_forward(TheForge())
+
+class HyruleKingdom(Room):
+    def __init__(self):
+        super().__init__()
+        self.set_enemy(Ganondorf())
+        self.set_name("Hyrule Kingdom")
+        self.set_description("")
+        self.link_back(CelestialResort())
+
+class TheEnd(Room):
+    def __init__(self):
+        super().__init__()
+        self.set_enemy(EnderDragon())
+        self.set_name("The End")
+        self.set_description("")
+
+class Kamurocho(Room):
+    def __init__(self):
+        super().__init__()
+        self.set_enemy(Shibusawa())
+        self.set_name("Kamurocho")
+        self.set_description("")
+
+class TowerOfFate(Room):
+    def __init__(self):
+        super().__init__()
+        self.set_enemy(Enchantress())
+        self.set_name("Tower of Fate")
+        self.set_description("")
+
+class ShoresOfNine(Room):
+    def __init__(self):
+        super().__init__()
+        self.set_enemy(Freya())
+        self.set_name("Shores of Nine")
+        self.set_description("")
+
+class Mementos(Room):
+    def __init__(self):
+        super().__init__()
+        self.set_enemy(Yaldabaoth())
+        self.set_name("Mementos")
+        self.set_description("")
+        self.link_right(ShoresOfNine())
+        self.link_left(Asphodel())
+
+class Ascent(Room):
+    def __init__(self):
+        super().__init__()
+        self.set_enemy(Reyna())
+        self.set_name("Ascent")
+        self.set_description("")
+        self.link_right(ApertureLab())

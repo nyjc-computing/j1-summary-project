@@ -1,8 +1,8 @@
-from map import Room, setup
-from character import Character
+from setup import *
 
 class Game:
-    '''a class that runs when the game runs
+    '''
+    a class that runs when the game runs
 
     attributes
     ----------
@@ -19,171 +19,408 @@ class Game:
     while_fighting() : runs when character is in a fight, disabling move option
     use_item(): method for character to use item
     '''
-    
-
-    
     def __init__(self):
+        temp = setup()
         self.end = False
-        self.room = setup()
-        self.character = Character()
-        
+        self.room = temp[0]
+        self.character = temp[1]
+        self.actions = ["help", "look", "move", "attack", "equip", "information"]
+        self.description = ["Gets the list of possible actions", "Looks around the room", "Move to another room", "Attack the enemny", "Change your equipment", "Find out more about your items"]
+    
     def intro(self):
         # start of the game
-        print('Welcome to Hogwarts School of Witchcraft and Wizardry\n')
-        self.character.name = input('Key in what you wish to be named: ')
-        print(f'\nWelcome {self.character.name}, in this game you can either move (up, down, left, right), attack or use objects\n')
-        decision = input('Do you wish to enter the school? (y/n): ')
-        if decision == "n":
+        print('Welcome to Hogwarts School of Witchcraft and Wizardry')
+        print("\nThe Dark Lord Voldermort has taken over Hogwarts School and opened multiple interdimensional gates, bringing hoards of enemies into the school. Your job as the chosen one is to traverse through the school and thwart Voldermort's evil plan to take over the world\n")
+        decision = input('Do you wish to enter the school? ( yes / no ): ')
+        
+        if decision.lower() == "no":
+            print("\nDue to your utter cowardice, voldermort continued gaining power, spreading his control and chaos all over the world, leading to the complete annihlation of the human race")
             self.end = True
-    
-
-    def run(self):
-        # if boss is dead, character wins the game
-        if self.room.enemy.name == 'Voldemort' and self.room.enemy.is_dead():
-            print('You have obtained the elder wand, thanks for saving the wizarding world :)')
-            self.end = True
+            self.end_game()
             return
         
-        # if character is not fighting
-        if not self.room.get_is_fighting():
-            # ask user for input (go left right up down) (use item) (attack)
-            print(f'\n=========================\n        {self.room.name}\n=========================\n')
-
-            # if charcter have not been here print description
-            if not self.room.get_been_here():
-                print(self.room.description)
-                self.room.set_been_here(True)
-                #print("\n")
-    
-            # prints which rooms are available to move to
-            available = []
-            for direction in ('left', 'right', 'up', 'down'):
-                if getattr(self.room, direction) != None:
-                    available.append(direction)
-            for i in available:
-                print(f'To the {i} is {getattr(self.room, i)}')
-    
-            # ask for input if have monster
-            if self.room.enemy.get_health() > 0:
-                #print(f'\nROAR!!! {self.room.enemy}, {self.room.enemy.description} is in the room')
-                # change available moves respectively
-                available_moves = ['attack']
-                decision = input('\nWhat do you wish to do? (attack): ')
-                while decision not in available_moves:
-                    decision = input('\nWhat do you wish to do? (attack): ')
-    
-            # ask for input if character have gone to this room and monster is dead
-            else:
-                available_moves = ['move']
-                decision = input('\nWhat do you wish to do? (move): ')
-                while decision not in available_moves:
-                    decision = input('\nWhat do you wish to do? (move): ')
-            
-            # if input = movement, ask for direction
-            if decision == 'move':
-                self.move(available)
-    
-            # if input = attack, deal damage to monster for the first time
-            elif decision == 'attack':
-                self.room.set_is_fighting(True)
-                self.attack(self.character, self.room.enemy)
-                # deal damage back to character if enemy is not dead
-                if not self.room.enemy.is_dead():
-                    self.attack(self.room.enemy, self.character)
-                    
-                # if enemy is dead drop loot
-                else:
-                    self.character.item += self.room.enemy.loot
-           
-        # if character is in the middle of fighting
-        else:
-            self.while_fighting()
-
-        # check if game is over
-        if self.character.is_dead():
-            print('\nHogwarts is not a school for the weak. Return when you are stronger')
-            print('\nGAME OVER')
-            self.end = True
+        self.character.set_name(input('\nTarnished, key in your name: '))
+        print("\nYou boldly opened the front gates of the school and made your way into the first room\n")
         
+    def run(self):
+        self.display_room_name()
 
-    def move(self, available):
-        movement = input('\nWhich direction do you wish to move in? (up, down, left, right): ')
-        while movement not in available:
-            movement = input('Which direction do you wish to move in? (up, down, left, right): ')
+        # Checks if the player has entered the room before
+        if not self.room.get_been_here():
+            # Displays a description of the room if the player has not been there before
+            self.display_room_description()
+        
+        decision = self.get_action()
+        
+        if decision == "help":
+            self.help()
 
-        # if input = movement, move in direction
-        for direction in ('left', 'right', 'up', 'down'):
-            if movement == direction:
-                self.room = getattr(self.room, direction)
+        elif decision == "look":
+            self.look()
+            
+        elif decision == "move":
+            self.move()
+            
+        elif decision == "attack":
+            self.attack(self.character, self.room.get_enemy())
+
+        elif decision == "equip":
+            self.equip(self.character)
+
+        elif decision == "information":
+            self.information(self.character)
+        
+    def help(self):
+        print("You are able to:")
+        for i, action in enumerate(self.actions):
+            print(f"{i+1}. {action} ({self.description[i]})")
+        
+    def look(self):
+        
+        if self.room.get_left() != None:
+            print(f"To the left is {self.room.get_left().get_name()}")
+            
+        if self.room.get_right() != None:
+            print(f"To the right is {self.room.get_right().get_name()}")
+            
+        if self.room.get_forward() != None:
+            print(f"In front of you is {self.room.get_forward().get_name()}")
+            
+        if self.room.get_back() != None:
+            print(f"Behind you is {self.room.get_back().get_name()}")
+
+        if self.room.get_enemy() != None:
+            print(f"\nIn the middle of the room is {self.room.get_enemy().get_name()}")
+
+    def move(self):
+        movement = input('\nWhich direction do you wish to move in? (left, right, forward, back): ')
+        
+        if movement.lower() not in ["left", "right", "forward", "back"]:
+            print(f"You do not know what direction {movement} is and got confused")
+
+        if movement.lower() == "left":
+            if self.room.get_left() == None:
+                print("You walked to the left and smashed into a wall")
+
+            else:
+                self.room = self.room.get_left()
+
+        if movement.lower() == "right":
+            if self.room.get_right() == None:
+                print("You walked to the right and smashed into a wall")
+            else:
+                self.room = self.room.get_right()
+
+        if movement.lower() == "forward":
+            if self.room.get_forward() == None:
+                print("You walked forward and smashed into a wall")
+            else:
+                self.room = self.room.get_forward()
+
+        if movement.lower() == "back":
+            if self.room.get_back() == None:
+                print("You turned back and smashed into a wall")
+            else:
+                self.room = self.room.get_back()
     
     def attack(self, attacker, victim):
-        # reduce enemy health base on battle point of character
-        victim.set_health(-attacker.battle_points)
-
-        if not victim.is_dead(): 
-            # print health of enemy
-            print(f'\n{attacker} has dealt {attacker.battle_points} damage to {victim.name}. {victim} still have {victim.get_health()} health')
-
+        if victim == None:
+            print("You attacked the air and realised how insane you looked")
         else:
-            # if victim is dead
-            print(f'{attacker} dealt {attacker.battle_points} damage to {victim.name}. {victim} is now dead')
-            self.room.set_is_fighting(False)
-            
+            while attacker.get_health() > 0:
 
-    def while_fighting(self):
-        print(f'\n{self.room.enemy} currently has {self.room.enemy.get_health()} health')
-        available = ['attack']
-        decision = input('What do you wish to do? (attack): ')
-        # check for valid response
-        while decision not in available:
-            decision = input('What do you wish to do? (attack): ')
-        if decision == 'attack':
-            self.attack(self.character, self.room.enemy)
-        if not self.room.enemy.is_dead():
-            self.attack(self.room.enemy, self.character)
-    
-    
-    def use_item(self):
-        # change available items when needed
-        available_items = ['weapon']
-        decision = input('\nWhich of the following item do you wish to use? (weapon):')
-        while decision not in available_items:
-                   decision = input('\nWhich of the following item do you wish to use? (weapon):')
-            
-        if decision == 'weapon':
-            self.use_weapon()
+                print(f"{attacker.get_name()} has {attacker.get_health()} health")
+                print(f"{victim.get_name()} has {victim.get_health()} health\n")
 
-        elif decision == 'consumable':
-            self.use_consumable()
+                damage, weapon = self.get_attack(self.character)
+                
+                victim.set_health(victim.get_health() - damage)
+                if victim.get_health() > 0:
+                    print(f"\n{attacker.get_name()} dealt {damage} damage to {victim.get_name()}")
+                
+                if victim.get_health() > 0:
+                    attacker.set_health(attacker.get_health() - victim.get_attack())
+                    print(f"\n{victim.get_name()} dealt {victim.get_attack()} damage to {attacker.get_name()}")
 
-        else:
-            raise ValueError(f'{decision}')
-            
-    def use_weapon(self) -> None:
-        choice = self.prompt_user_choice(self.character.item, 'Choose a weapon')
+                else:
+                    if weapon == None:
+                        print(f"\nYou pummeled {victim.get_name()} into the ground with your bare fist")
+                    else:
+                        print(f"{attacker.get_name()} {weapon.get_win_front()}{victim.get_name()}{weapon.get_win_back()}")
+                    print(f"\n{victim.get_name()} dropped a {victim.get_loot().get_name()}")
+                    choice = input(f"\nDo you want to pick {victim.get_loot().get_name()}? ( yes / no ): ")
+                    if choice.lower() == "yes":
+                        self.collect_loot(attacker, victim.get_loot())
+                    else:
+                        print(f"\nYour indecisiveness allowed the resourceful rat to steal the {victim.get_loot().get_name()} when you weren't looking")
+                    self.room.set_enemy(None)
+                    break
+
+            if attacker.get_health() < 0:
+                self.end()
+
+        return None
+
+    def get_attack(self, user):
         
-        # remove battle points from weapon currently
-        if self.character.equip != None:
-            self.character.battle_points -= self.character.equip.attack
-        # add battle points from new weapon
-        self.character.equip = self.character.item[choice]
-        self.character.battle_points += self.character.item[choice].attack
-
-    def use_consumable(self) -> None:
-        choice = self.prompt_user_choice(self.character.item, "Choose a consumable:")
-       # haven't implement
-
-    def prompt_user_choice(self, items: list, question: str) -> int:        
-        for i, item in enumerate(items):
-            print(f"[{i}]: {item}")
-        choice = None
-        while not choice:
-            choice = input(question + " ")
-            if not choice.isdecimal():
-                print("Invalid choice")
-                continue
-            if int(choice) >= len(items):
-                print("Invalid choice")
-                continue
-            return int(choice)
+        decision = input("What do you want to use? (weapon / spell): ")
+        
+        while decision.lower() not in ["weapon", "spell"]:
+            print(f"You tried to use {decision} but nothing happened")
+            decision = input("What do you want to use? (weapon / spell): ")
             
+        if decision.lower() == "weapon":
+            if user.get_weapon() == None:
+                return user.get_attack(), None
+            else:
+                return user.get_weapon().get_attack(), user.get_weapon()
+
+        elif decision.lower() == "spell":
+            self.display_spells(user)
+            spells = []
+            for spell in user.spells:
+                spells.append(spell.get_name().lower())
+            choice = input("Which spell would you like to cast?: ")
+            while choice not in spells:
+                print(f"You tried to cast {choice} but it blew up in your face")
+                choice = input("Which spell would you like to cast?: ")
+            return user.get_spells()[spells.index(choice)].get_attack(), user.get_spells()[spells.index(choice)]
+            
+    def equip(self, user):
+
+        self.display_equipment(user)
+
+        decision = input("\ndo you want to change your equipment?: ")
+
+        if decision.lower() == "no":
+            return
+
+        elif decision.lower() == "yes":
+            choice = ""
+            while choice != "finish":
+                choice = input("what do you want to change?: ")
+                while choice.lower() not in ["armour", "weapon", "accessory", "finish"]:
+                    print(f"You tried changing your {choice} but nothing happened")
+                    choice = input("what do you want to change?: ")
+    
+                if choice.lower() == "armour":
+                    self.equip_armour(user)
+
+                elif choice.lower() == "weapon":
+                    self.equip_weapon(user)
+
+                elif choice.lower() == "accessory":
+                    self.equip_accessory(user)
+    
+    def display_equipment(self, user):
+        
+        if user.armour == None:
+            print("Armour : Empty")
+        else:
+            print(f"Armour : {user.armour.get_name()}")
+
+        if user.weapon == None:
+            print("Weapon : Empty")
+        else:
+            print(f"Weapon : {user.weapon.get_name()}")
+
+        if user.accessory == None:
+            print("Accessory : Empty")
+        else:
+            print(f"Accessory : {user.accessory.get_name()}")
+
+    def display_spells(self, user):
+        print("\nYou can use:")
+        for i, spell in enumerate(user.spells):
+            print(f"{i + 1}. {spell.get_name()}")
+
+    def equip_armour(self, user):
+        if len(user.get_armours()) == 0:
+            print("You do not have any armour to equip")
+        else:
+            print("In your inventory you have: ")
+            items = []
+            for armour in user.get_armours():
+                items.append(armour.get_name().lower())
+            for armour in items:
+                print(f"- {armour}")
+            option = input("Which armour do you want to equip?: ")
+            if option.lower() not in items:
+                print(f"You tried equipping {option.lower()} but realised you cant create things out of thin air")
+            else:
+                user.armour = user.get_armours()[items.index(option.lower())]
+
+    def equip_weapon(self, user):
+        if len(user.get_weapons()) == 0:
+            print("You do not have any weapon to equip")
+        else:
+            print("In your inventory you have: ")
+            items = []
+            for weapon in user.get_weapons():
+                items.append(weapon.get_name().lower())
+            for weapon in items:
+                print(f"- {weapon}")
+            option = input("Which weapon do you want to equip?: ")
+            if option.lower() not in items:
+                print(f"You tried equipping {option.lower()} but realised you cant create things out of thin air")
+            else:
+                user.weapon = user.get_weapons()[items.index(option.lower())]
+
+    def equip_accessory(self, user):
+        if len(user.accessories) == 0:
+            print("You do not have any accessories to equip")
+        else:
+            print("In your inventory you have: ")
+            items = []
+            for accessory in user.get_accessories():
+                items.append(accessory.get_name().lower())
+            for accessory in items:
+                print(f"- {accessory}")
+            option = input("Which accessory do you want to equip?: ")
+            if option.lower() not in items:
+                print(f"You tried equipping {option.lower()} but realised you cant create things out of thin air")
+            else:
+                user.accessory = user.get_accessories()[items.index(option.lower())]
+
+    def information(self, user):
+        choice = input("What do you want to find out more about? (weapons, spells, armours, accessories): ")
+        
+        if choice.lower() not in ["weapons", "spells", "armours", "accessories"]:
+            print(f"\nYou do not own any {choice}")
+
+        elif choice == "weapons":
+            self.weapon_info(user)
+
+        elif choice == "spells":
+            self.spell_info(user)
+
+        elif choice == "armours":
+            self.armour_info(user)
+
+        elif choice == "accessories":
+            self.accessory_info(user)
+                
+        
+    def weapon_info(self, user):
+        if len(user.get_weapons()) == 0:
+            print("\nYou do not own any weapons yet")
+
+        else:
+            weapons = []
+            for weapon in user.get_weapons():
+                print("\nIn your inventory you have: ")
+                print(f"- {weapon.get_name()}")
+                weapons.append(weapon.get_name().lower())
+
+            decision = input("\nWhich weapon do you want to find out more about? : ")
+            if decision not in weapons:
+                print(f"You do not own {decision}")
+
+            else:
+                print("\n")
+                print(user.get_weapons()[weapons.index(decision)].get_description())
+
+    def spell_info(self, user):
+        if len(user.get_spells()) == 0:
+            print("\nYou do not own any spells yet")
+
+        else:
+            spells = []
+            for spell in user.get_spells():
+                print("\nIn your inventory you have: ")
+                print(f"- {spell.get_name()}")
+                spells.append(spell.get_name().lower())
+
+            decision = input("\nWhich spell do you want to find out more about? : ")
+            if decision not in spells:
+                print(f"You do not own {decision}")
+
+            else:
+                print("\n")
+                print(user.get_spells()[spells.index(decision)].get_description())
+
+    def armour_info(self, user):
+        if len(user.get_armours()) == 0:
+            print("\nYou do not own any amours yet")
+
+        else:
+            armours = []
+            for armour in user.get_armours():
+                print("\nIn your inventory you have: ")
+                print(f"- {armour.get_name()}")
+                armours.append(armour.get_name().lower())
+
+            decision = input("\nWhich armour do you want to find out more about? : ")
+            if decision not in armours:
+                print(f"You do not own {decision}")
+
+            else:
+                print("\n")
+                print(user.get_armours()[armours.index(decision)].get_description())
+
+    def accessory_info(self, user):
+        if len(user.get_accessories()) == 0:
+            print("\nYou do not own any accessories yet")
+
+        else:
+            accessories = []
+            for accessory in user.get_accessories():
+                print("\nIn your inventory you have: ")
+                print(f"- {accessory.get_name()}")
+                accessories.append(accessory.get_name().lower())
+
+            decision = input("\nWhich accesssory do you want to find out more about? : ")
+            if decision not in accessories:
+                print(f"You do not own {decision}")
+
+            else:
+                print("\n")
+                print(user.get_accessories()[accessories.index(decision)].get_description())
+                
+    def display_room_name(self):
+        print("\n=========================")
+        space = " "*int((25-len(self.room.get_name()))/2)
+        print(f"{space}{self.room.get_name()}{space}")
+        print("=========================\n")
+
+    def display_room_description(self):
+        print(self.room.description)
+        self.room.set_been_here(True)
+
+    def get_action(self):
+        
+        decision = input("\nWhat do you wish to do? (type help for list of actions): ")
+        
+        while decision not in self.actions:
+            print(f"\nYou do not have the physical and mental capability to {decision}")
+            decision = input("\nWhat do you wish to do? (type help for list of actions): ")
+
+        print("\n")
+        return decision
+
+    def collect_loot(self, attacker, loot):
+        
+        if loot.get_type() == "weapon":
+            attacker.set_weapons(loot)
+            print(f"You obtained a {loot.get_name()}, a powerful weapon")
+            
+        elif loot.get_type() == "spell":
+            attacker.set_spells(loot)
+            print(f"You obtained a {loot.get_name()}, a powerful spell")
+
+        elif loot.get_type() == "armour":
+            attacker.set_armours(loot)
+            print(f"You obtained a {loot.get_name()}, a powerful armour")
+
+        elif loot.get_type() == "accessory":
+            attacker.set_accessories(loot)
+            print(f"You obtained a {loot.get_name()}, a powerful accessory")
+
+    def end_game(self):
+        print("__   _______ _   _  ______ _____ ___________")
+        print("\ \ / /  _  | | | | |  _  \_   _|  ___|  _  \\")
+        print(" \ V /| | | | | | | | | | | | | | |__ | | | |")
+        print("  \ / | | | | | | | | | | | | | |  __|| | | |")
+        print("  | | \ \_/ / |_| | | |/ / _| |_| |___| |/ /")
+        print("  \_/  \___/ \___/  |___/  \___/\____/|___/ ")
+        self.end = True
