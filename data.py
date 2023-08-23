@@ -2,6 +2,7 @@
 
 import json
 import random
+import time
 
 NORTH = "NORTH"
 SOUTH = "SOUTH"
@@ -749,7 +750,7 @@ class Steve:
     def take_damage(self, damage):
         damage = int(damage * ((100 - self.get_defence())/100))
         self.hitpoints = max(0, self.hitpoints - damage)
-
+        
 class Creature:
     """
     -- ATTRIBUTES --
@@ -788,6 +789,26 @@ class Creature:
     def take_damage(self, damage: int):
         self.hitpoints = self.hitpoints - damage
 
+class Creeper(Creature):
+    def _generate_attack(self, attack: int, turn_number: int):
+        random_letter = random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+        print("AHHHHHHH A CREEPER HAS APPEARED!!!! RUN AWAY QUICK BY\n PRESSING THE FOLLOWING LETTER:")
+        time.sleep(2)
+        start_time = time.time()
+        inp = input("ENTER THE LETTER " + random_letter + " QUICK: ")
+        print("KABOOOOOMMMMM THE CREEPER EXPLODEDDDDD!!!!!!")
+        self.hitpoints = 0
+        if inp.upper() == random_letter and time.time() - start_time <= 1.8:
+            print("Luckily, your quick reactions allowed you to avoid the explosion. You took no damage.")
+            return 0
+        elif inp.upper() != random_letter:
+            print("Oh no! You took the wrong action and got caught in the blast!")
+        elif (time.time() - start_time) > 1.8:
+            print("Oh no! You were too slow and got caught in the blast!")
+        attack = int((attack) * ((turn_number / 10) + 1) * (random.randint(90, 110) / 100))
+        print(f"You took {attack} damage.")
+        return attack
+
 class Boss(Creature):
     """
     -- ATTRIBUTES --
@@ -795,14 +816,17 @@ class Boss(Creature):
     -- METHODS --
     """
     def __init__(self):
-        super().__init__("King Warden", 100, 10):
+        super().__init__("King Warden", 100, 10)
 
-    def heal(hp: int) -> None:
+    def heal(self, hp: int) -> None:
         self.hitpoints = min(self.hitpoints + hp, self.maxhp)
         
 def random_creature() -> "Creature":
     creature_data = random.choice(creature_list)
-    return Creature(creature_data["name"], creature_data["base_hp"], creature_data["base_atk"])
+    if creature_data["name"] == "Creeper":
+        return Creeper(creature_data["name"], creature_data["base_hp"], creature_data["base_atk"])
+    else:
+        return Creature(creature_data["name"], creature_data["base_hp"], creature_data["base_atk"])
 
 item_type_list = ["Armor", "Food", "Weapon"]
 def random_item() -> "Item":
@@ -829,6 +853,5 @@ with open("content/items/weapon.json",'r', encoding = 'utf-8') as f:
     weapon_list = json.load(f)
 turn = 10
 test = random_creature()
-print(test)
 test2 = random_item()
 print(test2)
