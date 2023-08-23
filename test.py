@@ -1,29 +1,29 @@
 import game
 import data
+import random
 class Test:
     def __init__(self):
         pass
-    
 
-    def valid_move(self, path, location):
-        '''According to the UI this test is useless'''
-        if path not in roompaths[location]:
-            print('Invalid move')
-            return False
-        else:
-            return True
+    def select_ag(self):
+        p = game.Game
+        print(p.agent_select(p, random.randint(0,3)))
 
-    def player_presence(self, location):
-        '''According to the fact that spawn is fixed and the UI doesnt allow you to move anywhere but map locations this test is also useless'''
-        if location not in map:
-            return False
-        else:
-            return True
+    def select_map(self):
+        p = game.Game
+        p.map_select(p,random.randint(0,2))
 
-    def end_state(self, player_hp):
-        '''The game has its own test for the end so this is also useless'''
-        if player_hp < 300:
-            return True
-        else:
-            return False
+    def omen_ab(self):
+        p = game.Game
+        p.omen(p,random.randint(0,15))
 
+
+
+
+
+
+
+x = Test
+x.select_ag(0)
+x.select_map(0)
+x.omen_ab(0)
