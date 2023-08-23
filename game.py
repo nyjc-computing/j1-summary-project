@@ -34,35 +34,37 @@ class MUDGame:
 
     
     def set_player(self, player, character):
-        if player == 'self.player1':
+        if player == 'Player 1':
             self.player1 = character
-        elif player == 'self.player2':
+        elif player == 'Player 2':
             self.player2 = character
-        elif player == 'self.player3':
+        elif player == 'Player 3':
             self.player3 = character
-        elif player == 'self.player4':
+        elif player == 'Player 4':
             self.player4 = character
 
     def run(self):
         data.start_menu()
-        for player in [
-                'self.player1', 'self.player2', 'self.player3', 'self.player4'
-        ]:
-            valid = False
-            while not valid:
+        for player in ['Player 1', 'Player 2', 'Player 3', 'Player 4']:
+            character = data.choose_character()
+            while character not in ['freddy', 'chica', 'bonnie', 'foxy', 'skip']:
+                print(f"Please select a valid animatronic or finish party by entering 'skip'. Got {character}.")
                 character = data.choose_character()
-                if character != None:
-                    valid = True
-            if character.lower() == 'freddy':
+            if character == 'freddy':
                 self.set_player(player, data.Freddy())
-            elif character.lower() == 'bonnie':
+                print(f'{player} has selected Freddy Fazbear.')
+            elif character == 'bonnie':
                 self.set_player(player, data.Bonnie())
-            elif character.lower() == 'chica':
+                print(f'{player} has selected Bonnie.')
+            elif character == 'chica':
                 self.set_player(player, data.Chica())
-            elif character.lower() == 'foxy':
+                print(f'{player} has selected Chica.')
+            elif character== 'foxy':
                 self.set_player(player, data.Foxy())
-            elif character.lower() == 'skip':
+                print(f'{player} has selected Foxy.')
+            elif character == 'skip':
                 break
+        print('The game will begin.')
         while not self.gameOver:
             if not self.current_room.grid.is_encounter():
                 #prompt movement
@@ -159,7 +161,7 @@ class MUDGame:
                                 continue
                             skill = active_character.prompt_attack()
                             while skill not in ['1', '2', '3', 'back']:
-                                print("Please select a valid action.")
+                                print(f"Please select a valid action. Got {skill}.")
                                 skill = active_character.prompt_attack()
                             if skill == 'back':
                                 continue
@@ -171,7 +173,7 @@ class MUDGame:
                         elif action.lower() == 'check':
                             check = active_character.prompt_check()
                             while check not in ['back', 'enemy', 'party']:
-                                print('Please select a valid action.')
+                                print(f'Please select a valid action. Got {check}.')
                                 check = active_character.prompt_check()
                             if check == 'enemy':
                                 for enemy in enemy_list:
@@ -186,7 +188,7 @@ class MUDGame:
                                 active_character.use_item()
                             continue
                         else:
-                            print('Select a valid action to take.')
+                            print(f'Please select a valid action. Got {action}.')
                             continue
                     #Remove defeated characters
                     for character in turn_order:
