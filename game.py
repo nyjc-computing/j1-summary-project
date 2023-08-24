@@ -41,6 +41,7 @@ class MUDGame:
 
     def run(self):
         data.start_menu()
+        
         for player in ['Player 1', 'Player 2', 'Player 3', 'Player 4']:
             character = data.choose_character()
             while character not in ['freddy', 'chica', 'bonnie', 'foxy', 'skip']:
@@ -75,16 +76,20 @@ class MUDGame:
                     continue
                 #entering next room
                 if self.current_room.grid.get_position() == [0, 2] and move == 'w' and self.current_room.is_next_room(move):
-                    self.current_room.next_room(move)
+                    self.current_room = self.current_room.next_room(move)
+                    self.current_room.grid.move([4, 2])
                     continue
                 elif self.current_room.grid.get_position() == [2, 0] and move == 'a' and self.current_room.is_next_room(move):
-                    self.current_room.next_room(move)
+                    self.current_room = self.current_room.next_room(move)
+                    self.current_room.grid.move([2, 4])
                     continue
                 elif self.current_room.grid.get_position() == [4, 2] and move == 's' and self.current_room.is_next_room(move):
-                    self.current_room.next_room(move)
+                    self.current_room = self.current_room.next_room(move)
+                    self.current_room.grid.move([0, 2])
                     continue
                 elif self.current_room.grid.get_position() == [2, 4] and move == 'd'  and self.current_room.is_next_room(move):
-                    self.current_room.nextRoom(move)
+                    self.current_room = self.current_room.next_room(move)
+                    self.current_room.grid.move([2, 0])
                     continue
                 #moving in current room
                 if move == 'w' and self.current_room.grid.get_position()[0] != 0:
@@ -177,11 +182,19 @@ class MUDGame:
                                     ally.get_stats()
                             continue
                         elif action.lower() == 'item':
-                            while active_character.is_use_item():
-                                active_character.display_inventory()
-                                used = active_character.use_item()
-                                if used:
-                                    break
+                            is_use = active_character.is_use_item()
+                            while is_use not in ['y', 'n']:
+                                print("Type 'Y' or 'N'.")
+                                is_use = active_character.is_use_item()
+                            if is_use == 'y':
+                                while active_character.is_use_item() == 'y':
+                                    active_character.display_inventory()
+                                    item = input('Choose an item to use: ')
+                                    used = active_character.use_item(item)
+                                    if used:
+                                        k = (k + 1) % len(turn_order)
+                                        break
+                            continue
                         else:
                             print(f'Please select a valid action. Got {action}.')
                             continue
@@ -276,11 +289,18 @@ class MUDGame:
                                     ally.get_stats()
                             continue
                         elif action.lower() == 'item':
-                            while active_character.is_use_item():
-                                active_character.display_inventory()
-                                used = active_character.use_item()
-                                if used:
-                                    break
+                            is_use = active_character.is_use_item()
+                            while is_use not in ['y', 'n']:
+                                print("Type 'Y' or 'N'.")
+                                is_use = active_character.is_use_item()
+                            if is_use == 'y':
+                                while active_character.is_use_item() == 'y':
+                                    active_character.display_inventory()
+                                    item = input('Choose an item to use: ')
+                                    used = active_character.use_item(item)
+                                    if used:
+                                        k = (k + 1) % len(turn_order)
+                                        break
                         else:
                             print(f'Please select a valid action. Got {action}.')
                             continue
