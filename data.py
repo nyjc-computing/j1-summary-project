@@ -300,10 +300,11 @@ class Grid:
         '''
         Return true if user coordinates are currently on a item tile.
         '''
-        if self.grid[self.get_position()[0]][self.get_position()[1]]['type'] == 'item':
-            return True
-        else:
+        if self.grid[self.get_position()[0]][self.get_position()[1]] == None:
             return False
+        elif self.grid[self.get_position()[0]][self.get_position()[1]]['type'] == 'item':
+            return True
+        return False
             
     def get_item(self) -> str:
         '''
@@ -381,7 +382,7 @@ def choose_character():
         return cr
     info(cr)
     print('')
-    is_select = input('Select ', cr.capitalize(), ' as your character? Y/N: ')
+    is_select = input('Select ' + cr.capitalize() + ' as your character? Y/N: ')
     is_select = is_select.lower()
     if input == 'n':
         return choose_character()
