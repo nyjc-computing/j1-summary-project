@@ -870,6 +870,7 @@ class Creature:
         return attack
         
     def get_attack(self):
+        """Might not need this"""
         return self.attack
 
     def get_health(self):
@@ -877,6 +878,9 @@ class Creature:
 
     def take_damage(self, damage: int):
         self.hitpoints = max(0, self.hitpoints - damage)
+
+    def random_move(self) -> int:
+        return self.get_attack()
 
 class Boss(Creature):
     """
@@ -887,8 +891,24 @@ class Boss(Creature):
     def __init__(self):
         super().__init__("King Warden", 100, 10)
 
-    def heal(self, hp: int) -> None:
-        self.hitpoints = min(self.hitpoints + hp, self.maxhp)
+    def heal(self) -> None:
+        """One of the moves that the boss can make
+        Deals boss by an amount"""
+        heal = random.randint(10, 20)
+        self.hitpoints = min(self.hitpoints + heal, self.maxhp)
+
+    def sonic_boom(self) -> bool:
+        raise NotImplementedError
+
+    def random_move(self) -> int:
+        if self.hitpoints > 50:
+            return self.attack
+        if random.randint(0, 100) <= 30:
+            self.heal()
+            return 0
+        return self.attack
+            
+        
         
 def random_creature() -> "Creature":
     creature_data = random.choice(creature_list)

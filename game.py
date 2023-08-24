@@ -27,10 +27,11 @@ class MUDGame:
         if self.steve.isdead() or self.boss.isdead(): # other conditions
             return True
 
-    def show_status(self) -> 'str':
+    def show_status(self) -> None:
+        raise NotImplementedError
         print(self.steve)
 
-    def show_options(self, sit: str) -> str:
+    def show_options(self, sit: str) -> None:
         if sit == 'creature':
             menu = "1. Attack \n2. Retreat"
         elif sit == 'item':
@@ -45,7 +46,7 @@ class MUDGame:
             opt = input('Please choose option 1 or 2:')
         return opt
 
-    def isvalid_2opt(choice) -> bool:
+    def isvalid_2opt(choice: str) -> bool:
         if choice in ('12'):
             if len(choice) == 1:
                 return True
@@ -67,7 +68,7 @@ class MUDGame:
             # damage = self.steve....
             self.creature.hitpoints -= damage
             print(f'You attacked {creature.info["name"]}')
-            self.steve.health -= creature.get_attack()
+            self.steve.health -= creature.random_move()
         pass
 
     def creature_encountered(self):
@@ -141,7 +142,7 @@ class MUDGame:
                     if self.game_is_over():
                         continue
                 else:
-                    odds = random.randint(0, 100)
+                    odds = random.randint(1, 100)
                     if odds <= 40:
                         self.maze.try_move_steve(...)
                         continue
@@ -158,7 +159,8 @@ class MUDGame:
                     self.steve._add_item_to_inv(item)
 
             self.movesteve()
-            self.moveboss()
+            if random.randint(1, 100) <= 30:
+                self.moveboss() 
                 # update
         if self.steve.isdead():
             self.show_losescreen()
