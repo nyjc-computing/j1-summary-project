@@ -20,6 +20,4 @@ def test_attack():
     assert mg.steve.isdead() or mg.creature.isdead()
 
 
-print(mg.maze.get_current_pos())
-print("hello?")
-mg.movesteve()
+mg.attack()
