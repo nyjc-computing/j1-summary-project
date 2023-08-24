@@ -145,21 +145,20 @@ class Room:
                     next_rooms.pop(next_room)
                     ref_next_rooms.pop(next_room)
                 elif ref_next_rooms[next_room] == 'self.down':
-                    self.down = Room(up = self, layer=self.count_layer())
+                    self.down = Room(up = self, layer=self.count_layer(), number = self.count_room())
                     increment_total_rooms()
                     next_rooms.pop(next_room)
                     ref_next_rooms.pop(next_room)
                 elif ref_next_rooms[next_room] == 'self.left':
-                    self.left = Room(right = self, layer=self.count_layer())
+                    self.left = Room(right = self, layer=self.count_layer(), number = self.count_room())
                     increment_total_rooms()
                     next_rooms.pop(next_room)
                     ref_next_rooms.pop(next_room)
                 elif ref_next_rooms[next_room] == 'self.right':
-                    self.right = Room(left = self, layer=self.count_layer())
+                    self.right = Room(left = self, layer=self.count_layer(), number = self.count_room())
                     increment_total_rooms()
                     next_rooms.pop(next_room)
                     ref_next_rooms.pop(next_room)
-                self.layer = self.count_room() 
                 connections -= 1
         #Boss Room
         if self.number == 7:
@@ -169,7 +168,7 @@ class Room:
                 next_rooms.pop(next_room)
                 ref_next_rooms.pop(next_room)
             elif ref_next_rooms[next_room] == 'self.down':
-                self.down = Room(up = self, type = 'boss', boss = Springtrap(), layer=self.count_layer())
+                self.down = Room(up = self, type = 'boss', boss = Springtrap(), layer=self.count_layer(), )
                 next_rooms.pop(next_room)
                 ref_next_rooms.pop(next_room)
             elif ref_next_rooms[next_room] == 'self.left':
@@ -905,6 +904,8 @@ class Freddy:
     def passive(self, target):
         if target.has_status('Sleeping'):
             return 5
+        else:
+            return 0
             
     def add_status(self, status, turns):
         for st in statuses:
@@ -1089,6 +1090,8 @@ class Bonnie:
         if target.has_status('Resonance'):
             multiplier = random.randint(1, 10)
             return multiplier
+        else:
+            return 0
             
     def add_status(self, status, turns):
         for st in statuses:
@@ -1273,6 +1276,9 @@ class Foxy:
     def passive(self, damage):
         if self.health < 50:
             damage = instinct(damage)
+            return damage
+        else:
+            return 0
             
     def add_status(self, status, turns):
         for st in statuses:
