@@ -7,8 +7,8 @@ def test_lbr_init():
     lb = Labyrinth()
     
 # test_lbr_init()
-# lb = Labyrinth()
-# lb.generate()
+lb = Labyrinth()
+lb.generate()
 
 from game import MUDGame
 
@@ -19,4 +19,7 @@ def test_attack():
     mg.attack()
     assert mg.steve.isdead() or mg.creature.isdead()
 
-mg.item_found()
+
+print(mg.maze.get_current_pos())
+print("hello?")
+mg.movesteve()
