@@ -740,14 +740,16 @@ class Steve:
     def __repr__(self):
         return f"Steve has {self.health} HP."
 
-    def _display_inventory(self) -> None:
+    def display_inventory(self) -> None:
         if self.inventory == []:
             print("You have no items in your inventory.\n")
             return None
         print("\nYou have:\n")
-        for i in self.inventory:
-            item, number = str(i["item"]), str(i["number"])
-            print(f"{number:>2} {item}")
+        for i in len(self.inventory):
+            dict_ = self.inventory[i]
+            item, number = str(dict_["item"]), str(dict_["number"])
+            prefix = i + 1
+            print(f"{prefix:>2}. {number:>2} x {item}")
         print("\n")
         return None
 
