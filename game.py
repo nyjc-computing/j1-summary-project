@@ -76,19 +76,15 @@ class MUDGame:
                 #entering next room
                 if self.current_room.grid.get_position() == [0, 2] and move == 'w' and self.current_room.is_next_room(move):
                     self.current_room.next_room(move)
-                    self.current_room.grid.move([4, 2])
                     continue
                 elif self.current_room.grid.get_position() == [2, 0] and move == 'a' and self.current_room.is_next_room(move):
                     self.current_room.next_room(move)
-                    self.current_room.grid.move([2, 4])
                     continue
                 elif self.current_room.grid.get_position() == [4, 2] and move == 's' and self.current_room.is_next_room(move):
                     self.current_room.next_room(move)
-                    self.current_room.grid.move([0, 2])
                     continue
                 elif self.current_room.grid.get_position() == [2, 4] and move == 'd'  and self.current_room.is_next_room(move):
                     self.current_room.nextRoom(move)
-                    self.current_room.grid.move([2, 0])
                     continue
                 #moving in current room
                 if move == 'w' and self.current_room.grid.get_position()[0] != 0:

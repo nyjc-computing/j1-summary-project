@@ -181,11 +181,20 @@ class Grid:
         action = input('Type an action:')
         return action.lower()
         
-    def move(self, position : list):
+    def move(self, move):
         '''
         Update user position and coordinates in the room
         '''
-        self.coordinates = position
+        x = self.coordinates[0]
+        y = self.coordinates[1]
+        if move == 'w':
+            self.coordinates = [x, y + 1] 
+        elif move == 'a':
+            self.coordinates = [x - 1, y]
+        elif move == 's':
+            self.coordinates = [x, y - 1]
+        elif move == 'd':
+            self.coordinates = [x + 1, y]
     
     def is_encounter(self):
         '''
