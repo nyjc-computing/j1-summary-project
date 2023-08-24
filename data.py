@@ -883,6 +883,8 @@ class Chica:
                 #deploys a clone to take damage instead of Chica
                 #fails if cupcake already in play
                 #cupcake's hp?
+                
+            
             if atk == '3':
                 print(f"{self.name} used Devour!")
                 if accuracy(69) == True:

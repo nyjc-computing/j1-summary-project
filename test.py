@@ -19,15 +19,9 @@ import game
 Test the Normal Room and Grid class for errors.
 ===============================================
 '''
-try:
-    test_grid = data.Grid("normal")
-except:
-    print("Grid cannot be instantiated")
-try:
-    test_room = data.Room()
-except:
-    print("Room cannot be instantiated")
-    
+test_grid = data.Grid("normal")
+test_room = data.Room()
+        
 try:
     
     if test_room.grid.get_position() != [2, 2]:
@@ -118,3 +112,4 @@ Test the Grid class for errors.
     # except:
     #     print("The game cannot run lmao.")
 
+test_classes()
