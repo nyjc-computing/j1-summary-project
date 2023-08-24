@@ -83,7 +83,7 @@ def make_map(map : str) -> dict:
     elif map == 'haven':
         _roompaths = {
     "T-side spawn" : ["A garden", "Grass", "C lobby"],
-    "A garden" : ["T-side Spawn", "Mid window", "A lobby"],
+    "A garden" : ["T-side spawn", "Mid window", "A lobby"],
     "A lobby" : ["A garden", "A short", "A long"],
     "A long" : ["A lobby", "A site"],
     "A short" : ["A lobby", "A site"],
