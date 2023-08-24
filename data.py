@@ -138,7 +138,7 @@ class Room:
         elif total_rooms < 10 and self.layer < 3:
             #Normal Room
             while connections != 0:
-                next_room = random.randint(0, len(next_rooms)) - 1
+                next_room = random.randint(0, len(next_rooms)-1)
                 if ref_next_rooms[next_room] == 'self.up':
                     self.up = Room(down = self, layer=self.count_layer(), number = self.count_room())
                     increment_total_rooms()
@@ -159,7 +159,7 @@ class Room:
                     increment_total_rooms()
                     next_rooms.pop(next_room)
                     ref_next_rooms.pop(next_room)
-                self.layer = self.countRoom() 
+                self.layer = self.count_room() 
                 connections -= 1
         #Boss Room
         if self.number == 7:
