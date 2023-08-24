@@ -128,9 +128,9 @@ class Room:
         x = 0
         for _ in range(len(next_rooms)):
             if next_rooms[x] != None:
-                x -= 1
                 next_rooms.pop(x)
                 ref_next_rooms.pop(x)
+                x -= 1
             x += 1
         if self.type == 'start':
             #Start Room
