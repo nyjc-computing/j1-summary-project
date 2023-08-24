@@ -26,6 +26,8 @@ class MUDGame:
         Starting interface of the game
         """
         username = input('Enter your username: ')
+        while username is None:
+            username = input('Enter your username: ')
         print(f'{username}, OH NO YOU ARE TRAPPED! \nYou will go through a series of rooms that may give you items or have ANGRY creatures wanting you DEAD :P \nKill them all, especially the boss to escape! \nGOOD LUCK ;D')
 
     def game_is_over(self) -> bool:
@@ -33,7 +35,6 @@ class MUDGame:
             return True
 
     def show_status(self) -> None:
-        raise NotImplementedError
         print(self.steve)
 
     def show_options(self, sit: str) -> None:
@@ -71,7 +72,7 @@ class MUDGame:
         x, y = self.maze.get_current_pos()
         room = self.maze.lab[x][y]
         creature = room.get_creature()
-        print(f"You have encountered the {creature.name}!")
+        print(f"You have encountered the {creature.get_name()}!")
         while not self.steve.isdead() or self.creature.isdead():
             print(self.steve) # show HP
             self.show_options('battle')
@@ -80,7 +81,7 @@ class MUDGame:
                 #attack
                 damage = self.steve.get_attack()
                 self.creature.take_damage(damage)
-                print(f"{creature.name} now has {self.creature.get_health()} HP")
+                print(f"{creature.get_name()} now has {self.creature.get_health()} HP")
             elif battle_option == 2:
                 #heal
                 self.steve.display_inventory()
@@ -102,14 +103,14 @@ class MUDGame:
     def creature_encountered(self):
         x, y = self.maze.get_current_pos()
         room = self.maze.lab[x][y]
-        if room.creature is None:
+        if room.get_creature() is None:
             return False
         return True
 
     def item_found(self):
         x, y = self.maze.get_current_pos()
         room = self.maze.lab[x][y]
-        if room.item is None:
+        if room.get_item() is None:
             return False
         return True
 
@@ -166,14 +167,14 @@ class MUDGame:
                 # show player action options
                 option = self.prompt_player_2opt()
                 # prompt player to take actions
-                if option == 1:
+                if option == '1':
                     self.battle()
                     if self.game_is_over():
                         continue
                 else:
                     odds = random.randint(1, 100)
                     if odds <= 40:
-                        self.maze.try_move_steve(self.maze.get_current_pos, self.steve_path[-2])
+                        self.maze.try_move_steve(self.steve_path[-2])
                         continue
                     else:
                         print("Too late to escape!")
@@ -181,7 +182,9 @@ class MUDGame:
                         if self.game_is_over():
                             continue
             if self.item_found():
-                item = self.room.get_item()
+                x, y = self.maze.get_current_pos()
+                room = self.maze.lab[x][y]
+                item = room.get_item()
                 self.show_options('item')
                 item_choice = self.prompt_player_2opt()
                 if item_choice == 1:
