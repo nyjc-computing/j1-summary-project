@@ -2,11 +2,8 @@ import random
 import data
 
 
-
-
-
-
 class MUDGame:
+
     def __init__(self):
         # self.spawn = Room('home', up='closed')
         self.boss = data.Springtrap()
@@ -17,7 +14,6 @@ class MUDGame:
         self.player3 = None
         self.player4 = None
 
-    
     def set_player(self, player, character):
         if player == 'Player 1':
             self.player1 = character
@@ -30,11 +26,15 @@ class MUDGame:
 
     def run(self):
         data.start_menu()
-        
+
         for player in ['Player 1', 'Player 2', 'Player 3', 'Player 4']:
             character = data.choose_character()
-            while character not in ['freddy', 'chica', 'bonnie', 'foxy', 'skip']:
-                print(f"Please select a valid animatronic or finish party by entering 'skip'. Got {character}.")
+            while character not in [
+                    'freddy', 'chica', 'bonnie', 'foxy', 'skip'
+            ]:
+                print(
+                    f"Please select a valid animatronic or finish party by entering 'skip'. Got {character}."
+                )
                 character = data.choose_character()
             if character == 'freddy':
                 self.set_player(player, data.Freddy())
@@ -45,7 +45,7 @@ class MUDGame:
             elif character == 'chica':
                 self.set_player(player, data.Chica())
                 print(f'{player} has selected Chica.')
-            elif character== 'foxy':
+            elif character == 'foxy':
                 self.set_player(player, data.Foxy())
                 print(f'{player} has selected Foxy.')
             elif character == 'skip':
@@ -64,36 +64,48 @@ class MUDGame:
                     data.display_inventory()
                     continue
                 #entering next room
-                if self.current_room.grid.get_position() == [0, 2] and move == 'w' and self.current_room.is_next_room(move):
+                if self.current_room.grid.get_position() == [
+                        0, 2
+                ] and move == 'w' and self.current_room.is_next_room(move):
                     self.current_room = self.current_room.next_room(move)
                     self.current_room.grid.move([4, 2])
                     continue
-                elif self.current_room.grid.get_position() == [2, 0] and move == 'a' and self.current_room.is_next_room(move):
+                elif self.current_room.grid.get_position() == [
+                        2, 0
+                ] and move == 'a' and self.current_room.is_next_room(move):
                     self.current_room = self.current_room.next_room(move)
                     self.current_room.grid.move([2, 4])
                     continue
-                elif self.current_room.grid.get_position() == [4, 2] and move == 's' and self.current_room.is_next_room(move):
+                elif self.current_room.grid.get_position() == [
+                        4, 2
+                ] and move == 's' and self.current_room.is_next_room(move):
                     self.current_room = self.current_room.next_room(move)
                     self.current_room.grid.move([0, 2])
                     continue
-                elif self.current_room.grid.get_position() == [2, 4] and move == 'd'  and self.current_room.is_next_room(move):
+                elif self.current_room.grid.get_position() == [
+                        2, 4
+                ] and move == 'd' and self.current_room.is_next_room(move):
                     self.current_room = self.current_room.next_room(move)
                     self.current_room.grid.move([2, 0])
                     continue
                 #moving in current room
-                if move == 'w' and self.current_room.grid.get_position()[0] != 0:
+                if move == 'w' and self.current_room.grid.get_position(
+                )[0] != 0:
                     current_position = self.current_room.grid.get_position()
                     current_position[1] = current_position[1] + 1
                     self.current_room.grid.move(current_position)
-                elif move == 's' and self.current_room.grid.get_position()[0] != 4:
+                elif move == 's' and self.current_room.grid.get_position(
+                )[0] != 4:
                     current_position = self.current_room.grid.get_position()
                     current_position[1] = current_position[1] - 1
                     self.current_room.grid.move(current_position)
-                elif move == 'a' and self.current_room.grid.get_position()[1] != 0:
+                elif move == 'a' and self.current_room.grid.get_position(
+                )[1] != 0:
                     current_position = self.current_room.grid.get_position()
                     current_position[0] = current_position[0] - 1
                     self.current_room.grid.move(current_position)
-                elif move == 'd' and self.current_room.grid.get_position()[1] != 4:
+                elif move == 'd' and self.current_room.grid.get_position(
+                )[1] != 4:
                     current_position = self.current_room.grid.get_position()
                     current_position[0] = current_position[0] + 1
                     self.current_room.grid.move(current_position)
@@ -120,10 +132,13 @@ class MUDGame:
                     enemy_list.pop(i)
                     i = i + 1
                 #Combat
-                player_list = [self.player1, self.player2, self.player3, self.player4]
+                player_list = [
+                    self.player1, self.player2, self.player3, self.player4
+                ]
                 enemy_list = self.current_room.grid.get_enemies()
                 k = 0
-                while not data.is_defeat(player_list) and not data.is_victory(enemy_list):
+                while not data.is_defeat(player_list) and not data.is_victory(
+                        enemy_list):
                     active_character = turn_order[(k % len(turn_order))]
                     if active_character.has_status('Sleeping'):
                         print(f"{active_character.name} is asleep.")
@@ -149,7 +164,9 @@ class MUDGame:
                                 continue
                             skill = active_character.prompt_attack()
                             while skill not in ['1', '2', '3', 'back']:
-                                print(f"Please select a valid action. Got {skill}.")
+                                print(
+                                    f"Please select a valid action. Got {skill}."
+                                )
                                 skill = active_character.prompt_attack()
                             if skill == 'back':
                                 continue
@@ -161,7 +178,9 @@ class MUDGame:
                         elif action.lower() == 'check':
                             check = active_character.prompt_check()
                             while check not in ['back', 'enemy', 'party']:
-                                print(f'Please select a valid action. Got {check}.')
+                                print(
+                                    f'Please select a valid action. Got {check}.'
+                                )
                                 check = active_character.prompt_check()
                             if check == 'enemy':
                                 for enemy in enemy_list:
@@ -185,7 +204,8 @@ class MUDGame:
                                         break
                             continue
                         else:
-                            print(f'Please select a valid action. Got {action}.')
+                            print(
+                                f'Please select a valid action. Got {action}.')
                             continue
                     #Remove defeated characters
                     for character in turn_order:
@@ -203,7 +223,9 @@ class MUDGame:
                     #Check if victory or defeat
                     if data.is_defeat(player_list):
                         self.gameOver = True
-                        print("Party defeated. Looks like you'll forgotten, just like the other animatronics down here who met their demise.")
+                        print(
+                            "Party defeated. Looks like you'll forgotten, just like the other animatronics down here who met their demise."
+                        )
                         break
                     elif data.is_victory(enemy_list):
                         print('Encounter survived.')
@@ -215,7 +237,9 @@ class MUDGame:
                 #Boss Fight
                 self.boss.encounter()
                 #Determine turn order
-                player_list = [self.player1, self.player2, self.player3, self.player4]
+                player_list = [
+                    self.player1, self.player2, self.player3, self.player4
+                ]
                 enemy_list = [self.boss]
                 turn_order = []
                 i = 0
@@ -227,10 +251,13 @@ class MUDGame:
                     enemy_list.pop(i)
                     i = i + 1
                 #Combat
-                player_list = [self.player1, self.player2, self.player3, self.player4]
+                player_list = [
+                    self.player1, self.player2, self.player3, self.player4
+                ]
                 enemy_list = [self.boss]
                 k = 0
-                while not data.is_defeat(player_list) and not data.is_victory(enemy_list):
+                while not data.is_defeat(player_list) and not data.is_victory(
+                        enemy_list):
                     active_character = turn_order[k % (len(turn_order))]
                     if active_character.has_status('Sleeping'):
                         print(f"{active_character.name} is asleep.")
@@ -256,7 +283,9 @@ class MUDGame:
                                 continue
                             skill = active_character.prompt_attack()
                             while skill not in ['1', '2', '3', 'back']:
-                                print(f"Please select a valid action. Got {skill}.")
+                                print(
+                                    f"Please select a valid action. Got {skill}."
+                                )
                                 skill = active_character.prompt_attack()
                             if skill == 'back':
                                 continue
@@ -268,7 +297,9 @@ class MUDGame:
                         elif action.lower() == 'check':
                             check = active_character.prompt_check()
                             while check not in ['back', 'enemy', 'party']:
-                                print(f'Please select a valid action. Got {check}.')
+                                print(
+                                    f'Please select a valid action. Got {check}.'
+                                )
                                 check = active_character.prompt_check()
                             if check == 'enemy':
                                 for enemy in enemy_list:
@@ -291,7 +322,8 @@ class MUDGame:
                                         k = (k + 1) % len(turn_order)
                                         break
                         else:
-                            print(f'Please select a valid action. Got {action}.')
+                            print(
+                                f'Please select a valid action. Got {action}.')
                             continue
                     #Remove defeated characters
                     for character in turn_order:
@@ -308,9 +340,12 @@ class MUDGame:
                     active_character.remove_status()
                     if data.is_defeat(player_list):
                         self.gameOver = True
-                        print("Party defeated. Looks like you'll forgotten, just like the other animatronics down here who met their demise.")
+                        print(
+                            "Party defeated. Looks like you'll forgotten, just like the other animatronics down here who met their demise."
+                        )
                         break
-                    elif data.is_victory(enemy_list) and self.boss.name == 'Springtrap':
+                    elif data.is_victory(
+                            enemy_list) and self.boss.name == 'Springtrap':
                         #Initiate phase 2
                         self.boss = data.Glitchtrap()
                         self.boss.spawn()
@@ -318,7 +353,8 @@ class MUDGame:
                         turn_order.insert(1, enemy_list[0])
                         k = 0
                         continue
-                    elif data.is_victory(enemy_list) and self.boss.name == 'Glitchtrap':
+                    elif data.is_victory(
+                            enemy_list) and self.boss.name == 'Glitchtrap':
                         self.gameOver = True
                         data.Ending()
                     k = (k + 1) % len(turn_order)
