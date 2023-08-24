@@ -95,6 +95,18 @@ def add_item(item):
     player_inventory.append(item)
     print(f'{item} has been added to inventory!')
 
+def display_inventory():
+    print("Inventory:")
+    if len(player_inventory) == 0:
+        print("You don't have any items currently.")
+    else:
+        for item in player_inventory:
+            name = item['name']
+            description = item['description']
+            effect = item['effect']
+            consumable = item['consumable']
+            print(f'Item : {name}  /\t Description : {description}  /\t Effect : {effect}  /\t Consumable : {consumable}')
+
 #Converting to json
 
 def to_json(data):
@@ -125,13 +137,13 @@ class Room:
         connections = random.randint(2, 3)
         next_rooms = [self.up, self.down, self.left, self.right]
         ref_next_rooms = ['self.up', 'self.down', 'self.left', 'self.right']
-        x = 0
+        i = 0
         for _ in range(len(next_rooms)):
             if next_rooms[x] != None:
                 next_rooms.pop(x)
                 ref_next_rooms.pop(x)
-                x -= 1
-            x += 1
+                i -= 1
+            i += 1
         if self.type == 'start':
             #Start Room
             self.up = Room(down = self)
@@ -183,7 +195,7 @@ class Room:
         self.grid = Grid(type = type, x = x, y = y)
         
     def display_room(self):
-        pass
+        print(f"Room {self.number}, Coordinate {self.grid.get_position()}")
 
     def is_next_room(self, next : str) -> bool:
         if next == 'w':
@@ -300,10 +312,11 @@ class Grid:
         '''
         Return true if user coordinates are currently on a item tile.
         '''
-        if self.grid[self.get_position()[0]][self.get_position()[1]]['type'] == 'item':
-            return True
-        else:
+        if self.grid[self.get_position()[0]][self.get_position()[1]] == None:
             return False
+        elif self.grid[self.get_position()[0]][self.get_position()[1]]['type'] == 'item':
+            return True
+        return False
             
     def get_item(self) -> str:
         '''
@@ -322,10 +335,10 @@ class Grid:
 #Start
 def start_menu():
     print('Welcome to FNAF:Reckoning!')
-    choice = input("Type 'Start' to begin!")
-    while choice.lower != 'start':
+    choice = input("Type 'Start' to begin: ")
+    while choice.lower() != 'start':
         print("To begin the game, enter 'start'.")
-        choice = input("Type 'Start' to begin!")
+        choice = input("Type 'Start' to begin: ")
 
     
 def info(cr):
@@ -381,7 +394,7 @@ def choose_character():
         return cr
     info(cr)
     print('')
-    is_select = input('Select ', cr.capitalize(), ' as your character? Y/N: ')
+    is_select = input('Select ' + cr.capitalize() + ' as your character? Y/N: ')
     is_select = is_select.lower()
     if input == 'n':
         return choose_character()
@@ -413,7 +426,22 @@ def infiltrated(damage):
 
 def instinct(damage):
     return abs(damage * 130 / 100)
-    
+
+#Win and lose conditions
+def is_defeat(players: list) -> bool:
+    is_lose = True
+    for player in players:
+        if not player.is_defeated():
+            is_lose = False
+    return is_lose
+
+
+def is_victory(enemies: list) -> bool:
+    is_win = True
+    for enemy in enemies:
+        if not enemy.is_defeated():
+            is_win = False
+    return is_win
 #Enemies
 all_enemies = ['GB', 'BB']
 
@@ -779,18 +807,6 @@ class Freddy:
         self.status = status if status is not None else []
         self.item_equipped = None
 
-    def display_inventory(self):
-        print("Inventory:")
-        if len(player_inventory) == 0:
-            print("You don't have any items currently.")
-        else:
-            for item in player_inventory:
-                name = item['name']
-                description = item['description']
-                effect = item['effect']
-                consumable = item['consumable']
-                print(f'Item : {name}  /\t Description : {description}  /\t Effect : {effect}  /\t Consumable : {consumable}')
-
     def add_item(self, item):
         global player_inventory
         global all_items
@@ -949,18 +965,6 @@ class Bonnie:
         self.health = health
         self.status = status if status is not None else []
         self.item_equipped = None
-
-    def display_inventory(self):
-        print("Inventory:")
-        if len(player_inventory) == 0:
-            print("You don't have any items currently.")
-        else:
-            for item in player_inventory:
-                name = item['name']
-                description = item['description']
-                effect = item['effect']
-                consumable = item['consumable']
-                print(f'Item : {name}  /\t Description : {description}  /\t Effect : {effect}  /\t Consumable : {consumable}')
 
     def add_item(self, item):
         global player_inventory
@@ -1136,18 +1140,6 @@ class Foxy:
         self.status = status if status is not None else []
         self.item_equipped = None
 
-    def display_inventory(self):
-        print("Inventory:")
-        if len(player_inventory) == 0:
-            print("You don't have any items currently.")
-        else:
-            for item in player_inventory:
-                name = item['name']
-                description = item['description']
-                effect = item['effect']
-                consumable = item['consumable']
-                print(f'Item : {name}  /\t Description : {description}  /\t Effect : {effect}  /\t Consumable : {consumable}')
-
     def add_item(self, item):
         global player_inventory
         global all_items
@@ -1322,18 +1314,6 @@ class Chica:
         self.status = status if status is not None else []
         self.item_equipped = None
         self.cupcake = cupcake
-
-    def display_inventory(self):
-        print("Inventory:")
-        if len(player_inventory) == 0:
-            print("You don't have any items currently.")
-        else:
-            for item in player_inventory:
-                name = item['name']
-                description = item['description']
-                effect = item['effect']
-                consumable = item['consumable']
-                print(f'Item : {name}  /\t Description : {description}  /\t Effect : {effect}  /\t Consumable : {consumable}')
 
     def add_item(self, item):
         global player_inventory
