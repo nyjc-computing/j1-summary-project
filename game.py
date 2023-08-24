@@ -28,10 +28,11 @@ class MUDGame:
         if self.steve.isdead() or self.boss.isdead(): # other conditions
             return True
 
-    def show_status(self) -> 'str':
+    def show_status(self) -> None:
+        raise NotImplementedError
         print(self.steve)
 
-    def show_options(self, sit: str) -> str:
+    def show_options(self, sit: str) -> None:
         if sit == 'creature':
             menu = "1. Attack \n2. Retreat"
         elif sit == 'item':
@@ -47,6 +48,7 @@ class MUDGame:
             opt = input('Please choose option 1 or 2: ')
         return opt
 
+
     def isvalid_2opt(self, opt) -> bool:
         if opt in '12':
             if len(opt) == 1:
@@ -59,21 +61,17 @@ class MUDGame:
                 return True
         return False
 
-    # def attack(self):
-    #     x, y = self.maze.get_current_pos()
-    #     room = Room(x, y)
-    #     creature = room.get_creature()
-    #     while not self.steve.isdead() or self.creature.hitpoints <= 0:
-    #         print(self.steve)
-    #         print(f"{creature.get_name()} has {self.creature.get_health()} HP")
-    #         damage = self.steve.get_attack()
-    #         creature.take_damage(damage)
-    #         print(f'You attacked {creature.get_name()}')
-    #         damage = creature.get_attack()
-    #         self.steve.take_damage(damage)
-    #     room.set_creature_None()
-
-    def battle(self):
+    def attack(self):
+        x, y = self.maze.get_current_pos()
+        room = Room(x, y)
+        creature = room.get_creature()
+        while not self.steve.isdead() or self.creature.hitpoints <= 0:
+            print(self.steve)
+            print(f"{creature.info['name']} has {self.creature.get_health()} HP")
+            # damage = self.steve....
+            self.creature.hitpoints -= damage
+            print(f'You attacked {creature.info["name"]}')
+            self.steve.health -= creature.random_move()
         pass
 
     def creature_encountered(self):
@@ -147,7 +145,7 @@ class MUDGame:
                     if self.game_is_over():
                         continue
                 else:
-                    odds = random.randint(0, 100)
+                    odds = random.randint(1, 100)
                     if odds <= 40:
                         self.maze.try_move_steve(self.maze.get_current_pos, self.steve_path[-2])
                         continue
@@ -167,7 +165,8 @@ class MUDGame:
                 
 
             self.movesteve()
-            self.moveboss()
+            if random.randint(1, 100) <= 30:
+                self.moveboss() 
                 # update
         if self.steve.isdead():
             self.show_losescreen()
