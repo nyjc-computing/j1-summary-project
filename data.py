@@ -102,9 +102,28 @@ def make_map(map : str) -> dict:
     "C lobby" : ["T-side spawn", "C long"],
     "CT-side spawn" : ["A link", "C link"]
                      }
-    elif map == 'breeze':
-        _roompaths = {}
-        pass
+    elif map =='bind':
+        _roompaths = {
+    "T-side spawn" : ["A garden", "Grass", "C lobby"],
+    "A garden" : ["T-side spawn", "Mid window", "A lobby"],
+    "A lobby" : ["A garden", "A short", "A long"],
+    "A long" : ["A lobby", "A site"],
+    "A short" : ["A lobby", "A site"],
+    "A site" : ["A long", "A short", "A link"],
+    "A link" : ["A site", "Heaven", "B site", "CT-side spawn"],
+    "Heaven" : ["A link", "A site"],
+    "B site" : ["A link", "Mid", "C link"],
+    "C link" : ["B site", "Garage window", "C site", "CT-side spawn"],
+    "C site" : ["C link", "C long", "Garage"],
+    "C long" : ["C site", "C lobby"],
+    "Mid" : ["Mid window", "B site", "Grass"],
+    "Mid window" : ["Mid", "A garden"],
+    "Grass" : ["T-side spawn", "Mid", "Garage"],
+    "Garage" : ["C site", "Garage window", "Grass"],
+    "Garage window" : ["Garage", "C link"],
+    "C lobby" : ["T-side spawn", "C long"],
+    "CT-side spawn" : ["A link", "C link"]
+                     }
     else:
         return -1
         
