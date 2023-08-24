@@ -745,7 +745,7 @@ class Steve:
             print("You have no items in your inventory.\n")
             return None
         print("\nYou have:\n")
-        for i in self.inventory:
+        for i in len(self.inventory):
             item, number = str(i["item"]), str(i["number"])
             print(f"{number:>2} {item}")
         print("\n")
