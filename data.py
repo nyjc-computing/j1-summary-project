@@ -1,13 +1,133 @@
 import random
 import time
-
+import json 
 
 #Inventory and Items
-all_items = []
+all_items = [
+    {
+        'name': 'Loose bolts',
+        'description':
+        'A pile of rusty parts found from the crushed remains of robots. Most noticeably, a pair of rusted springlocks are in the midst of the devastation.',
+        'effect': 'Heals user for 10 hp.',
+        'consumable': True,
+        'heal': 10
+    },
+    {
+        'name': 'Functioning Limb',
+        'description':
+        'While the animatronic is torn beyond recognition, some part of it is still salvageable.',
+        'effect': 'Heals user for 20 hp.',
+        'consumable': True,
+        'heal': 20
+    },
+    {
+        'name': 'Metal Pipe',
+        'description': 'A ventilation pipe. It\'s stained with blood.',
+        'effect': 'Increases users attack damage by 10.',
+        'consumable': False,
+        'damage': 10
+    },
+    {
+        'name': 'Hatchet',
+        'description': 'The hatchet brings you an unsettling feeling',
+        'effect': 'Increases users attack damage by 15.',
+        'consumable': False,
+        'damage': 15
+    },
+    {
+        'name': 'Battery',
+        'description':
+        'A battery found from a camera. It still functions with the remaining power left in it.',
+        'effect': 'Heals user for 30 hp.',
+        'consumable': True,
+        'heal': 30
+    },
+    {
+        'name': 'Freddy Figurine',
+        'description':
+        'It brings you nostalgia. The microphone in the toy\'s hands is gone.',
+        'effect':
+        'If the selected character is Freddy, increase damage by 5. Else, it\'s a pretty cool figurine isn\'t it.',
+        'consumable': False,
+        'damage': 5
+    },
+    {
+        'name': 'Bonnie Figurine',
+        'description':
+        'It brings you nostalgia. The guitar in the toy\'s hands is gone.',
+        'effect':
+        'If the selected character is Bonnie, increase damage by 5. Else, it\'s a pretty cool figurine isn\'t it.',
+        'consumable': False,
+        'damage': 5
+    },
+    {
+        'name': 'Chica Figurine',
+        'description':
+        'It brings you nostalgia. You notice that the beak of the figurine is missing.',
+        'effect':
+        'If the selected character is Chica, increase damage by 5. Else, it\'s a pretty cool figurine isn\'t it.',
+        'consumable': False,
+        'damage': 5
+    },
+    {
+        'name': 'Foxy Figurine',
+        'description':
+        'It brings you nostalgia. The hook in the toy\'s hands is gone.',
+        'effect':
+        'If the selected character is Foxy, increase damage by 5. Else, it\'s a pretty cool figurine isn\'t it.',
+        'consumable': False,
+        'damage': 5
+    },
+
+    #Items below this point are "cut content".
+    {
+        'Employee Card': {
+            'Description': 'A card specifically for employees.'
+        }
+    },
+    {
+        'White Gossypium': {
+            'Description':
+            'It\'s the same stuffing used to make your suit. Perhaps there is more than one of you?'
+        }
+    },
+    {
+        'Burnt Gossypium': {
+            'Description':
+            'It\'s charred and burnt. Perhaps someone like you wasn\'t so lucky.'
+        }
+    },
+    {
+        'Candle': {
+            'Description':
+            'The unused candles for birthday parties still remain.'
+        }
+    },
+    {
+        'Rabbit Ear': {
+            'Description':
+            'There\'s an endoskeleton inside the ear. It gives off an unsettling feeling.'
+        }
+    }
+]
+
 player_inventory = []
 
 def get_inventory():
     return player_inventory
+
+def add_item(item):
+    player_inventory.append(item)
+    print(f'{item} has been added to inventory!')
+
+def used_item(item):
+    player_inventory.remove(item)
+    print(f'{item} has been used!')
+
+#Converting to json
+
+def to_json(data):
+    return json.dumps(data, indent=4)
     
 #Rooms
 total_rooms = 0
@@ -34,10 +154,13 @@ class Room:
         connections = random.randint(2, 3)
         next_rooms = [self.up, self.down, self.left, self.right]
         ref_next_rooms = ['self.up', 'self.down', 'self.left', 'self.right']
-        for i in range(len(next_rooms)):
-            if next_rooms[i] != None:
-                next_rooms.pop(i)
-                ref_next_rooms.pop(i)
+        x = 0
+        for _ in range(len(next_rooms)):
+            if next_rooms[x] != None:
+                x -= 1
+                next_rooms.pop(x)
+                ref_next_rooms.pop(x)
+            x += 1
         if self.type == 'start':
             #Start Room
             self.up = Room(down = self)
@@ -155,7 +278,7 @@ class Grid:
                     enemy_number = random.randint(1, 3)
                     enemy_list = []
                     for i in range(enemy_number):
-                        enemy_list.append(GB()) 
+                        enemy_list.append(random.choice(all_enemies)) 
                     self.grid[random.randint(0, 4)][random.randint(0, 4)] = {'type' : 'creature', 'creatures':enemy_list}
                 i = i + 1
             k = 0
@@ -316,6 +439,9 @@ statuses = [{'name' : 'Sleeping', 'description' : 'Target cannot take action bas
 
 def infiltrated(damage):
     return abs(damage * 110 / 100)
+
+def instinct(damage):
+    return abs(damage * 130 / 100)
     
 #Enemies
 all_enemies = ['GB', 'BB']
@@ -1171,7 +1297,7 @@ class Foxy:
             print(f'{self.name} used Yar-Har on {target.name}!')
             if accuracy(90, target) == True:
                 damage += 15
-                self.passive(self)
+                self.passive(damage)
                 if self.has_status('Nightfall'):
                     damage += 15
                     self.heal(20)
@@ -1189,7 +1315,7 @@ class Foxy:
             print(f"{self.name} used Death Grip on {target.name}!")
             if accuracy(25, target) == True:
                 damage += 125
-                self.passive(self)
+                self.passive(damage)
                 if self.has_status('Nightfall'):
                     damage += 15
                     self.heal(20)    
@@ -1200,7 +1326,7 @@ class Foxy:
                 print('The attack missed!')
 
             
-    def passive(self):
+    def passive(self, damage):
         if self.health < 50:
             damage = instinct(damage)
             
@@ -1380,7 +1506,7 @@ class Chica:
             else:
                 print('There is already a cupcake in place!')
         if atk == '3':
-            print(f"{self.name} used Devour on {target.name}"!)
+            print(f"{self.name} used Devour on {target.name}!")
             if accuracy(40, target) == True:
                 if self.use_item() == True:
                     damage += 125
