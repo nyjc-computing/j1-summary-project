@@ -1186,7 +1186,7 @@ class Foxy:
             print(f"{self.name}'s attack and accuracy rose!")
             self.add_status('Nightfall', 5)
         if atk == '3':
-            print(f"{self.name} used Death Grip on {target.name}"!)
+            print(f"{self.name} used Death Grip on {target.name}!")
             if accuracy(25, target) == True:
                 damage += 125
                 self.passive(self)
