@@ -19,7 +19,7 @@ class Game:
     agent_descriptions = agent
     
     agents = ["Jett", "Sova", "Omen", "Sage"]
-    maps = ["Ascent", "Haven", "Breeze"]
+    maps = ["Ascent", "Haven", "Bind"]
 
     def countdown(self) -> None:
         """
@@ -51,10 +51,10 @@ class Game:
             accept = [str(x) for x in range(1, len(options)+2)]
         else:
             accept = [str(x) for x in range(1, len(options)+1)]
-        choice = input("Choose a number: ")
+        choice = input("Pick a number: ")
         while choice not in accept:
             print("Invalid input")
-            choice = input("Choose a number: ")
+            choice = input("Pick a number: ")
         print(divider)
         if int(choice) == len(options) + 1:
             return -1
@@ -79,7 +79,7 @@ class Game:
         elif choice == 1:
             self.map = data.make_map("haven")
         elif choice == 2:
-            self.map = data.make_map("breeze")
+            self.map = data.make_map("bind")
     
     def initialise(self, agent: str) -> None:
         """
@@ -88,7 +88,6 @@ class Game:
         sets cooldown for player
         sets starting positions for reyna and player
         """
-            
         creatures = 5
         orbs = 8
         rooms = list(self.map.keys())
@@ -125,7 +124,7 @@ class Game:
             print(path)
         print()
         if self.player_cooldown == 0:
-            print("You can use your ability.")
+            print("ABILITY READY!")
         else:
             print(f"{self.player_cooldown} turns until you can use your ability.")
         print(divider)
@@ -146,7 +145,7 @@ class Game:
             else:
                 print("Jett's ability cannot be manually activated\n")
         else:
-            print("Your ability is on cooldown.")
+            print("ABILITY NOT READY YET!")
     
     def jett(self) -> None:
         """
