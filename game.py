@@ -232,7 +232,7 @@ class MUDGame:
                 k = 0
                 while not data.is_defeat(player_list) and not data.is_victory(enemy_list):
                     active_character = turn_order[k % (len(turn_order))]
-                    if active_character.has_status('sleeping'):
+                    if active_character.has_status('Sleeping'):
                         print(f"{active_character.name} is asleep.")
                         k = (k + 1) % len(turn_order)
                         continue
@@ -296,8 +296,10 @@ class MUDGame:
                     #Remove defeated characters
                     for character in turn_order:
                         if character.is_defeated():
-                            print(f"{character.name} has died.")
+                            if k >= turn_order.index(character):
+                                k = k - 1
                             turn_order.remove(character)
+                            print(f"{character.name} has died.")
                         if character in enemy_list:
                             enemy_list.remove(character)
                         elif character in player_list:
@@ -316,4 +318,7 @@ class MUDGame:
                         turn_order.insert(1, enemy_list[0])
                         k = 0
                         continue
+                    elif data.is_victory(enemy_list) and self.boss.name == 'Glitchtrap':
+                        self.gameOver = True
+                        data.Ending()
                     k = (k + 1) % len(turn_order)
