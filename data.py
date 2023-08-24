@@ -1559,4 +1559,3 @@ class Chica:
                 description = st['description']
                 turns = st['count']
                 print(f'Status : {name} , Description : {description} , Turns Remaining : {turns}')
-
