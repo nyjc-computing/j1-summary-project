@@ -15,6 +15,7 @@ class Weapon:
     """
 
     def __init__(self, name: str, description: str, attack: int) -> None:
+        self.type = 'Weapon'
         self.name = name
         self.description = description
         self.attack = attack
@@ -31,6 +32,7 @@ class Potion:
     + name: str
     + description: str
     + attack: int | float
+    + heal: int | float
 
     Method
     ------
@@ -38,10 +40,12 @@ class Potion:
     
     """
 
-    def __init__(self, name: str, description: str, attack: int) -> None:
+    def __init__(self, name: str, description: str, attack: int, heal: int) -> None:
+        self.type = 'Potion'
         self.name = name
         self.description = description
         self.attack = attack
+        self.heal = heal
 
     def __repr__(self) -> str:
         return print(f"Item{self.name}")
