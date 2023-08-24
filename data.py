@@ -746,10 +746,11 @@ class Steve:
             return None
         print("\nYou have:\n")
         for i in len(self.inventory):
+
             dict_ = self.inventory[i]
             item, number = str(dict_["item"]), str(dict_["number"])
             prefix = i + 1
-            print(f"{prefix:>2}. {number:>2} x {item}")
+            print(f"{prefix:>2}. {number:>2} x {item}")q
         print("\n")
         return None
 
