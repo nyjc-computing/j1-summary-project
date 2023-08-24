@@ -24,9 +24,11 @@ class Character:
     def __init__(self) -> None:
         self.name = ""
         self.health = 0
+        self.max_health = 0
         self.spells = []
         self.attack = 0
         self.mana = 0
+        self.max_mana = 0
         self.armour = None
         self.armours = []
         self.weapon = None
@@ -53,6 +55,12 @@ class Character:
     def get_health(self) -> int:
         """Returns the character's health"""
         return self.health
+
+    def set_max_health(self, max_health):
+        self.max_health = max_health
+
+    def get_max_health(self):
+        return self.max_health
         
     def set_spells(self, spell):
         self.spells.append(spell)
@@ -71,6 +79,12 @@ class Character:
 
     def get_mana(self):
         return self.mana
+
+    def set_max_mana(self, max_mana):
+        self.max_mana = max_mana
+
+    def get_max_mana(self):
+        return self.max_mana
 
     def set_weapon(self, weapon):
         self.weapon = weapon

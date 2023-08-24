@@ -113,7 +113,7 @@ class Dirtmouth(Room):
         self.set_description("You stepped into Dirtmouth, a haunting cliffside town in the depths of Hallownest, standing as a silent sentinel overlooking a dark and mysterious underground world. Its dilapidated buildings and eerie stillness set the tone for your perilous journey")
         self.link_left(Midgar())
         self.link_right(HyruleKingdom())
-        self.link_forward(TheEnd())
+        self.link_forward(TheEndDimension())
 
 class CelestialResort(Room):
     def __init__(self):
@@ -220,11 +220,11 @@ class HyruleKingdom(Room):
         self.set_description("You stepped into a land steeped in legend and mystique, it is your sacred duty to protect as the Hero of Time. Its vast, rolling landscapes and iconic landmarks are both your home and the canvas upon which your destiny is written as you battle the forces of darkness and seek to rescue Princess Zelda.")
         self.link_back(CelestialResort())
 
-class TheEnd(Room):
+class TheEndDimension(Room):
     def __init__(self):
         super().__init__()
         self.set_enemy(TheEnderDragon())
-        self.set_name("The End")
+        self.set_name("The End Dimension")
         self.set_description("You stepped into a dark, space-like dimension consisting of separate islands in the void, made out of end stone. It is inhabited by endermen and shulkers.")
 
 class Kamurocho(Room):
@@ -269,5 +269,5 @@ class PrincipalsOffice(Room):
     def __init__(self):
         super().__init__()
         self.set_enemy(Voldermort())
-        self.set_name("Ascent")
-        self.set_description("")
+        self.set_name("Principals Office")
+        self.set_description("You step into a chamber where disciplinary matters are addressed by the headmaster or headmistress. It is an imposing and somber room, with a large wooden desk and portraits of previous headmasters lining the walls, serving as a place of both judgment and guidance for students.")

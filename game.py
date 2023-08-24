@@ -1,4 +1,5 @@
 from setup import *
+import time
 
 class Game:
     '''
@@ -24,13 +25,15 @@ class Game:
         self.end = False
         self.room = temp[0]
         self.character = temp[1]
-        self.actions = ["help", "look", "move", "attack", "equip", "information"]
+        self.actions = ["help", "look", "move", "attack", "equip", "info"]
         self.description = ["Gets the list of possible actions", "Looks around the room", "Move to another room", "Attack the enemny", "Change your equipment", "Find out more about your items"]
     
     def intro(self):
         # start of the game
         print('Welcome to Hogwarts School of Witchcraft and Wizardry')
+        time.sleep(1)
         print("\nThe Dark Lord Voldermort has taken over Hogwarts School and opened multiple interdimensional gates, bringing hoards of enemies into the school. Your job as the chosen one is to traverse through the school and thwart Voldermort's evil plan to take over the world\n")
+        time.sleep(3)
         decision = input('Do you wish to enter the school? ( yes / no ): ')
         
         if decision.lower() == "no":
@@ -41,6 +44,7 @@ class Game:
         
         self.character.set_name(input('\nTarnished, key in your name: '))
         print("\nYou boldly opened the front gates of the school and made your way into the first room\n")
+        time.sleep(2)
         
     def run(self):
         self.display_room_name()
@@ -52,23 +56,23 @@ class Game:
         
         decision = self.get_action()
         
-        if decision == "help":
+        if decision.lower() == "help":
             self.help()
 
-        elif decision == "look":
+        elif decision.lower() == "look":
             self.look()
             
-        elif decision == "move":
+        elif decision.lower() == "move":
             self.move()
             
-        elif decision == "attack":
+        elif decision.lower() == "attack":
             self.attack(self.character, self.room.get_enemy())
 
-        elif decision == "equip":
+        elif decision.lower() == "equip":
             self.equip(self.character)
 
-        elif decision == "information":
-            self.information(self.character)
+        elif decision.lower() == "info":
+            self.info(self.character)
         
     def help(self):
         print("You are able to:")
@@ -89,8 +93,11 @@ class Game:
         if self.room.get_back() != None:
             print(f"Behind you is {self.room.get_back().get_name()}")
 
+        time.sleep(1)
         if self.room.get_enemy() != None:
             print(f"\nIn the middle of the room is {self.room.get_enemy().get_name()}, {self.room.get_enemy().get_description()}")
+
+        time.sleep(1)
 
     def move(self):
         movement = input('\nWhich direction do you wish to move in? (left, right, forward, back): ')
@@ -137,16 +144,16 @@ class Game:
                 
                 victim.set_health(victim.get_health() - damage)
                 if victim.get_health() > 0:
-                    if weapon == None:
-                        print(f"\n{attacker.get_name()} dealt {damage} damage to {victim.get_name()}")
-                    else:
-                        print(f"\n{attacker.get_name()}{weapon.get_move()}, dealing {damage} damage to {victim.get_name()}")
+                    print(f"\n{attacker.get_name()}{weapon.get_move()}, dealing {damage} damage to {victim.get_name()}")
                 
                 if victim.get_health() > 0:
                     attacker.set_health(attacker.get_health() - victim.get_attack())
-                    print(f"\n{victim.get_name()} dealt {victim.get_attack()} damage to {attacker.get_name()}")
+                    print(f"\n{victim.get_name()} dealt {victim.get_attack()} damage to {attacker.get_name()}\n")
 
                 else:
+                    if victim.get_name() == "Voldermort":
+                        self.win(weapon)
+                        return
                     if weapon == None:
                         print(f"\nYou pummeled {victim.get_name()} into the ground with your bare fist")
                     else:
@@ -300,9 +307,15 @@ class Game:
                 print(f"\nYou tried equipping {option} but realised you cant create things out of thin air")
             else:
                 print(f"\nYou equipped {option}")
-                user.accessory = user.get_accessories()[items.index(option.lower())]
+                accessory = user.get_accessories()[items.index(option.lower())]
+                user.set_health(user.get_health() + accessory.get_health_boost())
+                user.set_max_health(user.get_max_health() + accessory.get_health_boost())
+                user.set_attack(user.get_attack() + accessory.get_attack_boost())
+                user.set_mana(user.get_mana() + accessory.get_mana_boost())
+                user.set_max_mana(user.get_max_mana() + accessory.get_mana_boost())
+                user.accessory = accessory
 
-    def information(self, user):
+    def info(self, user):
         choice = input("What do you want to find out more about? (weapons, spells, armours, accessories): ")
         
         if choice.lower() not in ["weapons", "spells", "armours", "accessories"]:
@@ -346,8 +359,8 @@ class Game:
 
         else:
             spells = []
+            print("\nIn your inventory you have: ")
             for spell in user.get_spells():
-                print("\nIn your inventory you have: ")
                 print(f"- {spell.get_name()}")
                 spells.append(spell.get_name().lower())
 
@@ -404,7 +417,11 @@ class Game:
         print("=========================\n")
 
     def display_room_description(self):
+        time.sleep(1)
         print(self.room.description)
+        print("\n")
+        time.sleep(2)
+        self.look()
         self.room.set_been_here(True)
 
     def get_action(self):
@@ -443,4 +460,14 @@ class Game:
         print("  \ / | | | | | | | | | | | | | |  __|| | | |")
         print("  | | \ \_/ / |_| | | |/ / _| |_| |___| |/ /")
         print("  \_/  \___/ \___/  |___/  \___/\____/|___/ ")
+        self.end = True
+
+    def win(self, weapon):
+        print(f"\nUsing the almighty {weapon.get_name()}, you struck the Dark Lord Voldermort down, crippling him of all his powers and stop his evil tyranny over the school")
+        print(" _____ ___________   _____ _       ___  _____ _   _ ")
+        print("|  __ \  _  |  _  \ /  ___| |     / _ \|_   _| \ | |")
+        print("| |  \/ | | | | | | \ `--.| |    / /_\ \ | | |  \| |")
+        print("| | __| | | | | | |  `--. \ |    |  _  | | | | . ` |")
+        print("| |_\ \ \_/ / |/ /  /\__/ / |____| | | |_| |_| |\  |")
+        print(" \____/\___/|___/   \____/\_____/\_| |_/\___/\_| \_/")
         self.end = True

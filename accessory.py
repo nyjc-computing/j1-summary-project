@@ -46,30 +46,33 @@ class GoldenFeather(Accessory):
     def __init__(self):
         super().__init__()
         self.set_name("Golden Feather")
-        self.set_description("")
-        self.set_mana_boost(0)
+        self.set_mana_boost(10)
+        self.set_description(f"The Golden Feather is a coveted and shimmering collectible that enhances your mobility. Its radiant appearance and unique functionality make it a symbol of progress and determination\nBoost mana by {self.get_mana_boost()} points")
+        
 
 class MasterRound(Accessory):
 
     def __init__(self):
         super().__init__()
         self.set_name("Master Round")
-        self.set_description("")
-        self.set_health_boost(0)
+        self.set_health_boost(10)
+        self.set_description(f"The Master Round is a prestigious and rare item that boost the player's health and also serve as a symbol of their mastery of challenging battles\nBoost health by {self.get_health_boost()} points")
 
 class DragonAmulet(Accessory):
 
     def __init__(self):
         super().__init__()
         self.set_name("Dragon Amulet")
-        self.set_description("")
-        self.set_attack_boost(0)
+        self.set_attack_boost(10)
+        self.set_description(f"The Dragon Amulet is a prized and ornate accessory and a symbol of membership in the Dojima Family. It features a dragon motif that represents a connection to the Yakuza world\nBoost attack by {self.get_attack_boost()} points")
+        
 
 class ChaosEmerald(Accessory):
 
     def __init__(self):
         super().__init__()
         self.set_name("Chaos Emerald")
-        self.set_description("")
-        self.set_health_boost(0)
+        self.set_health_boost(10)
+        self.set_description(f"The Chaos Emerald is a mystical, multicolored gemstone of immense power. The gemstones is known for its ability to grant incredible abilities, including the power of super transformation\nBoost health by {self.get_health_boost()} points")
+        
 

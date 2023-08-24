@@ -276,9 +276,9 @@ class Reyna(Enemy):
 class Voldermort(Enemy):
     def __init__(self):
         super().__init__()
-        self.set_name("Reyna")
+        self.set_name("Voldermort")
         self.set_health(10)
-        self.set_description("a deadly duelist agent with the ability to absorb the souls of defeated enemies, empowering herself to become an even more formidable threat on the battlefield")
+        self.set_description("a malevolent dark wizard, seeking power and immortality while spreading fear and chaos throughout the wizarding world")
         self.set_attack(10)
         self.set_move("")
-        self.set_loot(RGXButterflyKnife())
+        self.set_loot(ElderWand())
