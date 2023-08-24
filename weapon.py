@@ -53,85 +53,85 @@ class BusterSword(Weapon):
     def __init__(self):
         super().__init__()
         self.set_name("Buster Sword")
-        self.set_description("An enormous broadsword. From tip to handle, it is approximately five to six feet long, with a single-edged large blade approximately one foot wide.")
-        self.set_attack(100)
-        self.set_move("")
-        self.set_win_front("")
-        self.set_win_back("")
+        self.set_description("The Buster Sword is an enormous broadsword. From tip to handle, it is approximately five to six feet long, with a single-edged large blade approximately one foot wide.")
+        self.set_attack(10)
+        self.set_move(" used Focused Thrust")
+        self.set_win_front(" used braver and smashed ")
+        self.set_win_back(" into the ground")
 
 class MasterSword(Weapon):
 
     def __init__(self):
         super().__init__()
         self.set_name("Master Sword")
-        self.set_description("A divine magic sword with the power to vanquish evil. Infused with the sacred flames provided by the Golden Goddesses and blessed with Hylia's power")
-        self.set_attack(100)
-        self.set_move("")
-        self.set_win_front("")
-        self.set_win_back("")
+        self.set_description("The Master Sword is a divine magic sword with the power to vanquish evil. Infused with the sacred flames provided by the Golden Goddesses and blessed with Hylia's power")
+        self.set_attack(10)
+        self.set_move(" used Sword beam")
+        self.set_win_front(" used the power of the triforce to vanquish ")
+        self.set_win_back(" from the face of the earth")
 
 class LeviathanAxe(Weapon):
 
     def __init__(self):
         super().__init__()
         self.set_name("Leviathan Axe")
-        self.set_description("a two-handed battle axe. It was forged by Brok and Sindri for Laufey, in hopes that she would help undo their mistake in creating Mjolnir")
-        self.set_attack(100)
-        self.set_move("")
-        self.set_win_front("")
-        self.set_win_back("")
+        self.set_description("The Leviathan axe legendary two-handed battle axe imbuded with elemental magic allowing it to return to the user")
+        self.set_attack(10)
+        self.set_move("threw the Leviathan Axe")
+        self.set_win_front(" lunged towards ")
+        self.set_win_back(" and decapitated it")
 
 class PortalGun(Weapon):
 
     def __init__(self):
         super().__init__()
         self.set_name("Portal Gun")
-        self.set_description("A hand-held device which has the ability to manufacture two linked portals. No matter the distance between them, any object which passes through one portal will emerge from the other and vice versa instantaneously")
-        self.set_attack(100)
-        self.set_move("")
-        self.set_win_front("")
-        self.set_win_back("")
+        self.set_description("The Portal Gun is a hand-held device which has the ability to manufacture two linked portals. No matter the distance between them, any object which passes through one portal will emerge from the other and vice versa instantaneously")
+        self.set_attack(10)
+        self.set_move("used portals")
+        self.set_win_front(" used a portal to send ")
+        self.set_win_back(" to the moon")
 
 class VirtuousTreaty(Weapon):
 
     def __init__(self):
         super().__init__()
         self.set_name("Virtuous Treaty")
-        self.set_description("")
-        self.set_attack(100)
-        self.set_move("")
-        self.set_win_front("")
-        self.set_win_back("")
+        self.set_description("The Virtuous Treaty is a pure white samurai blade not sullied by a single drop of blood")
+        self.set_attack(10)
+        self.set_move(" used Virtuous Treaty")
+        self.set_win_front(" struck ")
+        self.set_win_back(" down in one clean slash")
 
 class Coronacht(Weapon):
 
     def __init__(self):
         super().__init__()
         self.set_name("Coronacht")
-        self.set_description("")
-        self.set_attack(100)
-        self.set_move("")
-        self.set_win_front("")
+        self.set_description("The Coronacht is an infernal arm, the finest bow ever concevied, once weilded by Mistress Hera")
+        self.set_attack(10)
+        self.set_move(" Used power shot")
+        self.set_win_front(" Used the aspect of Hera to shoot a power shot right through ")
         self.set_win_back("")
 
-class TerraBlade(Weapon):
+class Zenith(Weapon):
 
     def __init__(self):
         super().__init__()
-        self.set_name("Terra Blade")
-        self.set_description("")
-        self.set_attack(100)
-        self.set_move("")
-        self.set_win_front("")
-        self.set_win_back("")
+        self.set_name("Zenith")
+        self.set_description("The Zenith is a legendary blade crafted using 10 different powerful swords")
+        self.set_attack(10)
+        self.set_move(" Used The Zenith")
+        self.set_win_front(" obliterated ")
+        self.set_win_back(" using the power of 10 swords")
 
 class RGXButterflyKnife(Weapon):
 
     def __init__(self):
         super().__init__()
         self.set_name("RGX Butterfly Knife")
-        self.set_description("")
-        self.set_attack(100)
-        self.set_move("")
-        self.set_win_front("")
-        self.set_win_back("")
+        self.set_description("The RGX Butterfly Knife is the most powerful butterfly knife on earth due its RGB")
+        self.set_attack(10)
+        self.set_move(" used behind the 8 ball")
+        self.set_win_front(" performed the valorant inspect flawlessly causing ")
+        self.set_win_back(" to self destruct")

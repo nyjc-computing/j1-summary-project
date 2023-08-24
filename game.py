@@ -73,7 +73,7 @@ class Game:
     def help(self):
         print("You are able to:")
         for i, action in enumerate(self.actions):
-            print(f"{i+1}. {action} ({self.description[i]})")
+            print(f"- {action} ({self.description[i]})")
         
     def look(self):
         
@@ -90,7 +90,7 @@ class Game:
             print(f"Behind you is {self.room.get_back().get_name()}")
 
         if self.room.get_enemy() != None:
-            print(f"\nIn the middle of the room is {self.room.get_enemy().get_name()}")
+            print(f"\nIn the middle of the room is {self.room.get_enemy().get_name()}, {self.room.get_enemy().get_description()}")
 
     def move(self):
         movement = input('\nWhich direction do you wish to move in? (left, right, forward, back): ')
@@ -130,13 +130,17 @@ class Game:
             while attacker.get_health() > 0:
 
                 print(f"{attacker.get_name()} has {attacker.get_health()} health")
-                print(f"{victim.get_name()} has {victim.get_health()} health\n")
+                print(f"{attacker.get_name()} has {attacker.get_mana()} mana")
+                print(f"\n{victim.get_name()} has {victim.get_health()} health\n")
 
                 damage, weapon = self.get_attack(self.character)
                 
                 victim.set_health(victim.get_health() - damage)
                 if victim.get_health() > 0:
-                    print(f"\n{attacker.get_name()} dealt {damage} damage to {victim.get_name()}")
+                    if weapon == None:
+                        print(f"\n{attacker.get_name()} dealt {damage} damage to {victim.get_name()}")
+                    else:
+                        print(f"\n{attacker.get_name()}{weapon.get_move()}, dealing {damage} damage to {victim.get_name()}")
                 
                 if victim.get_health() > 0:
                     attacker.set_health(attacker.get_health() - victim.get_attack())
@@ -164,11 +168,21 @@ class Game:
     def get_attack(self, user):
         
         decision = input("What do you want to use? (weapon / spell): ")
-        
-        while decision.lower() not in ["weapon", "spell"]:
-            print(f"You tried to use {decision} but nothing happened")
-            decision = input("What do you want to use? (weapon / spell): ")
+
+        cost = []
+        for spell in user.get_spells():
+            cost.append(spell.get_cost())
             
+        while True:
+            if decision.lower() not in ["weapon", "spell"]:
+                print(f"You tried to use {decision} but nothing happened")
+                decision = input("What do you want to use? (weapon / spell): ")
+            elif decision.lower() == "spell" and user.get_mana() < min(cost):
+                print("You do not have enough mana to cast spells")
+                decision = input("What do you want to use? (weapon / spell): ")
+            else:
+                break
+        
         if decision.lower() == "weapon":
             if user.get_weapon() == None:
                 return user.get_attack(), None
@@ -180,10 +194,13 @@ class Game:
             spells = []
             for spell in user.spells:
                 spells.append(spell.get_name().lower())
-            choice = input("Which spell would you like to cast?: ")
+            choice = input("\nWhich spell would you like to cast?: ")
             while choice not in spells:
-                print(f"You tried to cast {choice} but it blew up in your face")
-                choice = input("Which spell would you like to cast?: ")
+                print(f"\nYou tried to cast {choice} but it blew up in your face")
+                choice = input("\nWhich spell would you like to cast?: ")
+            cost = user.get_spells()[spells.index(choice)].get_cost()
+            print(f"\nYou used up {cost} mana points")
+            user.set_mana(user.get_mana() - cost)
             return user.get_spells()[spells.index(choice)].get_attack(), user.get_spells()[spells.index(choice)]
             
     def equip(self, user):
@@ -198,10 +215,10 @@ class Game:
         elif decision.lower() == "yes":
             choice = ""
             while choice != "finish":
-                choice = input("what do you want to change?: ")
+                choice = input("\nwhat do you want to change? (type finish to quit): ")
                 while choice.lower() not in ["armour", "weapon", "accessory", "finish"]:
-                    print(f"You tried changing your {choice} but nothing happened")
-                    choice = input("what do you want to change?: ")
+                    print(f"\nYou tried changing your {choice} but nothing happened")
+                    choice = input("\nwhat do you want to change?: ")
     
                 if choice.lower() == "armour":
                     self.equip_armour(user)
@@ -232,54 +249,57 @@ class Game:
     def display_spells(self, user):
         print("\nYou can use:")
         for i, spell in enumerate(user.spells):
-            print(f"{i + 1}. {spell.get_name()}")
+            print(f"- {spell.get_name()}")
 
     def equip_armour(self, user):
         if len(user.get_armours()) == 0:
-            print("You do not have any armour to equip")
+            print("\nYou do not have any armour to equip")
         else:
-            print("In your inventory you have: ")
+            print("\nIn your inventory you have: ")
             items = []
             for armour in user.get_armours():
                 items.append(armour.get_name().lower())
             for armour in items:
                 print(f"- {armour}")
-            option = input("Which armour do you want to equip?: ")
+            option = input("\nWhich armour do you want to equip?: ")
             if option.lower() not in items:
-                print(f"You tried equipping {option.lower()} but realised you cant create things out of thin air")
+                print(f"\nYou tried equipping {option} but realised you cant create things out of thin air")
             else:
+                print(f"\nYou equipped {option}")
                 user.armour = user.get_armours()[items.index(option.lower())]
 
     def equip_weapon(self, user):
         if len(user.get_weapons()) == 0:
-            print("You do not have any weapon to equip")
+            print("\nYou do not have any weapon to equip")
         else:
-            print("In your inventory you have: ")
+            print("\nIn your inventory you have: ")
             items = []
             for weapon in user.get_weapons():
                 items.append(weapon.get_name().lower())
             for weapon in items:
                 print(f"- {weapon}")
-            option = input("Which weapon do you want to equip?: ")
+            option = input("\nWhich weapon do you want to equip?: ")
             if option.lower() not in items:
-                print(f"You tried equipping {option.lower()} but realised you cant create things out of thin air")
+                print(f"\nYou tried equipping {option} but realised you cant create things out of thin air")
             else:
+                print(f"\nYou equipped {option}")
                 user.weapon = user.get_weapons()[items.index(option.lower())]
 
     def equip_accessory(self, user):
         if len(user.accessories) == 0:
-            print("You do not have any accessories to equip")
+            print("\nYou do not have any accessories to equip")
         else:
-            print("In your inventory you have: ")
+            print("\nIn your inventory you have: ")
             items = []
             for accessory in user.get_accessories():
                 items.append(accessory.get_name().lower())
             for accessory in items:
                 print(f"- {accessory}")
-            option = input("Which accessory do you want to equip?: ")
+            option = input("\nWhich accessory do you want to equip?: ")
             if option.lower() not in items:
-                print(f"You tried equipping {option.lower()} but realised you cant create things out of thin air")
+                print(f"\nYou tried equipping {option} but realised you cant create things out of thin air")
             else:
+                print(f"\nYou equipped {option}")
                 user.accessory = user.get_accessories()[items.index(option.lower())]
 
     def information(self, user):

@@ -64,3 +64,12 @@ class DragonAmulet(Accessory):
         self.set_name("Dragon Amulet")
         self.set_description("")
         self.set_attack_boost(0)
+
+class ChaosEmerald(Accessory):
+
+    def __init__(self):
+        super().__init__()
+        self.set_name("Chaos Emerald")
+        self.set_description("")
+        self.set_health_boost(0)
+

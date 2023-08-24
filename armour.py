@@ -50,3 +50,11 @@ class PowerSuit(Armour):
         self.set_name("Power Suit")
         self.set_description("")
         self.set_defence(10)
+
+class DragonMail(Armour):
+
+    def __init__(self):
+        super().__init__()
+        self.set_name("Dragon Mail")
+        self.set_description("")
+        self.set_defence(10)
