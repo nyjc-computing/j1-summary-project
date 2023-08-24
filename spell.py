@@ -63,7 +63,7 @@ class WingardiumLeviosa(Spell):
         self.set_cost(10)
         self.set_description(f"Wingardium Leviosa is a magic spell that can make objects levitate\nDeals {self.get_attack()} damage\nCost {self.get_cost()} mana")
         self.set_move(" used levitation")
-        self.set_win_front("levitated ")
+        self.set_win_front(" levitated ")
         self.set_win_back(" so high that it breached the atmosphere and exploded")
     
 class VengefulSpirit(Spell):
@@ -75,7 +75,7 @@ class VengefulSpirit(Spell):
         self.set_cost(10)
         self.set_description(f"Vengeful spirit is a spirit that will fly forward and burn foes in its path\nDeals {self.get_attack()} damage\nCost {self.get_cost()} mana")
         self.set_move(" used Vengeful Spirit")
-        self.set_win_front("charged up all your soul and shot a massive vengeful spirit at ")
+        self.set_win_front(" charged up all your soul and shot a massive vengeful spirit at ")
         self.set_win_back("")
 
 class Megidolaon(Spell):
@@ -87,7 +87,7 @@ class Megidolaon(Spell):
         self.set_cost(10)
         self.set_description(f"Megidolaon is a damage dealing almight spell\nDeals {self.get_attack()} damage\nCost {self.get_cost()} mana")
         self.set_move(" used Megidolaon")
-        self.set_win_front("summoned your persona Satanael and dealt massive almighty damage to ")
+        self.set_win_front(" summoned your persona Satanael and dealt massive almighty damage to ")
         self.set_win_back("")
 
 class GlintstoneCometshard(Spell):

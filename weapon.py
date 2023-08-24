@@ -77,7 +77,7 @@ class LeviathanAxe(Weapon):
         self.set_name("Leviathan Axe")
         self.set_attack(10)
         self.set_description(f"The Leviathan axe legendary two-handed battle axe imbuded with elemental magic allowing it to return to the user\nDeals {self.get_attack()} damage")
-        self.set_move("threw the Leviathan Axe")
+        self.set_move(" threw the Leviathan Axe")
         self.set_win_front(" lunged towards ")
         self.set_win_back(" and decapitated it")
 
@@ -88,7 +88,7 @@ class PortalGun(Weapon):
         self.set_name("Portal Gun")
         self.set_attack(10)
         self.set_description(f"The Portal Gun is a hand-held device which has the ability to manufacture two linked portals. No matter the distance between them, any object which passes through one portal will emerge from the other and vice versa instantaneously\nDeals {self.get_attack()} damage")
-        self.set_move("used portals")
+        self.set_move(" used portals")
         self.set_win_front(" used a portal to send ")
         self.set_win_back(" to the moon")
 
@@ -110,7 +110,7 @@ class Coronacht(Weapon):
         self.set_name("Coronacht")
         self.set_attack(10)
         self.set_description(f"The Coronacht is an infernal arm, the finest bow ever concevied, once weilded by Mistress Hera\nDeals {self.get_attack()} damage")
-        self.set_move(" Used power shot")
+        self.set_move(" used power shot")
         self.set_win_front(" Used the aspect of Hera to shoot a power shot right through ")
         self.set_win_back("")
 
@@ -121,7 +121,7 @@ class Zenith(Weapon):
         self.set_name("Zenith")
         self.set_attack(10)
         self.set_description(f"The Zenith is a legendary blade crafted using 10 different powerful swords\nDeals {self.get_attack()} damage")
-        self.set_move(" Used The Zenith")
+        self.set_move(" used The Zenith")
         self.set_win_front(" obliterated ")
         self.set_win_back(" using the power of 10 swords")
 

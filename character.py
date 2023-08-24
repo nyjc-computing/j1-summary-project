@@ -29,6 +29,7 @@ class Character:
         self.attack = 0
         self.mana = 0
         self.max_mana = 0
+        self.defence = 0
         self.armour = None
         self.armours = []
         self.weapon = None
@@ -61,6 +62,12 @@ class Character:
 
     def get_max_health(self):
         return self.max_health
+
+    def set_defence(self, defence):
+        self.defence = defence
+
+    def get_defence(self):
+        return self.defence
         
     def set_spells(self, spell):
         self.spells.append(spell)
