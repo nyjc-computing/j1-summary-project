@@ -36,6 +36,9 @@ class Character:
         self.weapons = []
         self.accessory = None
         self.accessories = []
+        self.health_flask = 0
+        self.mana_flask = 0
+        self.items = []
 
     def set_name(self, name) -> None:
         """
@@ -128,3 +131,21 @@ class Character:
 
     def get_accessories(self):
         return self.accessories
+
+    def set_health_flask(self, number):
+        self.health_flask += number
+
+    def get_health_flask(self):
+        return self.health_flask
+
+    def set_mana_flask(self, number):
+        self.mana_flask += number
+
+    def get_mana_flask(self):
+        return self.mana_flask
+
+    def set_items(self, item):
+        self.items.append(item)
+
+    def get_items(self):
+        return self.items

@@ -157,3 +157,14 @@ class Wand(Weapon):
         self.set_move(" threw the wand")
         self.set_win_front(" poked ")
         self.set_win_back(" to death")  
+
+class MarksmanRevolver(Weapon):
+
+    def __init__(self):
+        super().__init__()
+        self.set_name("Marksman Revolver")
+        self.set_attack(10)
+        self.set_description(f"A revolver. Every few seconds a coin pops out of the bottom of the gun. The purpose of this function is lost on you\nDeals {self.get_attack()} damage")
+        self.set_move(" +HEADSHOT")
+        self.set_win_front(" threw $4.32 of change at ")
+        self.set_win_back(", knocking it out")  

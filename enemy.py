@@ -80,7 +80,7 @@ class TheRadiance(Enemy):
         self.set_health(20)
         self.set_description("a higher being of light similar to Essence, and as such, opposed to the Void, her ancient enemy. The Moth Tribe is born from her light and in return revered her.")
         self.set_attack(10)
-        self.set_move("wall of light")
+        self.set_move("Wall of Light")
         self.set_loot(VengefulSpirit())
 
 class MrOshiro(Enemy):
@@ -90,7 +90,7 @@ class MrOshiro(Enemy):
         self.set_health(20)
         self.set_description("a well-meaning but tormented ghostly hotel owner in Celeste, haunted by his past and struggling to maintain his crumbling establishment")
         self.set_attack(10)
-        self.set_move("charge")
+        self.set_move("Charge")
         self.set_loot(GoldenFeather())
 
 class TheHighDragun(Enemy):
@@ -100,7 +100,7 @@ class TheHighDragun(Enemy):
         self.set_health(10)
         self.set_description("a powerful dragon armed to the teeth with an array of deadly attacks and a formidable challenge for any gungeoneer")
         self.set_attack(10)
-        self.set_move("bullet stream")
+        self.set_move("Bullet Stream")
         self.set_loot(MasterRound())
 
 class GodrickTheGrafted(Enemy):
@@ -110,7 +110,7 @@ class GodrickTheGrafted(Enemy):
         self.set_health(10)
         self.set_description("a grotesque and formidable boss, a creature amalgamation of flesh and metal that presents a formidable challenge to you with his overwhelming power and monstrous appearance")
         self.set_attack(10)
-        self.set_move("dragon arm")
+        self.set_move("Dragon Arm")
         self.set_loot(GlintstoneCometshard())
 
 class Glados(Enemy):
@@ -120,7 +120,7 @@ class Glados(Enemy):
         self.set_health(10)
         self.set_description("a malevolent AI antagonist, known for her dark sense of humor and penchant for testing subjects with life-threatening puzzles")
         self.set_attack(10)
-        self.set_move("neurotoxin gas")
+        self.set_move("Neurotoxin Gas")
         self.set_loot(PortalGun())
 
 class Yaldabaoth(Enemy):
@@ -130,7 +130,7 @@ class Yaldabaoth(Enemy):
         self.set_health(10)
         self.set_description("an imposing and god-like antagonist, representing the oppressive control and distorted order imposed upon society")
         self.set_attack(10)
-        self.set_move("")
+        self.set_move("Divine Punishment")
         self.set_loot(Megidolaon())
 
 class Ridley(Enemy):
@@ -140,7 +140,7 @@ class Ridley(Enemy):
         self.set_health(10)
         self.set_description("a fearsome space pirate leader and recurring antagonist, known for his ruthless cruelty and iconic draconic appearance")
         self.set_attack(10)
-        self.set_move("")
+        self.set_move("Fireball")
         self.set_loot(PowerSuit())
 
 class Emil(Enemy):
@@ -150,7 +150,7 @@ class Emil(Enemy):
         self.set_health(10)
         self.set_description("a nightmarish and relentless foe, with multiple heads and powerful attacks")
         self.set_attack(10)
-        self.set_move("")
+        self.set_move("Emil Clones")
         self.set_loot(VirtuousTreaty())
 
 class TheBoneHyrda(Enemy):
@@ -160,7 +160,7 @@ class TheBoneHyrda(Enemy):
         self.set_health(10)
         self.set_description("a fearsome and multi-headed boss, a relentless adversary that guards the underworld's entrance and challenges you with its deadly attacks.")
         self.set_attack(10)
-        self.set_move("")
+        self.set_move("Ground Slam")
         self.set_loot(Coronacht())
 
 class GeneralMugen(Enemy):
@@ -170,7 +170,7 @@ class GeneralMugen(Enemy):
         self.set_health(10)
         self.set_description("a formidable and ruthless military leader, known for his strategic prowess and unwavering dedication to his nation's conquest")
         self.set_attack(10)
-        self.set_move("")
+        self.set_move("Ordained Punishment")
         self.set_loot(DragonMail())
 
 class DoctorEggman(Enemy):
@@ -180,7 +180,7 @@ class DoctorEggman(Enemy):
         self.set_health(10)
         self.set_description("a brilliant yet perpetually thwarted scientist with a penchant for constructing nefarious machines and plots to conquer the world")
         self.set_attack(10)
-        self.set_move("")
+        self.set_move("his Robot Army")
         self.set_loot(ChaosEmerald())
 
 class TheMoonLord(Enemy):
@@ -190,7 +190,7 @@ class TheMoonLord(Enemy):
         self.set_health(10)
         self.set_description("a towering eldritch entity with a menacing appearance and an array of devastating attacks that challenge you to your limits")
         self.set_attack(10)
-        self.set_move("")
+        self.set_move("Phantasmal Eyes")
         self.set_loot(Zenith())
 
 class Mithrix(Enemy):
@@ -200,7 +200,7 @@ class Mithrix(Enemy):
         self.set_health(10)
         self.set_description("a vengeful and godlike being with the power to manipulate time and space, posing a significant threat to whoever attempts to escape")
         self.set_attack(10)
-        self.set_move("")
+        self.set_move("Lunar Hammer Smash")
         self.set_loot(WillOTheWisp())
 
 class Sephiroth(Enemy):
@@ -210,7 +210,7 @@ class Sephiroth(Enemy):
         self.set_health(10)
         self.set_description("a brooding and immensely powerful warrior with a deep-seated desire to harness the destructive force of the planet for his own malevolent purposes")
         self.set_attack(10)
-        self.set_move("")
+        self.set_move("Super Nova")
         self.set_loot(BusterSword())
 
 class Ganondorf(Enemy):
@@ -220,7 +220,7 @@ class Ganondorf(Enemy):
         self.set_health(10)
         self.set_description("a malevolent Gerudo sorcerer who seeks to obtain the Triforce's power and plunge Hyrule into darkness and chaos")
         self.set_attack(10)
-        self.set_move("")
+        self.set_move("Dark Magic")
         self.set_loot(MasterSword())
 
 class TheEnderDragon(Enemy):
@@ -230,7 +230,7 @@ class TheEnderDragon(Enemy):
         self.set_health(10)
         self.set_description("a fearsome and colossal winged creature that challenges you with its destructive abilities and formidable strength")
         self.set_attack(10)
-        self.set_move("")
+        self.set_move("Dragon's breath")
         self.set_loot(NetheriteArmour())
 
 class Shibusawa(Enemy):
@@ -240,7 +240,7 @@ class Shibusawa(Enemy):
         self.set_health(10)
         self.set_description("a ruthless and power-hungry underworld figure who manipulates events to achieve his sinister goals within the criminal landscape of Kamurocho")
         self.set_attack(10)
-        self.set_move("")
+        self.set_move("Beast Style")
         self.set_loot(DragonAmulet())
 
 class Enchantress(Enemy):
@@ -250,7 +250,7 @@ class Enchantress(Enemy):
         self.set_health(10)
         self.set_description("a mastermind behind the Order of No Quarter, shrouded in mystery and wielding dark magic")
         self.set_attack(10)
-        self.set_move("")
+        self.set_move("Pyrokinetic Flames")
         self.set_loot(OrnatePlate())
 
 class Freya(Enemy):
@@ -260,7 +260,7 @@ class Freya(Enemy):
         self.set_health(10)
         self.set_description("a formidable and relentless adversary, harnessing her powerful magic and fierce determination to protect her son, Baldur")
         self.set_attack(10)
-        self.set_move("")
+        self.set_move("Thamur")
         self.set_loot(LeviathanAxe())
 
 class Reyna(Enemy):
@@ -270,15 +270,25 @@ class Reyna(Enemy):
         self.set_health(10)
         self.set_description("a deadly duelist agent with the ability to absorb the souls of defeated enemies, empowering herself to become an even more formidable threat on the battlefield")
         self.set_attack(10)
-        self.set_move("")
+        self.set_move("Reaver Vandal")
         self.set_loot(RGXButterflyKnife())
 
-class Voldermort(Enemy):
+class Voldemort(Enemy):
     def __init__(self):
         super().__init__()
-        self.set_name("Voldermort")
+        self.set_name("Voldemort")
         self.set_health(10)
         self.set_description("a malevolent dark wizard, seeking power and immortality while spreading fear and chaos throughout the wizarding world")
         self.set_attack(10)
-        self.set_move("")
+        self.set_move("Avada Kedavra")
         self.set_loot(ElderWand())
+
+class Gabriel(Enemy):
+    def __init__(self):
+        super().__init__()
+        self.set_name("Gabriel, Apostate of Hate")
+        self.set_health(10)
+        self.set_description("a seething red angelic crusader wielding twin swords, desperate to prove himself to the council")
+        self.set_attack(10)
+        self.set_move("Sword Throw")
+        self.set_loot(MarksmanRevolver())

@@ -18,5 +18,7 @@ def setup():
     character.set_attack(10)
     character.set_mana(100)
     character.set_max_mana(100)
+    character.set_health_flask(2)
+    character.set_mana_flask(2)
     
     return [map, character]

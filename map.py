@@ -2,6 +2,7 @@ from enemy import *
 from weapon import *
 from armour import *
 from spell import *
+from item import *
 
 class Room:
     """
@@ -40,7 +41,6 @@ class Room:
         self.forward = None
         self.back = None
         self.been_here = False
-        self.is_fighting = False
         self.loot = None
 
     def set_been_here(self, status: bool) -> None:
@@ -48,12 +48,6 @@ class Room:
         
     def get_been_here(self) -> bool:
         return self.been_here
-
-    def set_is_fighting(self, status: bool) -> None:
-        self.is_fighting = status
-
-    def get_is_fighting(self) -> bool:
-        return self.is_fighting
     
     def link_left(self, room):
         temp = room
@@ -104,6 +98,12 @@ class Room:
 
     def get_description(self):
         return self.description
+
+    def set_loot(self, loot):
+        self.loot = loot
+
+    def get_loot(self):
+        return self.loot
         
 class Dirtmouth(Room):
     def __init__(self):
@@ -114,6 +114,7 @@ class Dirtmouth(Room):
         self.link_left(Midgar())
         self.link_right(HyruleKingdom())
         self.link_forward(TheEndDimension())
+        self.set_loot(FlaskOfCrimsonTears())
 
 class CelestialResort(Room):
     def __init__(self):
@@ -130,6 +131,7 @@ class TheForge(Room):
         self.set_name("The Forge")
         self.set_description("You stepped into a blistering hellscape deep within the Gungeon, a relentless crucible where you honed your combat skills to a razor's edge. Its molten rivers and infernal denizens pushed you to your limits, but you are determined to conquer it and uncover the ultimate weapon hidden within.")
         self.link_forward(Mementos())
+        self.set_loot(FlaskOfCrimsonTears())
 
 class StormveilCastle(Room):
     def __init__(self):
@@ -155,7 +157,7 @@ class Zebes(Room):
         self.set_enemy(Ridley())
         self.set_name("Zebes")
         self.set_description("You stepped into a hostile and alien world, where you face some of your most harrowing battles against the Space Pirates and their nefarious plans. Its treacherous landscapes, infested with hostile creatures, hide the secrets of the Chozo and your relentless pursuit of justice.")
-        self.link_forward(PrincipalsOffice())
+        self.set_loot(DectusMedallionLeft())
 
 class Bunker(Room):
     def __init__(self):
@@ -196,6 +198,7 @@ class TheHallow(Room):
         self.set_enemy(TheMoonLord())
         self.set_name("The Hallow")
         self.set_description("You stepped into a radiant but eerie biome, a stark contrast to the darkness that permeates the underground. It's a realm where fantastical creatures and rare resources await, but also a place where you must tread carefully to avoid its relentless and otherworldly foes.")
+        self.set_loot(DectusMedallionRight())
 
 class Commencement(Room):
     def __init__(self):
@@ -226,6 +229,7 @@ class TheEndDimension(Room):
         self.set_enemy(TheEnderDragon())
         self.set_name("The End Dimension")
         self.set_description("You stepped into a dark, space-like dimension consisting of separate islands in the void, made out of end stone. It is inhabited by endermen and shulkers.")
+        self.link_forward(PrincipalsOffice())
 
 class Kamurocho(Room):
     def __init__(self):
@@ -264,10 +268,19 @@ class Ascent(Room):
         self.set_name("Ascent")
         self.set_description("You step into a clearing, in the middle of what seems to be a city. Surrounding you are buildings, their appearance reminding you of Ancient Roman Architecture. A skyscraper rises into the sky in the distance, its cold, geometric features clashing with the elegant, smooth lines of the buildings surrounding you. It is only when you turn around that you realise the entire city is several hundred metres above the ground.")
         self.link_right(ApertureLab())
+        self.link_left(SixthCircleOfHell())
 
 class PrincipalsOffice(Room):
     def __init__(self):
         super().__init__()
-        self.set_enemy(Voldermort())
-        self.set_name("Principals Office")
+        self.set_enemy(Voldemort())
+        self.set_name("Principal's Office")
         self.set_description("You step into a chamber where disciplinary matters are addressed by the headmaster or headmistress. It is an imposing and somber room, with a large wooden desk and portraits of previous headmasters lining the walls, serving as a place of both judgment and guidance for students.")
+
+class SixthCircleOfHell(Room):
+    def __init__(self):
+        super().__init__()
+        self.set_enemy(Gabriel())
+        self.set_name("6th Circle of Hell")
+        self.set_description("You step into an abandoned church bathed in blood red light. The walls are patterned with the faces of the damned, their expressions contorted in agony, doomed to shriek silently for all eternity. On the far side of the room, a church organ looms over you, an eerie, melancholic melody flowing from its pipes. Its player, a lone figure clad in gold and silver armour")
+    
