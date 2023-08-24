@@ -5,6 +5,7 @@ class Test:
     def __init__(self):
         pass
 
+
     def select_ag(self):
         p = game.Game()
         print(p.agent_select(random.randint(0,3)))
