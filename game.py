@@ -11,16 +11,17 @@ class MUDGame:
         self.won = False # default
         self.maze = Labyrinth()
         self.maze.generate()
-        self.steve = Steve(0)
+        self.steve = Steve()
         self.steve_path = []
         self.boss = Boss()
+
 
     
     def introduce(self): 
         """
         Starting interface of the game
         """
-        username = input('Enter your username:')
+        username = input('Enter your username: ')
         print(f'{username}, OH NO YOU ARE TRAPPED! \nYou will go through a series of rooms that may give you items or have ANGRY creatures wanting you DEAD :P \nKill them all, especially the boss to escape! \nGOOD LUCK ;D')
 
     def game_is_over(self) -> bool:
@@ -41,28 +42,30 @@ class MUDGame:
         print(menu)
 
     def prompt_player_2opt(self) -> int:
-        opt = None
+        opt = input('Please choose option 1 or 2: ')
         while not self.isvalid_2opt(opt):
-            opt = input('Please choose option 1 or 2:')
+            print('Please a valid number(1/2).')
+            opt = input('Please choose option 1 or 2: ')
         return opt
 
-    def isvalid_2opt(choice: str) -> bool:
-        if choice in ('12'):
-            if len(choice) == 1:
+
+    def isvalid_2opt(self, opt) -> bool:
+        if opt in '12':
+            if len(opt) == 1:
                 return True
         return False
 
-    def isvalid_4opt(choice) -> bool:
-        if choice in ('1234'):
-            if len(choice) == 1:
+    def isvalid_4opt(self, opt) -> bool:
+        if opt in '1234':
+            if len(opt) == 1:
                 return True
         return False
 
     def attack(self):
-        x, y =self.maze.steve_pos()
-        room = self.maze.get_current_pos()
-        creature = self.room.get_creature()
-        while not self.steve_isdead() or self.creature.hitpoints <= 0:
+        x, y = self.maze.get_current_pos()
+        room = Room(x, y)
+        creature = room.get_creature()
+        while not self.steve.isdead() or self.creature.hitpoints <= 0:
             print(self.steve)
             print(f"{creature.info['name']} has {self.creature.get_health()} HP")
             # damage = self.steve....
@@ -81,10 +84,10 @@ class MUDGame:
             return False
         return True
 
-    def show_winscreen():
+    def show_winscreen(self):
         print('Congratulations! \nYou have escaped!')
 
-    def show_losescreen():
+    def show_losescreen(self):
         print("YOU DIED...\nDo you want to try again?")
 
     def movesteve(self):
@@ -100,7 +103,7 @@ class MUDGame:
         validity = False
         while validity == False:
             print('Where are you going next? ' + dir_provided )
-            choice = input('Next location:')
+            choice = input('Next location: ')
             no_of_choice = len(available_dir)
             valid_choice = ''
             for i in range(no_of_choice):
@@ -157,6 +160,8 @@ class MUDGame:
                 item_choice = self.prompt_player_2opt()
                 if item_choice == 1:
                     self.steve._add_item_to_inv(item)
+            if self.boss_encountered():
+                
 
             self.movesteve()
             if random.randint(1, 100) <= 30:
