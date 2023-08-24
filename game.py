@@ -2,6 +2,10 @@
 from data import *
 import random
 
+NORTH = "NORTH"
+SOUTH = "SOUTH"
+EAST = "EAST"
+WEST = "WEST"
 
 
 class MUDGame:
@@ -28,16 +32,19 @@ class MUDGame:
         if self.steve.isdead() or self.boss.isdead(): # other conditions
             return True
 
-    def show_status(self) -> 'str':
+    def show_status(self) -> None:
+        raise NotImplementedError
         print(self.steve)
 
-    def show_options(self, sit: str) -> str:
+    def show_options(self, sit: str) -> None:
         if sit == 'creature':
             menu = "1. Attack \n2. Retreat"
         elif sit == 'item':
             menu = '1. Pick Up \n2. Do not pick up'
         elif sit == 'restart':
             menu = '1. Yes \n2. No'
+        elif sit == 'battle':
+            menu = '1. Attack \n2. Heal'
         print(menu)
 
     def prompt_player_2opt(self) -> int:
@@ -46,6 +53,7 @@ class MUDGame:
             print('Please a valid number(1/2).')
             opt = input('Please choose option 1 or 2: ')
         return opt
+
 
     def isvalid_2opt(self, opt) -> bool:
         if opt in '12':
@@ -59,17 +67,35 @@ class MUDGame:
                 return True
         return False
 
-    def attack(self):
+    def battle(self):
         x, y = self.maze.get_current_pos()
-        room = Room(x, y)
+        room = self.maze.lab[x][y]
         creature = room.get_creature()
-        while not self.steve.isdead() or self.creature.hitpoints <= 0:
-            print(self.steve)
-            print(f"{creature.info['name']} has {self.creature.get_health()} HP")
-            damage = self.steve.get_attack()
-            creature.hitpoints -= damage
-            print(f'You attacked {creature.info["name"]}')
-            self.steve.health -= creature.get_attack()
+        print(f"You have encountered the {creature.name}!")
+        while not self.steve.isdead() or self.creature.isdead():
+            print(self.steve) # show HP
+            self.show_options('battle')
+            self.prompt_player_2opt()
+            if option == 1:
+                #attack
+                damage = self.steve.get_attack()
+                self.creature.take_damage(damage)
+                print(f"{creature.name} now has {self.creature.get_health()} HP")
+            elif option == 2:
+                #heal
+                self.steve._display_inventory()
+                opt = input('Please choose a food item: ')
+                print('You have healed ')
+            #Steve endturn 
+            damage = creature.random_move()
+            self.steve.take_damage(damage)
+            if damage == 0:
+                print(f"The {creature.name} has healed itself.")
+            else:
+                print(f"The {creature.name} has dealt {damage} damage on you.")
+        
+
+        
 
     def creature_encountered(self):
         if self.room.creature is None:
@@ -88,11 +114,11 @@ class MUDGame:
         print("YOU DIED...\nDo you want to try again?")
 
     def movesteve(self):
-        current_location = self.maze.get_current_pos
-        opt_dir = {'1':'North', '2':'East', '3':'South', '4':'West'}
+        current_location = self.maze.get_current_pos()
+        opt_dir = {'1':NORTH, '2':SOUTH, '3':EAST, '4':WEST}
         available_dir = []
         dir_provided = ''
-        for dir in opt_dir.values:
+        for dir in opt_dir.values():
             if self.maze.can_move_here(current_location, dir):
                 available_dir.append(dir)
         for i in range(len(available_dir)):
@@ -108,6 +134,7 @@ class MUDGame:
             if choice in valid_choice:
                 if len(choice) == 1:
                     validity = True
+        choice = int(choice)
         self.maze.move_steve(current_location, available_dir[choice - 1])
 
     def moveboss(self):
@@ -142,9 +169,9 @@ class MUDGame:
                     if self.game_is_over():
                         continue
                 else:
-                    odds = random.randint(0, 100)
+                    odds = random.randint(1, 100)
                     if odds <= 40:
-                        self.maze.try_move_steve(...)
+                        self.maze.try_move_steve(self.maze.get_current_pos, self.steve_path[-2])
                         continue
                     else:
                         print("Too late to escape!")
@@ -157,9 +184,13 @@ class MUDGame:
                 item_choice = self.prompt_player_2opt()
                 if item_choice == 1:
                     self.steve._add_item_to_inv(item)
+            if self.boss_encountered():
+                
+                
 
             self.movesteve()
-            self.moveboss()
+            if random.randint(1, 100) <= 30:
+                self.moveboss() 
                 # update
         if self.steve.isdead():
             self.show_losescreen()

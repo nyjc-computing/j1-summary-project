@@ -2,6 +2,8 @@
 
 import json
 import random
+import math
+import time
 
 NORTH = "NORTH"
 SOUTH = "SOUTH"
@@ -12,6 +14,7 @@ EAST = "EAST"
 # MASTER = "MASTER"
 STARTROOM = "STARTROOM"
 DIRLIST = [[0, 1], [0, -1], [1, 0], [-1, 0]] # according to N, S, E, W
+PI = 3.14159265359
 
 #STANLEY TEST
 
@@ -360,8 +363,88 @@ class Labyrinth:
     def _steve_useitem(self, item) -> None:
         raise NotImplementedError
 
-    def _monster_roar(self):
-        raise NotImplementedError
+    def give_sound_clue(self):
+        dx, dy = self.sb_xy_distance()
+        if dx == 0 and dy == 0: # They are in the same room, a clue doesn't need to be given LOL
+            return None
+        i = random.randint(0, 100)
+        if i <= 20:
+            i = random.randint(0, 2)
+            if i == 0:
+                print("The warmth of the torch comforts you.")
+            elif i == 1:
+                print("There was dead silence, so silent you hear your heart tremble.")
+            else:
+                print("A silent whine was heard in the distance. It might just be any creature out there.")
+            return None
+        r, dirstr = r_dir_calc(dx, dy)
+        if r < 3:
+            i = random.randint(0, 2)
+            if i == 0:
+                print("The torches suddenly blew out without wind, leaving you in darkness. A series of intense heartbeats echoed, sending chills down to your spine. The torhces were then relit slowly, perhaps magically.")
+            else:
+                print("A blood-curdling roar seemed to shake the entire room with it. You flinched with no control over your body.")
+            print("You must be close to the king warden.")
+        elif r < 6:
+            i = random.randint(1, 100)
+            if i == 1:
+                print("You hear a rawr.")
+                print("Easter egg achieved!")
+            else:
+                print("A hair-raising, wrathful whine from afar stuns you, shattering the stillness of cold air.")
+        elif r < 10:
+            print("Distant but colossal footsteps were heard.")
+        else:
+            print("Hardly audible footsteps were heard.")   
+        print(f"The sound seemed to come from {dirstr}.")
+
+    def r_dir_calc(self, dx, dy) -> tuple[float, str]:
+        dx, dy = self.sb_xy_distance()
+        if dx == 0 and dy == 0:
+            return None
+        r = math.sqrt((dx ** 2) + (dy ** 2)) # Pythagorean theorem
+        basic = abs(math.atan(dy/dx))
+        if dy > 0:
+            if dx > 0:
+                theta = basic # 1st quadrant
+            elif dx < 0:
+                theta = PI - basic # 2nd quadrant
+            else:
+                theta = PI / 2 # up
+        elif dy < 0:
+            if dx < 0:
+                theta = PI + basic # 3rd quadrant
+            elif dx > 0:
+                theta = 2 * PI - basic # 4th quadrant
+            else:
+                theta = 3 * PI / 2 # down
+        elif dy == 0:
+            if dx > 0:
+                theta = 0 # right
+            if dx < 0:
+                theta = PI # left
+        dirstr = None
+        dirstrlist = ["EAST", "NORTHEAST", "NORTH", "NORTHWEST", "WEST", "SOUTHWEST", "SOUTH", "SOUTHEAST"]
+        if theta <= PI / 8 or theta > 15 * PI / 8:
+            dirstr = dirstrlist[0]
+        lowerbound = PI / 8
+        upperbound = lowerbound + PI / 4
+        i = 1
+        while i <= 7 and dirstr is not None:
+            if i > lowerbound and i <= upperbound:
+                dirstr = dirstrlist[i]
+            i += 1
+            lowerbound += PI / 4
+            upperbound += PI / 4
+        if dirstr is None:
+            raise MathError("Person who implemented r_dir_calc() has a skill issue")
+        return r, dirstr
+        
+        
+    def sb_xy_distance(self) -> list[int]:
+        xdiff = self.boss_pos[0] - self.steve_pos[0]
+        ydiff = self.boss_pos[1] - self.steve_pos[1]
+        return [xdiff, ydiff]
 
 SOMEROOM = "SOMEROOM"
 class Room:
@@ -433,7 +516,7 @@ class Room:
         if self.steve_ishere():
             raise RuntimeError(f"Steve is already in room {self.coords}, yet steve_enters() is called.\nPossible desync between Labyrinth object's steve_pos attribute and this room object's type attribute values.")
         self.type["steve?"] = True
-        if not self.cleared:
+        if not self.cleared and not self.type["boss?"]:
             if random.randint(1, 100) <= 50: # 50% chance a creature spawn
                 self.creature = random_creature()
                 if random.randint(1, 100) <= 60: # if creature spawns, 60% chance an item spawns
@@ -472,6 +555,10 @@ class Room:
             self.mywest = neighbour
         else:
             raise ValueError("Direction passed is not of the right value")
+    
+    def set_creature_None(self) -> None:
+        """When the creature is killed"""
+        self.creature = None
     
     def set_connected_True(self) -> None:
         self.connected = True
@@ -658,7 +745,7 @@ class Steve:
             print("You have no items in your inventory.\n")
             return None
         print("\nYou have:\n")
-        for i in self.inventory:
+        for i in len(self.inventory):
             item, number = str(i["item"]), str(i["number"])
             print(f"{number:>2} {item}")
         print("\n")
@@ -738,6 +825,8 @@ class Steve:
         self.weapon = weapon
         
     def get_attack(self):
+        if self.weapon is None:
+            return self.base_damage
         return self.base_damage + self.weapon.get_attack()
 
     def isdead(self) -> bool:
@@ -748,7 +837,7 @@ class Steve:
     def take_damage(self, damage):
         damage = int(damage * ((100 - self.get_defence())/100))
         self.hitpoints = max(0, self.hitpoints - damage)
-
+        
 class Creature:
     """
     -- ATTRIBUTES --
@@ -760,7 +849,7 @@ class Creature:
     get_attack
     get_health
     """
-    def __init__(self, name, maxhp, attack):
+    def __init__(self, name: str, maxhp: int, attack: int):
         self.name = name
         maxhp = self._generate_maxhp(maxhp, turn)
         self.hitpoints = maxhp
@@ -773,19 +862,49 @@ class Creature:
     def _generate_maxhp(self, maxhp: int, turn_number: int) -> None:
         maxhp = int((maxhp * ((turn_number / 10) + 1) * random.randint(90, 110) / 100))
         return maxhp
+
+    def get_name(self) -> None:
+        return self.name
         
     def _generate_attack(self, attack: int, turn_number: int) -> None:
         attack = int((attack) * ((turn_number / 10) + 1) * (random.randint(90, 110) / 100))
         return attack
         
     def get_attack(self):
+        """Might not need this"""
         return self.attack
 
     def get_health(self):
         return self.hitpoints
 
     def take_damage(self, damage: int):
-        self.hitpoints = self.hitpoints - damage
+        self.hitpoints = max(0, self.hitpoints - damage)
+
+    def random_move(self) -> int:
+        return self.get_attack()
+      
+class Creeper(Creature):
+    def _generate_attack(self, attack: int, turn_number: int):
+        random_letter = random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+        print("AHHHHHHH A CREEPER HAS APPEARED!!!! RUN AWAY QUICK BY\n PRESSING THE FOLLOWING LETTER:")
+        time.sleep(2)
+        start_time = time.time()
+        inp = input("ENTER THE LETTER " + random_letter + " QUICK: ")
+        print("KABOOOOOMMMMM THE CREEPER EXPLODEDDDDD!!!!!!")
+        self.hitpoints = 0
+        if inp.upper() == random_letter and time.time() - start_time <= 1.8:
+            print("Luckily, your quick reactions allowed you to avoid the explosion. You took no damage.")
+            return 0
+        elif inp.upper() != random_letter:
+            print("Oh no! You took the wrong action and got caught in the blast!")
+        elif (time.time() - start_time) > 1.8:
+            print("Oh no! You were too slow and got caught in the blast!")
+        attack = int((attack) * ((turn_number / 10) + 1) * (random.randint(90, 110) / 100))
+        print(f"You took {attack} damage.")
+        return attack
+
+    def isdead(self) -> bool:
+        return self.hitpoints <= 0
 
 class Boss(Creature):
     """
@@ -796,12 +915,31 @@ class Boss(Creature):
     def __init__(self):
         super().__init__("King Warden", 100, 10)
 
-    def heal(self, hp: int) -> None:
-        self.hitpoints = min(self.hitpoints + hp, self.maxhp)
+    def heal(self) -> None:
+        """One of the moves that the boss can make
+        Deals boss by an amount"""
+        heal = random.randint(10, 20)
+        self.hitpoints = min(self.hitpoints + heal, self.maxhp)
+
+    def sonic_boom(self) -> bool:
+        raise NotImplementedError
+
+    def random_move(self) -> int:
+        if self.hitpoints > 50:
+            return self.attack
+        if random.randint(0, 100) <= 30:
+            self.heal()
+            return 0
+        return self.attack
+            
+        
         
 def random_creature() -> "Creature":
     creature_data = random.choice(creature_list)
-    return Creature(creature_data["name"], creature_data["base_hp"], creature_data["base_atk"])
+    if creature_data["name"] == "Creeper":
+        return Creeper(creature_data["name"], creature_data["base_hp"], creature_data["base_atk"])
+    else:
+        return Creature(creature_data["name"], creature_data["base_hp"], creature_data["base_atk"])
 
 item_type_list = ["Armor", "Food", "Weapon"]
 def random_item() -> "Item":
@@ -828,6 +966,5 @@ with open("content/items/weapon.json",'r', encoding = 'utf-8') as f:
     weapon_list = json.load(f)
 turn = 10
 test = random_creature()
-print(test)
 test2 = random_item()
 print(test2)
