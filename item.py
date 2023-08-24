@@ -35,7 +35,7 @@ class FlaskOfCrimsonTears(loot):
     def __init__(self):
         super().__init__()
         self.set_name("Flask of Crimson Tears")
-        self.set_health(10)
+        self.set_health(50)
         self.set_description(f"The Flask of Crimson Tears is a sacred flask modelled after a golden holy chalice that was once graced by a tear of life\nHeals {self.get_health()} health")
 
 class FlaskOfCeruleanTears(loot):
@@ -43,7 +43,7 @@ class FlaskOfCeruleanTears(loot):
     def __init__(self):
         super().__init__()
         self.set_name("Flask of Cerulean Tears")
-        self.set_mana(10)
+        self.set_mana(50)
         self.set_description(f"The Flask of Cerulean Tears is a sacred flask modelled after a golden holy chalice that was once graced by a tear of life\nHeals {self.get_mana()} mana")
 
 class DectusMedallionRight(loot):

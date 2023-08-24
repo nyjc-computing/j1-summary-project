@@ -1,4 +1,4 @@
-from map import *
+from room import *
 from character import *
 from spell import *
 from weapon import *
@@ -15,7 +15,6 @@ def setup():
     character.set_weapons(character.get_weapon())
     character.set_health(100)
     character.set_max_health(100)
-    character.set_attack(10)
     character.set_mana(100)
     character.set_max_mana(100)
     character.set_health_flask(2)
