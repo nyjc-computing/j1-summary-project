@@ -1,6 +1,6 @@
 import random
 import data
-
+import time
 
 class MUDGame:
 
@@ -152,6 +152,7 @@ class MUDGame:
                         continue
                     active_character.display_turn()
                     if active_character in enemy_list:
+                        time.sleep(1)
                         target = random.choice(player_list)
                         if active_character.has_status('Corrupted'):
                             target = random.choice(turn_order)
@@ -180,6 +181,7 @@ class MUDGame:
                                 continue
                             else:
                                 active_character.attack(target, skill)
+                                target = None
                         elif action.lower() == 'target' or action == '2':
                             target = active_character.target(enemy_list)
                             while not target.isdigit() or int(target) > len(enemy_list):
@@ -227,19 +229,16 @@ class MUDGame:
                                 k = k - 1
                             print(f"{character.name} has died.")
                             turn_order.remove(character)
-                        if character in enemy_list:
-                            enemy_list.remove(character)
-                        elif character in player_list:
-                            player_list.remove(character)
+                            if character in enemy_list:
+                                enemy_list.remove(character)
+                            elif character in player_list:
+                                player_list.remove(character)
                     #Reduce count of status effects
                     active_character.remove_status()
                     #Check if victory or defeat
                     if data.is_defeat(player_list):
-                        for player in player_list:
-                            print(player.health)
                         self.gameOver = True
-                        print("Party defeated. Looks like you'll forgotten, just like the other animatronics down here who met their demise."
-                        )
+                        print("Party defeated. Looks like you'll forgotten, just like the other animatronics down here who met their demise.")
                         break
                     elif data.is_victory(enemy_list):
                         print('Encounter survived.')

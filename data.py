@@ -525,7 +525,8 @@ class GB:
                 print(f'{target.name} took {damage} damage.')
             else:
                 print('The attack missed!')
-        print('---------------------------------------------------------')
+        print('\n')
+
 
 class BB:
     def __init__(self, status=None, health=75):
@@ -599,7 +600,8 @@ class BB:
                 print(f'{target.name} took {damage} damage.')
             else:
                 print('The attack missed!')
-        print('---------------------------------------------------------')
+        print('\n')
+
 
 class Springtrap:
     def __init__(self, status=None, health=300):
@@ -691,7 +693,8 @@ class Springtrap:
                 print(f'{target.name} took {damage} damage.')
             else:
                 print('The attack missed!')
-        print('---------------------------------------------------------')
+        print('\n')
+
 
 class Glitchtrap:
     def __init__(self, status=None, health=250):
@@ -804,6 +807,8 @@ class Glitchtrap:
         if n == 1:  #1% chance to use this attack
             print(f'{self.name} hit the Griddy!') 
             print(f'{target.name} was traumatised and stared in disgust.')
+        print('\n')
+
     
 #Characters
 class Freddy:
@@ -880,7 +885,7 @@ class Freddy:
         print('To target enemies, input a number, with the leftmost enemy being 1.')
         i = 1
         for enemy in enemies:
-            print(f"{i}. {enemy.name} / {enemy.health}")
+            print(f"{i}. {enemy.name} / HP : {enemy.health}")
             i += 1
         print('')
         target = input('Choose an enemy to target: ')
@@ -930,6 +935,7 @@ class Freddy:
                 target.take_damage(damage)
             else:
                 print('The attack missed!')
+        print('\n')
 
             
     def passive(self, target):
@@ -1053,7 +1059,7 @@ class Bonnie:
         print('To target enemies, input a number, with the leftmost enemy being 1.')
         i = 1
         for enemy in enemies:
-            print(f"{i}. {enemy.name} / {enemy.health}")
+            print(f"{i}. {enemy.name} / HP : {enemy.health}")
             i += 1
         print('')
         target = input('Choose an enemy to target: ')
@@ -1110,7 +1116,7 @@ class Bonnie:
                 target.take_damage(damage)
             else:
                 print('The attack missed!')
-
+        print('\n')
             
     def passive(self, target):
         if target.has_status('Resonance'):
@@ -1234,7 +1240,7 @@ class Foxy:
         print('To target enemies, input a number, with the leftmost enemy being 1.')
         i = 1
         for enemy in enemies:
-            print(f"{i}. {enemy.name} / {enemy.health}")
+            print(f"{i}. {enemy.name} / HP : {enemy.health}")
             i += 1
         print('')
         target = input('Choose an enemy to target: ')
@@ -1282,7 +1288,7 @@ class Foxy:
             print(f"{self.name} used Death Grip on {target.name}!")
             if accuracy(25, target) == True:
                 damage += 125
-                damage = self.passive(damage)
+                damage += self.passive(damage)
                 if self.has_status('Nightfall'):
                     damage += 15
                     self.heal(20)    
@@ -1291,7 +1297,7 @@ class Foxy:
                 target.take_damage(damage)
             else:
                 print('The attack missed!')
-
+        print('\n')
             
     def passive(self, damage):
         if self.health < 50:
@@ -1419,7 +1425,7 @@ class Chica:
         print('To target enemies, input a number, with the leftmost enemy being 1.')
         i = 1
         for enemy in enemies:
-            print(f"{i}. {enemy.name} / {enemy.health}")
+            print(f"{i}. {enemy.name} / HP : {enemy.health}")
             i += 1
         print('')
         target = input('Choose an enemy to target: ')
@@ -1474,6 +1480,7 @@ class Chica:
                 target.take_damage(damage)
             else:
                 print('The attack missed!')
+        print('\n')
 
             
     def passive(self, target):
