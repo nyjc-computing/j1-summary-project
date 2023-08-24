@@ -1,5 +1,7 @@
 import data
 import random
+from text import divider, intro, agent
+import time
 
 class Game:
 
@@ -12,36 +14,24 @@ class Game:
         print intro message, instructions, etc.
         returns nothing 
         """
-        print("""Welcome to Valorant.
-        
-Your team all got killed by the Ranked Demon Reyna on the enemy team, 
-you need to clutch. 
+        print(intro)
 
-The Reyna will certainly one tap you the second you get into an encounter so the only way you're going to win this is by picking up enough shields (total 300hp) to not instantly die. 
-
-Shield orbs can be found randomly throughout the map, and add 50hp to your character. 
-
-There is still enemy utility scattered around the map, each piece you encounter will deduct 30hp from your character. 
-
-You also have an agent ability, which will hopefully give you an edge over this no-lifer. Using an ability does not pass your turn. 
-
-Remember, Clutch or Gae.
-=====================================================""")
-
-    agent_descriptions = """Choose your agent:
- 
-[1] Jett: Dash into an adjacent room if you would otherwise die (does not refresh)
-    
-[2] Sova: Scan an adjacent room for information (cooldown: 2 turn)
-    
-[3] Omen: Move to any room on the map (cooldown: 5 turns)
-    
-[4] Sage: Block a path from your current room to an adjacent one permanently (cooldown: 3 turns)
-====================================================="""
+    agent_descriptions = agent
     
     agents = ["Jett", "Sova", "Omen", "Sage"]
     maps = ["Ascent", "Haven", "Breeze"]
-    
+
+    def countdown(self) -> None:
+        """
+        counts down to the start of the game
+        """
+        for i in range(5):
+            print(f"{5-i}...")
+            time.sleep(1)
+        print("GAME STARTS NOW!!!!")
+        time.sleep(1)
+        print(divider)
+            
     def prompt(self, options: list, message: str, cancel: bool) -> int:
         """
         Takes input from the player to pass on to other methods
@@ -65,7 +55,7 @@ Remember, Clutch or Gae.
         while choice not in accept:
             print("Invalid input")
             choice = input("Choose a number: ")
-        print("=====================================================")
+        print(divider)
         if int(choice) == len(options) + 1:
             return -1
         else:
@@ -138,7 +128,7 @@ Remember, Clutch or Gae.
             print("You can use your ability.")
         else:
             print(f"{self.player_cooldown} turns until you can use your ability.")
-        print("=====================================================")
+        print(divider)
     
     def ability(self) -> None:
         """
@@ -219,7 +209,7 @@ Remember, Clutch or Gae.
         
         self.player_cooldown = 3
         print(f"{blocked} is successfully blocked.")
-        print("=====================================================")
+        print(divider)
     
     def move(self, choice: int) -> int:
         """
@@ -283,6 +273,7 @@ Remember, Clutch or Gae.
         agent = self.agent_select(self.prompt(self.agents, self.agent_descriptions, False))
         self.map_select(self.prompt(self.maps, "Choose a map", False))
         self.initialise(agent)
+        self.countdown()
     
         while not self.gameover:
             self.desc()
