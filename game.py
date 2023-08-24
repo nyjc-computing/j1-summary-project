@@ -3,18 +3,7 @@ import data
 
 
 
-def is_defeat(players: list) -> bool:
-    for player in players:
-        if not player.is_defeated():
-            return False
-    return True
 
-
-def is_victory(enemies: list) -> bool:
-    for enemy in enemies:
-        if not enemy.is_defeated():
-            return False
-    return True
 
 
 class MUDGame:

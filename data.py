@@ -1,6 +1,18 @@
 import random
 import time
 
+def is_defeat(players: list) -> bool:
+    for player in players:
+        if not player.is_defeated():
+            return False
+    return True
+
+
+def is_victory(enemies: list) -> bool:
+    for enemy in enemies:
+        if not enemy.is_defeated():
+            return False
+    return True
 #Status
 statuses = [{'name' : 'Sleeping', 'description' : 'Target cannot take action based on the count. At the end of the target\'s turn, reduce the count by 1.', 'count' : None}, 
             {'name' : 'Corrupted', 'description' : 'Target attacks indiscriminately, At the end of the turn, reduce the count by 1.', 'count' : None},
