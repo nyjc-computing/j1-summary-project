@@ -32,7 +32,8 @@ class Game:
         print('Welcome to Hogwarts School of Witchcraft and Wizardry')
         print("\nThe Dark Lord Voldermort has taken over Hogwarts School and opened multiple interdimensional gates, bringing hoards of enemies into the school. Your job as the chosen one is to traverse through the school and thwart Voldermort's evil plan to take over the world\n")
         decision = input('Do you wish to enter the school? ( yes / no ): ')
-        
+        while decision not in ["yes", "no"]:
+            decision = input('Do you wish to enter the school? ( yes / no ): ')
         if decision.lower() == "no":
             print("\nDue to your utter cowardice, voldermort continued gaining power, spreading his control and chaos all over the world, leading to the complete annihlation of the human race")
             self.end = True
