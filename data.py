@@ -139,9 +139,9 @@ class Room:
         ref_next_rooms = ['self.up', 'self.down', 'self.left', 'self.right']
         i = 0
         for _ in range(len(next_rooms)):
-            if next_rooms[x] != None:
-                next_rooms.pop(x)
-                ref_next_rooms.pop(x)
+            if next_rooms[i] != None:
+                next_rooms.pop(i)
+                ref_next_rooms.pop(i)
                 i -= 1
             i += 1
         if self.type == 'start':
