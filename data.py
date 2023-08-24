@@ -322,10 +322,10 @@ class Grid:
 #Start
 def start_menu():
     print('Welcome to FNAF:Reckoning!')
-    choice = input("Type 'Start' to begin!")
-    while choice.lower != 'start':
+    choice = input("Type 'Start' to begin: ")
+    while choice.lower() != 'start':
         print("To begin the game, enter 'start'.")
-        choice = input("Type 'Start' to begin!")
+        choice = input("Type 'Start' to begin: ")
 
     
 def info(cr):
