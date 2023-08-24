@@ -73,7 +73,7 @@ class MUDGame:
     #         self.steve.take_damage(damage)
     #     room.set_creature_None()
 
-    def attack(self):
+    def battle(self):
         pass
 
     def creature_encountered(self):
