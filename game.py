@@ -65,11 +65,10 @@ Remember, Clutch or Gae.
         while choice not in accept:
             print("Invalid input")
             choice = input("Choose a number: ")
+        print("=====================================================")
         if int(choice) == len(options) + 1:
-            print("=====================================================")
             return -1
         else:
-            print("=====================================================")
             return int(choice)-1
     
     def agent_select(self, choice: int) -> str:
@@ -171,6 +170,7 @@ Remember, Clutch or Gae.
         print(f"You are now in {outcome}.")
         self.player_cooldown = 999
         self.player_pos = self.map[outcome]
+        self.update()
     
     def sova(self, choice: int) -> None:
         """
@@ -299,7 +299,6 @@ Remember, Clutch or Gae.
                 elif action == 1:
                     advance = True
                     print(f"You stay in {self.player_pos.get_name()} for this turn.")
-                    print("=====================================================")
                 elif action == 2:
                     self.ability()
                     if self.gameover == True:
