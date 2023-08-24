@@ -10,7 +10,8 @@ all_items = [
         'A pile of rusty parts found from the crushed remains of robots. Most noticeably, a pair of rusted springlocks are in the midst of the devastation.',
         'effect': 'Heals user for 10 hp.',
         'consumable': True,
-        'heal': 10
+        'heal': 20,
+        'type': 'healing'
     },
     {
         'name': 'Functioning Limb',
@@ -18,21 +19,24 @@ all_items = [
         'While the animatronic is torn beyond recognition, some part of it is still salvageable.',
         'effect': 'Heals user for 20 hp.',
         'consumable': True,
-        'heal': 20
+        'heal': 20,
+        'type': 'healing'
     },
     {
         'name': 'Metal Pipe',
         'description': 'A ventilation pipe. It\'s stained with blood.',
         'effect': 'Increases users attack damage by 10.',
-        'consumable': False,
-        'damage': 10
+        'consumable': True,
+        'damage': 10,
+        'type': 'weapon'
     },
     {
         'name': 'Hatchet',
         'description': 'The hatchet brings you an unsettling feeling',
         'effect': 'Increases users attack damage by 15.',
-        'consumable': False,
-        'damage': 15
+        'consumable': True,
+        'damage': 15,
+        'type': 'weapon'
     },
     {
         'name': 'Battery',
@@ -40,7 +44,8 @@ all_items = [
         'A battery found from a camera. It still functions with the remaining power left in it.',
         'effect': 'Heals user for 30 hp.',
         'consumable': True,
-        'heal': 30
+        'heal': 30,
+        'type': 'healing'
     },
     {
         'name': 'Freddy Figurine',
@@ -50,6 +55,7 @@ all_items = [
         'If the selected character is Freddy, increase damage by 5. Else, it\'s a pretty cool figurine isn\'t it.',
         'consumable': False,
         'damage': 5
+        
     },
     {
         'name': 'Bonnie Figurine',
@@ -77,37 +83,6 @@ all_items = [
         'If the selected character is Foxy, increase damage by 5. Else, it\'s a pretty cool figurine isn\'t it.',
         'consumable': False,
         'damage': 5
-    },
-
-    #Items below this point are "cut content".
-    {
-        'Employee Card': {
-            'Description': 'A card specifically for employees.'
-        }
-    },
-    {
-        'White Gossypium': {
-            'Description':
-            'It\'s the same stuffing used to make your suit. Perhaps there is more than one of you?'
-        }
-    },
-    {
-        'Burnt Gossypium': {
-            'Description':
-            'It\'s charred and burnt. Perhaps someone like you wasn\'t so lucky.'
-        }
-    },
-    {
-        'Candle': {
-            'Description':
-            'The unused candles for birthday parties still remain.'
-        }
-    },
-    {
-        'Rabbit Ear': {
-            'Description':
-            'There\'s an endoskeleton inside the ear. It gives off an unsettling feeling.'
-        }
     }
 ]
 
@@ -119,10 +94,6 @@ def get_inventory():
 def add_item(item):
     player_inventory.append(item)
     print(f'{item} has been added to inventory!')
-
-def used_item(item):
-    player_inventory.remove(item)
-    print(f'{item} has been used!')
 
 #Converting to json
 
@@ -829,30 +800,15 @@ class Freddy:
 
     def is_use_item(self):
         is_use = input("Use an item? Y/N: ")
-        is_use = is_use.lower()
-        while is_use != 'y' and is_use != 'n':
-            print("Type 'Y' or 'N'.")
-            is_use = input("Use an item? Y/N: ")
-        if is_use == 'n':
-            return False
-        elif is_use == 'y':
-            return True
+        return is_use.lower()
                     
-    def use_item(self):
+    def use_item(self, item):
         global player_inventory
-        item = input('Choose an item to use: ')
         for it in player_inventory:
             if it['name'] == item:
                 if not it['consumable']: #If item can't be consumed
                     print("You can't consume this item.")
                     return False
-                is_use = input("Use this item? Y/N :")
-                is_use = is_use.lower()
-                while is_use != 'y' and is_use != 'n':
-                    print("Type 'Y' or 'N'.")
-                    is_use = input("Use this item? Y/N :")
-                if is_use == 'n':
-                    return False 
                 if it['type'] == 'healing': #If item is healing
                     self.heal(it['heal'])
                     player_inventory.remove(it)
@@ -860,10 +816,11 @@ class Freddy:
                 elif it['type'] == 'weapon': #If item is weapon
                     if self.items_equipped != None:
                         print('You already have a weapon equipped.')
+                        return False
                     else:
                         self.items_equipped.append(it)
                         name = it['name']
-                        print(f'{self.name} has equipped {name}')
+                        print(f'{self.name} has equipped {name}.')
                         player_inventory.remove(it)
                         return True 
         print("You don't have this item.")
@@ -1021,21 +978,13 @@ class Bonnie:
         elif is_use == 'y':
             return True
                     
-    def use_item(self):
+    def use_item(self, item):
         global player_inventory
-        item = input('Choose an item to use: ')
         for it in player_inventory:
             if it['name'] == item:
                 if not it['consumable']: #If item can't be consumed
                     print("You can't consume this item.")
                     return False
-                is_use = input("Use this item? Y/N :")
-                is_use = is_use.lower()
-                while is_use != 'y' and is_use != 'n':
-                    print("Type 'Y' or 'N'.")
-                    is_use = input("Use this item? Y/N :")
-                if is_use == 'n':
-                    return False 
                 if it['type'] == 'healing': #If item is healing
                     self.heal(it['heal'])
                     player_inventory.remove(it)
@@ -1043,10 +992,11 @@ class Bonnie:
                 elif it['type'] == 'weapon': #If item is weapon
                     if self.items_equipped != None:
                         print('You already have a weapon equipped.')
+                        return False
                     else:
                         self.items_equipped.append(it)
                         name = it['name']
-                        print(f'{self.name} has equipped {name}')
+                        print(f'{self.name} has equipped {name}.')
                         player_inventory.remove(it)
                         return True 
         print("You don't have this item.")
@@ -1212,21 +1162,13 @@ class Foxy:
         elif is_use == 'y':
             return True
                     
-    def use_item(self):
+    def use_item(self, item):
         global player_inventory
-        item = input('Choose an item to use: ')
         for it in player_inventory:
             if it['name'] == item:
                 if not it['consumable']: #If item can't be consumed
                     print("You can't consume this item.")
                     return False
-                is_use = input("Use this item? Y/N :")
-                is_use = is_use.lower()
-                while is_use != 'y' and is_use != 'n':
-                    print("Type 'Y' or 'N'.")
-                    is_use = input("Use this item? Y/N :")
-                if is_use == 'n':
-                    return False 
                 if it['type'] == 'healing': #If item is healing
                     self.heal(it['heal'])
                     player_inventory.remove(it)
@@ -1234,10 +1176,11 @@ class Foxy:
                 elif it['type'] == 'weapon': #If item is weapon
                     if self.items_equipped != None:
                         print('You already have a weapon equipped.')
+                        return False
                     else:
                         self.items_equipped.append(it)
                         name = it['name']
-                        print(f'{self.name} has equipped {name}')
+                        print(f'{self.name} has equipped {name}.')
                         player_inventory.remove(it)
                         return True 
         print("You don't have this item.")
@@ -1403,21 +1346,13 @@ class Chica:
         elif is_use == 'y':
             return True
                     
-    def use_item(self):
+    def use_item(self, item):
         global player_inventory
-        item = input('Choose an item to use: ')
         for it in player_inventory:
             if it['name'] == item:
                 if not it['consumable']: #If item can't be consumed
                     print("You can't consume this item.")
                     return False
-                is_use = input("Use this item? Y/N :")
-                is_use = is_use.lower()
-                while is_use != 'y' and is_use != 'n':
-                    print("Type 'Y' or 'N'.")
-                    is_use = input("Use this item? Y/N :")
-                if is_use == 'n':
-                    return False 
                 if it['type'] == 'healing': #If item is healing
                     self.heal(it['heal'])
                     player_inventory.remove(it)
@@ -1425,10 +1360,11 @@ class Chica:
                 elif it['type'] == 'weapon': #If item is weapon
                     if self.items_equipped != None:
                         print('You already have a weapon equipped.')
+                        return False
                     else:
                         self.items_equipped.append(it)
                         name = it['name']
-                        print(f'{self.name} has equipped {name}')
+                        print(f'{self.name} has equipped {name}.')
                         player_inventory.remove(it)
                         return True 
         print("You don't have this item.")
