@@ -26,12 +26,13 @@ class MUDGame:
 
     def run(self):
         data.start_menu()
-
+        
         for player in ['Player 1', 'Player 2', 'Player 3', 'Player 4']:
             character = data.choose_character()
-            while character not in [
-                    'freddy', 'chica', 'bonnie', 'foxy', 'skip'
-            ]:
+            valid_character_list = ['freddy', 'chica', 'bonnie', 'foxy', 'skip']
+            if player == 'Player 1':
+                valid_character_list.remove('skip')
+            while character not in valid_character_list:
                 print(
                     f"Please select a valid animatronic or finish party by entering 'skip'. Got {character}."
                 )
@@ -92,12 +93,12 @@ class MUDGame:
                 if move == 'w' and self.current_room.grid.get_position(
                 )[0] != 0:
                     current_position = self.current_room.grid.get_position()
-                    current_position[1] = current_position[1] + 1
+                    current_position[0] = current_position[0] - 1
                     self.current_room.grid.move(current_position)
                 elif move == 's' and self.current_room.grid.get_position(
                 )[0] != 4:
                     current_position = self.current_room.grid.get_position()
-                    current_position[1] = current_position[1] - 1
+                    current_position[1] = current_position[1] + 1
                     self.current_room.grid.move(current_position)
                 elif move == 'a' and self.current_room.grid.get_position(
                 )[1] != 0:
@@ -127,14 +128,15 @@ class MUDGame:
                 while len(player_list) != 0 and len(enemy_list) != 0:
                     if player_list[i] != None:
                         turn_order.append(player_list[i])
-                    turn_order.append(enemy_list[i])
+                        turn_order.append(enemy_list[i])
                     player_list.pop(i)
                     enemy_list.pop(i)
-                    i = i + 1
+                    
                 #Combat
                 player_list = [
                     self.player1, self.player2, self.player3, self.player4
                 ]
+                player_list = [player for player in player_list if player != None]
                 enemy_list = self.current_room.grid.get_enemies()
                 k = 0
                 while not data.is_defeat(player_list) and not data.is_victory(
