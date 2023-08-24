@@ -134,6 +134,7 @@ class MUDGame:
             if choice in valid_choice:
                 if len(choice) == 1:
                     validity = True
+        choice = int(choice)
         self.maze.move_steve(current_location, available_dir[choice - 1])
 
     def moveboss(self):
