@@ -75,17 +75,19 @@ class MUDGame:
         while not self.steve.isdead() or self.creature.isdead():
             print(self.steve) # show HP
             self.show_options('battle')
-            self.prompt_player_2opt()
-            if option == 1:
+            battle_option = self.prompt_player_2opt()
+            if battle_option == 1:
                 #attack
                 damage = self.steve.get_attack()
                 self.creature.take_damage(damage)
                 print(f"{creature.name} now has {self.creature.get_health()} HP")
-            elif option == 2:
+            elif battle_option == 2:
                 #heal
-                self.steve._display_inventory()
-                opt = input('Please choose a food item: ')
-                print('You have healed ')
+                self.steve.display_inventory()
+                heal_option = input('Please choose a food item: ')
+                heal_option = int(heal_option) - 1
+                self.steve.eat(heal_option)
+                print('Healed!')
             #Steve endturn 
             damage = creature.random_move()
             self.steve.take_damage(damage)
@@ -98,12 +100,16 @@ class MUDGame:
         
 
     def creature_encountered(self):
-        if self.room.creature is None:
+        x, y = self.maze.get_current_pos()
+        room = self.maze.lab[x][y]
+        if room.creature is None:
             return False
         return True
 
     def item_found(self):
-        if self.room.item is None:
+        x, y = self.maze.get_current_pos()
+        room = self.maze.lab[x][y]
+        if room.item is None:
             return False
         return True
 
@@ -111,7 +117,7 @@ class MUDGame:
         print('Congratulations! \nYou have escaped!')
 
     def show_losescreen(self):
-        print("YOU DIED...\nDo you want to try again?")
+        print("YOU DIED...")
 
     def movesteve(self):
         current_location = self.maze.get_current_pos()
@@ -135,15 +141,11 @@ class MUDGame:
                 if len(choice) == 1:
                     validity = True
         choice = int(choice)
-        self.maze.move_steve(current_location, available_dir[choice - 1])
+        self.maze.move_steve(available_dir[choice - 1])
 
     def moveboss(self):
         self.maze.move_boss()
         
-    
-    def restore_steve_hp(self):
-        pass
-    
     
     def run(self):
         """
@@ -165,7 +167,7 @@ class MUDGame:
                 option = self.prompt_player_2opt()
                 # prompt player to take actions
                 if option == 1:
-                    self.attack()
+                    self.battle()
                     if self.game_is_over():
                         continue
                 else:
@@ -175,7 +177,7 @@ class MUDGame:
                         continue
                     else:
                         print("Too late to escape!")
-                        self.attack()
+                        self.battle()
                         if self.game_is_over():
                             continue
             if self.item_found():
@@ -184,27 +186,14 @@ class MUDGame:
                 item_choice = self.prompt_player_2opt()
                 if item_choice == 1:
                     self.steve._add_item_to_inv(item)
-            if self.boss_encountered():
-                
-                
-
             self.movesteve()
             if random.randint(1, 100) <= 30:
                 self.moveboss() 
                 # update
         if self.steve.isdead():
             self.show_losescreen()
-            self.show_options('restart')
-            restart_choice = self.prompt_player_2opt()
-            if restart_choice == 1:
-                self.run()
-            else:
-                print('Hope to see you again !')
         else:
             self.show_winscreen()
 
             
             
-            
-
-
