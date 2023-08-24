@@ -777,10 +777,10 @@ class Steve:
         self.armour[armouritem.armor_slot] = armouritem
         return None
         
-    def eat(self, fooditem: "Item") -> None:
+    def eat(self, foodindex: int) -> None:
+        fooditem = self.inventory[foodindex]
         #validation
-        foodindex = self.find_item(fooditem)
-        if foodindex == -1:
+        if foodindex < 0:
             raise RuntimeError(f"{fooditem} cannot be consumed as Steve's inventory does not have it.")
         if not fooditem.item_type == "Food":
             raise ValueError(f"{fooditem} cannot be consumed as it is not food.")
