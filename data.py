@@ -419,7 +419,7 @@ def choose_character():
 
 #accuracy
 def accuracy(target, accuracy):
-    if target.has_status('phantom'):
+    if target.has_status('Phantom'):
         accuracy -= 10
     if target.has_status('Nightfall'):
         accuracy += 20
