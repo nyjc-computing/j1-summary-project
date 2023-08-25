@@ -90,7 +90,7 @@ class MUDGame:
         room = self.maze.lab[x][y]
         creature = room.get_creature()
         print(f"You have encountered the {creature.get_name()}!")
-        while not self.steve.isdead() or creature.isdead():
+        while not self.steve.isdead() and not creature.isdead():
             print(self.steve) # show HP
             if len(self.steve._inventory) == 0:
                 print(f'You have no heal items! \nAttack the {creature.get_name()}.')
