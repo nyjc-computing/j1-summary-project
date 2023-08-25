@@ -201,7 +201,7 @@ Methods
         """
         paths = self.player_pos.get_paths()
         outcome = random.choice(paths)
-        print("You are about to die. You used dash to escape.")
+        print("You were about to die. You used dash to escape.")
         print(f"You are now in {outcome}.")
         self.player_cooldown = 999
         self.player_pos = self.map[outcome]
@@ -280,7 +280,7 @@ Methods
         returns None
         """
         if self.reyna_pos == self.player_pos:
-            print("Reyna has found you!")
+            print("\nReyna has found you!")
             if self.player.get_hp() >= 300:
                 self.win = True
                 print("Somehow, you manage to win the gunfight.")
@@ -353,6 +353,6 @@ Methods
                 self.reyna_turn()
                 self.update()
         if self.win:
-            print("VICTORY")
+            print("\nVICTORY")
         else:
-            print("DEFEAT")
+            print("\nDEFEAT")
