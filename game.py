@@ -316,7 +316,7 @@ class Game:
                 decision = self.get_choice(attacker)
                 
                 if decision == "flask":
-                    self.use_flask(attacker)
+                    self.use_flask_battle(attacker)
                     if victim.get_health() > 0:
                         damage = max(1, victim.get_attack() - attacker.get_defence())
                         attacker.set_health(attacker.get_health() - damage)
@@ -420,7 +420,7 @@ class Game:
             user.set_mana(user.get_mana() - cost)
             return user.get_spells()[spells.index(choice.lower())].get_attack(), user.get_spells()[spells.index(choice)]
 
-    def use_flask(self, user : Character, battle : bool) -> None:
+    def use_flask_battle(self, user : Character) -> None:
         self.display_flask(user)
         selection = input("Which flask would you like to drink?: ")
         valid = False
@@ -444,6 +444,34 @@ class Game:
                 time.sleep(1)
                 selection = input("Which flask would you like to drink?: ")
                 valid = False
+                
+    def use_flask(self, user : Character) -> None:
+        self.display_flask(user)
+        selection = input("Which flask would you like to drink? (type cancel to quit): ")
+        valid = False
+        while not valid:
+            valid = True
+            # Validates user selection
+            if selection.lower() not in ["flask of crimson tears", "flask of cerulean tears", "cancel"]:
+                print(f"\nYou tried drinking {selection} but nothing happened\n")
+                time.sleep(1)
+                selection = input("Which flask would you like to drink?: ")
+                valid = False
+            # Checks if the user has enough flask of crimson tears
+            elif selection.lower() == "flask of crimson tears" and user.get_health_flask() == 0:
+                print("\nYou ran out of Flask of Crimson Tears\n")
+                time.sleep(1)
+                selection = input("Which flask would you like to drink?: ")
+                valid = False
+            # Checks if the user has enough flask of cerulean tears
+            elif selection.lower() == "flask of cerulean tears" and user.get_mana_flask() == 0:
+                print("\nYou ran out of Flask of Cerulean Tears\n")
+                time.sleep(1)
+                selection = input("Which flask would you like to drink?: ")
+                valid = False
+
+            elif selection.lower() == "cancel":
+                return
 
         if selection.lower() == "flask of crimson tears":
             # Makes sure the health healed does not exceed the maximum health
@@ -864,5 +892,5 @@ class Game:
         self.character.set_max_mana(999)
         self.character.set_attack(999)
         self.character.set_defence(999)
-        self.character.set_health_flask(999)
-        self.character.set_mana_flask(999)
+        self.character.set_health_flask(997)
+        self.character.set_mana_flask(997)
