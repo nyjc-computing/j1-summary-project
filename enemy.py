@@ -2,40 +2,56 @@ from armour import *
 from weapon import *
 from accessory import *
 from spell import *
+from item import *
 
 class Enemy:
     """
-    creates the enemies that are in the room
+    The parent class for an enemy
 
     Attributes
     ----------
-    + name: str
-    + spell: str
-    - health: int
-    + battle_points: int
-    + loot: str
+    - name : str
+      Name of the enemy
+    - health : int
+      Amount of health the enemy has
+    - attack : int
+      Amount of damage the enemy deals
+    - loot : Item
+      The loot the enemy drops when killed
+    - description : str
+      Description of the enemy
+    - move : str
+      Description of the enemy's attack
 
     Methods
     -------
-    + set_health(): updates the enemy's health
-    - is_dead(): checks the state of the enemy
-    + get_health(): gets the health of the enemy
-    
+    - set_health(self, health : int) -> None
+    - get_health(self) -> int
+    - set_name(self, name : str) -> None
+    - get_name(self) -> str
+    - set_description(self, description : str) -> None
+    - get_description(self) -> str
+    - set_attack(self, attack : int) -> None
+    - get_attack(self) -> int
+    - set_move(self, move : str) -> None
+    - get_move(self) -> str
+    - set_loot(self, loot : Weapon) -> None
+    - get_loot(self) -> Weapon
     """
 
     def __init__(self) -> None:
-        self.name = None
+        self.name = ""
         self.health = 0
         self.attack = 0
         self.loot = None
         self.description = ""
         self.move = ""
 
-    def set_health(self, bp: int) -> None:
+    def set_health(self, health : int) -> None:
         """
         Updates the enemy's health
         """
-        self.health = bp
+        self.health = health
 
     def get_health(self) -> int:
         """
@@ -43,37 +59,41 @@ class Enemy:
         """
         return self.health
 
-    def set_name(self, name):
+    def set_name(self, name : str) -> None:
         self.name = name
 
-    def get_name(self):
+    def get_name(self) -> str:
         return self.name
 
-    def set_description(self, description):
+    def set_description(self, description : str) -> None:
         self.description = description
 
-    def get_description(self):
+    def get_description(self) -> str:
         return self.description
 
-    def set_attack(self, attack):
+    def set_attack(self, attack : int) -> None:
         self.attack = attack
 
-    def get_attack(self):
+    def get_attack(self) -> int:
         return self.attack
 
-    def set_move(self, move):
+    def set_move(self, move : str) -> None:
         self.move = move
 
-    def get_move(self):
+    def get_move(self) -> str:
         return self.move
 
-    def set_loot(self, loot):
+    def set_loot(self, loot : Weapon) -> None:
         self.loot = loot
 
-    def get_loot(self):
+    def get_loot(self) -> Weapon:
         return self.loot
 
 class TheRadiance(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("The Radiance")
@@ -84,6 +104,10 @@ class TheRadiance(Enemy):
         self.set_loot(VengefulSpirit())
 
 class MrOshiro(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Mr Oshiro")
@@ -94,6 +118,10 @@ class MrOshiro(Enemy):
         self.set_loot(GoldenFeather())
 
 class TheHighDragun(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("The High Dragun")
@@ -104,6 +132,10 @@ class TheHighDragun(Enemy):
         self.set_loot(MasterRound())
 
 class GodrickTheGrafted(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Godrick The Grafted")
@@ -114,6 +146,10 @@ class GodrickTheGrafted(Enemy):
         self.set_loot(GlintstoneCometshard())
 
 class Glados(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Glados")
@@ -124,6 +160,10 @@ class Glados(Enemy):
         self.set_loot(PortalGun())
 
 class Yaldabaoth(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Yaldabaoth")
@@ -134,6 +174,10 @@ class Yaldabaoth(Enemy):
         self.set_loot(Megidolaon())
 
 class Ridley(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Ridley")
@@ -144,6 +188,10 @@ class Ridley(Enemy):
         self.set_loot(PowerSuit())
 
 class Emil(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Emil")
@@ -154,6 +202,10 @@ class Emil(Enemy):
         self.set_loot(VirtuousTreaty())
 
 class TheBoneHyrda(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("The Bone Hydra")
@@ -164,6 +216,10 @@ class TheBoneHyrda(Enemy):
         self.set_loot(Coronacht())
 
 class GeneralMugen(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("General Mugen")
@@ -174,6 +230,10 @@ class GeneralMugen(Enemy):
         self.set_loot(DragonMail())
 
 class DoctorEggman(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Doctor Eggman")
@@ -184,6 +244,10 @@ class DoctorEggman(Enemy):
         self.set_loot(ChaosEmerald())
 
 class TheMoonLord(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("The Moon Lord")
@@ -194,6 +258,10 @@ class TheMoonLord(Enemy):
         self.set_loot(Zenith())
 
 class Mithrix(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Mithrix")
@@ -204,6 +272,10 @@ class Mithrix(Enemy):
         self.set_loot(WillOTheWisp())
 
 class Sephiroth(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Sephiroth")
@@ -214,6 +286,10 @@ class Sephiroth(Enemy):
         self.set_loot(BusterSword())
 
 class Ganondorf(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Ganondorf")
@@ -224,6 +300,10 @@ class Ganondorf(Enemy):
         self.set_loot(MasterSword())
 
 class TheEnderDragon(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("The Ender Dragon")
@@ -233,7 +313,11 @@ class TheEnderDragon(Enemy):
         self.set_move("Dragon's breath")
         self.set_loot(NetheriteArmour())
 
-class Shibusawa(Enemy):
+class Shibusawa(Enemy):  
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Shibusawa")
@@ -244,6 +328,10 @@ class Shibusawa(Enemy):
         self.set_loot(DragonAmulet())
 
 class Enchantress(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Enchantress")
@@ -254,6 +342,10 @@ class Enchantress(Enemy):
         self.set_loot(OrnatePlate())
 
 class Freya(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Freya")
@@ -264,6 +356,10 @@ class Freya(Enemy):
         self.set_loot(LeviathanAxe())
 
 class Reyna(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Reyna")
@@ -274,6 +370,10 @@ class Reyna(Enemy):
         self.set_loot(RGXButterflyKnife())
 
 class Voldemort(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Voldemort")
@@ -284,6 +384,10 @@ class Voldemort(Enemy):
         self.set_loot(ElderWand())
 
 class Gabriel(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Gabriel, Apostate of Hate")
@@ -294,6 +398,10 @@ class Gabriel(Enemy):
         self.set_loot(MarksmanRevolver())
 
 class Flowey(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Flowey")
@@ -304,6 +412,10 @@ class Flowey(Enemy):
         self.set_loot(ToyKnife())
 
 class TheHeir(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("The Heir")
@@ -314,6 +426,10 @@ class TheHeir(Enemy):
         self.set_loot(HolyCross())
 
 class JenaAnderson(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Jena Anderson")
@@ -324,6 +440,10 @@ class JenaAnderson(Enemy):
         self.set_loot(XBaton())
 
 class TheKraken(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("The Kraken")
@@ -334,6 +454,10 @@ class TheKraken(Enemy):
         self.set_loot(MementoMortem())
 
 class Bowser(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Bowser")
