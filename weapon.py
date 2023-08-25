@@ -205,7 +205,7 @@ class RGXButterflyKnife(Weapon):
         super().__init__()
         self.set_name("RGX Butterfly Knife")
         self.set_attack(60)
-        self.set_description(f"The RGX Butterfly Knife is the most powerful butterfly knife on earth due its RGB\nDeals {self.get_attack()} damage")
+        self.set_description(f"The RGX Butterfly Knife is the most powerful butterfly knife on earth due to its RGB\nDeals {self.get_attack()} damage")
         self.set_move(" used behind the 8 ball")
         self.set_win_front(" performed the valorant inspect flawlessly causing ")
         self.set_win_back(" to self destruct")
