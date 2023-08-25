@@ -25,3 +25,5 @@ def test_movesteve():
     aftpos = mg.maze.get_current_pos()
     if befpos == aftpos:
         raise RuntimeError("After movesteve() was run, Steve did not move.")
+
+mg.run()
