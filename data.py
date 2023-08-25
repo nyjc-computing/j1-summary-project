@@ -334,7 +334,7 @@ class Grid:
         '''
         return self.grid[self.get_position()[0]][self.get_position()[1]]['item']['name']
         
-    def remove_item(self):
+    def claer_tile(self):
         '''
         After a defeating a creature or picking up an item, remove it from the grid
         '''
@@ -357,9 +357,9 @@ def info(cr):
         print('Description: The lovable brown bear enters the dungeon, ready to face any and all challenges in his way. With his trusty microphone, Freddy faces fear head on as he ventures deeper into the spiraling depths of the abyss.')
         print('Passive: Freddy does increased damage against enemies that are asleep.')
         print('Attacks:')
-        print('1. Mic Toss')
-        print('2. Sing')
-        print('3. The Bite')
+        print('1. Mic Toss : Deal minor damage to a single target.')
+        print('2. Sing : Put an enemy to sleep.')
+        print('3. The Bite : Deal massive damage to a single target.')
         print('--------------------------------------------------------')
         
     elif cr == 'bonnie':
@@ -367,9 +367,9 @@ def info(cr):
         print('Description: Bonnie the bunny is here and he is ready to stir up a storm. He treads through the treacherous dungeon as he sends rumbles through each room, pathing a way for him to dive deeper into the dungeons.')
         print('Passive: Bonnie increases his attacks by a random amount if enemies are resonating with him.')
         print('Attacks:')
-        print('1. Rift')
-        print('2. Guitar crash')
-        print("3. Rock 'n' Roll")
+        print('1. Rift : Deal minor damage to a single target.')
+        print('2. Guitar crash : Deal moderate damage to a single target.')
+        print("3. Rock 'n' Roll : Chance to deal massive damage to a single target.")
         print('--------------------------------------------------------')
         
     elif cr == 'chica':
@@ -377,9 +377,9 @@ def info(cr):
         print('Description: Chica is afraid of the darkness, hence she brought her best friend along with her - cupcake. Cupcake reassures her constantly that everything will be fine and helps her get through the dungeons, yet honestly she just wants to go back to the pizzeria and feast on pizza. ')
         print("Passive: Chica's cupcake heals her and when destroyed, explodes and deals damage to the opponent.")
         print('Attacks:')
-        print('1. Pizza slice')
-        print('2. Cupcake decoy')
-        print("3. Devour")
+        print('1. Pizza slice : Deal minor damage to a single target.')
+        print('2. Cupcake decoy : Deploy a cupcake that.')
+        print("3. Devour : Consume a cupcake to deal massive damage to a single target.")
         print('--------------------------------------------------------')
         
     elif cr == 'foxy':
@@ -387,9 +387,9 @@ def info(cr):
         print('Description: Foxy brandishes his hook, waiting for his next unsuspecting prey to walk past him as he lurks in the shadows. His unique eyes allow him to adapt to the darkness, but is also the reason why he is largely deterred from light sources. Though Foxy may be seen as arrogant and boastful by others, his band members know that he just wants to be able to be someone to somebody, in this case a better teammate for his friends.')
         print('Passive: When Foxy has below half of his health, his hunter instincts kick in and he increases his attack.')
         print('Attacks:')
-        print('1. Yar-Har')
-        print('2. Harvest Moon')
-        print("3. Death Grip")
+        print('1. Yar-Har : Deal minor damage to a single enemy.')
+        print('2. Harvest Moon : Increase own attack and accuracy.')
+        print("3. Death Grip : Deal massive damage to a single target and heal health.")
         print('--------------------------------------------------------')
     
 def choose_character():
@@ -415,12 +415,16 @@ def choose_character():
 
 
 #accuracy
-def accuracy(accuracy, target):
+def accuracy(accuracy, attacker, target):
     if target.has_status('Phantom'):
         accuracy -= 10
-    if target.has_status('Nightfall'):
+    if attacker.has_status('Nightfall'):
         accuracy += 20
-    hit = [True] * accuracy + [False] * (100 - accuracy)
+    if accuracy <= 0:
+        return False
+    elif accuracy >= 100:
+        return True
+    hit = random.choice([True] * accuracy + [False] * (100 - accuracy))
     if hit:
         return True
     else:
@@ -506,7 +510,7 @@ class GB:
     def attack(self, target):
         n = random.randint(1, 100)
         if n < 50:
-            if accuracy(50, target) == True:
+            if accuracy(50, self, target) == True:
                 print(f"{self.name} used Bash on {target.name}!")
                 damage = 10
                 if target.has_status('Infiltrated'):
@@ -516,7 +520,7 @@ class GB:
             else:
                 print('The attack missed!')
         else:
-            if accuracy(50, target) == True:
+            if accuracy(50, self, target) == True:
                 print(f"{self.name} used Ram on {target.name}!")
                 damage = 15
                 if target.has_status('Infiltrated'):
@@ -581,7 +585,7 @@ class BB:
     def attack(self, target):
         n = random.randint(1, 100)
         if n < 50:
-            if accuracy(50, target) == True:
+            if accuracy(50, self, target) == True:
                 print(f"{self.name} used Twirl on {target.name}!")
                 damage = 10
                 if target.has_status('Infiltrated'):
@@ -591,7 +595,7 @@ class BB:
             else:
                 print('The attack missed!')
         else:
-            if accuracy(50, target) == True:
+            if accuracy(50, self, target) == True:
                 print(f"{self.name} used Balloon Entanglement on {target.name}!")
                 damage = 20
                 if target.has_status('Infiltrated'):
@@ -674,7 +678,7 @@ class Springtrap:
             target.take_damage(damage)
             print(f'{target.name} took {damage} damage.')
         if n == '2':
-            if accuracy(40, target) == True:
+            if accuracy(40, self, target) == True:
                 print(f'{self.name} used Decaying Grasp on {target.name}!')
                 damage = 30
                 if target.has_status('Infiltrated'):
@@ -684,7 +688,7 @@ class Springtrap:
             else:
                 print('The attack missed!')
         if n == '3':
-            if accuracy(15, target) == True:
+            if accuracy(15, self, target) == True:
                 print(f'{self.name} used Eternal Torment on {target.name}!')
                 damage = 60
                 if target.has_status('Infiltrated'):
@@ -767,7 +771,7 @@ class Glitchtrap:
         n = random.randint(1, 100)
         if n > 30 and n < 60: #28% chance to use this attack
             print(f'{self.name} used Corrupt on {target.name}!')
-            if accuracy(50, target) == True:   
+            if accuracy(50, self, target) == True:   
                 damage = 20
                 if target.has_status('Infiltrated'):
                     damage = infiltrated(damage)
@@ -779,14 +783,14 @@ class Glitchtrap:
                 print('The attack missed!')
         if n > 15 and n < 31: #17% chance to use this attack
             print(f'{self.name} used Digital Infiltration on {target.name}!')
-            if accuracy(30, target) == True:
+            if accuracy(30, self, target) == True:
                 target.add_status('infiltrated', 1)
                 print(f"{self.name} infiltrated {target.name}'s system!")
             else:
                 print('The attack missed!')
         if n >= 2 and n < 16: #14% chance to use this attack
             print(f'{self.name} used System Overload on {target.name}!')
-            if accuracy(40, target) == True:
+            if accuracy(40, self, target) == True:
                 damage = 40
                 if target.has_status('Infiltrated'):
                     damage = infiltrated(damage)
@@ -796,7 +800,7 @@ class Glitchtrap:
                 print('The attack missed!')
         if n >= 60: #40% chance to use this attack
             print(f'{self.name} used Pixel Blast on {target.name}!')
-            if accuracy(70, target) == True:
+            if accuracy(70, self, target) == True:
                 damage = 15
                 if target.has_status('Infiltrated'):
                     damage = infiltrated(damage)
@@ -915,7 +919,7 @@ class Freddy:
             damage += self.item_equipped['damage']
         if atk == '1':
             print(f'Freddy used Mic Toss on {target.name}!')
-            if accuracy(90, target) == True:
+            if accuracy(90, self, target) == True:
                 damage += 15
                 print(f"{target.name} took {damage} damage!")
                 target.take_damage(damage)
@@ -923,13 +927,13 @@ class Freddy:
                 print('The attack missed!')
         if atk == '2':
             print(f'Freddy used Sing on {target.name}!')
-            if accuracy(40, target) == True:
+            if accuracy(40, self, target) == True:
                 target.add_status('Sleeping')
             else:
                 print('The attack missed!')
         if atk == '3':
             print(f'Freddy used The Bite on {target.name}!')
-            if accuracy(19, target) == True:
+            if accuracy(19, self, target) == True:
                 damage += 87
                 print(f"{target.name} took {damage} damage!")
                 target.take_damage(damage)
@@ -1089,7 +1093,7 @@ class Bonnie:
             damage += self.item_equipped['damage']
         if atk == '1':
             print(f'{self.name} used Rift on {target.name}!')
-            if accuracy(90, target) == True:
+            if accuracy(90, self, target) == True:
                 damage += 15
                 print(f"{target.name} took {damage} damage!")
                 target.take_damage(damage)
@@ -1097,7 +1101,7 @@ class Bonnie:
                 print('The attack missed!')
         if atk == '2':
             print(f'{self.name} used Guitar Crash on {target.name}!')
-            if accuracy(40, target) == True:
+            if accuracy(40, self, target) == True:
                 damage += 10
                 self.heal(10)
                 print(f"{target.name} took {damage} damage!")
@@ -1108,7 +1112,7 @@ class Bonnie:
                 print('The attack missed!')
         if atk == '3':
             print(f"{self.name} used Rock 'n' Roll on {target.name}!")
-            if accuracy(40, target) == True:
+            if accuracy(40, self, target) == True:
                 hits = random.randint(1, 5)
                 damage += 25*hits
                 print(f'{target.name} was hit {hits} times!')
@@ -1269,7 +1273,7 @@ class Foxy:
             damage += self.item_equipped['damage']
         if atk == '1':
             print(f'{self.name} used Yar-Har on {target.name}!')
-            if accuracy(90, target) == True:
+            if accuracy(90, self, target) == True:
                 damage += 15
                 damage += self.passive(damage)
                 if self.has_status('Nightfall'):
@@ -1286,7 +1290,7 @@ class Foxy:
             self.add_status('Nightfall', 5)
         if atk == '3':
             print(f"{self.name} used Death Grip on {target.name}!")
-            if accuracy(25, target) == True:
+            if accuracy(25, self, target) == True:
                 damage += 125
                 damage += self.passive(damage)
                 if self.has_status('Nightfall'):
@@ -1455,7 +1459,7 @@ class Chica:
             damage += self.item_equipped['damage']
         if atk == '1':
             print(f'{self.name} used Pizza slice on {target.name}!')
-            if accuracy(90, target) == True:
+            if accuracy(90, self, target) == True:
                 damage += 15
                 print(f"{target.name} took {damage} damage!")
                 target.take_damage(damage)
@@ -1470,10 +1474,13 @@ class Chica:
                 print('There is already a cupcake in place!')
         if atk == '3':
             print(f"{self.name} used Devour on {target.name}!")
-            if accuracy(40, target) == True:
-                if self.use_item() == True:
+            if accuracy(40, self, target) == True:
+                if self.cupcake > 0:
                     damage += 125
+                    print(f"{self.name} devoured the cupcake. Damage Increased.")
                     print(f"{target.name} took {damage} damage!")
+                    self.cupcake = 0
+                    
                 else:
                     damage += 30
                     print(f"{target.name} took {damage} damage!")
