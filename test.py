@@ -20,7 +20,7 @@ Test the Normal Room and Grid class for errors.
 ===============================================
 '''
 try:
-    test_grid = data.Grid("normal")
+    test_grid = data.Grid("normal", 2, 2)
 except:
     print("Grid cannot be instantiated")
 try:
@@ -107,7 +107,8 @@ Test the Grid class for errors.
 # print("Grid instantiated with no issues.")
 
 
-        
+test_freddy = data.Freddy()
+test_BB = data.BB()
         
         
     
