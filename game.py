@@ -75,20 +75,29 @@ class MUDGame:
         print(f"You have encountered the {creature.get_name()}!")
         while not self.steve.isdead() or self.creature.isdead():
             print(self.steve) # show HP
-            self.show_options('battle')
-            battle_option = self.prompt_player_2opt()
-            if battle_option == 1:
-                #attack
+            if len(self.steve.inventory) == 0:
+                print(f'You have no heal items! \nAttack the {creature.get_name()}.')
                 damage = self.steve.get_attack()
                 self.creature.take_damage(damage)
                 print(f"{creature.get_name()} now has {self.creature.get_health()} HP")
-            elif battle_option == 2:
-                #heal
-                self.steve.display_inventory()
-                heal_option = input('Please choose a food item: ')
-                heal_option = int(heal_option) - 1
-                self.steve.eat(heal_option)
-                print('Healed!')
+            else:
+                self.show_options('battle')
+                battle_option = self.prompt_player_2opt()
+                if battle_option == 1:
+                    #attack
+                    damage = self.steve.get_attack()
+                    self.creature.take_damage(damage)
+                    print(f"{creature.get_name()} now has {self.creature.get_health()} HP")
+                elif battle_option == 2:
+                    #heal
+                    heal_option = None
+                    while not self.isvalid_heal(heal_option): 
+                        self.steve.display_inventory()
+                        heal_option = input('Please choose a food item: ')
+                        self.isvalid_heal(heal_option)
+                    heal_option = int(heal_option) - 1
+                    self.steve.eat(heal_option)
+                    print('Healed!')
             #Steve endturn 
             damage = creature.random_move()
             self.steve.take_damage(damage)
@@ -98,6 +107,14 @@ class MUDGame:
                 print(f"The {creature.name} has dealt {damage} damage on you.")
         
 
+    def isvalid_heal(self, heal_option):
+        range_of_option = len(self.steve.inventory) + 1
+        valid_opt = []
+        for i in range(1, range_of_option):
+            valid_opt.append(str(i))
+        if heal_option in valid_opt:
+            return True
+        return False
         
 
     def creature_encountered(self):
