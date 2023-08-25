@@ -758,6 +758,7 @@ class Game:
         self.room.set_been_here(True)
 
     def get_action(self) -> str:
+        """sub action from run() that prompts user for a main action"""
         
         decision = input("\nWhat do you wish to do? (type help for list of actions): ")
         
@@ -769,6 +770,7 @@ class Game:
         return decision
 
     def collect_loot(self, attacker : Character, loot : Item) -> None:
+        """sub"""
         
         if loot.get_type() == "weapon":
             attacker.set_weapons(loot)
@@ -791,6 +793,7 @@ class Game:
             time.sleep(1)
 
     def end_game(self) -> None:
+        """print scenario when user dies"""
         print("__   _______ _   _  ______ _____ ___________")
         print("\ \ / /  _  | | | | |  _  \_   _|  ___|  _  \\")
         print(" \ V /| | | | | | | | | | | | | | |__ | | | |")
@@ -800,6 +803,7 @@ class Game:
         self.end = True
 
     def win(self, weapon) -> None:
+        """print scenario when user wins the game"""
         print(f"\nUsing the almighty {weapon.get_name()}, you struck the Dark Lord Voldemort down, crippling him of all his powers and stop his evil tyranny over the school")
         time.sleep(1)
         print(" _____ ___________   _____ _       ___  _____ _   _ ")
@@ -811,10 +815,12 @@ class Game:
         self.end = True
 
     def die(self) -> None:
+        """main action for user to quit the game"""
         self.end_game()
         self.end = True
 
     def use_item(self):
+        """"""
         # change available items when needed
         available_items = ['weapon', 'potion']
         decision = input('\nWhich of the following item do you wish to use? (weapon, potion):')
@@ -831,6 +837,7 @@ class Game:
             raise ValueError(f'{decision}')
             
     def use_weapon(self) -> None:
+        """sub method from use_item() for user to use weapon"""
         choice = self.prompt_user_choice(self.character.weapon, '\nChoose a weapon to equip: ')
         
         # remove battle points from weapon currently
@@ -841,6 +848,7 @@ class Game:
         self.character.battle_points += self.character.weapon[choice].attack
 
     def use_potion(self) -> None:
+        """sub method from use_item() for user to use potion"""
         choice = self.prompt_user_choice(self.character.potion, "\nChoose a potion to consume: ")
 
         # add effects from consumable
