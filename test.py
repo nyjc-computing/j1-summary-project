@@ -1,6 +1,6 @@
 #test
 # from main import game
-
+import time
 import data
 import game
 
@@ -108,14 +108,38 @@ Test the Grid class for errors.
 
 
 test_freddy = data.Freddy()
-test_BB = data.BB()
+test_BB = data.BB(health = 999)
         
-        
-    
-        
-    
-    # try:
-    #     test.run()
-    # except:
-    #     print("The game cannot run lmao.")
+while test_BB.is_defeated() == False:
+    test_freddy.attack(test_BB, "1")
+    print(f'test_BB health is now {test_BB.health}')
+    time.sleep(0.1)
+print("""
+Freddy attack 1 passed
+""")
+time.sleep(2)
+test_BB.health = 999
+
+while test_BB.is_defeated() == False:
+    test_freddy.attack(test_BB, "3")
+    print(f'test_BB health is now {test_BB.health}')
+    time.sleep(0.1)
+print("""
+Freddy attack 3 passed
+""")
+time.sleep(2)
+test_BB.health = 999
+
+while not test_BB.has_status("sleeping"):
+    test_freddy.attack(test_BB, "2")
+    print(f'test_BB health is now {test_BB.health}')
+    time.sleep(0.1)
+while test_BB.has_status("sleeping"):
+    test_BB.remove_status()
+print("""
+Freddy attack 2 (status move) passed
+""")
+
+
+
 
