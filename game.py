@@ -223,7 +223,7 @@ class Game:
                         time.sleep(1)
                         self.room = room.get_forward()
                     else:
-                        print("\nYou tried entering the Principal's Office but the door was locked by a powerful spell")
+                        print("\nYou tried entering the The Shrieking Shack but the door was locked by a powerful spell")
                         time.sleep(1)
                         print("\nYou probably need to find a special item to break the spell (remember to loot all the rooms)")
                         time.sleep(1)
