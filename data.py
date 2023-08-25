@@ -770,7 +770,7 @@ class Weapon(Item):
     def get_attack(self):
         return self.attack
 
-DEFAULT_HITPOINTS = 20
+DEFAULT_HITPOINTS = 50
 class Steve:
     """
     -- ATTRIBUTES --
@@ -787,7 +787,7 @@ class Steve:
             self.armour[slot] = None
         self.health = DEFAULT_HITPOINTS
         self.weapon = None
-        self.base_damage = 2 # default
+        self.base_damage = 5 # default
 
     def __repr__(self):
         return f"Steve has {self.health} HP."
@@ -1011,7 +1011,8 @@ def random_creature() -> "Creature":
     """returns a randomly generated creature"""
     creature_data = random.choice(creature_list)
     if creature_data["name"] == "Creeper":
-        return Creeper(creature_data["name"], creature_data["base_hp"], creature_data["base_atk"])
+        #remove creeper for now
+        return Creature(creature_data["name"], creature_data["base_hp"], creature_data["base_atk"])
     else:
         return Creature(creature_data["name"], creature_data["base_hp"], creature_data["base_atk"])
 
@@ -1039,7 +1040,4 @@ with open("content/items/food.json",'r', encoding = 'utf-8') as f:
     food_list = json.load(f)
 with open("content/items/weapon.json",'r', encoding = 'utf-8') as f:
     weapon_list = json.load(f)
-turn = 10
-test = random_creature()
-test2 = random_item()
-print(test2)
+turn = 1
