@@ -34,22 +34,22 @@ the room the monster is currently in
 
 Methods
 --------------------------------------------
-- self.intro(self) -> None:
-- self.countdown(self) -> None:
-- self.prompt(self, options: list, message: str, cancel: bool) -> int:
-- self.agent_select(self, choice: int) -> str:
-- self.map_select(self, choice: int) -> None:
-- self.initialise(self, agent: str) -> None:
-- self.desc(self) -> None:
-- self.ability(self) -> None:
++ self.intro(self) -> None:
++ self.countdown(self) -> None:
++ self.prompt(self, options: list, message: str, cancel: bool) -> int:
++ self.agent_select(self, choice: int) -> str:
++ self.map_select(self, choice: int) -> None:
++ self.initialise(self, agent: str) -> None:
++ self.desc(self) -> None:
++ self.ability(self) -> None:
 - self.jett(self) -> None:
 - self.sova(self, choice: int) -> None:
 - self.omen(self, choice: int) -> None:
 - self.sage(self, choice: int) -> None:
-- self.move(self, choice: int) -> int:
-- self.reyna_turn(self) -> None:
-- self.update(self) -> None:
-- self.run(self):
++ self.move(self, choice: int) -> int:
++ self.reyna_turn(self) -> None:
++ self.update(self) -> None:
++ self.run(self):
     """
     def __init__(self):
         self.gameover = False
