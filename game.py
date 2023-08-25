@@ -92,7 +92,7 @@ class MUDGame:
         print(f"You have encountered the {creature.get_name()}!")
         while not self.steve.isdead() or creature.isdead():
             print(self.steve) # show HP
-            if len(self.steve.inventory) == 0:
+            if len(self.steve._inventory) == 0:
                 print(f'You have no heal items! \nAttack the {creature.get_name()}.')
                 damage = self.steve.get_attack()
                 creature.take_damage(damage)
