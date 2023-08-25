@@ -73,7 +73,7 @@ class Game:
         # Displays the introduction messages
         print('Welcome to Hogwarts School of Witchcraft and Wizardry')
         time.sleep(1)
-        print("\nThe Dark Lord Voldemort has taken over Hogwarts School and opened multiple interdimensional gates, bringing hoards of enemies into the school. Your job as the chosen one is to traverse the school in order to locate the Principal's Office and thwart Voldemort's evil plan to take over the world\n")
+        print("\nThe Dark Lord Voldemort has taken over Hogwarts School and opened multiple interdimensional gates, bringing hoards of enemies into the school. Your job as the chosen one is to traverse the school in order to locate The Shrieking Shack and thwart Voldemort's evil plan to take over the world\n")
         time.sleep(2)
 
         decision = input('Do you wish to enter the school? ( yes / no ): ')
@@ -213,7 +213,7 @@ class Game:
                     print("\nYou walked forward and smashed into a wall")
                     time.sleep(1)
                 # Check if you are going to the final boss room
-                elif room.get_forward().get_name() == "Principal's Office":
+                elif room.get_forward().get_name() == "The Shrieking Shack":
                     items = []
                     for item in self.character.get_items():
                         items.append(item.get_name())
@@ -244,7 +244,7 @@ class Game:
 
     def loot(self, user : Character, loot : Item) -> None:
 
-        # Generate a random number 
+        # Generate a random number to see if you successfully loot the room whithout the enemy noticing
         chance = random.randint(1, 3)
         caught = False
 
@@ -290,6 +290,7 @@ class Game:
             self.attack(user, self.room.get_enemy())
 
     def flask(self, user : Character) -> None:
+        # Check if the user still has available flasks
         if (user.get_health_flask() + user.get_mana_flask()) == 0:
             print("\nYou ran out of flasks\n")
             time.sleep(1)
