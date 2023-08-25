@@ -1,6 +1,43 @@
 class Weapon:
+    """
+    creates the armour
 
-    def __init__(self):
+    Attributes
+    ----------
+    - type : str
+      Type of the item picked up
+    - name : str
+      Name of the weapon
+    - description : str
+      Description of the weapon
+    - attack : int
+      Numerical value added to the attack of the the character
+    - move : str
+      Name of the weapon's attack
+    - win_front : str
+      The front half of the weapon's killing message
+    - win_back : str
+      The back half of the weapon's killing message
+
+
+    Methods
+    -------
+    + get_type(self) -> str
+    - set_name(self, name : str) -> None
+    + get_name(self) -> str
+    - set_description(self) -> None
+    + get_description(self, description : str) -> str
+    - set_attack(self) -> None
+    + get_attack(self, attack : int) -> int
+    - set_move(self, move : str) -> None
+    + get_move(self) -> str
+    - set_win_front(self, win_front : str) -> None
+    + get_win_front(self) -> str
+    - set_win_back(self, win_back : str) -> None
+    + get_win_back(self) -> str
+    """
+
+    def __init__(self) -> None:
         self.type = "weapon"
         self.name = ""
         self.description = ""
@@ -9,46 +46,62 @@ class Weapon:
         self.win_front = ""
         self.win_back = ""
 
-    def get_type(self):
+    def get_type(self) -> str:
+        """gets the type of the weapon"""
         return self.type
         
-    def set_name(self, name):
+    def set_name(self, name : str) -> None:
+        """updates the name of the weapon"""
         self.name = name
 
-    def get_name(self):
+    def get_name(self) -> str:
+        """gets the name of the weapon"""
         return self.name
 
-    def set_description(self, description):
+    def set_description(self, description : str) -> None:
+        """updates the description of the weapon"""
         self.description = description
         
-    def get_description(self):
+    def get_description(self) -> str:
+        """gets the description of the weapon"""
         return self.description
 
-    def set_attack(self, attack):
+    def set_attack(self, attack : int) -> None:
+        """updates the amount of damage the weapon does"""
         self.attack = attack
 
-    def get_attack(self):
+    def get_attack(self) -> int:
+        """gets the amount of damage the weapon does"""
         return self.attack
 
-    def set_move(self, move):
+    def set_move(self, move : str) -> None:
+        """updates the name of the attack of the weapon"""
         self.move = move
         
-    def get_move(self):
+    def get_move(self) -> str:
+        """gets the name of the attack of the weapon"""
         return self.move
 
-    def set_win_front(self, win_front):
+    def set_win_front(self, win_front : str) -> None:
+        """updates the the front half of the weapon's killing message"""
         self.win_front = win_front
         
-    def get_win_front(self):
+    def get_win_front(self) -> str:
+        """gets the the front half of the weapon's killing message"""
         return self.win_front
 
-    def set_win_back(self, win_back):
+    def set_win_back(self, win_back : str) -> None:
+        """updates the the back half of the weapon's killing message"""
         self.win_back = win_back
         
-    def get_win_back(self):
+    def get_win_back(self) -> str:
+        """gets the the back half of the weapon's killing message"""
         return self.win_back
 
 class BusterSword(Weapon):
+    """
+    A weapon that inherits from the Weapon class
+    """
 
     def __init__(self):
         super().__init__()
@@ -60,6 +113,9 @@ class BusterSword(Weapon):
         self.set_win_back(" into the ground")
 
 class MasterSword(Weapon):
+    """
+    A weapon that inherits from the Weapon class
+    """
 
     def __init__(self):
         super().__init__()
@@ -71,6 +127,9 @@ class MasterSword(Weapon):
         self.set_win_back(" from the face of the earth")
 
 class LeviathanAxe(Weapon):
+    """
+    A weapon that inherits from the Weapon class
+    """
 
     def __init__(self):
         super().__init__()
@@ -82,6 +141,9 @@ class LeviathanAxe(Weapon):
         self.set_win_back(" and decapitated it")
 
 class PortalGun(Weapon):
+    """
+    A weapon that inherits from the Weapon class
+    """
 
     def __init__(self):
         super().__init__()
@@ -93,6 +155,9 @@ class PortalGun(Weapon):
         self.set_win_back(" to the moon")
 
 class VirtuousTreaty(Weapon):
+    """
+    A weapon that inherits from the Weapon class
+    """
 
     def __init__(self):
         super().__init__()
@@ -104,6 +169,9 @@ class VirtuousTreaty(Weapon):
         self.set_win_back(" down in one clean slash")
 
 class Coronacht(Weapon):
+    """
+    A weapon that inherits from the Weapon class
+    """
 
     def __init__(self):
         super().__init__()
@@ -115,6 +183,9 @@ class Coronacht(Weapon):
         self.set_win_back("")
 
 class Zenith(Weapon):
+    """
+    A weapon that inherits from the Weapon class
+    """
 
     def __init__(self):
         super().__init__()
@@ -126,6 +197,9 @@ class Zenith(Weapon):
         self.set_win_back(" using the power of 10 swords")
 
 class RGXButterflyKnife(Weapon):
+    """
+    A weapon that inherits from the Weapon class
+    """
 
     def __init__(self):
         super().__init__()
@@ -137,6 +211,9 @@ class RGXButterflyKnife(Weapon):
         self.set_win_back(" to self destruct")
 
 class ElderWand(Weapon):
+    """
+    A weapon that inherits from the Weapon class
+    """
 
     def __init__(self):
         super().__init__()
@@ -148,6 +225,9 @@ class ElderWand(Weapon):
         self.set_win_back("")
 
 class Wand(Weapon):
+    """
+    A weapon that inherits from the Weapon class
+    """
 
     def __init__(self):
         super().__init__()
@@ -159,6 +239,9 @@ class Wand(Weapon):
         self.set_win_back(" to death")  
 
 class MarksmanRevolver(Weapon):
+    """
+    A weapon that inherits from the Weapon class
+    """
 
     def __init__(self):
         super().__init__()
@@ -170,6 +253,9 @@ class MarksmanRevolver(Weapon):
         self.set_win_back(", knocking it out")  
 
 class ToyKnife(Weapon):
+    """
+    A weapon that inherits from the Weapon class
+    """
 
     def __init__(self):
         super().__init__()
@@ -181,6 +267,9 @@ class ToyKnife(Weapon):
         self.set_win_back(" so much it died")  
 
 class XBaton(Weapon):
+    """
+    A weapon that inherits from the Weapon class
+    """
 
     def __init__(self):
         super().__init__()

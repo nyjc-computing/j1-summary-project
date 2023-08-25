@@ -64,65 +64,84 @@ class Room:
         self.loot = None
 
     def set_been_here(self, status: bool) -> None:
+        """updates the status of whether the character has been to this room"""
         self.been_here = status
         
     def get_been_here(self) -> bool:
+        """gets the status of whether the character has been to this room"""
         return self.been_here
     
     def link_left(self, room) -> None:
+        """updates the room to the left of the home room(self.name)"""
         temp = room
         temp.right = self
         self.left = temp
 
     def get_left(self):
+        """gets the room to the left of the home room(self.name)"""
         return self.left
 
     def link_right(self, room) -> None:
+        """updates the room to the right of the home room(self.name)"""
         temp = room
         temp.left = self
         self.right = temp
 
     def get_right(self):
+        """gets the room to the right of the home room(self.name)"""
         return self.right
 
     def link_forward(self, room) -> None:
+        """updates the room to the up of the home room(self.name)"""
         temp = room
         temp.back = self
         self.forward = temp
 
     def get_forward(self):
+        """gets the room to the up of the home room(self.name)"""
+        
         return self.forward
 
     def link_back(self, room) -> None:
+        """updates the room to the down of the home room(self.name)"""
         temp = room
         temp.forward = self
         self.back = temp
 
     def get_back(self):
+        """gets the room to the down of the home room(self.name)"""
         return self.back
 
     def set_enemy(self, enemy : Enemy) -> None:
+        """updates the enemy of the room"""
         self.enemy = enemy
 
     def get_enemy(self) -> Enemy:
+        """gets the enemy of the room"""
         return self.enemy
 
     def set_name(self, name : str) -> None:
+        """updates the name of the room"""
         self.name = name
         
     def get_name(self) -> str:
+        """gets the name of the room"""
         return self.name
 
     def set_description(self, description : str) -> None:
+        """updates the description of the room"""
         self.description = description
 
     def get_description(self) -> str:
+        """gets the description of the room"""
         return self.description
 
     def set_loot(self, loot : Item) -> None:
+        """updates the loot of the room"""
         self.loot = loot
 
     def get_loot(self) -> Item:
+        """gets the loot of the room"""
         return self.loot
         
 class Dirtmouth(Room):
