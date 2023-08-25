@@ -48,7 +48,7 @@ class MUDGame:
         Print menu of options provided to users according to different situation.
         """
         if sit == 'creature':
-            menu = "1. Attack \n2. Retreat"
+            menu = "1. Attack \n2. Run away"
         elif sit == 'item':
             menu = '1. Pick Up \n2. Do not pick up'
         elif sit == 'restart':
@@ -134,7 +134,7 @@ class MUDGame:
         Validate player's option when choosing food items from inventory.
         Used for battle()
         """
-        range_of_option = len(self.steve.inventory) + 1
+        range_of_option = len(self.steve._inventory) + 1
         valid_opt = []
         for i in range(1, range_of_option):
             valid_opt.append(str(i))
@@ -219,46 +219,77 @@ class MUDGame:
         print('Please enter a valid option.')
     
     def run(self):
-        """
-- initiating the game
-- interaction between steve and creatures --> what kind of creature, what kind of battle do you want
-- how the turns work --> when to move steve, when to move the monster
-- winscreen
-- losescreen + lose conditions
-- 
-        """
+
+        # starting interface
         self.introduce()
+
+        # while loop continue until steve or boss die
         while not self.game_is_over():
+
+            # append the current location to steve_path
             self.steve_path.append(self.maze.get_current_pos)
+
+            # print steve's status
             self.show_status()
-            # show status: direction, hp, lvl, inventory
+
+            # creature is found in the room
             if self.creature_encountered():
-                self.show_options('creature')
+                
                 # show player action options
-                option = self.prompt_player()
+                self.show_options('creature')
+                
                 # prompt player to take actions
+                option = self.prompt_player()
+
+                # battle if player choose option 1
                 if option == '1':
                     self.battle()
                     if self.game_is_over():
                         continue
+
+                # steve has 40% chance of running away to another room, 60% chance to battle instead
                 else:
                     odds = random.randint(1, 100)
                     if odds <= 40:
-                        self.maze.try_move_steve(self.steve_path[-2])
+                        current_location = self.maze.get_current_pos()
+                        opt_dir = {'1':NORTH, '2':SOUTH, '3':EAST, '4':WEST}
+                        available_dir = []
+                        for dir in opt_dir.values():
+                            if self.maze.can_move_here(current_location, dir):
+                                available_dir.append(dir)
+                                random_dir = random.choice(available_dir)
+                        self.maze.move_steve(random_dir)
                         continue
                     else:
                         print("Too late to escape!")
                         self.battle()
                         if self.game_is_over():
                             continue
+            else:
+                print('No creature found in this room.')
+
+
+            # item is found in the room, player can choose to pick up or not
+            # item can be 'Armor', 'Food', 'Weapon'
             if self.item_found():
                 x, y = self.maze.get_current_pos()
                 room = self.maze.lab[x][y]
                 item = room.get_item()
-                self.show_options('item')
-                item_choice = self.prompt_player()
-                if item_choice == 1:
-                    self.steve._add_item_to_inv(item)
+                if item.item_type == 'Weapon':
+                    self.steve.equip_weapon(item)
+                    print(f'You have found a stronger weapon! It deals {item.get_attack()} damage now!')
+                elif item.item_type == 'Armour':
+                    self.steve.equip_armour(item)
+                    print(f'You have found a stronger armour! It now blocks {item.get_defence()} damage now!')
+                else:
+                    print(f"You have found a {item.name}! \nDo you want to pick it up?")
+                    self.show_options('item')
+                    item_choice = self.prompt_player()
+                    if item_choice == '1':
+                        self.steve._add_item_to_inv(item)
+            else:
+                print('No item found in this room.')
+                
             self.movesteve()
             if random.randint(1, 100) <= 30:
                 self.moveboss() 
