@@ -872,7 +872,8 @@ class Steve:
     def get_defence(self):
         defence = 0
         for armor in self.armour.values():
-            defence += armor.get_defence()
+            if armor is not None:
+                defence += armor.get_defence()
         return defence
 
     def equip_weapon(self, weapon):
@@ -891,8 +892,9 @@ class Steve:
 
     def take_damage(self, damage):
         """Updates hitpoints attribute based on how much damage is dealt."""
-        damage = int(damage * ((100 - self.get_defence())/100))
-        self.health = max(0, self.health - damage)
+        if damage is not None:
+            damage = int(damage * ((100 - self.get_defence())/100))
+            self.health = max(0, self.health - damage)
         
 class Creature:
     """
@@ -950,7 +952,7 @@ class Creature:
         return self.get_attack()
 
     def isdead(self) -> bool:
-        """Tells whether Steve is dead or not. Returns True if yes, else False."""
+        """Tells whether Creature is dead or not. Returns True if yes, else False."""
         if self.hitpoints <= 0:
             return True
         return False
@@ -966,13 +968,12 @@ class Creeper(Creature):
         self.hitpoints = 0
         if inp.upper() == random_letter and time.time() - start_time <= 1.8:
             print("\nLuckily, your quick reactions allowed you to avoid the explosion. You took no damage.")
-            return 0
+            return None
         elif inp.upper() != random_letter:
             print("\nOh no! You took the wrong action and got caught in the blast!")
         elif (time.time() - start_time) > 1.8:
             print("\nOh no! You were too slow and got caught in the blast!")
         attack = int((attack) * ((turn_number / 10) + 1) * (random.randint(90, 110) / 100))
-        print(f"You took {attack} damage.")
         return attack
 
 class Boss(Creature):
