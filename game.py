@@ -230,6 +230,7 @@ class MUDGame:
 
         # while loop continue until steve or boss die
         while not self.game_is_over():
+            print('\n')
 
             # append the current location to steve_path
             self.steve_path.append(self.maze.get_current_pos)
