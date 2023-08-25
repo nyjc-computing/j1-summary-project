@@ -892,7 +892,7 @@ class Steve:
     def take_damage(self, damage):
         """Updates hitpoints attribute based on how much damage is dealt."""
         damage = int(damage * ((100 - self.get_defence())/100))
-        self.hitpoints = max(0, self.hitpoints - damage)
+        self.health = max(0, self.health - damage)
         
 class Creature:
     """
@@ -948,6 +948,12 @@ class Creature:
         
         """
         return self.get_attack()
+
+    def isdead(self) -> bool:
+        """Tells whether Steve is dead or not. Returns True if yes, else False."""
+        if self.hitpoints <= 0:
+            return True
+        return False
       
 class Creeper(Creature):
     def _generate_attack(self, attack: int, turn_number: int):
@@ -968,10 +974,6 @@ class Creeper(Creature):
         attack = int((attack) * ((turn_number / 10) + 1) * (random.randint(90, 110) / 100))
         print(f"You took {attack} damage.")
         return attack
-
-    def isdead(self) -> bool:
-        "returns True if the creeper is dead. returns False otherwise."
-        return self.hitpoints <= 0
 
 class Boss(Creature):
     """
