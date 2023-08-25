@@ -69,18 +69,19 @@ class Game:
         self.description = ["Gets the list of possible actions", "Looks around the room","Move to another room", "Search the room for loot", "Drink your flasks", "Attack the enemny", "Change your equipment", "See your statistics", "Find out more about your items", "Ends the game"]
     
     def intro(self) -> None:
-        # start of the game
+        
+        # Displays the introduction messages
         print('Welcome to Hogwarts School of Witchcraft and Wizardry')
         time.sleep(1)
         print("\nThe Dark Lord Voldemort has taken over Hogwarts School and opened multiple interdimensional gates, bringing hoards of enemies into the school. Your job as the chosen one is to traverse the school in order to locate the Principal's Office and thwart Voldemort's evil plan to take over the world\n")
         time.sleep(2)
 
-        #
         decision = input('Do you wish to enter the school? ( yes / no ): ')
         
         if decision.lower() == "yes":
             name = input('\nTarnished, key in your name: ')
             self.character.set_name(name)
+            # Check if the user used the secret easter egg name
             if name == "meow":
                 self.meow()
             else:

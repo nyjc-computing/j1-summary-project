@@ -1,5 +1,5 @@
 # importing from other files
-from map import *
+from room import *
 from character import *
 from weapon import *
 from spell import *
