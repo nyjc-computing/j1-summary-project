@@ -3,7 +3,8 @@ import time
 import random
 
 class Game:
-    '''
+    
+    """
     A class that creates an instance of the game
 
     Attributes
@@ -14,25 +15,55 @@ class Game:
       Class for the room the player is in
     - character : Character
       Class of the character
-    - actions : list
+    - actions : list[str]
       List of possible actions
-    - description : list
+    - description : list[str]
       List of description of possible actions
 
     Methods
     -------
-    - intro(self) -> None : runs when the game starts for the first time
-    run(self) -> None : runs everytime the character choose an option
-    help(self) -> None : method for character to traverse to different rooms
-
-    '''
-    def __init__(self):
+    - intro(self) -> None
+    - run(self) -> None
+    - help(self) -> None
+    - look(self, room : Room) -> None
+    - move(self, room : Room) -> None
+    - loot(self, user : Character, loot : Item) -> None
+    - flask(self, user : Character) -> None
+    - attack(self, attacker : Character , victim: Enemy) -> None
+    - get_choice(self, user : Character) -> str
+    - get_attack(self, user : Character, decision : str) -> [int, Weapon]
+    - use_flask(self, user : Character) -> None
+    - display_flask(self, user : Character) -> None
+    - equip(self, user) -> None
+    - display_equipment(self, user : Character) -> None
+    - display_spells(self, user : Character) -> None
+    - equip_armour(self, user : Character) -> None
+    - equip_weapon(self, user : Character) -> None
+    - equip_accessory(self, user : Character) -> None
+    - status(self, user : Character) -> None
+    - info(self, user : Character) -> None
+    - weapon_info(self, user : Character) -> None
+    - spell_info(self, user : Character) -> None
+    - armour_info(self, user : Character) -> None
+    - accessory_info(self, user : Character) -> None
+    - flask_info(self) -> None
+    - item_info(self, user : Character) -> None
+    - display_room_name(self) -> None
+    - display_room_description(self) -> None
+    - get_action(self) -> str
+    - collect_loot(self, attacker : Character, loot : Item) -> None
+    - end_game(self) -> None
+    - win(self, weapon) -> None
+    - die(self) -> None
+    """
+    
+    def __init__(self) -> None:
         temp = setup()
         self.end = False
         self.room = temp[0]
         self.character = temp[1]
-        self.actions = ["help", "look", "move", "loot", "flask", "attack", "equip", "status", "info"]
-        self.description = ["Gets the list of possible actions", "Looks around the room","Move to another room", "Search the room for loot", "Drink your flasks", "Attack the enemny", "Change your equipment", "See your statistics", "Find out more about your items"]
+        self.actions = ["help", "look", "move", "loot", "flask", "attack", "equip", "status", "info", "die"]
+        self.description = ["Gets the list of possible actions", "Looks around the room","Move to another room", "Search the room for loot", "Drink your flasks", "Attack the enemny", "Change your equipment", "See your statistics", "Find out more about your items", "Ends the game"]
     
     def intro(self) -> None:
         # start of the game
@@ -95,6 +126,9 @@ class Game:
 
         elif decision.lower() == "info":
             self.info(self.character)
+
+        elif decision.lower() == "die":
+            self.die()
         
     def help(self) -> None:
         print("\nYou are able to:")
@@ -209,21 +243,25 @@ class Game:
                 print(f"\nYou found a {loot.get_name()}, a powerful flask")
                 time.sleep(1)
                 user.set_health_flask(1)
+                self.set_loot(None)
     
             elif loot.get_name() == "Flask of Cerulean Tears":
                 print(f"\nYou found a {loot.get_name()}, a powerful flask")
                 time.sleep(1)
                 user.set_mana_flask(1)
+                self.set_loot(None)
                 
             elif loot.get_name() == "Dectus Medallion (right)":
                 print(f"\nYou found a {loot.get_name()}, a powerful item")
                 time.sleep(1)
                 user.set_items(loot)
+                self.set_loot(None)
     
             elif loot.get_name() == "Dectus Medallion (left)":
                 print(f"\nYou found a {loot.get_name()}, a powerful item")
                 time.sleep(1)
                 user.set_items(loot)
+                self.set_loot(None)
 
         else:
             print(f"\n{self.room.get_enemy().get_name()} noticed you while you tried to loot the room")
@@ -255,7 +293,7 @@ class Game:
                 if decision == "flask":
                     self.use_flask(attacker)
                     if victim.get_health() > 0:
-                        damage = max(0, victim.get_attack() - attacker.get_defence())
+                        damage = max(1, victim.get_attack() - attacker.get_defence())
                         attacker.set_health(attacker.get_health() - damage)
                         print(f"\n{victim.get_name()} used {victim.get_move()}, dealing {damage} damage to {attacker.get_name()}")
                         time.sleep(1)
@@ -269,7 +307,7 @@ class Game:
                         time.sleep(1)
                     
                     if victim.get_health() > 0:
-                        damage = max(0, victim.get_attack() - attacker.get_defence())
+                        damage = max(1, victim.get_attack() - attacker.get_defence())
                         attacker.set_health(attacker.get_health() - damage)
                         print(f"\n{victim.get_name()} used {victim.get_move()}, dealing {damage} damage to {attacker.get_name()}")
                         time.sleep(1)
@@ -393,7 +431,7 @@ class Game:
         print(f"Number of Flask of Cerulean Tears in inventory: {user.get_mana_flask()} (restores {FlaskOfCeruleanTears().get_mana()} mana)\n")
         time.sleep(1)
         
-    def equip(self, user):
+    def equip(self, user) -> None:
 
         self.display_equipment(user)
 
@@ -748,4 +786,8 @@ class Game:
         print("| | __| | | | | | |  `--. \ |    |  _  | | | | . ` |")
         print("| |_\ \ \_/ / |/ /  /\__/ / |____| | | |_| |_| |\  |")
         print(" \____/\___/|___/   \____/\_____/\_| |_/\___/\_| \_/")
+        self.end = True
+
+    def die(self) -> None:
+        self.end_game()
         self.end = True
