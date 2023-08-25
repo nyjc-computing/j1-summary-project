@@ -223,7 +223,7 @@ class Labyrinth:
         # choose position of Monster room opposite to where steve is
         boss_x = labsize - 1 - (steve_x % labsize)
         boss_y = labsize - 1 - (steve_y % labsize)
-        
+        self.boss_pos = [boss_x, boss_y]
         if (boss_x, boss_y) == (steve_x, steve_y): # if they happen to be placed in the same room
             raise ValueError("Steve and the Boss have been put at the same location.")
         self.lab[boss_x][boss_y].boss_enters()    
@@ -798,11 +798,10 @@ class Steve:
             return None
         print("\nYou have:\n")
         for i in len(self.inventory):
-
             dict_ = self.inventory[i]
             item, number = str(dict_["item"]), str(dict_["number"])
             prefix = i + 1
-            print(f"{prefix:>2}. {number:>2} x {item}")q
+            print(f"{prefix:>2}. {number:>2} x {item}")
         print("\n")
         return None
 
