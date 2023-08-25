@@ -7,12 +7,12 @@
 - Ling Kai
 - Jae Zen
 
-  ____               _                    _  _    _ 
- |  _ \  ___   __ _ | | _ __ ___   _   _ | || |_ (_)
- | |_) |/ _ \ / _` || || '_ ` _ \ | | | || || __|| |
- |  _ <|  __/| (_| || || | | | | || |_| || || |_ | |
- |_| \_\\___| \__,_||_||_| |_| |_| \__,_||_| \__||_|
-                                                    
+## Project Name
+
+Realmulti
+
+## Project Description
+
 "Realmulti" is an immersive text-based adventure game where the nefarious Voldemort, the primary antagonist, employs his dark powers to craft interdimensional portals that link various gaming universes together. As the protagonist of this captivating narrative, players embark on a journey to thwart Voldemort's sinister plans.
 
 Venturing through these dimensional portals, the main character discovers an array of distinct rooms, each adorned with the thematic essence of a renowned game world – from the blocky landscapes of Minecraft to the epic realms of Zelda and beyond. These rooms serve as the battlegrounds where the protagonist confronts diverse monsters and challenges.
