@@ -22,8 +22,8 @@ class Game:
 
     Methods
     -------
-    - intro(self) -> None
-    - run(self) -> None
+    + intro(self) -> None
+    + run(self) -> None
     - help(self) -> None
     - look(self, room : Room) -> None
     - move(self, room : Room) -> None

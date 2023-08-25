@@ -25,18 +25,18 @@ class Enemy:
 
     Methods
     -------
-    - set_health(self, health : int) -> None
-    - get_health(self) -> int
-    - set_name(self, name : str) -> None
-    - get_name(self) -> str
-    - set_description(self, description : str) -> None
-    - get_description(self) -> str
-    - set_attack(self, attack : int) -> None
-    - get_attack(self) -> int
-    - set_move(self, move : str) -> None
-    - get_move(self) -> str
-    - set_loot(self, loot : Weapon) -> None
-    - get_loot(self) -> Weapon
+    + set_health(self, health : int) -> None
+    + get_health(self) -> int
+    + set_name(self, name : str) -> None
+    + get_name(self) -> str
+    + set_description(self, description : str) -> None
+    + get_description(self) -> str
+    + set_attack(self, attack : int) -> None
+    + get_attack(self) -> int
+    + set_move(self, move : str) -> None
+    + get_move(self) -> str
+    + set_loot(self, loot : Weapon) -> None
+    + get_loot(self) -> Weapon
     """
 
     def __init__(self) -> None:

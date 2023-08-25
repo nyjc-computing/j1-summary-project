@@ -48,40 +48,40 @@ class Character:
 
     Methods
     -------
-    - set_name(self, name) -> None
-    - get_name(self) -> str
-    - set_health(self, health : int) -> None
-    - get_health(self) -> int
-    - set_max_health(self, max_health : int) -> None
-    - get_max_health(self) -> int
-    - set_defence(self, defence : int) -> None
-    - get_defence(self) -> int
-    - set_spells(self, spell : Spell) -> None
-    - get_spells(self) -> list[Spell]
-    - set_attack(self, attack : int) -> None
-    - get_attack(self) -> int
-    - set_mana(self, mana : int) -> None
-    - get_mana(self) -> int
-    - set_max_mana(self, max_mana : int) -> None
-    - get_max_mana(self) -> int
-    - set_weapon(self, weapon : Weapon) -> None:
-    - get_weapon(self) -> Weapon
-    - set_weapons(self, weapon : Weapon) -> None
-    - get_weapons(self) -> list[Weapon]
-    - set_armour(self, armour : Armour) -> None
-    - get_armour(self) -> Armour
-    - set_armours(self, armour : Armour) -> None
-    - get_armours(self) -> list[Armour]
-    - set_accessory(self, accessory : Accessory) -> None
-    - get_accessory(self) -> Accessory
-    - set_accessories(self, accessory : Accessory) -> None
-    - get_accessories(self) -> list[Accessory]
-    - set_health_flask(self, number : int) -> None
-    - get_health_flask(self) -> int
-    - set_mana_flask(self, number : int) -> None
-    - get_mana_flask(self) -> int
-    - set_items(self, item : Item) -> None
-    - get_items(self) -> list[Item]
+    + set_name(self, name) -> None
+    + get_name(self) -> str
+    + set_health(self, health : int) -> None
+    + get_health(self) -> int
+    + set_max_health(self, max_health : int) -> None
+    + get_max_health(self) -> int
+    + set_defence(self, defence : int) -> None
+    + get_defence(self) -> int
+    + set_spells(self, spell : Spell) -> None
+    + get_spells(self) -> list[Spell]
+    + set_attack(self, attack : int) -> None
+    + get_attack(self) -> int
+    + set_mana(self, mana : int) -> None
+    + get_mana(self) -> int
+    + set_max_mana(self, max_mana : int) -> None
+    + get_max_mana(self) -> int
+    + set_weapon(self, weapon : Weapon) -> None:
+    + get_weapon(self) -> Weapon
+    + set_weapons(self, weapon : Weapon) -> None
+    + get_weapons(self) -> list[Weapon]
+    + set_armour(self, armour : Armour) -> None
+    + get_armour(self) -> Armour
+    + set_armours(self, armour : Armour) -> None
+    + get_armours(self) -> list[Armour]
+    + set_accessory(self, accessory : Accessory) -> None
+    + get_accessory(self) -> Accessory
+    + set_accessories(self, accessory : Accessory) -> None
+    + get_accessories(self) -> list[Accessory]
+    + set_health_flask(self, number : int) -> None
+    + get_health_flask(self) -> int
+    + set_mana_flask(self, number : int) -> None
+    + get_mana_flask(self) -> int
+    + set_items(self, item : Item) -> None
+    + get_items(self) -> list[Item]
     """
     
     def __init__(self) -> None:
