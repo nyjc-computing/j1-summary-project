@@ -143,7 +143,7 @@ class Game:
             self.die()
         
     def help(self) -> None:
-        # Displays the list of actions 
+        # Displays the list of actions the user can do
         print("\nYou are able to:")
         for i, action in enumerate(self.actions):
             print(f"- {action} ({self.description[i]})")
@@ -151,7 +151,8 @@ class Game:
         
     def look(self, room : Room) -> None:
         print("\n", end="")
-        
+
+        # Displays the connected rooms
         if room.get_left() != None:
             print(f"To the left is {room.get_left().get_name()}")
             
@@ -165,6 +166,8 @@ class Game:
             print(f"Behind you is {room.get_back().get_name()}")
 
         time.sleep(1)
+
+        # Displays the enemy in the room
         if room.get_enemy() != None:
             print(f"\nIn the middle of the room is {room.get_enemy().get_name()}, {room.get_enemy().get_description()}")
 
@@ -172,14 +175,16 @@ class Game:
 
     def move(self, room : Room) -> None:
         movement = input('\nWhich direction do you wish to move in? (left, right, forward, back): ')
-        
+
+        # Validates the users choice
         if movement.lower() not in ["left", "right", "forward", "back"]:
             print(f"\nYou do not know what direction {movement} is and got confused")
             time.sleep(1)
 
+        # Generate a random number to see if you managed to sneak past the enemy
         chance = random.randint(1, 3)
         caught = False
-
+        
         if room.get_enemy() != None:
             if chance == 1:
                 caught = True
@@ -207,10 +212,12 @@ class Game:
                 if room.get_forward() == None:
                     print("\nYou walked forward and smashed into a wall")
                     time.sleep(1)
+                # Check if you are going to the final boss room
                 elif room.get_forward().get_name() == "Principal's Office":
                     items = []
                     for item in self.character.get_items():
                         items.append(item.get_name())
+                    # Checks if you have the required items to enter the final boss room
                     if "Dectus Medallion (right)" in items and "Dectus Medallion (left)" in items:
                         print("\nCongratulations, you placed the two Dectus Medallions together releasing trememndous amounts of energy, breaking the powerful spell on the door")
                         time.sleep(1)
@@ -237,6 +244,7 @@ class Game:
 
     def loot(self, user : Character, loot : Item) -> None:
 
+        # Generate a random number 
         chance = random.randint(1, 3)
         caught = False
 
@@ -395,11 +403,11 @@ class Game:
                 print(f"\nYou tried to cast {choice} but it blew up in your face")
                 time.sleep(1)
                 choice = input("\nWhich spell would you like to cast?: ")
-            cost = user.get_spells()[spells.index(choice)].get_cost()
+            cost = user.get_spells()[spells.index(choice.lower())].get_cost()
             print(f"\nYou used up {cost} mana points")
             time.sleep(1)
             user.set_mana(user.get_mana() - cost)
-            return user.get_spells()[spells.index(choice)].get_attack(), user.get_spells()[spells.index(choice)]
+            return user.get_spells()[spells.index(choice.lower())].get_attack(), user.get_spells()[spells.index(choice)]
 
     def use_flask(self, user : Character) -> None:
         self.display_flask(user)
