@@ -975,10 +975,6 @@ class Creeper(Creature):
         print(f"You took {attack} damage.")
         return attack
 
-    def isdead(self) -> bool:
-        "returns True if the creeper is dead. returns False otherwise."
-        return self.hitpoints <= 0
-
 class Boss(Creature):
     """
     -- ATTRIBUTES --
