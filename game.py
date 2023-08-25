@@ -67,6 +67,7 @@ class Game:
         self.description = ["Gets the list of possible actions", "Looks around the room","Move to another room", "Search the room for loot", "Drink your flasks", "Attack the enemny", "Change your equipment", "See your statistics", "Find out more about your items", "Ends the game"]
     
     def intro(self) -> None:
+        """print introduction for the start of the game """
         # start of the game
         print('Welcome to Hogwarts School of Witchcraft and Wizardry')
         time.sleep(1)
@@ -96,6 +97,7 @@ class Game:
             return
         
     def run(self) -> None:
+        """to be run in a loop to prompt user's action"""
         self.display_room_name()
 
         # Checks if the player has entered the room before
@@ -136,12 +138,14 @@ class Game:
             self.die()
         
     def help(self) -> None:
+        """main action for user to get the list of possible actions"""
         print("\nYou are able to:")
         for i, action in enumerate(self.actions):
             print(f"- {action} ({self.description[i]})")
         time.sleep(1)
         
     def look(self, room : Room) -> None:
+        """main action to look around the room including rooms linked to the room and enemies in the room"""
         print("\n", end="")
         
         if room.get_left() != None:
@@ -163,6 +167,7 @@ class Game:
         time.sleep(1)
 
     def move(self, room : Room) -> None:
+        """main action for user to traverse from one room to another"""
         movement = input('\nWhich direction do you wish to move in? (left, right, forward, back): ')
         
         if movement.lower() not in ["left", "right", "forward", "back"]:
@@ -228,6 +233,7 @@ class Game:
             self.attack(self.character, room.get_enemy())
 
     def loot(self, user : Character, loot : Item) -> None:
+        """main action for user to search the room for loot"""
 
         chance = random.randint(1, 3)
         caught = False
@@ -274,6 +280,7 @@ class Game:
             self.attack(user, self.room.get_enemy())
 
     def flask(self, user : Character) -> None:
+        """main action for user to drink their flasks"""
         if (user.get_health_flask() + user.get_mana_flask()) == 0:
             print("\nYou ran out of flasks\n")
             time.sleep(1)
@@ -281,6 +288,7 @@ class Game:
             self.use_flask(user)
 
     def attack(self, attacker : Character , victim: Enemy) -> None:
+        """main action for user to attack the enemy in the room"""
         if victim == None:
             print("\nYou attacked the air and realised how insane you looked")
             time.sleep(1)
@@ -344,6 +352,7 @@ class Game:
         return None
 
     def get_choice(self, user : Character) -> str:
+        """sub action from attack() to prompt user for attack methods or use of flask"""
         decision = input(f"What do you want to use? ({user.get_weapon().get_name()} / Spell / Flask): ")
         
         cost = []
@@ -372,6 +381,7 @@ class Game:
         return decision
     
     def get_attack(self, user : Character, decision : str) -> [int, Weapon]:
+        """sub action from attack() to get total damage done to victim"""
         
         if decision.lower() == user.get_weapon().get_name().lower():
             return user.get_weapon().get_attack(), user.get_weapon()
@@ -394,6 +404,7 @@ class Game:
             return user.get_spells()[spells.index(choice)].get_attack(), user.get_spells()[spells.index(choice)]
 
     def use_flask(self, user : Character) -> None:
+        """sub action from get_choice() to prompt user for the flask to drink"""
         self.display_flask(user)
         selection = input("Which flask would you like to drink?: ")
         valid = False
@@ -432,11 +443,13 @@ class Game:
             user.set_mana_flask(-1)
     
     def display_flask(self, user : Character) -> None:
+        """sub action from use_flask to display flask in inventory"""
         print(f"\nNumber of Flask of Crimson Tears in inventory : {user.get_health_flask()} (restores {FlaskOfCrimsonTears().get_health()} health)")
         print(f"Number of Flask of Cerulean Tears in inventory: {user.get_mana_flask()} (restores {FlaskOfCeruleanTears().get_mana()} mana)\n")
         time.sleep(1)
         
     def equip(self, user) -> None:
+        """main action for user to equip various items"""
 
         self.display_equipment(user)
 
@@ -463,6 +476,7 @@ class Game:
                     self.equip_accessory(user)
     
     def display_equipment(self, user : Character) -> None:
+        """sub action for equip() to display equipments that the user have"""
         
         if user.armour == None:
             print("\nArmour : Empty")
@@ -481,11 +495,13 @@ class Game:
         time.sleep(1)
 
     def display_spells(self, user : Character) -> None:
+        """sub action from get_attack() to display spells that the user have"""
         print("\nSpells:")
         for i, spell in enumerate(user.spells):
             print(f"- {spell.get_name()} ({spell.get_cost()} mana)")
 
     def equip_armour(self, user : Character) -> None:
+        """sub action from equip() for user to choose an armour to equip"""
         if len(user.get_armours()) == 0:
             print("\nYou do not have any armour to equip")
             time.sleep(1)
@@ -511,6 +527,7 @@ class Game:
                 self.display_equipment(user)
 
     def equip_weapon(self, user : Character) -> None:
+        """sub action from equip() for user to choose a weapon to equip"""
         if len(user.get_weapons()) == 0:
             print("\nYou do not have any weapon to equip")
             time.sleep(1)
@@ -531,6 +548,7 @@ class Game:
                 self.display_equipment(user)
 
     def equip_accessory(self, user : Character) -> None:
+        """sub action from equip() for user to choose an accessory to equip"""
         if len(user.accessories) == 0:
             print("\nYou do not have any accessories to equip")
             time.sleep(1)
@@ -574,6 +592,7 @@ class Game:
                 self.display_equipment(user)
 
     def status(self, user : Character) -> None:
+        """main action that prints user's status"""
         print(f"\nName: {user.get_name()}")
         print(f"Health: {user.get_health()} / {user.get_max_health()}")
         print(f"Mana: {user.get_mana()} / {user.get_max_mana()}")
@@ -582,6 +601,7 @@ class Game:
         time.sleep(1)
 
     def info(self, user : Character) -> None:
+        """main action that prompts user for the type of item to find out more information about"""
         choice = input("\nWhat do you want to find out more about? (weapons, spells, armours, accessories, flasks, items): ")
         
         if choice.lower() not in ["weapons", "spells", "armours", "accessories", "flasks", "items"]:
@@ -814,6 +834,7 @@ class Game:
             raise ValueError(f'{decision}')
             
     def use_weapon(self) -> None:
+        """"""
         choice = self.prompt_user_choice(self.character.weapon, '\nChoose a weapon to equip: ')
         
         # remove battle points from weapon currently
@@ -835,7 +856,8 @@ class Game:
         # remove potion from list of potion available
         self.character.potion.pop(choice)
 
-    def prompt_user_choice(self, items: list, question: str) -> int:        
+    def prompt_user_choice(self, items: list, question: str) -> int:
+        """general function to prompt user input and perform input validation"""
         for i, item in enumerate(items):
             print(f"[{i}]: {item}")
         choice = None
@@ -851,6 +873,7 @@ class Game:
             
 
     def meow(self) -> None:
+        """admin account by setting name as meow"""
         print("\nWelcome chosen one, the Gods smile upon you and have rained down their blessing")
         time.sleep(1)
         self.character.set_health(999)
