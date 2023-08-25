@@ -117,6 +117,7 @@ class MUDGame:
                     heal_option = None
                     n = 0
                     while not self.isvalid_heal(heal_option): 
+                        n += 1
                         self.steve.display_inventory()
                         if n > 1:
                             self.invalid_opt()
