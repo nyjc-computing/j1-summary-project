@@ -229,7 +229,7 @@ class Game:
                         time.sleep(1)
                         self.room = room.get_forward()
                     else:
-                        print("\nYou tried entering the Principal's Office but the door was locked by a powerful spell")
+                        print("\nYou tried entering the The Shrieking Shack but the door was locked by a powerful spell")
                         time.sleep(1)
                         print("\nYou probably need to find a special item to break the spell (remember to loot all the rooms)")
                         time.sleep(1)
@@ -325,7 +325,7 @@ class Game:
                 decision = self.get_choice(attacker)
                 
                 if decision == "flask":
-                    self.use_flask(attacker)
+                    self.use_flask_battle(attacker)
                     if victim.get_health() > 0:
                         damage = max(1, victim.get_attack() - attacker.get_defence())
                         attacker.set_health(attacker.get_health() - damage)
@@ -431,7 +431,7 @@ class Game:
             user.set_mana(user.get_mana() - cost)
             return user.get_spells()[spells.index(choice.lower())].get_attack(), user.get_spells()[spells.index(choice)]
 
-    def use_flask(self, user : Character) -> None:
+    def use_flask_battle(self, user : Character) -> None:
         """sub action from get_choice() to prompt user for the flask to drink"""
         self.display_flask(user)
         selection = input("Which flask would you like to drink?: ")
@@ -456,6 +456,35 @@ class Game:
                 time.sleep(1)
                 selection = input("Which flask would you like to drink?: ")
                 valid = False
+                
+    def use_flask(self, user : Character) -> None:
+        """Function to allow the user to use flask but also allows them to cancel the action"""
+        self.display_flask(user)
+        selection = input("Which flask would you like to drink? (type cancel to quit): ")
+        valid = False
+        while not valid:
+            valid = True
+            # Validates user selection
+            if selection.lower() not in ["flask of crimson tears", "flask of cerulean tears", "cancel"]:
+                print(f"\nYou tried drinking {selection} but nothing happened\n")
+                time.sleep(1)
+                selection = input("Which flask would you like to drink?: ")
+                valid = False
+            # Checks if the user has enough flask of crimson tears
+            elif selection.lower() == "flask of crimson tears" and user.get_health_flask() == 0:
+                print("\nYou ran out of Flask of Crimson Tears\n")
+                time.sleep(1)
+                selection = input("Which flask would you like to drink?: ")
+                valid = False
+            # Checks if the user has enough flask of cerulean tears
+            elif selection.lower() == "flask of cerulean tears" and user.get_mana_flask() == 0:
+                print("\nYou ran out of Flask of Cerulean Tears\n")
+                time.sleep(1)
+                selection = input("Which flask would you like to drink?: ")
+                valid = False
+
+            elif selection.lower() == "cancel":
+                return
 
         if selection.lower() == "flask of crimson tears":
             # Makes sure the health healed does not exceed the maximum health
@@ -839,7 +868,7 @@ class Game:
         return decision
 
     def collect_loot(self, attacker : Character, loot : Item) -> None:
-        """sub action from attack() to collect loot of defeated monster"""
+        """sub method from attack() to collect loot of defeated monster"""
         if loot.get_type() == "weapon":
             attacker.set_weapons(loot)
             print(f"\nYou obtained a {loot.get_name()}, a powerful weapon")
@@ -861,7 +890,7 @@ class Game:
             time.sleep(1)
 
     def end_game(self) -> None:
-        """prints scenario when user dies"""
+        """displays scenario when user dies"""
         print("__   _______ _   _  ______ _____ ___________")
         print("\ \ / /  _  | | | | |  _  \_   _|  ___|  _  \\")
         print(" \ V /| | | | | | | | | | | | | | |__ | | | |")
@@ -871,7 +900,7 @@ class Game:
         self.end = True
 
     def win(self, weapon) -> None:
-        """prints scenario when user wins"""
+        """displays scenario when user wins"""
         print(f"\nUsing the almighty {weapon.get_name()}, you struck the Dark Lord Voldemort down, crippling him of all his powers and stop his evil tyranny over the school")
         time.sleep(1)
         print(" _____ ___________   _____ _       ___  _____ _   _ ")
@@ -883,67 +912,12 @@ class Game:
         self.end = True
 
     def die(self) -> None:
-        """to end the gamae"""
+        """to end the game"""
         self.end_game()
         self.end = True
-
-    def use_item(self):
-        # change available items when needed
-        available_items = ['weapon', 'potion']
-        decision = input('\nWhich of the following item do you wish to use? (weapon, potion):')
-        while decision not in available_items:
-                   decision = input('\nWhich of the following item do you wish to use? (weapon, potion):')
-            
-        if decision == 'weapon':
-            self.use_weapon()
-
-        elif decision == 'potion':
-            self.use_potion()
-
-        else:
-            raise ValueError(f'{decision}')
-            
-    def use_weapon(self) -> None:
-        choice = self.prompt_user_choice(self.character.weapon, '\nChoose a weapon to equip: ')
-        
-        # remove battle points from weapon currently
-        if self.character.equip != None:
-            self.character.battle_points -= self.character.equip.attack
-        # add battle points from new weapon
-        self.character.equip = self.character.weapon[choice]
-        self.character.battle_points += self.character.weapon[choice].attack
-
-    def use_potion(self) -> None:
-        choice = self.prompt_user_choice(self.character.potion, "\nChoose a potion to consume: ")
-
-        # add effects from consumable
-        if self.character.potion[choice].attack != 0:
-            self.character.battle_points += self.character.potion[choice].attack
-        if self.character.potion[choice].heal != 0:
-            self.character.set_health(self.character.potion[choice].heal)
-
-        # remove potion from list of potion available
-        self.character.potion.pop(choice)
-
-    def prompt_user_choice(self, items: list, question: str) -> int:
-        """general function to prompt user input and perform input validation"""
-        for i, item in enumerate(items):
-            print(f"[{i}]: {item}")
-        choice = None
-        while not choice:
-            choice = input(question + " ")
-            if not choice.isdecimal():
-                print("Invalid choice")
-                continue
-            if int(choice) >= len(items):
-                print("Invalid choice")
-                continue
-            return int(choice)
-            
-
-
+           
     def meow(self) -> None:
-        """admin account by setting name as meow"""
+        """secret account that gives God like stats by setting name as meow"""
         print("\nWelcome chosen one, the Gods smile upon you and have rained down their blessing")
         time.sleep(1)
         self.character.set_health(999)
@@ -952,5 +926,5 @@ class Game:
         self.character.set_max_mana(999)
         self.character.set_attack(999)
         self.character.set_defence(999)
-        self.character.set_health_flask(999)
-        self.character.set_mana_flask(999)
+        self.character.set_health_flask(997)
+        self.character.set_mana_flask(997)
