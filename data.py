@@ -95,6 +95,18 @@ def add_item(item):
     player_inventory.append(item)
     print(f'{item} has been added to inventory!')
 
+def display_inventory():
+    print("Inventory:")
+    if len(player_inventory) == 0:
+        print("You don't have any items currently.")
+    else:
+        for item in player_inventory:
+            name = item['name']
+            description = item['description']
+            effect = item['effect']
+            consumable = item['consumable']
+            print(f'Item : {name}  /\t Description : {description}  /\t Effect : {effect}  /\t Consumable : {consumable}')
+
 #Converting to json
 
 def to_json(data):
@@ -125,41 +137,40 @@ class Room:
         connections = random.randint(2, 3)
         next_rooms = [self.up, self.down, self.left, self.right]
         ref_next_rooms = ['self.up', 'self.down', 'self.left', 'self.right']
-        x = 0
+        i = 0
         for _ in range(len(next_rooms)):
-            if next_rooms[x] != None:
-                x -= 1
-                next_rooms.pop(x)
-                ref_next_rooms.pop(x)
-            x += 1
+            if next_rooms[i] != None:
+                next_rooms.pop(i)
+                ref_next_rooms.pop(i)
+                i -= 1
+            i += 1
         if self.type == 'start':
             #Start Room
-            self.up = Room(down = self)
+            self.up = Room(down = self, number = self.count_room())
         elif total_rooms < 10 and self.layer < 3:
             #Normal Room
             while connections != 0:
-                next_room = random.randint(0, len(next_rooms)-1)
+                next_room = random.randint(0, len(next_rooms) - 1)
                 if ref_next_rooms[next_room] == 'self.up':
                     self.up = Room(down = self, layer=self.count_layer(), number = self.count_room())
                     increment_total_rooms()
                     next_rooms.pop(next_room)
                     ref_next_rooms.pop(next_room)
                 elif ref_next_rooms[next_room] == 'self.down':
-                    self.down = Room(up = self, layer=self.count_layer())
+                    self.down = Room(up = self, layer=self.count_layer(), number = self.count_room())
                     increment_total_rooms()
                     next_rooms.pop(next_room)
                     ref_next_rooms.pop(next_room)
                 elif ref_next_rooms[next_room] == 'self.left':
-                    self.left = Room(right = self, layer=self.count_layer())
+                    self.left = Room(right = self, layer=self.count_layer(), number = self.count_room())
                     increment_total_rooms()
                     next_rooms.pop(next_room)
                     ref_next_rooms.pop(next_room)
                 elif ref_next_rooms[next_room] == 'self.right':
-                    self.right = Room(left = self, layer=self.count_layer())
+                    self.right = Room(left = self, layer=self.count_layer(), number = self.count_room())
                     increment_total_rooms()
                     next_rooms.pop(next_room)
                     ref_next_rooms.pop(next_room)
-                self.layer = self.count_room() 
                 connections -= 1
         #Boss Room
         if self.number == 7:
@@ -169,7 +180,7 @@ class Room:
                 next_rooms.pop(next_room)
                 ref_next_rooms.pop(next_room)
             elif ref_next_rooms[next_room] == 'self.down':
-                self.down = Room(up = self, type = 'boss', boss = Springtrap(), layer=self.count_layer())
+                self.down = Room(up = self, type = 'boss', boss = Springtrap(), layer=self.count_layer(), )
                 next_rooms.pop(next_room)
                 ref_next_rooms.pop(next_room)
             elif ref_next_rooms[next_room] == 'self.left':
@@ -184,7 +195,7 @@ class Room:
         self.grid = Grid(type = type, x = x, y = y)
         
     def display_room(self):
-        pass
+        print(f"Room {self.number}, Coordinate {self.grid.get_position()}")
 
     def is_next_room(self, next : str) -> bool:
         if next == 'w':
@@ -242,24 +253,33 @@ class Grid:
                     {0 : None, 1 : None, 2 : None, 3 : None, 4 : None},
                     {0 : None, 1 : None, 2 : None, 3 : None, 4 : None},
                     {0 : None, 1 : None, 2 : None, 3 : None, 4 : None}]
-        i = 0
         if type == 'normal':
         #Spawning creatures
+            i = 0
             while i < 5:
-                if self.grid[random.randint(0, 4)][random.randint(0, 4)] == None:
-                    enemy_number = random.randint(1, 3)
+                tile_x_coord = random.randint(0, 4)
+                tile_y_coord = random.randint(0, 4)
+                if self.grid[tile_x_coord][tile_y_coord] == None:
+                    enemy_count = random.randint(1, 3)
                     enemy_list = []
-                    for i in range(enemy_number):
-                        enemy_list.append(random.choice(all_enemies)) 
-                    self.grid[random.randint(0, 4)][random.randint(0, 4)] = {'type' : 'creature', 'creatures':enemy_list}
-                i = i + 1
+                    all_enemies = [GB(),BB()]
+                    for _ in range(enemy_count):
+                        enemy = random.randint(1, len(all_enemies))
+                        if enemy == 1:
+                            enemy_list.append(GB())
+                        elif enemy == 2:
+                            enemy_list.append(BB())
+                    self.grid[tile_x_coord][tile_y_coord] = {'type' : 'creature', 'creatures' : enemy_list}
+                    i = i + 1
             k = 0
         #Spawning items
             while k < 5:
-                if self.grid[random.randint(0, 4)][random.randint(0, 4)] == None:
+                tile_x_coord = random.randint(0, 4)
+                tile_y_coord = random.randint(0, 4)
+                if self.grid[tile_x_coord][tile_y_coord] == None:
                     random_item = random.choice(all_items)
-                    self.grid[random.randint(0, 4)][random.randint(0, 4)] = {'type' : 'item', 'item' : random_item}
-                k = k + 1
+                    self.grid[tile_x_coord][tile_y_coord] = {'type' : 'item', 'item' : random_item}
+                    k = k + 1
         self.coordinates = [x, y]
 
         
@@ -273,7 +293,7 @@ class Grid:
         Prompt the user for a movement and return the direction to move. Also, to view inventory, user types open inventory
         '''
         print("Type 'wasd' to move, open the inventory by typing 'inventory'")
-        action = input('Type an action:')
+        action = input('Type an action: ')
         return action.lower()
         
     def move(self, position : list):
@@ -296,15 +316,17 @@ class Grid:
         '''
         Return the enemies on that tile
         '''
-        return self.grid[self.get_position()[0]][self.get_position()[1]]['creatures']
+        coordinates = self.get_position()
+        return self.grid[coordinates[0]][coordinates[1]]['creatures']
     def is_item(self):
         '''
         Return true if user coordinates are currently on a item tile.
         '''
-        if self.grid[self.get_position()[0]][self.get_position()[1]]['type'] == 'item':
-            return True
-        else:
+        if self.grid[self.get_position()[0]][self.get_position()[1]] == None:
             return False
+        elif self.grid[self.get_position()[0]][self.get_position()[1]]['type'] == 'item':
+            return True
+        return False
             
     def get_item(self) -> str:
         '''
@@ -323,10 +345,10 @@ class Grid:
 #Start
 def start_menu():
     print('Welcome to FNAF:Reckoning!')
-    choice = input("Type 'Start' to begin!")
-    while choice.lower != 'start':
+    choice = input("Type 'Start' to begin: ")
+    while choice.lower() != 'start':
         print("To begin the game, enter 'start'.")
-        choice = input("Type 'Start' to begin!")
+        choice = input("Type 'Start' to begin: ")
 
     
 def info(cr):
@@ -382,15 +404,18 @@ def choose_character():
         return cr
     info(cr)
     print('')
-    is_select = input('Select ', cr.capitalize(), ' as your character? Y/N: ')
-    is_select = is_select.lower()
+    is_select = input('Select ' + cr.capitalize() + ' as your character? Y/N: ')
+    while is_select not in ['y', 'n']:
+        is_select = is_select.lower()
+        print("Enter 'y' or 'n' to proceed.")
+        is_select = input('Select ' + cr.capitalize() + ' as your character? Y/N: ')
     if input == 'n':
         return choose_character()
     return cr
 
 
 #accuracy
-def accuracy(target, accuracy):
+def accuracy(accuracy, target):
     if target.has_status('Phantom'):
         accuracy -= 10
     if target.has_status('Nightfall'):
@@ -414,9 +439,19 @@ def infiltrated(damage):
 
 def instinct(damage):
     return abs(damage * 130 / 100)
-    
+
+#Win and lose conditions
+def is_defeat(players: list) -> bool:
+    if len(players) == 0:
+        return True
+    return False
+
+def is_victory(enemies: list) -> bool:
+    if len(enemies) == 0:
+        return True
+    return False
 #Enemies
-all_enemies = ['GB', 'BB']
+
 
 class GB:
     def __init__(self, status=None, health=50):
@@ -458,7 +493,7 @@ class GB:
 
     def get_stats(self):
         print(f"{self.name}'s stats")
-        print(f"HP: {self.health}" / 50)
+        print(f"HP: {self.health} / 50")
         if self.status == []:
             print('Status: No statuses.')
         else:
@@ -490,7 +525,8 @@ class GB:
                 print(f'{target.name} took {damage} damage.')
             else:
                 print('The attack missed!')
-        print('---------------------------------------------------------')
+        print('\n')
+
 
 class BB:
     def __init__(self, status=None, health=75):
@@ -532,7 +568,7 @@ class BB:
 
     def get_stats(self):
         print(f"{self.name}'s stats")
-        print(f"HP: {self.health}" / 75)
+        print(f"HP: {self.health} / 75")
         if self.status == []:
             print('Status: No statuses.')
         else:
@@ -564,7 +600,8 @@ class BB:
                 print(f'{target.name} took {damage} damage.')
             else:
                 print('The attack missed!')
-        print('---------------------------------------------------------')
+        print('\n')
+
 
 class Springtrap:
     def __init__(self, status=None, health=300):
@@ -656,8 +693,7 @@ class Springtrap:
                 print(f'{target.name} took {damage} damage.')
             else:
                 print('The attack missed!')
-        print('---------------------------------------------------------')
-
+        print('\n')
 
 
 class Glitchtrap:
@@ -771,6 +807,8 @@ class Glitchtrap:
         if n == 1:  #1% chance to use this attack
             print(f'{self.name} hit the Griddy!') 
             print(f'{target.name} was traumatised and stared in disgust.')
+        print('\n')
+
     
 #Characters
 class Freddy:
@@ -779,18 +817,6 @@ class Freddy:
         self.health = health
         self.status = status if status is not None else []
         self.item_equipped = None
-
-    def display_inventory(self):
-        print("Inventory:")
-        if len(player_inventory) == 0:
-            print("You don't have any items currently.")
-        else:
-            for item in player_inventory:
-                name = item['name']
-                description = item['description']
-                effect = item['effect']
-                consumable = item['consumable']
-                print(f'Item : {name}  /\t Description : {description}  /\t Effect : {effect}  /\t Consumable : {consumable}')
 
     def add_item(self, item):
         global player_inventory
@@ -801,6 +827,7 @@ class Freddy:
 
     def is_use_item(self):
         is_use = input("Use an item? Y/N: ")
+        print('')
         return is_use.lower()
                     
     def use_item(self, item):
@@ -840,29 +867,35 @@ class Freddy:
         return False
             
     def display_turn(self):
-        print(f"It is {self.name}'s turn.")
+        print(f"It is {self.name}'s turn.\n")
 
-    def prompt_action(self, target):
+    def prompt_action(self):
         print('Select one of the following actions:')
         print('1. Attack')
         print('2. Target')
         print('3. Stats')
         print('4. Item')
         dec = input('Please choose an action: ')
+        print('')
         dec = dec.lower()
-        if dec in ['attack', 'target', 'stats', 'item']:
-            return dec
-        else:
-            return None
+        return dec
+
     
-    def target(self):
+    def target(self, enemies):
         print('To target enemies, input a number, with the leftmost enemy being 1.')
+        i = 1
+        for enemy in enemies:
+            print(f"{i}. {enemy.name} / HP : {enemy.health}")
+            i += 1
+        print('')
         target = input('Choose an enemy to target: ')
+        print('')
         return target
         
     def prompt_check(self):
         print("Type 'enemy' to see enemy stats, 'party' to see party stats, 'back' to cancel this action.")
         check = input("Choose to check enemy or party stats: ")
+        print('')
         return check.lower()
         
     def prompt_attack(self):
@@ -872,12 +905,14 @@ class Freddy:
         print('3. The Bite  19 acc 87 dmg')
         print("Type 'back' to cancel the attack. Use the numbers corresponding to each ability to attack.")
         atk = input("Select an attack to use: ")
+        print('')
         return atk.lower()
 
     def attack(self, target, atk):
         damage = 0
         damage += self.passive(target)
-        damage += self.item_equipped['damage']
+        if self.item_equipped != None:
+            damage += self.item_equipped['damage']
         if atk == '1':
             print(f'Freddy used Mic Toss on {target.name}!')
             if accuracy(90, target) == True:
@@ -900,11 +935,14 @@ class Freddy:
                 target.take_damage(damage)
             else:
                 print('The attack missed!')
+        print('\n')
 
             
     def passive(self, target):
         if target.has_status('Sleeping'):
             return 5
+        else:
+            return 0
             
     def add_status(self, status, turns):
         for st in statuses:
@@ -929,7 +967,7 @@ class Freddy:
 
     def get_stats(self):
         print(f"{self.name}'s stats")
-        print(f"HP: {self.health}")
+        print(f"HP: {self.health} / 100")
         if self.status == []:
             print('Status: No statuses.')
         else:
@@ -937,7 +975,7 @@ class Freddy:
                 name = st['name']
                 description = st['description']
                 turns = st['count']
-                print(f'Status : {name} , Description : {description} , Turns Remaining : {turns}')
+                print(f'Status : {name} , Description : {description} , Turns Remaining : {turns}\n')
 
 
 
@@ -948,18 +986,6 @@ class Bonnie:
         self.health = health
         self.status = status if status is not None else []
         self.item_equipped = None
-
-    def display_inventory(self):
-        print("Inventory:")
-        if len(player_inventory) == 0:
-            print("You don't have any items currently.")
-        else:
-            for item in player_inventory:
-                name = item['name']
-                description = item['description']
-                effect = item['effect']
-                consumable = item['consumable']
-                print(f'Item : {name}  /\t Description : {description}  /\t Effect : {effect}  /\t Consumable : {consumable}')
 
     def add_item(self, item):
         global player_inventory
@@ -1016,29 +1042,34 @@ class Bonnie:
         return False
             
     def display_turn(self):
-        print(f"It is {self.name}'s turn.")
+        print(f"It is {self.name}'s turn.\n")
 
-    def prompt_action(self, target):
+    def prompt_action(self):
         print('Select one of the following actions:')
         print('1. Attack')
         print('2. Target')
         print('3. Stats')
         print('4. Item')
         dec = input('Please choose an action: ')
+        print('')
         dec = dec.lower()
-        if dec in ['attack', 'target', 'stats', 'item']:
-            return dec
-        else:
-            return None
+        return dec
     
-    def target(self):
+    def target(self, enemies):
         print('To target enemies, input a number, with the leftmost enemy being 1.')
+        i = 1
+        for enemy in enemies:
+            print(f"{i}. {enemy.name} / HP : {enemy.health}")
+            i += 1
+        print('')
         target = input('Choose an enemy to target: ')
+        print('')
         return target
         
     def prompt_check(self):
         print("Type 'enemy' to see enemy stats, 'party' to see party stats, 'back' to cancel this action.")
         check = input("Choose to check enemy or party stats: ")
+        print('')
         return check.lower()
         
     def prompt_attack(self):
@@ -1048,12 +1079,14 @@ class Bonnie:
         print("3. Rock 'n' Roll  19 acc 87 dmg")
         print("Type 'back' to cancel the attack. Use the numbers corresponding to each ability to attack.")
         atk = input("Select an attack to use: ")
+        print('')
         return atk.lower()
 
     def attack(self, target, atk):
         damage = 0
         damage += self.passive(target)
-        damage += self.item_equipped['damage']
+        if self.item_equipped != None:
+            damage += self.item_equipped['damage']
         if atk == '1':
             print(f'{self.name} used Rift on {target.name}!')
             if accuracy(90, target) == True:
@@ -1083,12 +1116,14 @@ class Bonnie:
                 target.take_damage(damage)
             else:
                 print('The attack missed!')
-
+        print('\n')
             
     def passive(self, target):
         if target.has_status('Resonance'):
             multiplier = random.randint(1, 10)
             return multiplier
+        else:
+            return 0
             
     def add_status(self, status, turns):
         for st in statuses:
@@ -1113,7 +1148,7 @@ class Bonnie:
 
     def get_stats(self):
         print(f"{self.name}'s stats")
-        print(f"HP: {self.health}")
+        print(f"HP: {self.health} / 100")
         if self.status == []:
             print('Status: No statuses.')
         else:
@@ -1121,7 +1156,7 @@ class Bonnie:
                 name = st['name']
                 description = st['description']
                 turns = st['count']
-                print(f'Status : {name} , Description : {description} , Turns Remaining : {turns}')
+                print(f'Status : {name} , Description : {description} , Turns Remaining : {turns}\n')
 
 
 
@@ -1132,18 +1167,6 @@ class Foxy:
         self.health = health
         self.status = status if status is not None else []
         self.item_equipped = None
-
-    def display_inventory(self):
-        print("Inventory:")
-        if len(player_inventory) == 0:
-            print("You don't have any items currently.")
-        else:
-            for item in player_inventory:
-                name = item['name']
-                description = item['description']
-                effect = item['effect']
-                consumable = item['consumable']
-                print(f'Item : {name}  /\t Description : {description}  /\t Effect : {effect}  /\t Consumable : {consumable}')
 
     def add_item(self, item):
         global player_inventory
@@ -1200,29 +1223,34 @@ class Foxy:
         return False
             
     def display_turn(self):
-        print(f"It is {self.name}'s turn.")
+        print(f"It is {self.name}'s turn.\n")
 
-    def prompt_action(self, target):
+    def prompt_action(self):
         print('Select one of the following actions:')
         print('1. Attack')
         print('2. Target')
         print('3. Stats')
         print('4. Item')
         dec = input('Please choose an action: ')
+        print('')
         dec = dec.lower()
-        if dec in ['attack', 'target', 'stats', 'item']:
-            return dec
-        else:
-            return None
+        return dec
     
-    def target(self):
+    def target(self, enemies):
         print('To target enemies, input a number, with the leftmost enemy being 1.')
+        i = 1
+        for enemy in enemies:
+            print(f"{i}. {enemy.name} / HP : {enemy.health}")
+            i += 1
+        print('')
         target = input('Choose an enemy to target: ')
+        print('')
         return target
         
     def prompt_check(self):
         print("Type 'enemy' to see enemy stats, 'party' to see party stats, 'back' to cancel this action.")
         check = input("Choose to check enemy or party stats: ")
+        print('')
         return check.lower()
         
     def prompt_attack(self):
@@ -1232,23 +1260,24 @@ class Foxy:
         print("3. Death Grip  25 acc 125 dmg")
         print("Type 'back' to cancel the attack. Use the numbers corresponding to each ability to attack.")
         atk = input("Select an attack to use: ")
+        print('')
         return atk.lower()
 
     def attack(self, target, atk):
         damage = 0
-        damage += self.item_equipped['damage']
+        if self.item_equipped != None:
+            damage += self.item_equipped['damage']
         if atk == '1':
             print(f'{self.name} used Yar-Har on {target.name}!')
             if accuracy(90, target) == True:
                 damage += 15
-                self.passive(damage)
+                damage += self.passive(damage)
                 if self.has_status('Nightfall'):
                     damage += 15
                     self.heal(20)
                     print(f"{self.name} leeched {target.name}'s health!")
                 print(f"{target.name} took {damage} damage!")
                 target.take_damage(damage)
-                
             else:
                 print('The attack missed!')
         if atk == '2':
@@ -1259,7 +1288,7 @@ class Foxy:
             print(f"{self.name} used Death Grip on {target.name}!")
             if accuracy(25, target) == True:
                 damage += 125
-                self.passive(damage)
+                damage += self.passive(damage)
                 if self.has_status('Nightfall'):
                     damage += 15
                     self.heal(20)    
@@ -1268,11 +1297,14 @@ class Foxy:
                 target.take_damage(damage)
             else:
                 print('The attack missed!')
-
+        print('\n')
             
     def passive(self, damage):
         if self.health < 50:
             damage = instinct(damage)
+            return damage
+        else:
+            return 0
             
     def add_status(self, status, turns):
         for st in statuses:
@@ -1297,7 +1329,7 @@ class Foxy:
 
     def get_stats(self):
         print(f"{self.name}'s stats")
-        print(f"HP: {self.health}")
+        print(f"HP: {self.health} / 100")
         if self.status == []:
             print('Status: No statuses.')
         else:
@@ -1305,7 +1337,7 @@ class Foxy:
                 name = st['name']
                 description = st['description']
                 turns = st['count']
-                print(f'Status : {name} , Description : {description} , Turns Remaining : {turns}')
+                print(f'Status : {name} , Description : {description} , Turns Remaining : {turns}\n')
 
 
 
@@ -1316,18 +1348,6 @@ class Chica:
         self.status = status if status is not None else []
         self.item_equipped = None
         self.cupcake = cupcake
-
-    def display_inventory(self):
-        print("Inventory:")
-        if len(player_inventory) == 0:
-            print("You don't have any items currently.")
-        else:
-            for item in player_inventory:
-                name = item['name']
-                description = item['description']
-                effect = item['effect']
-                consumable = item['consumable']
-                print(f'Item : {name}  /\t Description : {description}  /\t Effect : {effect}  /\t Consumable : {consumable}')
 
     def add_item(self, item):
         global player_inventory
@@ -1388,29 +1408,34 @@ class Chica:
         return False
             
     def display_turn(self):
-        print(f"It is {self.name}'s turn.")
+        print(f"It is {self.name}'s turn.\n")
 
-    def prompt_action(self, target):
+    def prompt_action(self):
         print('Select one of the following actions:')
         print('1. Attack')
         print('2. Target')
         print('3. Stats')
         print('4. Item')
         dec = input('Please choose an action: ')
+        print('')
         dec = dec.lower()
-        if dec in ['attack', 'target', 'stats', 'item']:
-            return dec
-        else:
-            return None
+        return dec
     
-    def target(self):
+    def target(self, enemies):
         print('To target enemies, input a number, with the leftmost enemy being 1.')
+        i = 1
+        for enemy in enemies:
+            print(f"{i}. {enemy.name} / HP : {enemy.health}")
+            i += 1
+        print('')
         target = input('Choose an enemy to target: ')
+        print('')
         return target
         
     def prompt_check(self):
         print("Type 'enemy' to see enemy stats, 'party' to see party stats, 'back' to cancel this action.")
         check = input("Choose to check enemy or party stats: ")
+        print('')
         return check.lower()
         
     def prompt_attack(self):
@@ -1420,12 +1445,14 @@ class Chica:
         print("3. Devour  69 acc 30 dmg")
         print("Type 'back' to cancel the attack. Use the numbers corresponding to each ability to attack.")
         atk = input("Select an attack to use: ")
+        print('')
         return atk.lower()
 
     def attack(self, target, atk):
         damage = 0
         damage += self.passive(target)
-        damage += self.item_equipped['damage']
+        if self.item_equipped != None:
+            damage += self.item_equipped['damage']
         if atk == '1':
             print(f'{self.name} used Pizza slice on {target.name}!')
             if accuracy(90, target) == True:
@@ -1435,11 +1462,10 @@ class Chica:
             else:
                 print('The attack missed!')
         if atk == '2':
-            if self.cupcake != 0:
+            if self.cupcake <= 0:
                 print(f'{self.name} used Cupcake decoy!')
                 print(f'{self.name} placed a cupcake in place of her.')
-                self.cupcake = 0
-                self.cupcake += 50
+                self.cupcake = 50
             else:
                 print('There is already a cupcake in place!')
         if atk == '3':
@@ -1454,6 +1480,7 @@ class Chica:
                 target.take_damage(damage)
             else:
                 print('The attack missed!')
+        print('\n')
 
             
     def passive(self, target):
@@ -1487,7 +1514,7 @@ class Chica:
 
     def get_stats(self):
         print(f"{self.name}'s stats")
-        print(f"HP: {self.health}")
+        print(f"HP: {self.health} / 100")
         if self.status == []:
             print('Status: No statuses.')
         else:
@@ -1495,4 +1522,4 @@ class Chica:
                 name = st['name']
                 description = st['description']
                 turns = st['count']
-                print(f'Status : {name} , Description : {description} , Turns Remaining : {turns}')
+                print(f'Status : {name} , Description : {description} , Turns Remaining : {turns}\n')
