@@ -1,6 +1,6 @@
 class Weapon:
     """
-    creates the armour
+    The parent class for a weapon
 
     Attributes
     ----------
@@ -23,17 +23,17 @@ class Weapon:
     Methods
     -------
     + get_type(self) -> str
-    - set_name(self, name : str) -> None
+    + set_name(self, name : str) -> None
     + get_name(self) -> str
-    - set_description(self) -> None
+    + set_description(self) -> None
     + get_description(self, description : str) -> str
-    - set_attack(self) -> None
+    + set_attack(self) -> None
     + get_attack(self, attack : int) -> int
-    - set_move(self, move : str) -> None
+    + set_move(self, move : str) -> None
     + get_move(self) -> str
-    - set_win_front(self, win_front : str) -> None
+    + set_win_front(self, win_front : str) -> None
     + get_win_front(self) -> str
-    - set_win_back(self, win_back : str) -> None
+    + set_win_back(self, win_back : str) -> None
     + get_win_back(self) -> str
     """
 

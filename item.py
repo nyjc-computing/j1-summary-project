@@ -1,6 +1,6 @@
 class Item:
     """
-    creates the armour
+    The parent class for an item
 
     Attributes
     ----------
@@ -15,13 +15,13 @@ class Item:
 
     Methods
     -------
-    - set_name(self, name : str) -> None
+    + set_name(self, name : str) -> None
     + get_name(self) -> str
-    - set_description(self) -> None
+    + set_description(self) -> None
     + get_description(self, description : str) -> str
-    - set_health(self, health : int) -> None
+    + set_health(self, health : int) -> None
     + get_health(self, health : int) -> int
-    - set_mana(self, mana : int) -> None
+    + set_mana(self, mana : int) -> None
     + get_mana(self, mana : int) -> int
     """
     

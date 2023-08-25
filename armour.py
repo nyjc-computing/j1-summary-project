@@ -1,6 +1,6 @@
 class Armour:
     """
-    creates the armour
+    The parent class for an armour
 
     Attributes
     ----------
@@ -16,11 +16,11 @@ class Armour:
     Methods
     -------
     + get_type(self) -> str
-    - set_name(self, name : str) -> None
+    + set_name(self, name : str) -> None
     + get_name(self) -> str
-    - set_description(self) -> None
+    + set_description(self) -> None
     + get_description(self, description : str) -> str
-    - set_defence(self) -> None
+    + set_defence(self) -> None
     + get_defence(self, defence : int) -> int
     """
     
