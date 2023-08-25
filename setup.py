@@ -1,11 +1,12 @@
-from room import *
+# importing from other files
+from map import *
 from character import *
-from spell import *
 from weapon import *
+from spell import *
 
-def setup():
+def setup() -> [Room, Character]:
     """
-    Generates 3 rooms, named room1, room2, room3 and links them together
+    Generates the map and the character and returns it in a list
     """
 
     map = Dirtmouth()

@@ -1,6 +1,9 @@
-from setup import *
+#import from python built in libraries
 import time
 import random
+
+#import from other files
+from setup import *
 
 class Game:
     
@@ -72,6 +75,8 @@ class Game:
         time.sleep(1)
         print("\nThe Dark Lord Voldemort has taken over Hogwarts School and opened multiple interdimensional gates, bringing hoards of enemies into the school. Your job as the chosen one is to traverse the school in order to locate the Principal's Office and thwart Voldemort's evil plan to take over the world\n")
         time.sleep(2)
+
+        #
         decision = input('Do you wish to enter the school? ( yes / no ): ')
         
         if decision.lower() == "yes":
