@@ -118,7 +118,7 @@ class WingardiumLeviosa(Spell):
     def __init__(self):
         super().__init__()
         self.set_name("Wingardium Leviosa")
-        self.set_attack(5)
+        self.set_attack(10)
         self.set_cost(5)
         self.set_description(f"Wingardium Leviosa is a magic spell that can make objects levitate\nDeals {self.get_attack()} damage\nCost {self.get_cost()} mana")
         self.set_move(" used levitation")

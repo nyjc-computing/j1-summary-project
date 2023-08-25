@@ -176,7 +176,7 @@ class Coronacht(Weapon):
     def __init__(self):
         super().__init__()
         self.set_name("Coronacht")
-        self.set_attack(30)
+        self.set_attack(60)
         self.set_description(f"The Coronacht is an infernal arm, the finest bow ever concevied, once weilded by Mistress Hera\nDeals {self.get_attack()} damage")
         self.set_move(" used power shot")
         self.set_win_front(" used the aspect of Hera to shoot a power shot right through ")

@@ -34,6 +34,7 @@ class Game:
     - attack(self, attacker : Character , victim: Enemy) -> None
     - get_choice(self, user : Character) -> str
     - get_attack(self, user : Character, decision : str) -> [int, Weapon]
+    - use_flask_battle(self, user : Character) -> None
     - use_flask(self, user : Character) -> None
     - display_flask(self, user : Character) -> None
     - equip(self, user) -> None
@@ -58,6 +59,7 @@ class Game:
     - win(self, weapon) -> None
     - die(self) -> None
     - meow(self) -> None
+    - secret(self) -> None
     """
     
     def __init__(self) -> None:
@@ -65,12 +67,11 @@ class Game:
         self.end = False
         self.room = temp[0]
         self.character = temp[1]
-        self.actions = ["help", "look", "move", "loot", "flask", "attack", "equip", "status", "info", "die"]
-        self.description = ["Gets the list of possible actions", "Looks around the room","Move to another room", "Search the room for loot", "Drink your flasks", "Attack the enemny", "Change your equipment", "See your statistics", "Find out more about your items", "Ends the game"]
+        self.actions = ["help", "look", "move", "loot", "flask", "attack", "equip", "status", "info", "die", "meow"]
+        self.description = ["Gets the list of possible actions", "Looks around the room","Move to another room", "Search the room for loot", "Drink your flasks", "Attack the enemny", "Change your equipment", "See your statistics", "Find out more about your items", "Ends the game", "meow"]
     
     def intro(self) -> None:
         """print introduction for the start of the game """
-        # start of the game
         
         # Displays the introduction messages
         print('Welcome to Hogwarts School of Witchcraft and Wizardry')
@@ -85,7 +86,7 @@ class Game:
             self.character.set_name(name)
             # Check if the user used the secret easter egg name
             if name == "meow":
-                self.meow()
+                self.secret()
             else:
                 print("\nYou boldly opened the front gates of the school and made your way into the first room")
                 time.sleep(1)
@@ -144,6 +145,9 @@ class Game:
 
         elif decision.lower() == "die":
             self.die()
+
+        elif decision.lower() == "meow":
+            self.meow()
         
     def help(self) -> None:
         """main action for user to get the list of possible actions"""
@@ -263,6 +267,7 @@ class Game:
                 time.sleep(1)
 
         if not caught:
+            # Allow the user to loot the room
             if loot == None:
                 print("\nYou searched every nook and cranny but there was nothing to be found")
                 time.sleep(1)
@@ -317,6 +322,8 @@ class Game:
                 print(f"\n{'-'*50}\n")
                 print(f"{attacker.get_name()} has {attacker.get_health()} health")
                 print(f"{attacker.get_name()} has {attacker.get_mana()} mana")
+                print(f"{attacker.get_name()} has {attacker.get_health_flask()} Flask of Crimson Tears")
+                print(f"{attacker.get_name()} has {attacker.get_mana_flask()} Flask of Cerulean Tears")
                 time.sleep(1)
                 # Display enemy's health
                 print(f"\n{victim.get_name()} has {victim.get_health()} health\n")
@@ -456,6 +463,24 @@ class Game:
                 time.sleep(1)
                 selection = input("Which flask would you like to drink?: ")
                 valid = False
+
+        if selection.lower() == "flask of crimson tears":
+            # Makes sure the health healed does not exceed the maximum health
+            final_health = min(user.get_max_health(), user.get_health() + FlaskOfCrimsonTears().get_health())
+            healing = final_health - user.get_health()
+            print(f"\nYou drank a Flask of Crimson Tears and gained {healing} health")
+            time.sleep(1)
+            user.set_health(final_health)
+            user.set_health_flask(-1)
+            
+        elif selection.lower() == "flask of cerulean tears":
+            # Makes sure the mana gained does not exceed the maximum mana
+            final_mana = min(user.get_max_mana(), user.get_mana() + FlaskOfCeruleanTears().get_mana())
+            healing = final_mana - user.get_mana()
+            print(f"\nYou drank a Flask of Cerulean Tears and gained {healing} mana")
+            time.sleep(1)
+            user.set_mana(final_mana)
+            user.set_mana_flask(-1)
                 
     def use_flask(self, user : Character) -> None:
         """Function to allow the user to use flask but also allows them to cancel the action"""
@@ -841,10 +866,10 @@ class Game:
                 
     def display_room_name(self) -> None:
         """prints the room's name in a cool way"""
-        print(".")
+        print("="*25)
         space = " "*int((25-len(self.room.get_name()))/2)
         print(f"{space}{self.room.get_name()}{space}")
-        print(".")
+        print("="*25)
         time.sleep(1)
 
     def display_room_description(self) -> None:
@@ -916,9 +941,9 @@ class Game:
         self.end_game()
         self.end = True
            
-    def meow(self) -> None:
+    def secret(self) -> None:
         """secret account that gives God like stats by setting name as meow"""
-        print("\nWelcome chosen one, the Gods smile upon you and have rained down their blessing")
+        print("\nWelcome chosen one, the Gods smile upon you and have rained down their blessing\n")
         time.sleep(1)
         self.character.set_health(999)
         self.character.set_max_health(999)
@@ -928,3 +953,35 @@ class Game:
         self.character.set_defence(999)
         self.character.set_health_flask(997)
         self.character.set_mana_flask(997)
+
+    def meow(self) -> None:
+        choice = random.randint(1, 3)
+        if choice == 1:
+            print("""  
+  __  __  U _____ u U  ___ u             
+U|' \/ '|u\| ___"|/  \/"_ \/__        __ 
+\| |\/| |/ |  _|"    | | | |\"\      /"/ 
+ | |  | |  | |___.-,_| |_| |/\ \ /\ / /\ 
+ |_|  |_|  |_____|\_)-\___/U  \ V  V /  U
+<<,-,,-.   <<   >>     \\  .-,_\ /\ /_,-.
+ (./  \.) (__) (__)   (__)  \_)-'  '-(_/ """)
+        elif choice == 2:
+            print("""                                
+   ____ ___  ___  ____ _      __
+  / __ `__ \/ _ \/ __ \ | /| / /
+ / / / / / /  __/ /_/ / |/ |/ / 
+/_/ /_/ /_/\___/\____/|__/|__/  
+                                """)
+        elif choice == 3:
+            print(""" 
+ .----------------.  .----------------.  .----------------.  .----------------. 
+| .--------------. || .--------------. || .--------------. || .--------------. |
+| | ____    ____ | || |  _________   | || |     ____     | || | _____  _____ | |
+| ||_   \  /   _|| || | |_   ___  |  | || |   .'    `.   | || ||_   _||_   _|| |
+| |  |   \/   |  | || |   | |_  \_|  | || |  /  .--.  \  | || |  | | /\ | |  | |
+| |  | |\  /| |  | || |   |  _|  _   | || |  | |    | |  | || |  | |/  \| |  | |
+| | _| |_\/_| |_ | || |  _| |___/ |  | || |  \  `--'  /  | || |  |   /\   |  | |
+| ||_____||_____|| || | |_________|  | || |   `.____.'   | || |  |__/  \__|  | |
+| |              | || |              | || |              | || |              | |
+| '--------------' || '--------------' || '--------------' || '--------------' |
+ '----------------'  '----------------'  '----------------'  '----------------' """)
