@@ -10,7 +10,7 @@ WEST = "WEST"
 
 class MUDGame:
     """This class encapsulates data for the main game implementation."""
-    def __init__(self):
+    def __init__(self) -> None:
         self.gameover = False # default
         self.won = False # default
         self.maze = Labyrinth()
@@ -21,13 +21,13 @@ class MUDGame:
 
 
     
-    def introduce(self): 
+    def introduce(self) -> None: 
         """
         Starting interface of the game
         """
         username = ''
         n = 0
-        while username.strip(' ') != '':
+        while username.strip(' ') == '':
             n += 1
             if n > 1:
                 print('Please enter a valid username with at least one character.')
@@ -102,6 +102,8 @@ class MUDGame:
                 damage = self.steve.get_attack()
                 creature.take_damage(damage)
                 print(f"{creature.get_name()} now has {creature.get_health()} HP")
+                if creature.get_health() == 0:
+                    continue
             else:
                 self.show_options('battle')
                 battle_option = self.prompt_player()
@@ -134,7 +136,7 @@ class MUDGame:
             room.set_creature_None()
         
 
-    def isvalid_heal(self, heal_option):
+    def isvalid_heal(self, heal_option) -> bool:
         """
         Validate player's option when choosing food items from inventory.
         Used for battle()
@@ -148,7 +150,7 @@ class MUDGame:
         return False
         
 
-    def creature_encountered(self):
+    def creature_encountered(self) -> bool:
         """
         Returns True when creature is found in the room.
         """
@@ -158,7 +160,7 @@ class MUDGame:
             return False
         return True
 
-    def item_found(self):
+    def item_found(self) -> bool:
         """
         Returns True if item is found in the room.
         """
@@ -168,19 +170,19 @@ class MUDGame:
             return False
         return True
 
-    def show_winscreen(self):
+    def show_winscreen(self) -> None:
         """
         Shows winscreen when Boss dies.
         """
         print('Congratulations! \nYou have escaped!')
 
-    def show_losescreen(self):
+    def show_losescreen(self) -> None:
         """
         Show losescreen when Steve dies."""
         print("YOU DIED...")
         print(f"Score: {random.randint(0, 10000)}")
 
-    def movesteve(self):
+    def movesteve(self) -> None:
         """
         Move Steve to another room when no item or creatures left in the current room.
         """
@@ -211,13 +213,13 @@ class MUDGame:
         choice = int(choice)
         self.maze.move_steve(available_dir[choice - 1])
 
-    def moveboss(self):
+    def moveboss(self) -> None:
         """
         Move boss to another room.
         """
         self.maze.move_boss()
 
-    def invalid_opt(self):
+    def invalid_opt(self) -> None:
         """
         Show error message.
         """
@@ -230,6 +232,7 @@ class MUDGame:
 
         # while loop continue until steve or boss die
         while not self.game_is_over():
+            print('\n')
 
             # append the current location to steve_path
             self.steve_path.append(self.maze.get_current_pos)
