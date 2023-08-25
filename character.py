@@ -25,15 +25,21 @@ class Character:
     def __init__(self) -> None:
         self.name = ""
         self.health = 0
+        self.max_health = 0
         self.spells = []
         self.attack = 0
         self.mana = 0
+        self.max_mana = 0
+        self.defence = 0
         self.armour = None
         self.armours = []
         self.weapon = None
         self.weapons = []
         self.accessory = None
         self.accessories = []
+        self.health_flask = 0
+        self.mana_flask = 0
+        self.items = []
 
     def set_name(self, name) -> None:
         """
@@ -54,6 +60,18 @@ class Character:
     def get_health(self) -> int:
         """Returns the character's health"""
         return self.health
+
+    def set_max_health(self, max_health):
+        self.max_health = max_health
+
+    def get_max_health(self):
+        return self.max_health
+
+    def set_defence(self, defence):
+        self.defence = defence
+
+    def get_defence(self):
+        return self.defence
         
     def set_spells(self, spell):
         self.spells.append(spell)
@@ -72,6 +90,12 @@ class Character:
 
     def get_mana(self):
         return self.mana
+
+    def set_max_mana(self, max_mana):
+        self.max_mana = max_mana
+
+    def get_max_mana(self):
+        return self.max_mana
 
     def set_weapon(self, weapon):
         self.weapon = weapon
@@ -108,3 +132,21 @@ class Character:
 
     def get_accessories(self):
         return self.accessories
+
+    def set_health_flask(self, number):
+        self.health_flask += number
+
+    def get_health_flask(self):
+        return self.health_flask
+
+    def set_mana_flask(self, number):
+        self.mana_flask += number
+
+    def get_mana_flask(self):
+        return self.mana_flask
+
+    def set_items(self, item):
+        self.items.append(item)
+
+    def get_items(self):
+        return self.items
