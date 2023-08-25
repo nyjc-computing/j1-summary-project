@@ -519,7 +519,7 @@ class Room:
 
     def __init__(self, x: int, y: int):
         self.coords = [x, y]
-        self.cleared = True
+        self.cleared = False
         self.type = {"startroom?": False, "steve?": False, "boss?": False}
         self.connected = False
         self.creature = None
