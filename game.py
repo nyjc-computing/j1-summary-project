@@ -626,6 +626,7 @@ class Game:
             self.item_info(user)
                 
     def weapon_info(self, user : Character) -> None:
+        """sub action from equip() that prompts user for specific weapon to find out more about"""
         if len(user.get_weapons()) == 0:
             print("\nYou do not own any weapons yet")
 
@@ -647,6 +648,7 @@ class Game:
                 time.sleep(1)
 
     def spell_info(self, user : Character) -> None:
+        """sub action from equip() that prompts user for specific spell to find out more about"""
         if len(user.get_spells()) == 0:
             print("\nYou do not own any spells yet")
 
@@ -668,6 +670,7 @@ class Game:
                 time.sleep(1)
 
     def armour_info(self, user : Character) -> None:
+        """sub action from equip() that prompts user for specific armour to find out more about"""
         if len(user.get_armours()) == 0:
             print("\nYou do not own any amours yet")
 
@@ -689,6 +692,7 @@ class Game:
                 time.sleep(1)
 
     def accessory_info(self, user : Character) -> None:
+        """sub action from equip() that prompts user for specific accessory to find out more about"""
         if len(user.get_accessories()) == 0:
             print("\nYou do not own any accessories yet")
 
@@ -710,6 +714,7 @@ class Game:
                 time.sleep(1)
 
     def flask_info(self) -> None:
+        """sub action from equip() that prompts user for specific flask to find out more about"""
         print("\nIn your inventory you have: ")
         print("- Flask of Crimson Tears")
         print("- Flask of Cerulean Tears")
@@ -727,6 +732,7 @@ class Game:
             print(f"You do not own {decision}")
 
     def item_info(self, user : Character) -> None:
+        """sub action from equip() that prompts user for specific special item to find out more about"""
         if len(user.get_items()) == 0:
             print("\nYou do not own any items yet")
         else:
@@ -747,6 +753,7 @@ class Game:
                 time.sleep(1)
                 
     def display_room_name(self) -> None:
+        """prints the room's name in a cool way"""
         print("\n=========================")
         space = " "*int((25-len(self.room.get_name()))/2)
         print(f"{space}{self.room.get_name()}{space}")
@@ -754,6 +761,7 @@ class Game:
         time.sleep(1)
 
     def display_room_description(self) -> None:
+        """prints the room's description"""
         print("\n", end="")
         print(self.room.description)
         time.sleep(2)
@@ -834,7 +842,6 @@ class Game:
             raise ValueError(f'{decision}')
             
     def use_weapon(self) -> None:
-        """"""
         choice = self.prompt_user_choice(self.character.weapon, '\nChoose a weapon to equip: ')
         
         # remove battle points from weapon currently
