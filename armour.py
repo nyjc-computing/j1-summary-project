@@ -5,13 +5,17 @@ class Armour:
     Attributes
     ----------
     - type: str
+      Type of the item picked up
     - name: str
+      Name of the armour
     - description: str
+      Description of the armour
     - defence: int
+      Numerical value added to the defence of the the character
 
     Methods
     -------
-    + get_type(): gets the type of the 
+    + get_type(self) -> : gets the type of the 
     - set_name(): updates the name of the armour
     + get_name(): gets the name of the armour
     - set_description(): updates the description of the armour
