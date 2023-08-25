@@ -62,7 +62,7 @@ def valid_coords(roomcoords: list[int]) -> bool:
         print(f"valid_coords() says that roomcoords {roomcoords} does not have exactly 2 elements.")
         return False
     i, j = roomcoords
-    if i is not int or j is not int:
+    if type(i) is not int or type(j) is not int:
         return False
         print(f"valid_coords() says that roomcoords {roomcoords} elements are not type int.")
     if i not in list(range(labsize)) or j not in list(range(labsize)):
@@ -368,7 +368,7 @@ class Labyrinth:
                         randomdir = DIRLIST[i]
                 self.boss_pos = [x + randomdir[0], y + randomdir[1]]
                 x, y = self.boss_pos
-                self.lab[x][y].boss_leaves()
+                self.lab[x][y].boss_enters()
                 return None
         raise RuntimeError(f"Boss cannot move because its room {self.boss_pos} is unlinked to neighbours.")
                 
