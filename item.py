@@ -1,5 +1,4 @@
-class loot:
-
+class Item:
     def __init__(self):
         self.name = ""
         self.description = ""
@@ -30,7 +29,7 @@ class loot:
     def get_mana(self):
         return self.mana
 
-class FlaskOfCrimsonTears(loot):
+class FlaskOfCrimsonTears(Item):
 
     def __init__(self):
         super().__init__()
@@ -38,7 +37,7 @@ class FlaskOfCrimsonTears(loot):
         self.set_health(50)
         self.set_description(f"The Flask of Crimson Tears is a sacred flask modelled after a golden holy chalice that was once graced by a tear of life\nHeals {self.get_health()} health")
 
-class FlaskOfCeruleanTears(loot):
+class FlaskOfCeruleanTears(Item):
 
     def __init__(self):
         super().__init__()
@@ -46,14 +45,14 @@ class FlaskOfCeruleanTears(loot):
         self.set_mana(50)
         self.set_description(f"The Flask of Cerulean Tears is a sacred flask modelled after a golden holy chalice that was once graced by a tear of life\nHeals {self.get_mana()} mana")
 
-class DectusMedallionRight(loot):
+class DectusMedallionRight(Item):
 
     def __init__(self):
         super().__init__()
         self.set_name("Dectus Medallion (right)")
         self.set_description("The right half of a medallion with the power to break a powerful spell")
 
-class DectusMedallionLeft(loot):
+class DectusMedallionLeft(Item):
 
     def __init__(self):
         super().__init__()

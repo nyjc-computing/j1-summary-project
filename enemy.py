@@ -89,7 +89,7 @@ class MrOshiro(Enemy):
         self.set_name("Mr Oshiro")
         self.set_health(80)
         self.set_description("a well-meaning but tormented ghostly hotel owner in Celeste, haunted by his past and struggling to maintain his crumbling establishment")
-        self.set_attack(15)
+        self.set_attack(8)
         self.set_move("Charge")
         self.set_loot(GoldenFeather())
 

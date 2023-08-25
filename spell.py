@@ -71,7 +71,7 @@ class VengefulSpirit(Spell):
     def __init__(self):
         super().__init__()
         self.set_name("Vengeful Spirit")
-        self.set_attack(10)
+        self.set_attack(20)
         self.set_cost(10)
         self.set_description(f"Vengeful spirit is a spirit that will fly forward and burn foes in its path\nDeals {self.get_attack()} damage\nCost {self.get_cost()} mana")
         self.set_move(" used Vengeful Spirit")
