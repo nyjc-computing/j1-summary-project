@@ -29,6 +29,7 @@ PI = 3.14159265359
 
 
 def is_adjacent(room1: list[int], room2: list[int]) -> bool:
+    
     xdiff = room1[0] - room2[0]
     ydiff = room1[1] - room2[1]
     for i in DIRLIST:
@@ -55,12 +56,18 @@ def direction_of(targetcoords: list[int], neighbourcoords: list[int]) -> "NORTH 
 labsize = 10 # cannot be too small!!
 def valid_coords(roomcoords: list[int]) -> bool:
     if type(roomcoords) is not list:
+        print(f"valid_coords() says that roomcoords {roomcoords} is not a list.")
         return False
     if len(roomcoords) != 2:
+        print(f"valid_coords() says that roomcoords {roomcoords} does not have exactly 2 elements.")
         return False
     i, j = roomcoords
+    if i is not int or j is not int:
+        return False
+        print(f"valid_coords() says that roomcoords {roomcoords} elements are not type int.")
     if i not in list(range(labsize)) or j not in list(range(labsize)):
         return False
+        print(f"valid_coords() says that roomcoords {roomcoords} elements are not within integers from 0 to {labsize - 1}.")
     return True
 
 class Labyrinth:
@@ -143,6 +150,7 @@ class Labyrinth:
         self._generate_nowalls()
 
     def _generate_nowalls(self) -> None:
+        """Helper method for the generate() method. Makes sure all rooms are connected to all adjacent rooms in the labyrinth."""
         for x in range(labsize):
             for y in range(labsize):
                 this = self.lab[x][y]
@@ -160,19 +168,27 @@ class Labyrinth:
         1. Filling in empty rooms in the empty maze
         2. Chooses (somewhat) randomly which room is the startroom room where Steve is placed
         3. Places the boss room opposite to startroom
-        4. Makes the rooms connected like a maze structure
-        6. (Unimplemented functionality) Takes in a difficulty level and sets the game accordingly
+        4. Makes the rooms connected like a maze structure (with walls)
+        5. (Unimplemented functionality) Takes in a difficulty level and sets the game accordingly
         
         Requires the use of helper methods, namely:
 
-        Too many LOL
+        _generate_place_steve_boss()
+        _generate_maze()
+        _generate_recursive_linking()
+        _generate_count_unconnected_rooms()
+        _generate_force_connect()
+        _generate_is_linkable_by_recursive()
+        _generate_link_rooms()
         """
         # self.difficulty_level = difficulty_level
         # put in empty rooms
         for x in range(labsize):
             for y in range(labsize):
                 self.lab[x][y] = Room(x, y)
+        # choose location for steve and boss
         self._generate_place_steve_boss()
+        # connecting all the rooms in a maze-like fashion
         self._generate_maze(self.steve_pos)
     
 
@@ -207,17 +223,20 @@ class Labyrinth:
         # choose position of Monster room opposite to where steve is
         boss_x = labsize - 1 - (steve_x % labsize)
         boss_y = labsize - 1 - (steve_y % labsize)
-        
+        self.boss_pos = [boss_x, boss_y]
         if (boss_x, boss_y) == (steve_x, steve_y): # if they happen to be placed in the same room
             raise ValueError("Steve and the Boss have been put at the same location.")
         self.lab[boss_x][boss_y].boss_enters()    
 
     def _generate_maze(self, startroom_pos: list[int]) -> None:
-        # link up a large number of rooms
+        """Links up all rooms in a maze-like fashion"""
+        # link up a "large" number of rooms
         print("Loading: Generating maze...")
         self._generate_recursive_linking(startroom_pos)
         unconnected = self._generate_count_unconnected_rooms()
         print("Loading: Tying loose ends...")
+        # linearly search through the grid to find unconnected rooms, and connects them. 
+        # Stops when all are connected.
         while unconnected != 0:
             for x in range(labsize):
                 for y in range(labsize):
@@ -227,7 +246,8 @@ class Labyrinth:
             unconnected = self._generate_count_unconnected_rooms()
 
     def _generate_force_connect(self, roomcoords: list[int]) -> None:
-        """links holes in connectivity of maze to as many adjacent rooms as possible"""
+        """links holes in connectivity of maze to as many adjacent rooms as possible.
+        Game design: Does so in an unpredictable (random) sequence, so that this has a lower chance of being exploitable by the player."""
         newdirlist = DIRLIST.copy()
         random.shuffle(newdirlist)
         for i in range(4):
@@ -236,11 +256,16 @@ class Labyrinth:
                 self._generate_link_rooms(roomcoords, neighbourcoords) # forcing a connection.
                 
     def _generate_is_linkable_by_recursive(self, roomcoords: list[int]) -> bool:
+        """Rules for a this room with coordinates roomcoords to be linked to its neighbour that is attempting to link to this:
+        
+        1. It must have valid coords, within the appropriate range from 0 to labsize - 1
+        2. It must not already be connected to the start.
+        """
         if not valid_coords(roomcoords):
             return False
         x, y = roomcoords
         room_object = self.lab[x][y]
-        if room_object.is_connected_tostart(): # has access to 
+        if room_object.is_connected_tostart(): # has access
             return False
         return True
                      
@@ -249,7 +274,7 @@ class Labyrinth:
         """
         Attempts to link a large number of rooms, recursively
         Rules for whether a neighbour room is linkable:
-        0. The room exists.
+        0. The room exists (has coordinates within the valid range)
         1. The room is not already linked.
 
         thisroom will make an attempt to link to linkable neighbour rooms.
@@ -319,13 +344,19 @@ class Labyrinth:
                     number_of_unconnected += 1 # counter
         return number_of_unconnected
 
-    def get_current_pos(self) -> "Room":
+    def get_current_pos(self) -> list[int]:
+        """Tells the coordinates of Steve's current location."""
         return self.steve_pos
 
 
         
 
     def move_boss(self) -> None:
+        """Tries to move the boss from its current room to any (available) neighbour rooms.
+        
+        Does not jump over walls.
+        If the boss cannot move in any of the 4 cardinal directions, an error is raised as it implies that the room it is in is completely isolated, which should not happen.
+        """
         dirlist = [NORTH, SOUTH, EAST, WEST]
         random.shuffle(dirlist)
         for randomdir in dirlist:
@@ -355,15 +386,27 @@ class Labyrinth:
         
 
     def can_move_here(self, this_coords: list[int], direction) -> bool:
+        """Tells whether an adjacent room is accessible.
+        Rules:
+        1. There is no wall between this room and the neighbour.
+        2. the coordinates are within the range of valid coordinates.
+        """
         if not valid_coords(this_coords): # this should not happen at all
             raise IndexError("entity is not inside of maze")
         thisroom = self.lab[this_coords[0]][this_coords[1]]
         return thisroom.dir_is_accessible(direction)
 
     def _steve_useitem(self, item) -> None:
+        """Uses a utility item. Not implemented because no utility items are implemented yet."""
         raise NotImplementedError
 
     def give_sound_clue(self):
+        """Displays a message giving a hint how far away the boss is from steve and which direction steve might have to go in order to find the boss.
+        
+        Calculates straight line distance.
+        Calculates which direction, N, S, E, W, NE, NW, SE, SW
+        displays a message based on distance and direction.
+        """
         dx, dy = self.sb_xy_distance()
         if dx == 0 and dy == 0: # They are in the same room, a clue doesn't need to be given LOL
             return None
@@ -377,7 +420,7 @@ class Labyrinth:
             else:
                 print("A silent whine was heard in the distance. It might just be any creature out there.")
             return None
-        r, dirstr = r_dir_calc(dx, dy)
+        r, dirstr = self.r_dir_calc(dx, dy)
         if r < 3:
             i = random.randint(0, 2)
             if i == 0:
@@ -399,6 +442,10 @@ class Labyrinth:
         print(f"The sound seemed to come from {dirstr}.")
 
     def r_dir_calc(self, dx, dy) -> tuple[float, str]:
+        """maths work for give_sound_clue
+        Finds r and theta using x and y (polar coordinates system)
+        returns r and direction
+        """
         dx, dy = self.sb_xy_distance()
         if dx == 0 and dy == 0:
             return None
@@ -437,11 +484,12 @@ class Labyrinth:
             lowerbound += PI / 4
             upperbound += PI / 4
         if dirstr is None:
-            raise MathError("Person who implemented r_dir_calc() has a skill issue")
+            raise RuntimeError("Person who implemented r_dir_calc() has a skill issue")
         return r, dirstr
         
         
     def sb_xy_distance(self) -> list[int]:
+        """returns x, y displacement of boss from steve."""
         xdiff = self.boss_pos[0] - self.steve_pos[0]
         ydiff = self.boss_pos[1] - self.steve_pos[1]
         return [xdiff, ydiff]
@@ -557,19 +605,23 @@ class Room:
             raise ValueError("Direction passed is not of the right value")
     
     def set_creature_None(self) -> None:
-        """When the creature is killed"""
+        """When the creature is killed, removes the creature from the room."""
         self.creature = None
     
     def set_connected_True(self) -> None:
+        """Setter method for connected attribute"""
         self.connected = True
 
     def get_creature(self) -> "Creature":
+        """Getter method for creature attribute"""
         return self.creature
 
     def get_item(self) -> "Item":
+        """Getter method for item attribute"""
         return self.item
 
     def set_creature(self, creature: "Creature") -> None:
+        """setter method for creature; might not need it"""
         if self.creature is not None:
             return None
         self.creature = creature
@@ -740,14 +792,16 @@ class Steve:
     def __repr__(self):
         return f"Steve has {self.health} HP."
 
-    def _display_inventory(self) -> None:
+    def display_inventory(self) -> None:
         if self.inventory == []:
             print("You have no items in your inventory.\n")
             return None
         print("\nYou have:\n")
         for i in len(self.inventory):
-            item, number = str(i["item"]), str(i["number"])
-            print(f"{number:>2} {item}")
+            dict_ = self.inventory[i]
+            item, number = str(dict_["item"]), str(dict_["number"])
+            prefix = i + 1
+            print(f"{prefix:>2}. {number:>2} x {item}")
         print("\n")
         return None
 
@@ -775,10 +829,10 @@ class Steve:
         self.armour[armouritem.armor_slot] = armouritem
         return None
         
-    def eat(self, fooditem: "Item") -> None:
+    def eat(self, foodindex: int) -> None:
+        fooditem = self.inventory[foodindex]
         #validation
-        foodindex = self.find_item(fooditem)
-        if foodindex == -1:
+        if foodindex < 0:
             raise RuntimeError(f"{fooditem} cannot be consumed as Steve's inventory does not have it.")
         if not fooditem.item_type == "Food":
             raise ValueError(f"{fooditem} cannot be consumed as it is not food.")
@@ -830,11 +884,13 @@ class Steve:
         return self.base_damage + self.weapon.get_attack()
 
     def isdead(self) -> bool:
+        """Tells whether Steve is dead or not. Returns True if yes, else False."""
         if self.health <= 0:
             return True
         return False
 
     def take_damage(self, damage):
+        """Updates hitpoints attribute based on how much damage is dealt."""
         damage = int(damage * ((100 - self.get_defence())/100))
         self.hitpoints = max(0, self.hitpoints - damage)
         
@@ -864,23 +920,33 @@ class Creature:
         return maxhp
 
     def get_name(self) -> None:
+        """Returns the name of the creature"""
         return self.name
         
     def _generate_attack(self, attack: int, turn_number: int) -> None:
+        """"""
         attack = int((attack) * ((turn_number / 10) + 1) * (random.randint(90, 110) / 100))
         return attack
         
     def get_attack(self):
-        """Might not need this"""
+        """Getter for attack attribute.
+        Might not need this"""
         return self.attack
 
     def get_health(self):
+        """Getter for hitpoints attribute"""
         return self.hitpoints
 
-    def take_damage(self, damage: int):
+    def take_damage(self, damage: int) -> None:
+        """Updates health based on the damage the creature suffered"""
         self.hitpoints = max(0, self.hitpoints - damage)
 
     def random_move(self) -> int:
+        """Chooses randomly from the following attack moves that the creature can make:
+        
+        1. normal attack
+        
+        """
         return self.get_attack()
       
 class Creeper(Creature):
@@ -893,17 +959,18 @@ class Creeper(Creature):
         print("KABOOOOOMMMMM THE CREEPER EXPLODEDDDDD!!!!!!")
         self.hitpoints = 0
         if inp.upper() == random_letter and time.time() - start_time <= 1.8:
-            print("Luckily, your quick reactions allowed you to avoid the explosion. You took no damage.")
+            print("\nLuckily, your quick reactions allowed you to avoid the explosion. You took no damage.")
             return 0
         elif inp.upper() != random_letter:
-            print("Oh no! You took the wrong action and got caught in the blast!")
+            print("\nOh no! You took the wrong action and got caught in the blast!")
         elif (time.time() - start_time) > 1.8:
-            print("Oh no! You were too slow and got caught in the blast!")
+            print("\nOh no! You were too slow and got caught in the blast!")
         attack = int((attack) * ((turn_number / 10) + 1) * (random.randint(90, 110) / 100))
         print(f"You took {attack} damage.")
         return attack
 
     def isdead(self) -> bool:
+        "returns True if the creeper is dead. returns False otherwise."
         return self.hitpoints <= 0
 
 class Boss(Creature):
@@ -922,9 +989,12 @@ class Boss(Creature):
         self.hitpoints = min(self.hitpoints + heal, self.maxhp)
 
     def sonic_boom(self) -> bool:
+        """Unimplemented attack that would make the battle more interesting"""
         raise NotImplementedError
 
     def random_move(self) -> int:
+        """If current health gt 50 HP, returns attack damage.
+        If current health lte 50 HP, 30 percent chance it heals itself, and does no damage. Otherwise, returns attack damage."""
         if self.hitpoints > 50:
             return self.attack
         if random.randint(0, 100) <= 30:
@@ -935,6 +1005,7 @@ class Boss(Creature):
         
         
 def random_creature() -> "Creature":
+    """returns a randomly generated creature"""
     creature_data = random.choice(creature_list)
     if creature_data["name"] == "Creeper":
         return Creeper(creature_data["name"], creature_data["base_hp"], creature_data["base_atk"])
@@ -943,6 +1014,7 @@ def random_creature() -> "Creature":
 
 item_type_list = ["Armor", "Food", "Weapon"]
 def random_item() -> "Item":
+    """returns a randomly generated item"""
     item_type = random.choice(item_type_list)
     if item_type == "Armor":
         item_data = random.choice(armor_list)
