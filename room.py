@@ -249,8 +249,7 @@ class Asphodel(Room):
         self.set_description("You stepped into a desolate collection of rocky islands amidst a sea of fire beyond Tartarus. You travel between these islands through small bone rafts")
         self.link_back(Commencement())
         self.link_forward(GreenhillZone())
-        self.set_loot(FlaskOfCeruleanTears())
-        
+        self.set_loot(FlaskOfCeruleanTears())        
 
 class KingdomOfKu(Room):
     """
@@ -292,7 +291,6 @@ class TheHallow(Room):
         self.set_description("You stepped into a radiant but eerie biome, a stark contrast to the darkness that permeates the underground. It's a realm where fantastical creatures and rare resources await, but also a place where you must tread carefully to avoid its relentless and otherworldly foes.")
         self.link_back(TheObraDinn())
         self.set_loot(FlaskOfCrimsonTears())
-        
 
 class Commencement(Room):
     """
@@ -305,7 +303,6 @@ class Commencement(Room):
         self.set_name("Commencement")
         self.set_description("You stepped into a large domain located above the shattered breach of Petrichor V's moon. It is ostensibly the desolated seat of Mithrix's power, made up of the shattered remains of four individual sections, emblematic of Mithrix and Providence's tools of creation")
         self.set_loot(FlaskOfCeruleanTears())
-        
 
 class Midgar(Room):
     """
