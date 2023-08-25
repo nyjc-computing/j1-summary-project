@@ -11,25 +11,34 @@ class Room:
     Attribute
     ---------
     + name: str
+      Name of the room
     + enemy: str
+      Instance of the enemy in the room
     + right: str
+      Instance of the room right of the current room
     + left: str
+      Instance of the room left of the current room
     + up: str
+      Instance of the room upwards of the current room
     + down: str
+      Instance of the room downwards of the current room
     + been_here: bool
+      Status of wether the character has been to this room
     + discription: str
+      Description of the room
     - is_fighting: bool
+      Status of wether the character is fighting in this room
 
     Method
     ------
-    + link_left(): updates the room to the left of the home room(self.name)
+    + set_been_here()
+    + get_been_here(self, been_here : bool) -> bool
+    + link_left(self, room : Room) -> None
     + link_right(): updates the room to the right of the home room(self.name)
     + link_up(): updates the room to the up of the home room(self.name)
     + link_down(): updates the room to the down of the home room(self.name)
     + set_is_fighting: updates the status of the character in the room
     + get_is_fighting: gets the status of the character in the room
-    + set_been_here(): updates the status of wether the character has been to this room
-    + get_been_here(): gets the status of wether the character has been to this room
     """
    
     def __init__(self):
@@ -44,12 +53,15 @@ class Room:
         self.loot = None
 
     def set_been_here(self, status: bool) -> None:
+        """updates been_here status of the room"""
         self.been_here = status
         
     def get_been_here(self) -> bool:
+        """gets the status of wether the character has been to this room"""
         return self.been_here
     
-    def link_left(self, room):
+    def link_left(self, room: Room) -> None:
+        """updates the room to the left of the home room(self.name)"""
         temp = room
         temp.right = self
         self.left = temp
@@ -106,6 +118,10 @@ class Room:
         return self.loot
         
 class Dirtmouth(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(TheRadiance())
@@ -117,6 +133,10 @@ class Dirtmouth(Room):
         self.set_loot(FlaskOfCrimsonTears())
 
 class CelestialResort(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(MrOshiro())
@@ -126,6 +146,10 @@ class CelestialResort(Room):
         self.set_loot(FlaskOfCeruleanTears())
 
 class TheForge(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(TheHighDragun())
@@ -135,6 +159,10 @@ class TheForge(Room):
         self.set_loot(FlaskOfCrimsonTears())
 
 class StormveilCastle(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(GodrickTheGrafted())
@@ -145,6 +173,10 @@ class StormveilCastle(Room):
         self.set_loot(FlaskOfCeruleanTears())
 
 class ApertureLab(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(Glados())
@@ -155,6 +187,10 @@ class ApertureLab(Room):
         self.set_loot(FlaskOfCrimsonTears())
 
 class Zebes(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(Ridley())
@@ -163,6 +199,10 @@ class Zebes(Room):
         self.set_loot(DectusMedallionLeft())
 
 class Bunker(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(Emil())
@@ -171,6 +211,10 @@ class Bunker(Room):
         self.set_loot(FlaskOfCrimsonTears())
 
 class Asphodel(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(TheBoneHyrda())
@@ -182,6 +226,10 @@ class Asphodel(Room):
         
 
 class KingdomOfKu(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(GeneralMugen())
@@ -192,6 +240,10 @@ class KingdomOfKu(Room):
         self.set_loot(FlaskOfCrimsonTears())
 
 class GreenhillZone(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(DoctorEggman())
@@ -202,6 +254,10 @@ class GreenhillZone(Room):
         self.set_loot(FlaskOfCeruleanTears())
 
 class TheHallow(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(TheMoonLord())
@@ -212,6 +268,10 @@ class TheHallow(Room):
         
 
 class Commencement(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(Mithrix())
@@ -221,6 +281,10 @@ class Commencement(Room):
         
 
 class Midgar(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(Sephiroth())
@@ -230,6 +294,10 @@ class Midgar(Room):
         self.set_loot(FlaskOfCrimsonTears())
 
 class HyruleKingdom(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(Ganondorf())
@@ -239,6 +307,10 @@ class HyruleKingdom(Room):
         self.set_loot(FlaskOfCeruleanTears())
 
 class TheEndDimension(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(TheEnderDragon())
@@ -248,6 +320,10 @@ class TheEndDimension(Room):
         self.set_loot(FlaskOfCrimsonTears())
 
 class Kamurocho(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(Shibusawa())
@@ -257,6 +333,10 @@ class Kamurocho(Room):
         self.set_loot(FlaskOfCeruleanTears())
 
 class TowerOfFate(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(Enchantress())
@@ -265,6 +345,10 @@ class TowerOfFate(Room):
         self.set_loot(FlaskOfCrimsonTears())
 
 class ShoresOfNine(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(Freya())
@@ -273,6 +357,10 @@ class ShoresOfNine(Room):
         self.set_loot(FlaskOfCeruleanTears())
         
 class Mementos(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(Yaldabaoth())
@@ -283,6 +371,10 @@ class Mementos(Room):
         self.set_loot(FlaskOfCrimsonTears())
 
 class Ascent(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(Reyna())
@@ -293,6 +385,10 @@ class Ascent(Room):
         self.set_loot(FlaskOfCeruleanTears())
 
 class PrincipalsOffice(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(Voldemort())
@@ -301,6 +397,10 @@ class PrincipalsOffice(Room):
         self.set_loot(FlaskOfCrimsonTears())
 
 class SixthCircleOfHell(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(Gabriel())
@@ -309,6 +409,10 @@ class SixthCircleOfHell(Room):
         self.set_loot(FlaskOfCeruleanTears())
 
 class Snowdin(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(Flowey())
@@ -319,6 +423,10 @@ class Snowdin(Room):
         self.set_loot(FlaskOfCrimsonTears())
 
 class TheSealedTemple(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(TheHeir())
@@ -327,6 +435,10 @@ class TheSealedTemple(Room):
         self.set_loot(DectusMedallionRight())
 
 class TheAstralPlane(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(JenaAnderson())
@@ -335,6 +447,10 @@ class TheAstralPlane(Room):
         self.set_loot(FlaskOfCrimsonTears())
 
 class TheObraDinn(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(TheKraken())
@@ -343,6 +459,10 @@ class TheObraDinn(Room):
         self.set_loot(FlaskOfCeruleanTears())
 
 class TheMushroomKingdom(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_enemy(Bowser())

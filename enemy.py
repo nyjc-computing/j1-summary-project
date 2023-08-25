@@ -48,45 +48,51 @@ class Enemy:
         self.move = ""
 
     def set_health(self, health : int) -> None:
-        """
-        Updates the enemy's health
-        """
+        """updates the health of the enemy"""
         self.health = health
 
     def get_health(self) -> int:
-        """
-        Returns the enemys health
-        """
+        """gets the health of the enemy"""
         return self.health
 
     def set_name(self, name : str) -> None:
+        """updates the name of the enemy"""
         self.name = name
 
     def get_name(self) -> str:
+        """gets the name of the enemy"""
         return self.name
 
     def set_description(self, description : str) -> None:
+        """updates the description of the enemy"""
         self.description = description
 
     def get_description(self) -> str:
+        """gets the description of the enemy"""
         return self.description
 
     def set_attack(self, attack : int) -> None:
+        """updates the attack of the enemy"""
         self.attack = attack
 
     def get_attack(self) -> int:
+        """gets the attack of the enemy"""
         return self.attack
 
     def set_move(self, move : str) -> None:
+        """updates the description of the attack of the enemy"""
         self.move = move
 
     def get_move(self) -> str:
+        """gets the description of the attack of the enemy"""
         return self.move
 
     def set_loot(self, loot : Weapon) -> None:
+        """updates the loot of the enemy"""
         self.loot = loot
 
     def get_loot(self) -> Weapon:
+        """gets the loot of the enemy"""
         return self.loot
 
 class TheRadiance(Enemy):
