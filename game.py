@@ -27,7 +27,7 @@ class MUDGame:
         """
         username = ''
         n = 0
-        while username.strip(' ') != '':
+        while username.strip(' ') == '':
             n += 1
             if n > 1:
                 print('Please enter a valid username with at least one character.')
