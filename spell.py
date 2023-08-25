@@ -59,11 +59,11 @@ class WingardiumLeviosa(Spell):
     def __init__(self):
         super().__init__()
         self.set_name("Wingardium Leviosa")
-        self.set_description("Wingardium Leviosa is a magic spell that can make objects levitate\nDeals 10 damage")
-        self.set_attack(10)
-        self.set_cost(10)
+        self.set_attack(5)
+        self.set_cost(5)
+        self.set_description(f"Wingardium Leviosa is a magic spell that can make objects levitate\nDeals {self.get_attack()} damage\nCost {self.get_cost()} mana")
         self.set_move(" used levitation")
-        self.set_win_front("levitated ")
+        self.set_win_front(" levitated ")
         self.set_win_back(" so high that it breached the atmosphere and exploded")
     
 class VengefulSpirit(Spell):
@@ -71,11 +71,11 @@ class VengefulSpirit(Spell):
     def __init__(self):
         super().__init__()
         self.set_name("Vengeful Spirit")
-        self.set_description("Vengeful spirit is a spirit that will fly forward and burn foes in its path")
-        self.set_attack(10)
+        self.set_attack(20)
         self.set_cost(10)
+        self.set_description(f"Vengeful spirit is a spirit that will fly forward and burn foes in its path\nDeals {self.get_attack()} damage\nCost {self.get_cost()} mana")
         self.set_move(" used Vengeful Spirit")
-        self.set_win_front("charged up all your soul and shot a massive vengeful spirit at ")
+        self.set_win_front(" charged up all your soul and shot a massive vengeful spirit at ")
         self.set_win_back("")
 
 class Megidolaon(Spell):
@@ -83,11 +83,11 @@ class Megidolaon(Spell):
     def __init__(self):
         super().__init__()
         self.set_name("Megidolaon")
-        self.set_description("Megidolaon is a damage dealing almight spell")
-        self.set_attack(10)
-        self.set_cost(10)
+        self.set_attack(30)
+        self.set_cost(20)
+        self.set_description(f"Megidolaon is a damage dealing almighty spell\nDeals {self.get_attack()} damage\nCost {self.get_cost()} mana")
         self.set_move(" used Megidolaon")
-        self.set_win_front("summoned your persona Satanael and dealt massive almighty damage to ")
+        self.set_win_front(" summoned your persona Satanael and dealt massive almighty damage to ")
         self.set_win_back("")
 
 class GlintstoneCometshard(Spell):
@@ -95,10 +95,10 @@ class GlintstoneCometshard(Spell):
     def __init__(self):
         super().__init__()
         self.set_name("Glintstone Cometshard")
-        self.set_description("Glintstone Cometshard fires a comet that moves forward while leaving a trail")
-        self.set_attack(10)
-        self.set_cost(10)
-        self.set_move(" used Glinstone Cometshard")
+        self.set_attack(40)
+        self.set_cost(25)
+        self.set_description(f"Glintstone Cometshard fires a comet that moves forward while leaving a trail\nDeals {self.get_attack()} damage\nCost {self.get_cost()} mana")
+        self.set_move(" shot a Glinstone Cometshard")
         self.set_win_front(" Shredded ")
         self.set_win_back(" into a million pieces")
 
@@ -106,10 +106,10 @@ class WillOTheWisp(Spell):
 
     def __init__(self):
         super().__init__()
-        self.set_name("Will-O-The-Wisp")
-        self.set_description("Will-O-The-Wisp causes the enemy to explode")
-        self.set_attack(10)
-        self.set_cost(10)
+        self.set_name("Will O The Wisp")
+        self.set_attack(50)
+        self.set_cost(30)
+        self.set_description(f"Will O The Wisp causes the enemy to explode\nDeals {self.get_attack()} damage\nCost {self.get_cost()} mana")
         self.set_move(" exploded")
         self.set_win_front(" exploded ")
-        self.set_win_back(" until it burnt to a cris")
+        self.set_win_back(" until it burnt to a crisp")
