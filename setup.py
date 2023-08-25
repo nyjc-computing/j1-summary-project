@@ -9,8 +9,13 @@ def setup() -> [Room, Character]:
     Generates the map and the character and returns it in a list
     """
 
+    # Generates the starting room 
     map = Dirtmouth()
+
+    # Generates the character
     character = Character()
+
+    # Sets the default statistics of the character
     character.set_spells(WingardiumLeviosa())
     character.set_weapon(Wand())
     character.set_weapons(character.get_weapon())

@@ -6,7 +6,6 @@ import random
 from setup import *
 
 class Game:
-    
     """
     A class that creates an instance of the game
 
