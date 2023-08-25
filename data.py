@@ -793,12 +793,12 @@ class Steve:
         return f"Steve has {self.health} HP."
 
     def display_inventory(self) -> None:
-        if self.inventory == []:
+        if self._inventory == []:
             print("You have no items in your inventory.\n")
             return None
         print("\nYou have:\n")
-        for i in len(self.inventory):
-            dict_ = self.inventory[i]
+        for i in len(self._inventory):
+            dict_ = self._inventory[i]
             item, number = str(dict_["item"]), str(dict_["number"])
             prefix = i + 1
             print(f"{prefix:>2}. {number:>2} x {item}")
@@ -812,7 +812,7 @@ class Steve:
                 return None
         # If exit loop, inventory does not have any of new_item
         # create a dict to add to self.inventory
-        self.inventory.append({"item": new_item, "number": num})
+        self._inventory.append({"item": new_item, "number": num})
         return None
 
     def _discard_item(self, item: Item, num: int) -> None:
@@ -830,7 +830,7 @@ class Steve:
         return None
         
     def eat(self, foodindex: int) -> None:
-        fooditem = self.inventory[foodindex]
+        fooditem = self._inventory[foodindex]
         #validation
         if foodindex < 0:
             raise RuntimeError(f"{fooditem} cannot be consumed as Steve's inventory does not have it.")
@@ -842,19 +842,19 @@ class Steve:
 
     def find_item(self, item: "Item") -> int:
         """Linear search through inventory to find the index of the item"""
-        for i in self.inventory:
+        for i in self._inventory:
             if str(i["item"]) == str(item):
                 return i
         return -1 # return value is -1 when not found.
         
     def remove_item_from_inv(self, index) -> None:
-        if index not in list(range(len(self.inventory))):
+        if index not in list(range(len(self._inventory))):
             raise ValueError("Item that is trying to be removed from inventory has an index outside of the range of Steve's inventory.")
-        if self.inventory[index]["number"] == 1: # Steve has only 1 of this such item left
-            self.inventory.pop(index)
+        if self._inventory[index]["number"] == 1: # Steve has only 1 of this such item left
+            self._inventory.pop(index)
             # This dict is removed as there are no more of such items in the inventory
             return None
-        self.inventory[index]["number"] -= 1
+        self._inventory[index]["number"] -= 1
         return None
         
     def heal_health(self, change: int) -> None:
