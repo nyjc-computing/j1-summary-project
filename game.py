@@ -88,7 +88,7 @@ class Game:
             if name == "meow":
                 self.secret()
             else:
-                print("\nYou boldly opened the front gates of the school and made your way into the first room")
+                print("\nYou boldly opened the front gates of the school and made your way into the first room\n")
                 time.sleep(1)
         elif decision.lower() == "no":
             print("\nDue to your utter cowardice, voldemort continued gaining power, spreading his control and chaos all over the world, leading to the complete annihlation of the human race")
@@ -367,6 +367,11 @@ class Game:
                         choice = input(f"\nDo you want to pick {victim.get_loot().get_name()}? ( yes / no ): ")
                         if choice.lower() == "yes":
                             self.collect_loot(attacker, victim.get_loot())
+                            time.sleep(1)
+                            print()
+                            print(victim.get_loot().get_description())
+                            print()
+                            time.sleep(1)
 
                         elif choice.lower() == "no":
                             print(f"\nYou left {victim.get_loot().get_name()} on the ground and allowed the resourceful rat to steal it")
@@ -860,7 +865,7 @@ class Game:
     
             else:
                 # Displays the description of the items
-                print("\n", end="")
+                print()
                 print(user.get_items()[items.index(decision)].get_description())
                 time.sleep(1)
                 
@@ -874,7 +879,7 @@ class Game:
 
     def display_room_description(self) -> None:
         """prints the room's description"""
-        print("\n", end="")
+        print()
         print(self.room.description)
         time.sleep(2)
         self.look(self.room)
@@ -955,7 +960,7 @@ class Game:
         self.character.set_mana_flask(997)
 
     def meow(self) -> None:
-        choice = random.randint(1, 3)
+        choice = random.randint(1, 10)
         if choice == 1:
             print("""  
   __  __  U _____ u U  ___ u             
@@ -985,3 +990,64 @@ U|' \/ '|u\| ___"|/  \/"_ \/__        __
 | |              | || |              | || |              | || |              | |
 | '--------------' || '--------------' || '--------------' || '--------------' |
  '----------------'  '----------------'  '----------------'  '----------------' """)
+
+        elif choice == 4:
+            print("""                              
+                              
+ _ __ ___   ___  _____      __
+| '_ ` _ \ / _ \/ _ \ \ /\ / /
+| | | | | |  __/ (_) \ V  V / 
+|_| |_| |_|\___|\___/ \_/\_/  
+                              
+                              """)
+
+        elif choice == 5:
+            print(""" 
+ _  _  ____  __   _  _ 
+( \/ )(  __)/  \ / )( \
+/ \/ \ ) _)(  O )\ /\ /
+\_)(_/(____)\__/ (_/\_)""")
+
+        elif choice == 6:
+            print("""                              
+ _ __ ___   ___  _____      __
+| '_ ` _ \ / _ \/ _ \ \ /\ / /
+| | | | | |  __/ (_) \ V  V / 
+|_| |_| |_|\___|\___/ \_/\_/  
+                              """)
+
+        elif choice == 7:
+            print("""                                    
+                                    
+,--,--,--. ,---.  ,---. ,--.   ,--. 
+|        || .-. :| .-. ||  |.'.|  | 
+|  |  |  |\   --.' '-' '|   .'.   | 
+`--`--`--' `----' `---' '--'   '--' 
+                                    """)
+
+        elif choice == 8:
+            print(""" 
+ __    __     ______     ______     __     __    
+/\ "-./  \   /\  ___\   /\  __ \   /\ \  _ \ \   
+\ \ \-./\ \  \ \  __\   \ \ \/\ \  \ \ \/ ".\ \  
+ \ \_\ \ \_\  \ \_____\  \ \_____\  \ \__/".~\_\ 
+  \/_/  \/_/   \/_____/   \/_____/   \/_/   \/_/ 
+                                                 """)
+
+        elif choice == 9:
+            print("""                                        
+                                        
+ _ .--..--.  .---.   .--.   _   _   __  
+[ `.-. .-. |/ /__\\/ .'`\ \[ \ [ \ [  ] 
+ | | | | | || \__.,| \__. | \ \/\ \/ /  
+[___||__||__]'.__.' '.__.'   \__/\__/   
+                                        """)
+
+        elif choice == 10:
+            print(""" 
+_      _____ ____  _     
+/ \__/|/  __//  _ \/ \  /|
+| |\/|||  \  | / \|| |  ||
+| |  |||  /_ | \_/|| |/\||
+\_/  \|\____\\____/\_/  \|
+                          """)

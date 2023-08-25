@@ -1,6 +1,18 @@
 from game import Game
 
-def test_win():
+def test() -> bool:
+    
     test = Game()
-    self.room = TheShriekingShack()
+    
+    try:
+        test.intro()
+    except:
+        return False
+
+    try:
+        test.run()
+    except:
+        return False
+
+    return True
     
