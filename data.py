@@ -350,15 +350,22 @@ class Grid:
 
 #Start
 def start_menu():
-    print('Welcome to FNAF:Reckoning!')
-    choice = input("Type 'Start' to begin: ")
-    while choice.lower() != 'start':
-        print("To begin the game, enter 'start'.")
+    """
+    Displays start menu 
+    """
+        def start_menu():
+        print('Welcome to FNAF:Reckoning!')
         choice = input("Type 'Start' to begin: ")
-    print('--------------------------------------------------------')
+        while choice.lower() != 'start':
+            print("To begin the game, enter 'start'.")
+            choice = input("Type 'Start' to begin: ")
+        print('--------------------------------------------------------')
 
     
 def info(cr):
+    """
+    Displays information of the playable characters
+    """
     if cr == 'freddy':
         print('HP: 100')
         print('Description: The lovable brown bear enters the dungeon, ready to face any and all challenges in his way. With his trusty microphone, Freddy faces fear head on as he ventures deeper into the spiraling depths of the abyss.')
@@ -400,6 +407,9 @@ def info(cr):
         print('--------------------------------------------------------')
     
 def choose_character(player):
+    """
+    Prompts the user to select a character to play as
+    """
     print('Characters:')
     print('1. Freddy Fazbear')
     print('2. Bonnie')
@@ -416,7 +426,7 @@ def choose_character(player):
         is_select = is_select.lower()
         print("Enter 'y' or 'n' to proceed.")
         is_select = input('Select ' + cr.capitalize() + ' as your character? Y/N: ')
-    if is_select == 'y':
+    if is_select.lower() == 'y':
         if cr == 'freddy' or cr == 'freddy fazbear':
             print(f'{player} has selected Freddy Fazbear.')
         elif cr == 'bonnie':
@@ -426,13 +436,39 @@ def choose_character(player):
         elif cr == 'foxy':
             print(f'{player} has selected Foxy.')
         print('--------------------------------------------------------')
-    if is_select == 'n':
+    if is_select.lower() == 'n':
         return choose_character(player)
     return cr
+        
+#End
+def Ending():
+    """
+    Plays the end sequence after Glitchtrap is defeated
+    """
+    print('Glitchtrap: No! This cannot be!')
+    time.sleep(2)
+    print('Glitchtrap: I cannot be defeated by an animatronic!')
+    time.sleep(2)
+    print('Glitchtrap: You are a product of my creation, I cannot be defeated by the likes of you!')
+    time.sleep(3)
+    print('Glitchtrap: Whatever, I will find a way to come back,')
+    time.sleep(2)
+    print('Glitchtrap: I always do.')
+    time.sleep(2)
+    print('You then hear the blood-curling scream of the dying bunny, followed by the sight of the glitching bunny.')
+    time.sleep(3)
+    print('Finally, the virus disappears and the room falls into silence.')
+    time.sleep(2)
+    print('You finally reached the end, for now at least.')
+
 
 
 #accuracy
 def accuracy(accuracy, attacker, target):
+    """
+    Determines whether an attack hits the opponent.
+    Can be changed by buffs or debuffs (statuses)
+    """
     if target.has_status('Phantom'):
         accuracy -= 10
     if attacker.has_status('Nightfall'):
@@ -448,26 +484,65 @@ def accuracy(accuracy, attacker, target):
         return False
         
 #Status
-statuses = [{'name' : 'Sleeping', 'description' : 'Target cannot take action based on the count. At the end of the target\'s turn, reduce the count by 1.', 'count' : None}, 
-            {'name' : 'Corrupted', 'description' : 'Target attacks indiscriminately, At the end of the turn, reduce the count by 1.', 'count' : None},
-            {'name' : 'Infiltrated', 'description' : 'Target takes 10% more damage when attacked by Glitch Type enemies. At the end of the turn, reduce count by 1.', 'count' : None},
-            {'name' : 'Phantom', 'description' : 'Target has an increased chance to dodge all attacks. At the end of the turn, reduce count by 1.' , 'count' : None},
-            {'name' : 'Resonance', 'description' : 'Target gains a random damage boost between 1 and 10 extra damage. At the end of the turn, reduce count by 1.' , 'count' : None},
-            {'name' : 'Nightfall', 'description' : 'Target increases their attack and accuracy of their skills, as well as gains the ability to leech of of the opponent\'s health. At the end of the turn, reduce count by 1.' , 'count' : None}]
+statuses = [{
+    'name': 'Sleeping',
+    'description':
+    'Target cannot take action based on the count. At the end of the target\'s turn, reduce the count by 1.',
+    'count': None
+}, {
+    'name': 'Corrupted',
+    'description':
+    'Target attacks indiscriminately, At the end of the turn, reduce the count by 1.',
+    'count': None
+}, {
+    'name': 'Infiltrated',
+    'description':
+    'Target takes 10% more damage when attacked by Glitch Type enemies. At the end of the turn, reduce count by 1.',
+    'count': None
+}, {
+    'name': 'Phantom',
+    'description':
+    'Target has an increased chance to dodge all attacks. At the end of the turn, reduce count by 1.',
+    'count': None
+}, {
+    'name': 'Resonance',
+    'description':
+    'Target gains a random damage boost between 1 and 10 extra damage. At the end of the turn, reduce count by 1.',
+    'count': None
+}, {
+    'name': 'Nightfall',
+    'description':
+    'Target increases their attack and accuracy of their skills, as well as gains the ability to leech of of the opponent\'s health. At the end of the turn, reduce count by 1.',
+    'count': None
+}]
+
 
 def infiltrated(damage):
+    """
+    Increases the damage taken by 10%
+    """
     return abs(damage * 110 / 100)
 
+
 def instinct(damage):
+    """
+    Increases damage dealt by 30%
+    """
     return abs(damage * 130 / 100)
 
 #Win and lose conditions
 def is_defeat(players: list) -> bool:
+    """
+    Returns True if user lost, else returns False
+    """
     if len(players) == 0:
         return True
     return False
 
 def is_victory(enemies: list) -> bool:
+    """
+    Returns True if user won, else returns False
+    """
     if len(enemies) == 0:
         return True
     return False
@@ -475,30 +550,64 @@ def is_victory(enemies: list) -> bool:
 
 
 class GB:
+    """
+    Basic common enemy found roaming the rooms.
+
+    Attributes:
+    status (list): Shows statuses currently inflicted.
+    health (int): Max health of character.
+
+    Methods:
+    take_damage(x): Reduces health of character by x 
+    is_defeated(): Returns True if characters health is less than 0, else return False
+    display_turn(): Displays the characters turn
+    add_status(str): Adds status to a character 
+    remove_status(str): Removes status from a character
+    has_status(str): If character has status, returns True, else returns False. 
+    get_stats(str): Displays a characters stats
+    attack(str): Attacks a target using one of its attacks 
+    """
+
     def __init__(self, status=None, health=50):
         self.name = 'Glitch Bunny'
         self.health = health
         self.status = status if status is not None else []
 
     def take_damage(self, damage: int):
+        """
+        Reduces health based on damage done 
+        """
         self.health -= damage
 
     def is_defeated(self):
+        """
+        Returns True if characters health is less than 0, else return False
+        """
         if self.health <= 0:
             return True
         return False
-        
+
     def display_turn(self):
+        """
+        Displays the characters turn
+        """
+        print('--------------------------------------------------------')
         print(f"It is {self.name}'s turn.")
-        
+
     def add_status(self, status, turns):
+        """
+        Adds status to a character 
+        """
         for st in statuses:
             if st['name'] == status:
                 temp = st.copy()
                 temp['count'] = turns
                 self.status.append(temp)
-                
+
     def remove_status(self):
+        """
+        Removes status from a character
+        """
         for st in self.status:
             st['count'] -= 1
             if st['count'] == 0:
@@ -507,12 +616,19 @@ class GB:
                 self.status.remove(st)
 
     def has_status(self, status):
+        """
+        If character has status, returns True, else returns False.
+        """
         for st in self.status:
+            print (st)
             if st['name'] == status:
                 return True
         return False
 
     def get_stats(self):
+        """
+        Displays a characters stats
+        """
         print(f"{self.name}'s stats")
         print(f"HP: {self.health} / 50")
         if self.status == []:
@@ -525,6 +641,9 @@ class GB:
                 print(f'Status : {name}  /\t Description : {description}  /\t Turns Remaining : {turns}')
 
     def attack(self, target):
+        """
+        Attacks a target using one of its attacks 
+        """
         n = random.randint(1, 100)
         if n < 50:
             if accuracy(50, self, target) == True:
@@ -550,45 +669,83 @@ class GB:
 
 
 class BB:
+    """
+    Basic common enemy found roaming the rooms.
+
+    Attributes:
+    status (list): Shows statuses currently inflicted.
+    health (int): Max health of character.
+
+    Methods:
+    take_damage(x): Reduces health of character by x 
+    is_defeated(): Returns True if characters health is less than 0, else return False
+    display_turn(): Displays the characters turn
+    add_status(str): Adds status to a character 
+    remove_status(str): Removes status from a character
+    has_status(str): If character has status, returns True, else returns False. 
+    get_stats(str): Displays a characters stats
+    attack(str): Attacks a target using one of its attacks 
+    """
     def __init__(self, status=None, health=75):
         self.name = 'Balloon Boy'
         self.health = health
         self.status = status if status is not None else []
 
     def take_damage(self, damage: int):
+        """
+        Reduces health of character by x 
+        """
         self.health -= damage
 
     def is_defeated(self):
+        """
+        Returns True if characters health is less than 0, else return False
+        """
         if self.health <= 0:
             return True
         return False
-        
+
     def display_turn(self):
+        """
+        Displays the characters turn
+        """
         print('--------------------------------------------------------')
         print(f"It is {self.name}'s turn.")
-        
+
     def add_status(self, status, turns):
+        """
+        Adds status to a character 
+        """
         for st in statuses:
             if st['name'] == status:
                 temp = st.copy()
                 temp['count'] = turns
                 self.status.append(temp)
-                
+
     def remove_status(self):
+        """
+        Removes status from a character
+        """
         for st in self.status:
-            st['count'] -= 1
-            if st['count'] == 0:
+            st['counter'] -= 1
+            if st['counter'] == 0:
                 name = st['name']
                 print(f'{self.name} is no longer {name}!')
                 self.status.remove(st)
 
     def has_status(self, status):
+        """
+         If character has status, returns True, else returns False.
+        """
         for st in self.status:
             if st['name'] == status:
                 return True
         return False
 
     def get_stats(self):
+        """
+        Displays a characters stats
+        """
         print(f"{self.name}'s stats")
         print(f"HP: {self.health} / 75")
         if self.status == []:
@@ -598,9 +755,14 @@ class BB:
                 name = st['name']
                 description = st['description']
                 turns = st['count']
-                print(f'Status : {name}  /\t Description : {description}  /\t Turns Remaining : {turns}')
+                print(
+                    f'Status : {name}  /\t Description : {description}  /\t Turns Remaining : {turns}'
+                )
 
     def attack(self, target):
+        """
+        Attacks a target using one of its attacks
+        """
         n = random.randint(1, 100)
         if n < 50:
             if accuracy(50, self, target) == True:
@@ -626,31 +788,61 @@ class BB:
 
 
 class Springtrap:
-    def __init__(self, status=None, health=300):
+    """
+    The boss that the player has to defeat in order to win.
+
+    Attributes:
+    status (list): Shows statuses currently inflicted.
+    health (int): Max health of character.
+
+    Methods:
+    take_damage(x): Reduces health of character by x 
+    is_defeated(): Returns True if characters health is less than 0, else return False
+    display_turn(): Displays the characters turn
+    add_status(str): Adds status to a character 
+    remove_status(str): Removes status from a character
+    has_status(str): If character has status, returns True, else returns False. 
+    get_stats(str): Displays a characters stats
+    encounter(): Displays dialogue when encountering Springtrap
+    attack(str): Attacks a target using one of its attacks 
+    """
+    def __init__(self, status=None, health=250):
         self.name = 'Springtrap'
         self.health = health
         self.status = status if status is not None else []
 
     def take_damage(self, damage: int):
+        """
+        Reduces health of character by x
+        """
         self.health -= damage
 
     def is_defeated(self):
+        """
+        Returns True if characters health is less than 0, else return False
+        """
         if self.health <= 0:
             return True
-        return False        
+        return False
 
     def display_turn(self):
+        """
+        Displays the characters turn
+        """
         print('--------------------------------------------------------')
         print(f"It is {self.name}'s turn.")
-            
+
     def add_status(self, status, turns):
         for st in statuses:
             if st['name'] == status:
                 temp = st.copy()
                 temp['count'] = turns
                 self.status.append(temp)
-                
+
     def remove_status(self):
+        """
+        Removes status from a character
+        """
         for st in self.status:
             st['count'] -= 1
             if st['count'] == 0:
@@ -659,12 +851,18 @@ class Springtrap:
                 self.status.remove(st)
 
     def has_status(self, status):
+        """
+        If character has status, returns True, else returns False.
+        """
         for st in self.status:
             if st['name'] == status:
                 return True
         return False
 
     def get_stats(self):
+        """
+        Displays a characters stats
+        """
         print(f"{self.name}'s stats")
         print(f"HP: {self.health} / 300")
         if self.status == []:
@@ -677,15 +875,24 @@ class Springtrap:
                 print(f'Status : {name}  /\t Description : {description}  /\t Turns Remaining : {turns}')
 
     def encounter(self):
+        """
+        Plays dialogue when encountering Springtrap, notifying the player.
+        """
         print('You notice the pungent smell of decaying matter.')
         time.sleep(2)
-        print('Then, you hear the clanking of metal wires and robotic movement.')
+        print(
+            'Then, you hear the clanking of metal wires and robotic movement.')
         time.sleep(2)
-        print('Finally, you see a haunted amalgamation of wires and memories emerge from the shadows.')
+        print(
+            'Finally, you see a haunted amalgamation of wires and memories emerge from the shadows.'
+        )
         time.sleep(3)
         print('Springtrap.')
-        
+
     def attack(self, target):
+        """
+        Attacks a target using one of its attacks
+        """
         print(f"{self.name} attacks {target.name}!")
         n = random.randint(1, 3)
         if n == '1':
@@ -720,31 +927,65 @@ class Springtrap:
 
 
 class Glitchtrap:
-    def __init__(self, status=None, health=250):
-            self.name = 'Glitchtrap'
-            self.health = health
-            self.status = status if status is not None else []
-    
+    """
+    Phase 2 of Springtrap that once defeated will finish the game
+
+    Attributes:
+    status (list): Shows statuses currently inflicted.
+    health (int): Max health of character.
+
+    Methods:
+    take_damage(x): Reduces health of character by x 
+    is_defeated(): Returns True if characters health is less than 0, else return False
+    display_turn(): Displays the characters turn
+    add_status(str): Adds status to a character 
+    remove_status(str): Removes status from a character
+    has_status(str): If character has status, returns True, else returns False. 
+    get_stats(str): Displays a characters stats
+    spawn(): Turns Springtrap into Glitchtrap, initialising phase 2
+    attack(str): Attacks a target using one of its attacks 
+    """
+
+    def __init__(self, status=None, health=275):
+        self.name = 'Glitchtrap'
+        self.health = health
+        self.status = status if status is not None else []
+
     def take_damage(self, damage: int):
+        """
+        Reduces health of character by x
+        """
         self.health -= damage
 
     def is_defeated(self):
+        """
+        Returns True if characters health is less than 0, else return False
+        """
         if self.health <= 0:
             return True
         return False
 
     def display_turn(self):
+        """
+        Displays the characters turn
+        """
         print('--------------------------------------------------------')
         print(f"It is {self.name}'s turn.")
-        
+
     def add_status(self, status, turns):
+        """
+        Adds status to a character
+        """
         for st in statuses:
             if st['name'] == status:
                 temp = st.copy()
                 temp['count'] = turns
                 self.status.append(temp)
-                
+
     def remove_status(self):
+        """
+        Removes status from a character
+        """
         for st in self.status:
             st['count'] -= 1
             if st['count'] == 0:
@@ -753,12 +994,18 @@ class Glitchtrap:
                 self.status.remove(st)
 
     def has_status(self, status):
+        """
+        If character has status, returns True, else returns False.
+        """
         for st in self.status:
             if st['name'] == status:
                 return True
         return False
 
     def get_stats(self):
+        """
+        Displays a characters stats
+        """
         print(f"{self.name}'s stats")
         print(f"HP: {self.health} / 250")
         if self.status == []:
@@ -768,25 +1015,37 @@ class Glitchtrap:
                 name = st['name']
                 description = st['description']
                 turns = st['count']
-                print(f'Status : {name}  /\t Description : {description}  /\t Turns Remaining : {turns}')
+                print(
+                    f'Status : {name}  /\t Description : {description}  /\t Turns Remaining : {turns}'
+                )
 
     def spawn():
+        """
+        Turns Springtrap into Glitchtrap, initialising phase 2
+        """
         if Springtrap.health <= 0:
             print('Or has he?')
             time.sleep(2)
-            print('Springtrap: Did you really think this would be enough to finish me?')
+            print(
+                'Springtrap: Did you really think this would be enough to finish me?'
+            )
             time.sleep(2)
-            print('Springtrap: I am the embodiment of your fears and uncertainties, now merged and given form.')
+            print(
+                'Springtrap: I am the embodiment of your fears and uncertainties, now merged and given form.'
+            )
             time.sleep(3)
-            print('Springtrap: You forget,')
+            print('Springtrap: A glitch in the system, a fracture in reality. Witness the merging of two worlds.')
             time.sleep(3)
-            print('Springtrap: I always come back.')
-            time.sleep(4)
-            print('You watch as the decaying bunny is encapsulated in digital code, turning him into another bunny with stitches running down his sides as he chuckles.')
+            print(
+                'You watch as the decaying bunny is encapsulated in digital code, turning him into another bunny with stitches running down his sides as he chuckles.'
+            )
             time.sleep(5)
             print('Glitchtrap: The time of reckoning, has begun.')
-    
+
     def attack(self, target):
+        """
+        Attacks a target using one of its attacks
+        """
         print(f"{self.name} attacks {target.name}!")
         n = random.randint(1, 100)
         if n > 30 and n < 60: #28% chance to use this attack
@@ -836,13 +1095,60 @@ class Glitchtrap:
     
 #Characters
 class Freddy:
+    """
+    Data for Freddy character that players can choose to play as.
+
+    Attributes:
+    status (list): Shows statuses currently inflicted.
+    health (int): Max health of character.
+    inventory(list): Shows items collected.
+
+    Methods:
+    display_inventory(): Displays a character's inventory
+    add_item(str): Adds items collected into the player's inventory
+    is_use_item(): Confirms with the player whether they want to use the item
+    use_item(str): Uses a selected item in the player's inventory
+    heal(x): Restores a characters health by a certain amount.
+    take_damage(x): Reduces health of character by x 
+    is_defeated(): Returns True if characters health is less than 0, else return False
+    display_turn(): Displays the characters turn
+    prompt_action(str): Prompts the user for an action
+    target(str): Prompts the user to select a target
+    prompt_check(str): Allows user to check the stats of party or enemy
+    prompt_attack(): Prompts the user to choose an attack to use
+    attack(str): Attacks a target using one of its attacks
+    passive(str): Increases damage if target is asleep
+    add_status(str): Adds status to a character 
+    remove_status(str): Removes status from a character
+    has_status(str): If character has status, returns True, else returns False. 
+    get_stats(str): Displays a characters stats
+     
+    """
     def __init__(self, status=None, health=100, inventory=None):
         self.name = 'Freddy Fazbear'
         self.health = health
         self.status = status if status is not None else []
         self.item_equipped = None
 
+    def display_inventory(self):
+        """
+        Displays a character's inventory
+        """
+        print("Inventory:")
+        if len(player_inventory) == 0:
+            print("You don't have any items currently.")
+        else:
+            for item in player_inventory:
+                name = item['name']
+                description = item['description']
+                effect = item['effect']
+                consumable = item['consumable']
+                print(f'Item : {name}  /\t Description : {description}  /\t Effect : {effect}  /\t Consumable : {consumable}')
+                
     def add_item(self, item):
+        """
+        Adds items collected into the player's inventory
+        """
         global player_inventory
         global all_items
         for it in all_items:
@@ -850,11 +1156,17 @@ class Freddy:
                 player_inventory.append(it)
 
     def is_use_item(self):
+        """
+        Confirms with the player whether they want to use the item
+        """
         is_use = input("Use an item? Y/N: ")
         print('')
         return is_use.lower()
                     
     def use_item(self, item):
+        """
+        Uses a selected item in the player's inventory
+        """
         global player_inventory
         for it in player_inventory:
             if it['name'] == item:
@@ -879,22 +1191,37 @@ class Freddy:
         return False
 
     def heal(self, amnt):
+        """
+        Restores a characters health by a certain amount.
+        """
         self.health += amnt
         print(f"{self.name} healed {amnt} hp!")
 
     def take_damage(self, damage_taken):
+        """
+        Reduces health of character by x
+        """
         self.health -= damage_taken
 
     def is_defeated(self):
+        """
+        Returns True if characters health is less than 0, else return False
+        """
         if self.health <= 0:
             return True
         return False
             
     def display_turn(self):
+                """
+        Displays the characters turn
+        """
         print('--------------------------------------------------------')
         print(f"It is {self.name}'s turn.\n")
 
     def prompt_action(self):
+        """
+        Prompts the user for an action
+        """
         print('Select one of the following actions:')
         print('1. Attack')
         print('2. Target')
@@ -907,6 +1234,9 @@ class Freddy:
 
     
     def target(self, enemies):
+        """
+        Prompts the user to select a target
+        """
         print('To target enemies, input a number, with the leftmost enemy being 1.')
         i = 1
         for enemy in enemies:
@@ -918,12 +1248,18 @@ class Freddy:
         return target
         
     def prompt_check(self):
+        """
+        Allows user to check the stats of party or enemy
+        """
         print("Type 'enemy' to see enemy stats, 'party' to see party stats, 'back' to cancel this action.")
         check = input("Choose to check enemy or party stats: ")
         print('')
         return check.lower()
         
     def prompt_attack(self):
+        """
+        Prompts the user to choose an attack to use
+        """
         print(f"{self.name}'s Attacks:'")
         print('1. Mic Toss  90 acc  15 dmg')
         print('2. Sing  40 acc - dmg')
@@ -934,6 +1270,9 @@ class Freddy:
         return atk.lower()
 
     def attack(self, target, atk):
+        """
+        Attacks a target using one of its attacks
+        """
         damage = 0
         damage += self.passive(target)
         if self.item_equipped != None:
@@ -964,12 +1303,18 @@ class Freddy:
 
             
     def passive(self, target):
+        """
+        Increases damage if target is asleep
+        """
         if target.has_status('Sleeping'):
             return 5
         else:
             return 0
             
     def add_status(self, status, turns):
+        """
+        Adds status to a character
+        """
         for st in statuses:
             if st['name'] == status:
                 temp = st.copy()
@@ -977,6 +1322,9 @@ class Freddy:
                 self.status.append(temp)
                 
     def remove_status(self):
+        """
+        Removes status from a character
+        """
         for st in self.status:
             st['count'] -= 1
             if st['count'] == 0:
@@ -985,12 +1333,18 @@ class Freddy:
                 self.status.remove(st)
 
     def has_status(self, status):
+        """
+        If character has status, returns True, else returns False.
+        """
         for st in self.status:
             if st['name'] == status:
                 return True
         return False
 
     def get_stats(self):
+        """
+        Displays a characters stats
+        """
         print(f"{self.name}'s stats")
         print(f"HP: {self.health} / 100")
         if self.status == []:
@@ -1006,13 +1360,60 @@ class Freddy:
 
 
 class Bonnie:
+    """
+    Data for Bonnie character that players can choose to play as.
+
+    Attributes:
+    status (list): Shows statuses currently inflicted.
+    health (int): Max health of character.
+    inventory(list): Shows items collected.
+
+    Methods:
+    display_inventory(): Displays a character's inventory
+    add_item(str): Adds items collected into the player's inventory
+    is_use_item(): Confirms with the player whether they want to use the item
+    use_item(str): Uses a selected item in the player's inventory
+    heal(x): Restores a characters health by a certain amount.
+    take_damage(x): Reduces health of character by x 
+    is_defeated(): Returns True if characters health is less than 0, else return False
+    display_turn(): Displays the characters turn
+    prompt_action(str): Prompts the user for an action
+    target(str): Prompts the user to select a target
+    prompt_check(str): Allows user to check the stats of party or enemy
+    prompt_attack(): Prompts the user to choose an attack to use
+    attack(str): Attacks a target using one of its attacks
+    passive(str): Increases damage by a multiplier of 1 to 10 if target has resonance
+    add_status(str): Adds status to a character 
+    remove_status(str): Removes status from a character
+    has_status(str): If character has status, returns True, else returns False. 
+    get_stats(str): Displays a characters stats
+     
+    """
     def __init__(self, status=None, health=100, inventory=None):
         self.name = 'Bonnie'
         self.health = health
         self.status = status if status is not None else []
         self.item_equipped = None
 
+    def display_inventory(self):
+        """
+        Displays a character's inventory
+        """
+        print("Inventory:")
+        if len(player_inventory) == 0:
+            print("You don't have any items currently.")
+        else:
+            for item in player_inventory:
+                name = item['name']
+                description = item['description']
+                effect = item['effect']
+                consumable = item['consumable']
+                print(f'Item : {name}  /\t Description : {description}  /\t Effect : {effect}  /\t Consumable : {consumable}')
+                
     def add_item(self, item):
+        """
+        Adds items collected into the player's inventory
+        """
         global player_inventory
         global all_items
         for it in all_items:
@@ -1020,6 +1421,9 @@ class Bonnie:
                 player_inventory.append(it)
 
     def is_use_item(self):
+        """
+        Confirms with the player whether they want to use the item
+        """
         is_use = input("Use an item? Y/N: ")
         is_use = is_use.lower()
         while is_use != 'y' and is_use != 'n':
@@ -1031,6 +1435,9 @@ class Bonnie:
             return True
                     
     def use_item(self, item):
+        """
+        Uses a selected item in the player's inventory
+        """
         global player_inventory
         for it in player_inventory:
             if it['name'] == item:
@@ -1055,22 +1462,37 @@ class Bonnie:
         return False
 
     def heal(self, amnt):
+        """
+        Restores a characters health by x
+        """
         self.health += amnt
         print(f"{self.name} healed {amnt} hp!")
 
     def take_damage(self, damage_taken):
+        """
+        Reduces health of character by x
+        """
         self.health -= damage_taken
 
     def is_defeated(self):
+        """
+        Returns True if characters health is less than 0, else return False
+        """
         if self.health <= 0:
             return True
         return False
             
     def display_turn(self):
+        """
+        Displays the characters turn
+        """
         print('--------------------------------------------------------')
         print(f"It is {self.name}'s turn.\n")
 
     def prompt_action(self):
+        """
+        Prompts the user for an action
+        """
         print('Select one of the following actions:')
         print('1. Attack')
         print('2. Target')
@@ -1082,6 +1504,9 @@ class Bonnie:
         return dec
     
     def target(self, enemies):
+        """
+        Prompts the user to select a target
+        """
         print('To target enemies, input a number, with the leftmost enemy being 1.')
         i = 1
         for enemy in enemies:
@@ -1093,12 +1518,18 @@ class Bonnie:
         return target
         
     def prompt_check(self):
+        """
+        Allows user to check the stats of party or enemy
+        """
         print("Type 'enemy' to see enemy stats, 'party' to see party stats, 'back' to cancel this action.")
         check = input("Choose to check enemy or party stats: ")
         print('')
         return check.lower()
         
     def prompt_attack(self):
+        """
+        Prompts the user to choose an attack to use
+        """
         print(f"{self.name}'s attacks:'")
         print('1. Rift  90 acc  15 dmg')
         print('2. Guitar crash  40 acc 10 dmg')
@@ -1109,6 +1540,9 @@ class Bonnie:
         return atk.lower()
 
     def attack(self, target, atk):
+        """
+        Attacks a target using one of its attacks
+        """
         damage = 0
         damage += self.passive(target)
         if self.item_equipped != None:
@@ -1145,6 +1579,9 @@ class Bonnie:
         print('\n')
             
     def passive(self, target):
+        """
+        Increases damage by a multiplier of 1 to 10 if target has resonance
+        """
         if target.has_status('Resonance'):
             multiplier = random.randint(1, 10)
             return multiplier
@@ -1152,6 +1589,9 @@ class Bonnie:
             return 0
             
     def add_status(self, status, turns):
+        """
+        Adds status to a character
+        """
         for st in statuses:
             if st['name'] == status:
                 temp = st.copy()
@@ -1159,6 +1599,9 @@ class Bonnie:
                 self.status.append(temp)
                 
     def remove_status(self):
+        """
+        Removes status from a character
+        """
         for st in self.status:
             st['count'] -= 1
             if st['count'] == 0:
@@ -1167,12 +1610,18 @@ class Bonnie:
                 self.status.remove(st)
 
     def has_status(self, status):
+        """
+        If character has status, returns True, else returns False
+        """
         for st in self.status:
             if st['name'] == status:
                 return True
         return False
 
     def get_stats(self):
+        """
+        Displays a characters stats
+        """
         print(f"{self.name}'s stats")
         print(f"HP: {self.health} / 100")
         if self.status == []:
@@ -1188,13 +1637,60 @@ class Bonnie:
 
 
 class Foxy:
+    """
+    Data for Foxy character that players can choose to play as.
+
+    Attributes:
+    status (list): Shows statuses currently inflicted.
+    health (int): Max health of character.
+    inventory(list): Shows items collected.
+
+    Methods:
+    display_inventory(): Displays a character's inventory
+    add_item(str): Adds items collected into the player's inventory
+    is_use_item(): Confirms with the player whether they want to use the item
+    use_item(str): Uses a selected item in the player's inventory
+    heal(x): Restores a characters health by x
+    take_damage(x): Reduces health of character by x 
+    is_defeated(): Returns True if characters health is less than 0, else return False
+    display_turn(): Displays the characters turn
+    prompt_action(str): Prompts the user for an action
+    target(str): Prompts the user to select a target
+    prompt_check(str): Allows user to check the stats of party or enemy
+    prompt_attack(): Prompts the user to choose an attack to use
+    attack(str): Attacks a target using one of its attacks
+    passive(str): Increases damage by 30% if Foxy has less than half health
+    add_status(str): Adds status to a character 
+    remove_status(str): Removes status from a character
+    has_status(str): If character has status, returns True, else returns False
+    get_stats(str): Displays a characters stats
+     
+    """
     def __init__(self, status=None, health=100, inventory=None):
         self.name = 'Foxy'
         self.health = health
         self.status = status if status is not None else []
         self.item_equipped = None
 
+    def display_inventory(self):
+        """
+        Displays a character's inventory
+        """
+        print("Inventory:")
+        if len(player_inventory) == 0:
+            print("You don't have any items currently.")
+        else:
+            for item in player_inventory:
+                name = item['name']
+                description = item['description']
+                effect = item['effect']
+                consumable = item['consumable']
+                print(f'Item : {name}  /\t Description : {description}  /\t Effect : {effect}  /\t Consumable : {consumable}')
+                
     def add_item(self, item):
+        """
+        Adds items collected into the player's inventory
+        """
         global player_inventory
         global all_items
         for it in all_items:
@@ -1202,6 +1698,9 @@ class Foxy:
                 player_inventory.append(it)
 
     def is_use_item(self):
+        """
+        Confirms with the player whether they want to use the item
+        """
         is_use = input("Use an item? Y/N: ")
         is_use = is_use.lower()
         while is_use != 'y' and is_use != 'n':
@@ -1213,6 +1712,9 @@ class Foxy:
             return True
                     
     def use_item(self, item):
+        """
+        Uses a selected item in the player's inventory
+        """
         global player_inventory
         for it in player_inventory:
             if it['name'] == item:
@@ -1237,22 +1739,37 @@ class Foxy:
         return False
 
     def heal(self, amnt):
+        """
+        Restores a characters health by x
+        """
         self.health += amnt
         print(f"{self.name} healed {amnt} hp!")
 
     def take_damage(self, damage_taken):
+        """
+        Reduces health of character by x
+        """
         self.health -= damage_taken
     
     def is_defeated(self):
+        """
+        Returns True if characters health is less than 0, else return False
+        """
         if self.health <= 0:
             return True
         return False
             
     def display_turn(self):
+        """
+        Displays the characters turn
+        """
         print('--------------------------------------------------------')
         print(f"It is {self.name}'s turn.\n")
 
     def prompt_action(self):
+        """
+        Prompts the user for an action
+        """
         print('Select one of the following actions:')
         print('1. Attack')
         print('2. Target')
@@ -1264,6 +1781,9 @@ class Foxy:
         return dec
     
     def target(self, enemies):
+        """
+        Prompts the user to select a target
+        """
         print('To target enemies, input a number, with the leftmost enemy being 1.')
         i = 1
         for enemy in enemies:
@@ -1275,6 +1795,9 @@ class Foxy:
         return target
         
     def prompt_check(self):
+        """
+        Allows user to check the stats of party or enemy
+        """
         print("Type 'enemy' to see enemy stats, 'party' to see party stats, 'back' to cancel this action.")
         check = input("Choose to check enemy or party stats: ")
         print('')
@@ -1291,6 +1814,9 @@ class Foxy:
         return atk.lower()
 
     def attack(self, target, atk):
+        """
+        Prompts the user to choose an attack to use
+        """
         damage = 0
         if self.item_equipped != None:
             damage += self.item_equipped['damage']
@@ -1327,6 +1853,9 @@ class Foxy:
         print('\n')
             
     def passive(self, damage):
+        """
+        Increases damage by 30% if Foxy has less than half health
+        """
         if self.health < 50:
             damage = instinct(damage)
             return damage
@@ -1334,6 +1863,9 @@ class Foxy:
             return 0
             
     def add_status(self, status, turns):
+        """
+        Adds status to a character
+        """
         for st in statuses:
             if st['name'] == status:
                 temp = st.copy()
@@ -1341,6 +1873,9 @@ class Foxy:
                 self.status.append(temp)
                 
     def remove_status(self):
+         """
+        Removes status from a character
+        """
         for st in self.status:
             st['count'] -= 1
             if st['count'] == 0:
@@ -1349,12 +1884,18 @@ class Foxy:
                 self.status.remove(st)
 
     def has_status(self, status):
+        """
+        If character has status, returns True, else returns False
+        """
         for st in self.status:
             if st['name'] == status:
                 return True
         return False
 
     def get_stats(self):
+        """
+        Displays a characters stats
+        """
         print(f"{self.name}'s stats")
         print(f"HP: {self.health} / 100")
         if self.status == []:
@@ -1369,6 +1910,35 @@ class Foxy:
 
 
 class Chica:
+    """
+    Data for Chica character that players can choose to play as.
+
+    Attributes:
+    status (list): Shows statuses currently inflicted.
+    health (int): Max health of character.
+    inventory(list): Shows items collected.
+
+    Methods:
+    display_inventory(): Displays a character's inventory
+    add_item(str): Adds items collected into the player's inventory
+    is_use_item(): Confirms with the player whether they want to use the item
+    use_item(str): Uses a selected item in the player's inventory
+    heal(x): Restores a characters health by a certain amount.
+    take_damage(x): Reduces health of character by x 
+    is_defeated(): Returns True if characters health is less than 0, else return False
+    display_turn(): Displays the characters turn
+    prompt_action(str): Prompts the user for an action
+    target(str): Prompts the user to select a target
+    prompt_check(str): Allows user to check the stats of party or enemy
+    prompt_attack(): Prompts the user to choose an attack to use
+    attack(str): Attacks a target using one of its attacks
+    passive(str): If cupcake is present, heals Chica for 10 each turn. When cupcake is destroyed, deals 20 damage to targetted opponent
+    add_status(str): Adds status to a character 
+    remove_status(str): Removes status from a character
+    has_status(str): If character has status, returns True, else returns False. 
+    get_stats(str): Displays a characters stats
+     
+    """
     def __init__(self, status=None, health=100, inventory=None, cupcake=None):
         self.name = 'Chica'
         self.health = health
@@ -1376,7 +1946,25 @@ class Chica:
         self.item_equipped = None
         self.cupcake = cupcake
 
+    def display_inventory(self):
+        """
+        Displays a character's inventory
+        """
+        print("Inventory:")
+        if len(player_inventory) == 0:
+            print("You don't have any items currently.")
+        else:
+            for item in player_inventory:
+                name = item['name']
+                description = item['description']
+                effect = item['effect']
+                consumable = item['consumable']
+                print(f'Item : {name}  /\t Description : {description}  /\t Effect : {effect}  /\t Consumable : {consumable}')
+                
     def add_item(self, item):
+        """
+        Adds items collected into the player's inventory
+        """
         global player_inventory
         global all_items
         for it in all_items:
@@ -1384,6 +1972,9 @@ class Chica:
                 player_inventory.append(it)
 
     def is_use_item(self):
+        """
+        Confirms with the player whether they want to use the item
+        """
         is_use = input("Use an item? Y/N: ")
         is_use = is_use.lower()
         while is_use != 'y' and is_use != 'n':
@@ -1395,6 +1986,9 @@ class Chica:
             return True
                     
     def use_item(self, item):
+        """
+        Uses a selected item in the player's inventory
+        """
         global player_inventory
         for it in player_inventory:
             if it['name'] == item:
@@ -1419,10 +2013,16 @@ class Chica:
         return False
 
     def heal(self, amnt):
+        """
+        Restores a characters health by x
+        """
         self.health += amnt
         print(f"{self.name} healed {amnt} hp!")
 
     def take_damage(self, damage_taken):
+        """
+        Reduces health of character by x
+        """
         if self.cupcake <= 0:
             self.health -= damage_taken
             self.cupcake = None
@@ -1430,15 +2030,24 @@ class Chica:
             self.cupcake -= damage_taken
         
     def is_defeated(self):
+        """
+        Returns True if characters health is less than 0, else return False
+        """
         if self.health <= 0:
             return True
         return False
             
     def display_turn(self):
+        """
+        Displays the characters turn
+        """
         print('--------------------------------------------------------')
         print(f"It is {self.name}'s turn.\n")
 
     def prompt_action(self):
+        """
+        Prompts the user for an action
+        """
         print('Select one of the following actions:')
         print('1. Attack')
         print('2. Target')
@@ -1450,6 +2059,9 @@ class Chica:
         return dec
     
     def target(self, enemies):
+        """
+        Prompts the user to select a target
+        """
         print('To target enemies, input a number, with the leftmost enemy being 1.')
         i = 1
         for enemy in enemies:
@@ -1461,12 +2073,18 @@ class Chica:
         return target
         
     def prompt_check(self):
+        """
+        Allows user to check the stats of party or enemy
+        """
         print("Type 'enemy' to see enemy stats, 'party' to see party stats, 'back' to cancel this action.")
         check = input("Choose to check enemy or party stats: ")
         print('')
         return check.lower()
         
     def prompt_attack(self):
+        """
+        Prompts the user to choose an attack to use
+        """
         print(f"{self.name}'s attacks:'")
         print('1. Pizza slice  90 acc  15 dmg')
         print('2. Cupcake decoy  - acc - dmg')
@@ -1477,8 +2095,11 @@ class Chica:
         return atk.lower()
 
     def attack(self, target, atk):
+        """
+        Attacks a target using one of its attacks
+        """
         damage = 0
-        damage += self.passive(target)
+        self.passive(target)
         if self.item_equipped != None:
             damage += self.item_equipped['damage']
         if atk == '1':
@@ -1490,7 +2111,7 @@ class Chica:
             else:
                 print('The attack missed!')
         if atk == '2':
-            if self.cupcake <= 0:
+            if self.cupcake != None:
                 print(f'{self.name} used Cupcake decoy!')
                 print(f'{self.name} placed a cupcake in place of her.')
                 self.cupcake = 50
@@ -1515,7 +2136,10 @@ class Chica:
 
             
     def passive(self, target):
-        if self.cupcake <= 0:
+        """
+        If cupcake is present, heals Chica for 10 each turn. When cupcake is destroyed, deals 20 damage to targetted opponent
+        """
+        if self.cupcake != None:
             target.take_damage(20)
             print(f'The cupcake exploded and dealt 20 damage to {target.name}!')
         else:
@@ -1523,6 +2147,9 @@ class Chica:
             print(f"The cupcake healed {self.name}'s HP!")
             
     def add_status(self, status, turns):
+        """
+        Adds status to a character
+        """
         for st in statuses:
             if st['name'] == status:
                 temp = st.copy()
@@ -1530,6 +2157,9 @@ class Chica:
                 self.status.append(temp)
                 
     def remove_status(self):
+        """
+        Removes status from a character
+        """
         for st in self.status:
             st['counter'] -= 1
             if st['counter'] == 0:
@@ -1538,12 +2168,18 @@ class Chica:
                 self.status.remove(st)
 
     def has_status(self, status):
+        """
+        If character has status, returns True, else returns False
+        """
         for st in self.status:
             if st['name'] == status:
                 return True
         return False
 
     def get_stats(self):
+        """
+        Displays a characters stats
+        """
         print(f"{self.name}'s stats")
         print(f"HP: {self.health} / 100")
         if self.status == []:
