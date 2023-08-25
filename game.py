@@ -211,6 +211,9 @@ class MUDGame:
         self.maze.move_boss()
 
     def invalid_opt(self):
+        """
+        Show error message.
+        """
         print('Please enter a valid option.')
     
     def run(self):
