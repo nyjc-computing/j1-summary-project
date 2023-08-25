@@ -27,39 +27,31 @@ class Player:
     ----------
     + self.name: (str) Player username
     + self.hp: (int) Player hit points (health)
-    + self.attack: (int) Player damage per hit
+    + self.attack_punch: (int) Player punch damage per hit
+    + self.attack_weapon: (int) Player attack damage per hit
     + self.current: (int) Room number (player position)
-    + self.turn: (bool) Whether it is player turn
-    + self.map: (dicts in dict) Contains contents of json file with rooms and their characteristics
+   
 
     Methods
     -------
-    + self.attack(target: object) -> None: player deal damage to target
     + self.set_username() -> None: set self.name to input by user
-    + self.move(direction: str) -> None: shift player to desired room (up, down, left or right), update self.current based on room number
-    + self.consume_item(item: tuple, inventory: object) -> None: Use the item specified, removing the item from the inventory
-    + self.pick_item(item: tuple, inventory: object) -> None: Pick up item specified, adding the item to the inventory
+    + self.attack_p(target: object) -> None: player punch target (object)
+    + self.attack_w(target: object) -> None: player weapon target (object)
     """
     def __init__(self) -> None: # map in json
         self.name = '' # user input
         self.hp = 1000
-        self.attack_punch = 50
-        self.attack_weapon = 15
+        self.attack_punch = 10
+        self.attack_weapon = 10
         self.current = '0'
 
     def attack_p(self, target: object) -> None: # Enemy object
-        """
-        player deal damage to target
-        """
         target.hp -= self.attack_punch
             
     def attack_w(self, target: object) -> None:
         target.hp -= self.attack_weapon
 
     def set_username(self) -> None:
-        """
-        set self.name to input by user
-        """
         self.name = input('What would you like to be called: ')
 
 
@@ -67,35 +59,36 @@ class Player:
 
 # Inventory
 class _Inventory:
-    """
-    This class encapsulates data for...
+    """ 
+    This class encapsulates data for game inventory
+    
     Attributes
     -----------
     + self.items: (dicts in dict) Contains contents of json file with items and their characteristics (all items in the game NOT THE PLAYER INVENTORY)
-    + self.inventory: (list) contains items that users have picked up
-
-    Methods
-    --------
-    + self.use(item: tuple) -> None: use items from inventory
-    + self.get_items(item: tuple) -> None: pick up items in rooms
     """
-    def __init__(self):
+    def __init__(self) -> None:
         self.items = []
         with open("content/items.csv", 'r') as f:
             f.readline()
             for line in f:
                 line = line.strip().split(',')
-                item = _Item(line[0].strip(), line[1].strip(), bool(True if line[2].strip() == 'True' else False), bool(True if line[3].strip() == 'True' else False), line[4].strip())
+                item = _Item(line[0].strip(), line[1].strip(), bool(True if line[2].strip() == 'True' else False), bool(True if line[3].strip() == 'True' else False), line[4].strip()) #convert strings from csv file to bool
                 self.items.append(item)
-                
-        
-        
-        # self.equip = None
-    
 
 # Items
 class _Item:
-    def __init__(self, name, type, consumable, status, magnitude):
+    """
+    This class encapsulates data for _Item
+
+    Attributes
+    -----------
+    self.name: (str) name of item
+    self.type: (str) type of item
+    self.consumable: (str) whether the item is consumable
+    self.status: (str) whether item is equipped
+    self.magnitude: (str) magnitude of items
+    """
+    def __init__(self, name: str, type: str, consumable: str, status: str, magnitude: str) -> None:
         self.name  = name
         self.type = type
         self.consumable = consumable
@@ -104,31 +97,42 @@ class _Item:
 
 
 class _PlayerInventory:
-    def __init__(self):
+    """
+    This class encapsulates data for Player inventory
+    
+    Attributes
+    ----------
+    + self.player_inventory: (objects in a list)
+   
+    Methods
+    -------
+    + self.consume_item(item: object) -> None: remove item from inventory upon consumption
+    + self.add_item(item: object) -> None: add item to inventory
+    """
+    def __init__(self) -> None:
         self.player_inventory = []
 
-    def consume_item(self, item):
+    def consume_item(self, item: object) -> bool:
         item = item.lower()
         flag = True
         while flag:
             if item in self.player_inventory:
                 item_index = self.player_inventory.index(item)
                 self.player_inventory.pop(item_index)
-                flag = False
+                flag = False 
         else:
             print('Invalid item')
             
 
-    def add_item(self, item_data):
-        # item_data is in the following format: {'name':'elixer', 'type':'hp', 'consumable':True, 'status':False}
-        # item = _Item(line[0], line[1], line[2], line[3], line[4])
-        # return item
-        
-        self.player_inventory.append(item_data)
+    def add_item(self, item: object) -> None:
+        self.player_inventory.append(item)
         
         
 
-def generate_items():
+def generate_items() -> list:
+    """
+    generate random items from 0 to 5, using the game inventory
+    """
     inventory = _Inventory()
     game_inventory = inventory.items
     num_of_items = r.randint(0,5)
@@ -142,12 +146,16 @@ def generate_items():
 # Enemy     
 class Enemy:
     """
-    This class encapsulates data for...
+    This class encapsulates data for Enemy
+    
     Attributes
     -----------
     + self.hp: (int) enemy hit points (health)
     + self.attack: (int) enemy damage per hit
 
+    Methods
+    -------
+    + self.atk(Player: class) enemy attack player
     """
     def __init__(self):
         self.hp = 200
@@ -157,6 +165,18 @@ class Enemy:
         player.hp -= self.attack
 
 class Enemy1(Enemy):
+    """
+    This class encapsulates data for Enemy1 and inherits from the enemy class.
+    
+    Attributes
+    -----------
+    + self.hp: (int) enemy hit points (health)
+    + self.attack: (int) enemy damage per hit
+
+    Methods
+    -------
+    + self.atk(Player: class) enemy attack player
+    """
     def __init__(self):
         super().__init__()
         self.hp = r.randint(100, 200)
@@ -166,6 +186,18 @@ class Enemy1(Enemy):
         super().atk(player)
 
 class Enemy2(Enemy):
+    """
+    This class encapsulates data for Enemy2 and inherits from the enemy class.
+    
+    Attributes
+    -----------
+    + self.hp: (int) enemy hit points (health)
+    + self.attack: (int) enemy damage per hit
+
+    Methods
+    -------
+    + self.atk(Player: class) enemy attack player
+    """
     def __init__(self):
         super().__init__()
         self.hp = r.randint(100, 200)
@@ -176,7 +208,9 @@ class Enemy2(Enemy):
         
 
 def generate_enemy() -> list:
-    """generate random enemies in a room"""
+    """
+    generate random enemies in a room
+    """
     enemy_list = []
     enemy1 = Enemy1()
     enemy2 = Enemy2()
@@ -190,15 +224,32 @@ def generate_enemy() -> list:
     return enemy_list
     
 class Boss(Enemy):
+    """
+    Inherited from the Enemy class
+    This class encapsulates data for Boss
+    
+    Attributes
+    -----------
+    + self.hp: (int) enemy hit points (health)
+    + self.attack: (int) enemy damage per hit
+
+    Methods
+    -------
+    + self.atk(Player: object) enemy attack player
+    """
     def __init__(self):
         self.hp = 500
         self.attack = 10
 
-    def atk(self, player):
+    def atk(self, player: object):
         super().atk(player)
     
 class Colours:
-    """ ANSI color codes """
+    """
+    ANSI color codes
+    used for UX
+    """
+    # class attributes
     BLACK = "\033[0;30m"
     RED = "\033[0;31m"
     GREEN = "\033[0;32m"
@@ -224,7 +275,8 @@ class Colours:
     CROSSED = "\033[9m"
     END = "\033[0m"
 
-    def colourised(self, colour, text):
+    @staticmethod # functions of the class such that there is no need to insantiate the object
+    def colourised(colour, text):
         return colour + text
         
 # Zonemap callout
@@ -234,7 +286,4 @@ map = _Zonemap('content/zonemap.json').map
 player_inventory_temp = _PlayerInventory()
 player_inventory = player_inventory_temp.player_inventory
 
-inventory = _Inventory()
-inventory = inventory.items
-
-colour = Colours()
+inventory = _Inventory().items

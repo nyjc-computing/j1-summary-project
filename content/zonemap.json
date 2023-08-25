@@ -34,7 +34,7 @@
 
     "4":
         {
-    "name": "Spooky Town", "description": "idk", "up": ["1"],
+    "name": "Spooky Town", "description": "A magically augumented space, this room looks bigger on the inside. Dust is wrapped on everything in sight, with a dense fog making it feel like the Dark Ages.", "up": ["1"],
     "down": ["7"], "left": [null],
     "right": ["5"]
         },
