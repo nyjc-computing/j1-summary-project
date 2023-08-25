@@ -197,7 +197,8 @@ class Room:
         self.grid = Grid(type = type, x = x, y = y)
         
     def display_room(self):
-        print(f"Room {self.number}, Coordinate {self.grid.get_position()}")
+        print(f"Room {self.number}")
+
 
     def is_next_room(self, next : str) -> bool:
         if next == 'w':
@@ -561,6 +562,7 @@ class BB:
         return False
         
     def display_turn(self):
+        print('--------------------------------------------------------')
         print(f"It is {self.name}'s turn.")
         
     def add_status(self, status, turns):
@@ -636,6 +638,7 @@ class Springtrap:
         return False        
 
     def display_turn(self):
+        print('--------------------------------------------------------')
         print(f"It is {self.name}'s turn.")
             
     def add_status(self, status, turns):
@@ -729,6 +732,7 @@ class Glitchtrap:
         return False
 
     def display_turn(self):
+        print('--------------------------------------------------------')
         print(f"It is {self.name}'s turn.")
         
     def add_status(self, status, turns):
@@ -885,6 +889,7 @@ class Freddy:
         return False
             
     def display_turn(self):
+        print('--------------------------------------------------------')
         print(f"It is {self.name}'s turn.\n")
 
     def prompt_action(self):
@@ -1060,6 +1065,7 @@ class Bonnie:
         return False
             
     def display_turn(self):
+        print('--------------------------------------------------------')
         print(f"It is {self.name}'s turn.\n")
 
     def prompt_action(self):
@@ -1093,8 +1099,8 @@ class Bonnie:
     def prompt_attack(self):
         print(f"{self.name}'s attacks:'")
         print('1. Rift  90 acc  15 dmg')
-        print('2. Guitar crash  40 acc - dmg')
-        print("3. Rock 'n' Roll  19 acc 87 dmg")
+        print('2. Guitar crash  40 acc 10 dmg')
+        print("3. Rock 'n' Roll  25 acc 25*n dmg, n ranges from 1 to 5.")
         print("Type 'back' to cancel the attack. Use the numbers corresponding to each ability to attack.")
         atk = input("Select an attack to use: ")
         print('')
@@ -1241,6 +1247,7 @@ class Foxy:
         return False
             
     def display_turn(self):
+        print('--------------------------------------------------------')
         print(f"It is {self.name}'s turn.\n")
 
     def prompt_action(self):
@@ -1426,6 +1433,7 @@ class Chica:
         return False
             
     def display_turn(self):
+        print('--------------------------------------------------------')
         print(f"It is {self.name}'s turn.\n")
 
     def prompt_action(self):
