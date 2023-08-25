@@ -797,7 +797,7 @@ class Steve:
             print("You have no items in your inventory.\n")
             return None
         print("\nYou have:\n")
-        for i in len(self._inventory):
+        for i in range(len(self._inventory)):
             dict_ = self._inventory[i]
             item, number = str(dict_["item"]), str(dict_["number"])
             prefix = i + 1
@@ -830,7 +830,7 @@ class Steve:
         return None
         
     def eat(self, foodindex: int) -> None:
-        fooditem = self._inventory[foodindex]
+        fooditem = self._inventory[foodindex]["item"]
         #validation
         if foodindex < 0:
             raise RuntimeError(f"{fooditem} cannot be consumed as Steve's inventory does not have it.")
@@ -862,8 +862,8 @@ class Steve:
             return None
         prevhp = self.health
         if change > 0:
-            self.health = min(self.health + change, 20)
-            print(f"you were healed by {self.health - prevhp} HP and now have {self.health}.")
+            self.health = min(self.health + change, 50)
+            print(f"You were healed by {self.health - prevhp} HP and now have {self.health}.")
             return None
         self.health = max(self.health + change, 0)
         print(f"You got hurt by {prevhp - self.health} HP and have {self.health} left.")
