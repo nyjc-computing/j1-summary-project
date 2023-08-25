@@ -57,7 +57,7 @@ class Room:
         self.been_here = status
         
     def get_been_here(self) -> bool:
-        """gets the status of wether the character has been to this room"""
+        """gets the status of whether the character has been to this room"""
         return self.been_here
     
     def link_left(self, room: Room) -> None:

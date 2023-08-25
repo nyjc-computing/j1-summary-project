@@ -5,7 +5,7 @@ class Spell:
     Attributes
     ----------
     - type : str
-      The type of item it is
+      The type of spell it is
     - name : str
       Name of the spell
     - description : str
@@ -51,48 +51,63 @@ class Spell:
         self.win_back = ""
 
     def get_type(self) -> str:
+        """gets the type of the spell"""
         return self.type
     
     def set_name(self, name : str) -> None:
+        """updates the name of the spell"""
         self.name = name
 
     def get_name(self) -> str:
+        """gets the name of the spell"""
         return self.name
 
     def set_description(self, description : str) -> None:
+        """updates the description of the spell"""
         self.description = description
         
     def get_description(self) -> str:
+        """gets the description of the spell"""
         return self.description
 
     def set_attack(self, attack : int) -> None:
+        """updates the amount of damage the spell does"""
         self.attack = attack
 
     def get_attack(self) -> int:
+        """gets the amount of damage the spell does"""
         return self.attack
 
     def set_cost(self, cost : int) -> None:
+        """updates the the amount of mana the spell uses"""
         self.cost = cost
 
     def get_cost(self) -> int:
+        """gets the the amount of mana the spell uses"""
         return self.cost
 
     def set_move(self, move : str) -> None:
+        """updates the name of the attack of the spell"""
         self.move = move
         
     def get_move(self) -> str:
+        """gets the name of the attack of the spell"""
         return self.move
 
     def set_win_front(self, win_front : str) -> None:
+        """updates the the front half of the spell's killing message"""
         self.win_front = win_front
         
     def get_win_front(self) -> str:
+        """gets the the front half of the spell's killing message"""
         return self.win_front
 
     def set_win_back(self, win_back : str) -> None:
+        """updates the the back half of the spell's killing message"""
         self.win_back = win_back
         
     def get_win_back(self) -> str:
+        """gets the the back half of the spell's killing message"""
         return self.win_back
 
 class WingardiumLeviosa(Spell):
