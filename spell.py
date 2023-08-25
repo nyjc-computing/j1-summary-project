@@ -1,6 +1,46 @@
 class Spell:
+    """
+    The parent class for a spell
 
-    def __init__(self):
+    Attributes
+    ----------
+    - type : str
+      The type of item it is
+    - name : str
+      Name of the spell
+    - description : str
+      Description of the spell
+    - attack : int
+      The amount of damage the spell does
+    - cost : int
+      The amount of mana the spell uses
+    - move : str
+      The name of the spell's attack
+    - win_front : str
+      The front half of the spell's killing message
+    - win_back : str
+      The back half of the spell's killing message
+
+    Methods
+    -------
+    + get_type(self) -> str
+    + set_name(self, name : str) -> None
+    + get_name(self) -> str
+    + set_description(self, description : str) -> None
+    + get_description(self) -> str
+    + set_attack(self, attack : int) -> None
+    + get_attack(self) -> int
+    + set_cost(self, cost : int) -> None
+    + get_cost(self) -> int
+    + set_move(self, move : str) -> None
+    + get_move(self) -> str
+    + set_win_front(self, win_front : str) -> None
+    + get_win_front(self) -> str
+    + set_win_back(self, win_back : str) -> None
+    + get_win_back(self) -> str
+    """
+
+    def __init__(self) -> None:
         self.type = "spell"
         self.name = ""
         self.description = ""
@@ -10,52 +50,56 @@ class Spell:
         self.win_front = ""
         self.win_back = ""
 
-    def get_type(self):
+    def get_type(self) -> str:
         return self.type
     
-    def set_name(self, name):
+    def set_name(self, name : str) -> None:
         self.name = name
 
-    def get_name(self):
+    def get_name(self) -> str:
         return self.name
 
-    def set_description(self, description):
+    def set_description(self, description : str) -> None:
         self.description = description
         
-    def get_description(self):
+    def get_description(self) -> str:
         return self.description
 
-    def set_attack(self, attack):
+    def set_attack(self, attack : int) -> None:
         self.attack = attack
 
-    def get_attack(self):
+    def get_attack(self) -> int:
         return self.attack
 
-    def set_cost(self, cost):
+    def set_cost(self, cost : int) -> None:
         self.cost = cost
 
-    def get_cost(self):
+    def get_cost(self) -> int:
         return self.cost
 
-    def set_move(self, move):
+    def set_move(self, move : str) -> None:
         self.move = move
         
-    def get_move(self):
+    def get_move(self) -> str:
         return self.move
 
-    def set_win_front(self, win_front):
+    def set_win_front(self, win_front : str) -> None:
         self.win_front = win_front
         
-    def get_win_front(self):
+    def get_win_front(self) -> str:
         return self.win_front
 
-    def set_win_back(self, win_back):
+    def set_win_back(self, win_back : str) -> None:
         self.win_back = win_back
         
-    def get_win_back(self):
+    def get_win_back(self) -> str:
         return self.win_back
 
 class WingardiumLeviosa(Spell):
+    """
+    A spell that inherits from the Spell class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Wingardium Leviosa")
@@ -67,7 +111,10 @@ class WingardiumLeviosa(Spell):
         self.set_win_back(" so high that it breached the atmosphere and exploded")
     
 class VengefulSpirit(Spell):
-
+    """
+    A spell that inherits from the Spell class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Vengeful Spirit")
@@ -79,7 +126,10 @@ class VengefulSpirit(Spell):
         self.set_win_back("")
 
 class Megidolaon(Spell):
-
+    """
+    A spell that inherits from the Spell class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Megidolaon")
@@ -91,7 +141,10 @@ class Megidolaon(Spell):
         self.set_win_back("")
 
 class GlintstoneCometshard(Spell):
-
+    """
+    A spell that inherits from the Spell class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Glintstone Cometshard")
@@ -103,7 +156,10 @@ class GlintstoneCometshard(Spell):
         self.set_win_back(" into a million pieces")
 
 class WillOTheWisp(Spell):
-
+    """
+    A spell that inherits from the Spell class
+    """
+    
     def __init__(self):
         super().__init__()
         self.set_name("Will O The Wisp")
