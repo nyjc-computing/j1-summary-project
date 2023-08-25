@@ -398,10 +398,10 @@ class Game:
                 print(user.get_accessories()[accessories.index(decision)].get_description())
                 
     def display_room_name(self):
-        print(".")
+        print("\n=========================")
         space = " "*int((25-len(self.room.get_name()))/2)
         print(f"{space}{self.room.get_name()}{space}")
-        print(".")
+        print("=========================\n")
 
     def display_room_description(self):
         print(self.room.description)
