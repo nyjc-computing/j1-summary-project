@@ -112,4 +112,4 @@ class WillOTheWisp(Spell):
         self.set_cost(10)
         self.set_move(" exploded")
         self.set_win_front(" exploded ")
-        self.set_win_back(" until it burnt to a cris")
+        self.set_win_back(" until it burnt to a crisp")
