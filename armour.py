@@ -1,4 +1,24 @@
 class Armour:
+    """
+    creates the armour
+
+    Attributes
+    ----------
+    - type: str
+    - name: str
+    - description: str
+    - defence: int
+
+    Methods
+    -------
+    + get_type(): gets the type of the 
+    - set_name(): updates the name of the armour
+    + get_name(): gets the name of the armour
+    - set_description(): updates the description of the armour
+    + get_description(): gets the description of the armour
+    - set_defence(): updates the defence of the armour
+    + get_defence(): gets the defence of the armour
+    """
     
     def __init__(self):
         self.type = "armour"
