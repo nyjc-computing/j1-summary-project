@@ -1,3 +1,4 @@
+#importing from other files
 from enemy import *
 from weapon import *
 from armour import *
@@ -70,44 +71,44 @@ class Room:
         """gets the status of whether the character has been to this room"""
         return self.been_here
     
-    def link_left(self, room) -> None:
+    def link_left(self, room : "Room") -> None:
         """updates the room to the left of the home room(self.name)"""
         temp = room
         temp.right = self
         self.left = temp
 
-    def get_left(self):
+    def get_left(self) -> "Room":
         """gets the room to the left of the home room(self.name)"""
         return self.left
 
-    def link_right(self, room) -> None:
+    def link_right(self, room : "Room") -> None:
         """updates the room to the right of the home room(self.name)"""
         temp = room
         temp.left = self
         self.right = temp
 
-    def get_right(self):
+    def get_right(self) -> "Room":
         """gets the room to the right of the home room(self.name)"""
         return self.right
 
-    def link_forward(self, room) -> None:
+    def link_forward(self, room : "Room") -> None:
         """updates the room to the up of the home room(self.name)"""
         temp = room
         temp.back = self
         self.forward = temp
 
-    def get_forward(self):
+    def get_forward(self) -> "Room":
         """gets the room to the up of the home room(self.name)"""
         
         return self.forward
 
-    def link_back(self, room) -> None:
+    def link_back(self, room : "Room") -> None:
         """updates the room to the down of the home room(self.name)"""
         temp = room
         temp.forward = self
         self.back = temp
 
-    def get_back(self):
+    def get_back(self) -> "Room":
         """gets the room to the down of the home room(self.name)"""
         return self.back
 

@@ -1,15 +1,21 @@
+# importing from other files
 from room import *
 from character import *
-from spell import *
 from weapon import *
+from spell import *
 
-def setup():
+def setup() -> [Room, Character]:
     """
-    Generates 3 rooms, named room1, room2, room3 and links them together
+    Generates the map and the character and returns it in a list
     """
 
+    # Generates the starting room 
     map = Dirtmouth()
+
+    # Generates the character
     character = Character()
+
+    # Sets the default statistics of the character
     character.set_spells(WingardiumLeviosa())
     character.set_weapon(Wand())
     character.set_weapons(character.get_weapon())

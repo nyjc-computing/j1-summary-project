@@ -1,6 +1,6 @@
 class Accessory:
     """
-    creates the accessory
+    The parent class for an accessory
 
     Attributes
     ----------
@@ -22,17 +22,17 @@ class Accessory:
     Methods
     -------
     + get_type(self) -> str
-    - set_name(self, name : str) -> None
+    + set_name(self, name : str) -> None
     + get_name(self) -> str
-    - set_description(self) -> None
+    + set_description(self) -> None
     + get_description(self, description : str) -> str
-    - set_health_boost(self) -> None
+    + set_health_boost(self) -> None
     + get_health_boost(self, health_boost : int) -> int
-    - set_attack_boost(self) -> None
+    + set_attack_boost(self) -> None
     + get_attack_boost(self, attack_boost : int) -> int
-    - set_mana_boost(self) -> None
+    + set_mana_boost(self) -> None
     + get_mana_boost(self, mana_boost : int) -> int
-    - set_defence_boost(self) -> None
+    + set_defence_boost(self) -> None
     + get_defence_boost(self, defence_boost : int) -> int
     """
 
