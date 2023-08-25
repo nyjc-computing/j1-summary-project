@@ -109,6 +109,8 @@ class Game:
             self.display_room_description()
         
         decision = self.get_action()
+
+        # Does the action the user selected
         
         if decision.lower() == "help":
             self.help()
@@ -141,6 +143,7 @@ class Game:
             self.die()
         
     def help(self) -> None:
+        # Displays the list of actions 
         print("\nYou are able to:")
         for i, action in enumerate(self.actions):
             print(f"- {action} ({self.description[i]})")
@@ -253,25 +256,25 @@ class Game:
                 print(f"\nYou found a {loot.get_name()}, a powerful flask")
                 time.sleep(1)
                 user.set_health_flask(1)
-                self.set_loot(None)
+                self.room.set_loot(None)
     
             elif loot.get_name() == "Flask of Cerulean Tears":
                 print(f"\nYou found a {loot.get_name()}, a powerful flask")
                 time.sleep(1)
                 user.set_mana_flask(1)
-                self.set_loot(None)
+                self.room.set_loot(None)
                 
             elif loot.get_name() == "Dectus Medallion (right)":
                 print(f"\nYou found a {loot.get_name()}, a powerful item")
                 time.sleep(1)
                 user.set_items(loot)
-                self.set_loot(None)
+                self.room.set_loot(None)
     
             elif loot.get_name() == "Dectus Medallion (left)":
                 print(f"\nYou found a {loot.get_name()}, a powerful item")
                 time.sleep(1)
                 user.set_items(loot)
-                self.set_loot(None)
+                self.room.set_loot(None)
 
         else:
             print(f"\n{self.room.get_enemy().get_name()} noticed you while you tried to loot the room")
