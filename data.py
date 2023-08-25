@@ -334,7 +334,7 @@ class Grid:
         '''
         return self.grid[self.get_position()[0]][self.get_position()[1]]['item']['name']
         
-    def claer_tile(self):
+    def clear_tile(self):
         '''
         After a defeating a creature or picking up an item, remove it from the grid
         '''
