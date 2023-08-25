@@ -25,9 +25,14 @@ class MUDGame:
         """
         Starting interface of the game
         """
-        username = input('Enter your username: ')
-        while username is None:
+        username = ''
+        n = 0
+        while username.strip(' ') != '':
+            n += 1
+            if n > 1:
+                print('Please enter a valid username with at least one character.')
             username = input('Enter your username: ')
+            
         print(f'{username}, OH NO YOU ARE TRAPPED! \nYou will go through a series of rooms that may give you items or have ANGRY creatures wanting you DEAD :P \nKill them all, especially the boss to escape! \nGOOD LUCK ;D')
 
     def game_is_over(self) -> bool:
@@ -100,12 +105,12 @@ class MUDGame:
             else:
                 self.show_options('battle')
                 battle_option = self.prompt_player()
-                if battle_option == "1":
+                if battle_option == '1':
                     #attack
                     damage = self.steve.get_attack()
                     creature.take_damage(damage)
                     print(f"{creature.get_name()} now has {creature.get_health()} HP")
-                elif battle_option == "2":
+                elif battle_option == '2':
                     #heal
                     heal_option = None
                     n = 0
@@ -259,6 +264,7 @@ class MUDGame:
                                 available_dir.append(dir)
                                 random_dir = random.choice(available_dir)
                         self.maze.move_steve(random_dir)
+                        print('You have successfully ran away!')
                         continue
                     else:
                         print("Too late to escape!")
@@ -269,8 +275,10 @@ class MUDGame:
                 print('No creature found in this room.')
 
 
-            # item is found in the room, player can choose to pick up or not
+            # item is found in the room
             # item can be 'Armor', 'Food', 'Weapon'
+            # armor and weapon item will be automatically picked up
+            # player can choose to pick up food item or not
             if self.item_found():
                 x, y = self.maze.get_current_pos()
                 room = self.maze.lab[x][y]
@@ -280,7 +288,7 @@ class MUDGame:
                     print(f'You have found a stronger weapon! It deals {item.get_attack()} damage now!')
                 elif item.item_type == 'Armor':
                     self.steve.equip_armour(item)
-                    print(f'You have found a stronger armour! It now blocks {item.get_defence()} damage now!')
+                    print(f'You have found a stronger armor! It blocks {item.get_defence()} damage now!')
                 else:
                     print(f"You have found a {item.name}! \nDo you want to pick it up?")
                     self.show_options('item')
@@ -289,11 +297,13 @@ class MUDGame:
                         self.steve._add_item_to_inv(item, 1)
             else:
                 print('No item found in this room.')
-                
+
+            # move steve to the next room according to player's input, 30% chance of moving boss to adjacent room
             self.movesteve()
             if random.randint(1, 100) <= 30:
                 self.moveboss() 
-                # update
+
+        # game end interface
         if self.steve.isdead():
             self.show_losescreen()
         else:
