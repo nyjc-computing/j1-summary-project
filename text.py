@@ -1,6 +1,6 @@
 divider = "====================================================="
 
-intro = """Welcome to Valorant.
+intro = f"""Welcome to Valorant.
         
 Your team all got killed by the Ranked Demon Reyna on the enemy team, 
 you need to clutch. 
@@ -15,9 +15,9 @@ You also have an agent ability, which will hopefully give you an edge over this 
 
 Remember, CLUTCH OR GAE!!
 
-====================================================="""
+{divider}"""
 
-agent = """CHOOSE YOUR AGENT:
+agent = f"""CHOOSE YOUR AGENT:
  
 [1] Jett: Dash into an adjacent room if you would otherwise die (does not refresh)
     
@@ -26,4 +26,4 @@ agent = """CHOOSE YOUR AGENT:
 [3] Omen: Move to any room on the map (cooldown: 5 turns)
     
 [4] Sage: Block a path from your current room to an adjacent one permanently (cooldown: 3 turns)
-====================================================="""
+{divider}"""
