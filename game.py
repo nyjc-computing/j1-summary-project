@@ -55,6 +55,7 @@ class Game:
     - end_game(self) -> None
     - win(self, weapon) -> None
     - die(self) -> None
+    - meow(self) -> None
     """
     
     def __init__(self) -> None:
@@ -74,9 +75,13 @@ class Game:
         decision = input('Do you wish to enter the school? ( yes / no ): ')
         
         if decision.lower() == "yes":
-            self.character.set_name(input('\nTarnished, key in your name: '))
-            print("\nYou boldly opened the front gates of the school and made your way into the first room")
-            time.sleep(1)
+            name = input('\nTarnished, key in your name: ')
+            self.character.set_name(name)
+            if name == "meow":
+                self.meow()
+            else:
+                print("\nYou boldly opened the front gates of the school and made your way into the first room")
+                time.sleep(1)
         elif decision.lower() == "no":
             print("\nDue to your utter cowardice, voldemort continued gaining power, spreading his control and chaos all over the world, leading to the complete annihlation of the human race")
             self.end = True
@@ -245,7 +250,6 @@ class Game:
                 user.set_health_flask(1)
                 self.set_loot(None)
     
-<<<<<<< HEAD
             elif loot.get_name() == "Flask of Cerulean Tears":
                 print(f"\nYou found a {loot.get_name()}, a powerful flask")
                 time.sleep(1)
@@ -792,7 +796,7 @@ class Game:
     def die(self) -> None:
         self.end_game()
         self.end = True
-=======
+
     def use_item(self):
         # change available items when needed
         available_items = ['weapon', 'potion']
@@ -845,4 +849,15 @@ class Game:
                 continue
             return int(choice)
             
->>>>>>> 1231531 (lazy)
+
+    def meow(self) -> None:
+        print("\nWelcome chosen one, the Gods smile upon you and have rained down their blessing")
+        time.sleep(1)
+        self.character.set_health(999)
+        self.character.set_max_health(999)
+        self.character.set_mana(999)
+        self.character.set_max_mana(999)
+        self.character.set_attack(999)
+        self.character.set_defence(999)
+        self.character.set_health_flask(999)
+        self.character.set_mana_flask(999)
