@@ -29,7 +29,7 @@ class MUDGame:
         
         for player in ['Player 1', 'Player 2', 'Player 3', 'Player 4']:
             character = data.choose_character()
-            valid_character_list = ['freddy', 'chica', 'bonnie', 'foxy', 'skip']
+            valid_character_list = ['freddy', 'chica', 'bonnie', 'foxy', 'skip', '1', '2', '3', '4']
             if player == 'Player 1':
                 valid_character_list.remove('skip')
             while character not in valid_character_list:
@@ -38,16 +38,16 @@ class MUDGame:
                 )
                 character = data.choose_character()
                 print('')
-            if character == 'freddy':
+            if character == 'freddy' or character == '1':
                 self.set_player(player, data.Freddy())
                 print(f'{player} has selected Freddy Fazbear.')
-            elif character == 'bonnie':
+            elif character == 'bonnie' or character == '2':
                 self.set_player(player, data.Bonnie())
                 print(f'{player} has selected Bonnie.')
-            elif character == 'chica':
+            elif character == 'chica' or character == '3':
                 self.set_player(player, data.Chica())
                 print(f'{player} has selected Chica.')
-            elif character == 'foxy':
+            elif character == 'foxy' or character == '4':
                 self.set_player(player, data.Foxy())
                 print(f'{player} has selected Foxy.')
             elif character == 'skip':
