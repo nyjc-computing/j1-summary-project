@@ -268,7 +268,7 @@ class MUDGame:
 
 
             # item is found in the room, player can choose to pick up or not
-            # 'Armor' 'Food' 'Weapon'
+            # item can be 'Armor', 'Food', 'Weapon'
             if self.item_found():
                 x, y = self.maze.get_current_pos()
                 room = self.maze.lab[x][y]
@@ -283,7 +283,7 @@ class MUDGame:
                     print(f"You have found a {item.name}! \nDo you want to pick it up?")
                     self.show_options('item')
                     item_choice = self.prompt_player()
-                    if item_choice == 1:
+                    if item_choice == '1':
                         self.steve._add_item_to_inv(item)
             else:
                 print('No item found in this room.')
