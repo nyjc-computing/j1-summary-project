@@ -1,3 +1,4 @@
+#importing from other files
 from enemy import *
 from weapon import *
 from armour import *
@@ -6,39 +7,49 @@ from item import *
 
 class Room:
     """
-    creates the room weapon and enemy
+    The parent class for a room
 
-    Attribute
-    ---------
-    + name: str
+    Attributes
+    ----------
+    - name : str
       Name of the room
-    + enemy: str
-      Instance of the enemy in the room
-    + right: str
-      Instance of the room right of the current room
-    + left: str
-      Instance of the room left of the current room
-    + up: str
-      Instance of the room upwards of the current room
-    + down: str
-      Instance of the room downwards of the current room
-    + been_here: bool
-      Status of wether the character has been to this room
-    + discription: str
+    - enemy : Enemy
+      The enemy that is in the room
+    - description : str
       Description of the room
-    - is_fighting: bool
-      Status of wether the character is fighting in this room
+    - left : Room
+      The room on the left
+    - right : Room
+      The room on the right
+    - forward : Room
+      The room in front
+    - back : Room
+      The room to the back
+    - been_here : bool
+      True if the player has entered the room before, False otherwise
+    - loot : Item
+      The loot that can be found in the room
 
-    Method
-    ------
-    + set_been_here()
-    + get_been_here(self, been_here : bool) -> bool
+    Methods
+    -------
+    + set_been_here(self, status: bool) -> None
+    + get_been_here(self) -> bool
     + link_left(self, room : Room) -> None
-    + link_right(): updates the room to the right of the home room(self.name)
-    + link_up(): updates the room to the up of the home room(self.name)
-    + link_down(): updates the room to the down of the home room(self.name)
-    + set_is_fighting: updates the status of the character in the room
-    + get_is_fighting: gets the status of the character in the room
+    + get_left(self) -> Room
+    + link_right(self, room : Room) -> None
+    + get_right(self) -> Room
+    + link_forward(self, room : Room) -> None
+    + get_forward(self) -> Room
+    + link_back(self, room : Room) -> None
+    + get_back(self) -> Room
+    + set_enemy(self, enemy : Enemy) -> None
+    + get_enemy(self) -> Enemy
+    + set_name(self, name : str) -> None
+    + get_name(self) -> str
+    + set_description(self, description : str) -> None
+    + get_description(self) -> str
+    + set_loot(self, loot : Item) -> None
+    + get_loot(self) -> Item
     """
    
     def __init__(self):
@@ -53,68 +64,84 @@ class Room:
         self.loot = None
 
     def set_been_here(self, status: bool) -> None:
-        """updates been_here status of the room"""
+        """updates the status of whether the character has been to this room"""
         self.been_here = status
         
     def get_been_here(self) -> bool:
         """gets the status of whether the character has been to this room"""
         return self.been_here
     
-    def link_left(self, room: Room) -> None:
+    def link_left(self, room) -> None:
         """updates the room to the left of the home room(self.name)"""
         temp = room
         temp.right = self
         self.left = temp
 
     def get_left(self):
+        """gets the room to the left of the home room(self.name)"""
         return self.left
 
-    def link_right(self, room):
+    def link_right(self, room) -> None:
+        """updates the room to the right of the home room(self.name)"""
         temp = room
         temp.left = self
         self.right = temp
 
     def get_right(self):
+        """gets the room to the right of the home room(self.name)"""
         return self.right
 
-    def link_forward(self, room):
+    def link_forward(self, room) -> None:
+        """updates the room to the up of the home room(self.name)"""
         temp = room
         temp.back = self
         self.forward = temp
 
     def get_forward(self):
+        """gets the room to the up of the home room(self.name)"""
+        
         return self.forward
 
-    def link_back(self, room):
+    def link_back(self, room) -> None:
+        """updates the room to the down of the home room(self.name)"""
         temp = room
         temp.forward = self
         self.back = temp
 
     def get_back(self):
+        """gets the room to the down of the home room(self.name)"""
         return self.back
 
-    def set_enemy(self, enemy):
+    def set_enemy(self, enemy : Enemy) -> None:
+        """updates the enemy of the room"""
         self.enemy = enemy
 
-    def get_enemy(self):
+    def get_enemy(self) -> Enemy:
+        """gets the enemy of the room"""
         return self.enemy
 
-    def set_name(self, name):
+    def set_name(self, name : str) -> None:
+        """updates the name of the room"""
         self.name = name
         
-    def get_name(self):
+    def get_name(self) -> str:
+        """gets the name of the room"""
         return self.name
 
-    def set_description(self, description):
+    def set_description(self, description : str) -> None:
+        """updates the description of the room"""
         self.description = description
 
-    def get_description(self):
+    def get_description(self) -> str:
+        """gets the description of the room"""
         return self.description
 
-    def set_loot(self, loot):
+    def set_loot(self, loot : Item) -> None:
+        """updates the loot of the room"""
         self.loot = loot
 
-    def get_loot(self):
+    def get_loot(self) -> Item:
+        """gets the loot of the room"""
         return self.loot
         
 class Dirtmouth(Room):
@@ -316,7 +343,7 @@ class TheEndDimension(Room):
         self.set_enemy(TheEnderDragon())
         self.set_name("The End Dimension")
         self.set_description("You stepped into a dark, space-like dimension consisting of separate islands in the void, made out of end stone. It is inhabited by endermen and shulkers.")
-        self.link_forward(PrincipalsOffice())
+        self.link_forward(TheShriekingShack())
         self.set_loot(FlaskOfCrimsonTears())
 
 class Kamurocho(Room):
@@ -384,7 +411,7 @@ class Ascent(Room):
         self.link_left(SixthCircleOfHell())
         self.set_loot(FlaskOfCeruleanTears())
 
-class PrincipalsOffice(Room):
+class TheShriekingShack(Room):
     """
     A room that inherits from the Room class
     """
@@ -392,8 +419,8 @@ class PrincipalsOffice(Room):
     def __init__(self):
         super().__init__()
         self.set_enemy(Voldemort())
-        self.set_name("Principal's Office")
-        self.set_description("You step into a chamber where disciplinary matters are addressed by the headmaster or headmistress. It is an imposing and somber room, with a large wooden desk and portraits of previous headmasters lining the walls, serving as a place of both judgment and guidance for students.")
+        self.set_name("The Shrieking Shack")
+        self.set_description("You step into a notorious and allegedly haunted building near Hogwarts School, known for its eerie and unsettling reputation as the most haunted building in Britain")
         self.set_loot(FlaskOfCrimsonTears())
 
 class SixthCircleOfHell(Room):
