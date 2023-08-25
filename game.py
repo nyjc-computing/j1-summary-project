@@ -100,12 +100,12 @@ class MUDGame:
             else:
                 self.show_options('battle')
                 battle_option = self.prompt_player()
-                if battle_option == 1:
+                if battle_option == "1":
                     #attack
                     damage = self.steve.get_attack()
                     creature.take_damage(damage)
                     print(f"{creature.get_name()} now has {creature.get_health()} HP")
-                elif battle_option == 2:
+                elif battle_option == "2":
                     #heal
                     heal_option = None
                     n = 0
@@ -278,7 +278,7 @@ class MUDGame:
                 if item.item_type == 'Weapon':
                     self.steve.equip_weapon(item)
                     print(f'You have found a stronger weapon! It deals {item.get_attack()} damage now!')
-                elif item.item_type == 'Armour':
+                elif item.item_type == 'Armor':
                     self.steve.equip_armour(item)
                     print(f'You have found a stronger armour! It now blocks {item.get_defence()} damage now!')
                 else:
@@ -286,7 +286,7 @@ class MUDGame:
                     self.show_options('item')
                     item_choice = self.prompt_player()
                     if item_choice == '1':
-                        self.steve._add_item_to_inv(item)
+                        self.steve._add_item_to_inv(item, 1)
             else:
                 print('No item found in this room.')
                 
