@@ -731,10 +731,10 @@ class Game:
                 time.sleep(1)
                 
     def display_room_name(self) -> None:
-        print(".")
+        print("\n=========================")
         space = " "*int((25-len(self.room.get_name()))/2)
         print(f"{space}{self.room.get_name()}{space}")
-        print(".")
+        print("=========================")
         time.sleep(1)
 
     def display_room_description(self) -> None:
