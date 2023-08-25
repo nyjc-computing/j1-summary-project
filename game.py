@@ -132,10 +132,11 @@ class MUDGame:
         return True
 
     def show_winscreen(self):
-        print('Congratulations! \nYou have escaped!')
+        print('Congratulations! \nYou have won!')
 
     def show_losescreen(self):
-        print("YOU DIED...")
+        print("YOU DIED!")
+        print(f"Score: {random.randint(0, 100000)}")
 
     def movesteve(self):
         current_location = self.maze.get_current_pos()
