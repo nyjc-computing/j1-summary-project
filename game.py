@@ -171,7 +171,7 @@ class MUDGame:
         """
         Show losescreen when Steve dies."""
         print("YOU DIED...")
-        print(f"Score: {randint(0, 10000)}")
+        print(f"Score: {random.randint(0, 10000)}")
 
     def movesteve(self):
         """
