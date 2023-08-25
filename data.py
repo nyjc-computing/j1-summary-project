@@ -605,7 +605,7 @@ class Room:
             raise ValueError("Direction passed is not of the right value")
     
     def set_creature_None(self) -> None:
-        """When the creature is killed"""
+        """When the creature is killed, removes the creature from the room."""
         self.creature = None
     
     def set_connected_True(self) -> None:
@@ -621,7 +621,7 @@ class Room:
         return self.item
 
     def set_creature(self, creature: "Creature") -> None:
-        """setter method for """
+        """setter method for creature; might not need it"""
         if self.creature is not None:
             return None
         self.creature = creature
@@ -884,11 +884,13 @@ class Steve:
         return self.base_damage + self.weapon.get_attack()
 
     def isdead(self) -> bool:
+        """Tells whether Steve is dead or not. Returns True if yes, else False."""
         if self.health <= 0:
             return True
         return False
 
     def take_damage(self, damage):
+        """Updates hitpoints attribute based on how much damage is dealt."""
         damage = int(damage * ((100 - self.get_defence())/100))
         self.hitpoints = max(0, self.hitpoints - damage)
         
@@ -918,23 +920,33 @@ class Creature:
         return maxhp
 
     def get_name(self) -> None:
+        """Returns the name of the creature"""
         return self.name
         
     def _generate_attack(self, attack: int, turn_number: int) -> None:
+        """"""
         attack = int((attack) * ((turn_number / 10) + 1) * (random.randint(90, 110) / 100))
         return attack
         
     def get_attack(self):
-        """Might not need this"""
+        """Getter for attack attribute.
+        Might not need this"""
         return self.attack
 
     def get_health(self):
+        """Getter for hitpoints attribute"""
         return self.hitpoints
 
-    def take_damage(self, damage: int):
+    def take_damage(self, damage: int) -> None:
+        """Updates health based on the damage the creature suffered"""
         self.hitpoints = max(0, self.hitpoints - damage)
 
     def random_move(self) -> int:
+        """Chooses randomly from the following attack moves that the creature can make:
+        
+        1. normal attack
+        
+        """
         return self.get_attack()
       
 class Creeper(Creature):
@@ -947,17 +959,18 @@ class Creeper(Creature):
         print("KABOOOOOMMMMM THE CREEPER EXPLODEDDDDD!!!!!!")
         self.hitpoints = 0
         if inp.upper() == random_letter and time.time() - start_time <= 1.8:
-            print("Luckily, your quick reactions allowed you to avoid the explosion. You took no damage.")
+            print("\nLuckily, your quick reactions allowed you to avoid the explosion. You took no damage.")
             return 0
         elif inp.upper() != random_letter:
-            print("Oh no! You took the wrong action and got caught in the blast!")
+            print("\nOh no! You took the wrong action and got caught in the blast!")
         elif (time.time() - start_time) > 1.8:
-            print("Oh no! You were too slow and got caught in the blast!")
+            print("\nOh no! You were too slow and got caught in the blast!")
         attack = int((attack) * ((turn_number / 10) + 1) * (random.randint(90, 110) / 100))
         print(f"You took {attack} damage.")
         return attack
 
     def isdead(self) -> bool:
+        "returns True if the creeper is dead. returns False otherwise."
         return self.hitpoints <= 0
 
 class Boss(Creature):
