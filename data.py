@@ -101,10 +101,12 @@ def display_inventory():
         print("You don't have any items currently.")
     else:
         for item in player_inventory:
-            name = item['name']
-            description = item['description']
-            effect = item['effect']
-            consumable = item['consumable']
+            for x in all_items:
+                if x['name'] == item:
+                    name = x['name']
+                    description = item['description']
+                    effect = item['effect']
+                    consumable = item['consumable']
             print(f'Item : {name}  /\t Description : {description}  /\t Effect : {effect}  /\t Consumable : {consumable}')
     print('--------------------------------------------------------')
         
