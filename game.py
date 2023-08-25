@@ -28,28 +28,23 @@ class MUDGame:
         data.start_menu()
         
         for player in ['Player 1', 'Player 2', 'Player 3', 'Player 4']:
-            character = data.choose_character()
-            valid_character_list = ['freddy', 'chica', 'bonnie', 'foxy', 'skip', '1', '2', '3', '4']
+            character = data.choose_character(player)
+            valid_character_list = ['freddy', 'freddy fazbear', 'chica', 'bonnie', 'foxy', 'skip']
             if player == 'Player 1':
                 valid_character_list.remove('skip')
             while character not in valid_character_list:
                 print(
                     f"Please select a valid animatronic or finish party by entering 'skip'. Got {character}.\n"
                 )
-                character = data.choose_character()
-                print('')
-            if character == 'freddy' or character == '1':
+                character = data.choose_character(player)
+            if character == 'freddy' or character == 'freddy fazbear':
                 self.set_player(player, data.Freddy())
-                print(f'{player} has selected Freddy Fazbear.')
-            elif character == 'bonnie' or character == '2':
+            elif character == 'bonnie':
                 self.set_player(player, data.Bonnie())
-                print(f'{player} has selected Bonnie.')
-            elif character == 'chica' or character == '3':
+            elif character == 'chica':
                 self.set_player(player, data.Chica())
-                print(f'{player} has selected Chica.')
-            elif character == 'foxy' or character == '4':
+            elif character == 'foxy':
                 self.set_player(player, data.Foxy())
-                print(f'{player} has selected Foxy.')
             elif character == 'skip':
                 break
         print('The game will begin.\n')
@@ -61,7 +56,6 @@ class MUDGame:
                 while move not in ['w', 'a', 's', 'd', 'inventory']:
                     print(f"Type w, a, s or d or 'inventory'. Got {move}.\n")
                     move = self.current_room.grid.prompt_movement()
-                print('')
                 #Opening inventory
                 if move == 'inventory':
                     data.display_inventory()
@@ -115,11 +109,11 @@ class MUDGame:
                 #Picking up items
                 if self.current_room.grid.is_item():
                     item = self.current_room.grid.get_item()
-                    print(f'You obtained {item}.')
-                    self.player1.add_item(item)
-                    self.current_room.grid.remove_item()
+                    data.add_item(item)
+                    self.current_room.grid.clear_tile()
             #Combat Start
             elif self.current_room.grid.is_encounter():
+                self.current_room.display_room()
                 print('Battle started.\n')
                 #Determine turn order
                 player_list = [
@@ -157,6 +151,7 @@ class MUDGame:
                         if active_character.has_status('Corrupted'):
                             target = random.choice(turn_order)
                         active_character.attack(target)
+                        target = None
                     elif active_character in player_list:
                         action = active_character.prompt_action()
                         while action not in ['attack', 'target', 'stats', 'item', '1', '2' ,'3', '4']:

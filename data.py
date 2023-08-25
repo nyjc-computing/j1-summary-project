@@ -93,7 +93,7 @@ def get_inventory():
 
 def add_item(item):
     player_inventory.append(item)
-    print(f'{item} has been added to inventory!')
+    print(f'You obtained {item}.\n')
 
 def display_inventory():
     print("Inventory:")
@@ -106,6 +106,8 @@ def display_inventory():
             effect = item['effect']
             consumable = item['consumable']
             print(f'Item : {name}  /\t Description : {description}  /\t Effect : {effect}  /\t Consumable : {consumable}')
+    print('--------------------------------------------------------')
+        
 
 #Converting to json
 
@@ -294,6 +296,7 @@ class Grid:
         '''
         print("Type 'wasd' to move, open the inventory by typing 'inventory'")
         action = input('Type an action: ')
+        print('--------------------------------------------------------')
         return action.lower()
         
     def move(self, position : list):
@@ -334,7 +337,7 @@ class Grid:
         '''
         return self.grid[self.get_position()[0]][self.get_position()[1]]['item']['name']
         
-    def claer_tile(self):
+    def clear_tile(self):
         '''
         After a defeating a creature or picking up an item, remove it from the grid
         '''
@@ -349,6 +352,7 @@ def start_menu():
     while choice.lower() != 'start':
         print("To begin the game, enter 'start'.")
         choice = input("Type 'Start' to begin: ")
+    print('--------------------------------------------------------')
 
     
 def info(cr):
@@ -392,25 +396,35 @@ def info(cr):
         print("3. Death Grip : Deal massive damage to a single target and heal health.")
         print('--------------------------------------------------------')
     
-def choose_character():
+def choose_character(player):
     print('Characters:')
     print('1. Freddy Fazbear')
     print('2. Bonnie')
     print('3. Chica')
     print('4. Foxy')
-    cr = input("Please select your character or enter 'skip' if you are ready to start the game: ")
+    cr = input(f"{player}, please select your character or enter 'skip' if you are ready to start the game: ")
+    print('--------------------------------------------------------')
     cr = cr.lower()
     if cr == 'skip':
         return cr
     info(cr)
-    print('')
     is_select = input('Select ' + cr.capitalize() + ' as your character? Y/N: ')
     while is_select not in ['y', 'n']:
         is_select = is_select.lower()
         print("Enter 'y' or 'n' to proceed.")
         is_select = input('Select ' + cr.capitalize() + ' as your character? Y/N: ')
-    if input == 'n':
-        return choose_character()
+    if is_select == 'y':
+        if cr == 'freddy' or cr == 'freddy fazbear':
+            print(f'{player} has selected Freddy Fazbear.')
+        elif cr == 'bonnie':
+            print(f'{player} has selected Bonnie.')
+        elif cr == 'chica':
+            print(f'{player} has selected Chica.')
+        elif cr == 'foxy':
+            print(f'{player} has selected Foxy.')
+        print('--------------------------------------------------------')
+    if is_select == 'n':
+        return choose_character(player)
     return cr
 
 
@@ -483,8 +497,8 @@ class GB:
                 
     def remove_status(self):
         for st in self.status:
-            st['counter'] -= 1
-            if st['counter'] == 0:
+            st['count'] -= 1
+            if st['count'] == 0:
                 name = st['name']
                 print(f'{self.name} is no longer {name}!')
                 self.status.remove(st)
@@ -558,8 +572,8 @@ class BB:
                 
     def remove_status(self):
         for st in self.status:
-            st['counter'] -= 1
-            if st['counter'] == 0:
+            st['count'] -= 1
+            if st['count'] == 0:
                 name = st['name']
                 print(f'{self.name} is no longer {name}!')
                 self.status.remove(st)
@@ -633,8 +647,8 @@ class Springtrap:
                 
     def remove_status(self):
         for st in self.status:
-            st['counter'] -= 1
-            if st['counter'] == 0:
+            st['count'] -= 1
+            if st['count'] == 0:
                 name = st['name']
                 print(f'{self.name} is no longer {name}!')
                 self.status.remove(st)
@@ -726,8 +740,8 @@ class Glitchtrap:
                 
     def remove_status(self):
         for st in self.status:
-            st['counter'] -= 1
-            if st['counter'] == 0:
+            st['count'] -= 1
+            if st['count'] == 0:
                 name = st['name']
                 print(f'{self.name} is no longer {name}!')
                 self.status.remove(st)
@@ -928,7 +942,7 @@ class Freddy:
         if atk == '2':
             print(f'Freddy used Sing on {target.name}!')
             if accuracy(40, self, target) == True:
-                target.add_status('Sleeping')
+                target.add_status('Sleeping', 2)
             else:
                 print('The attack missed!')
         if atk == '3':
@@ -957,8 +971,8 @@ class Freddy:
                 
     def remove_status(self):
         for st in self.status:
-            st['counter'] -= 1
-            if st['counter'] == 0:
+            st['count'] -= 1
+            if st['count'] == 0:
                 name = st['name']
                 print(f'{self.name} is no longer {name}!')
                 self.status.remove(st)
@@ -1138,8 +1152,8 @@ class Bonnie:
                 
     def remove_status(self):
         for st in self.status:
-            st['counter'] -= 1
-            if st['counter'] == 0:
+            st['count'] -= 1
+            if st['count'] == 0:
                 name = st['name']
                 print(f'{self.name} is no longer {name}!')
                 self.status.remove(st)
@@ -1319,8 +1333,8 @@ class Foxy:
                 
     def remove_status(self):
         for st in self.status:
-            st['counter'] -= 1
-            if st['counter'] == 0:
+            st['count'] -= 1
+            if st['count'] == 0:
                 name = st['name']
                 print(f'{self.name} is no longer {name}!')
                 self.status.remove(st)
