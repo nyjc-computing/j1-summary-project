@@ -343,7 +343,8 @@ class Game:
                     damage, weapon = self.get_attack(attacker, decision)
 
                     # Deal damage to enemy
-                    victim.set_health(victim.get_health() - (damage + attacker.get_attack()))
+                    damage += attacker.get_attack()
+                    victim.set_health(victim.get_health() - damage)
                     # Check if enemy died
                     if victim.get_health() > 0:
                         print(f"\n{attacker.get_name()}{weapon.get_move()}, dealing {damage} damage to {victim.get_name()}")
@@ -840,7 +841,7 @@ class Game:
             time.sleep(1)
         elif decision.lower() == "flask of cerulean tears":
             print("\n", end ="")
-            print(FlaskOfCecruleanTears().get_description())
+            print(FlaskOfCeruleanTears().get_description())
             time.sleep(1)
         else:
             print(f"You do not own {decision}")
