@@ -81,9 +81,9 @@ class Game:
         
         # Displays the introduction messages
         print('Welcome to Hogwarts School of Witchcraft and Wizardry')
-        time.sleep(1)
+        time.sleep(self.sleep)
         print("\nThe Dark Lord Voldemort has taken over Hogwarts and opened multiple interdimensional gates, bringing hordes of enemies into the school. Your job as the chosen one is to traverse the school in order to locate The Shrieking Shack and thwart Voldemort's evil plan to take over the world.\n")
-        time.sleep(2)
+        time.sleep(self.sleep)
 
         decision = input('Do you wish to enter the school? ( yes / no ): ')
         
@@ -191,15 +191,15 @@ class Game:
         if "Virtual Boo" in upgrades:
             if room.enemy != None:
                 print(f"\nIn the middle of the room is {room.enemy.name}, {room.enemy.description}")
-                time.sleep(1)
+                time.sleep(self.sleep)
                 print(f"\n{room.enemy.name} has {room.enemy.health} health")
-                time.sleep(1)
+                time.sleep(self.sleep)
             if room.loot != None:
                 print(f"\nThere is {room.loot.name} hidden in the {room.name}")
-                time.sleep(1)
+                time.sleep(self.sleep)
             else:
                 print(f"\nThere is no loot hidden in {room.name}")
-                time.sleep(1)
+                time.sleep(self.sleep)
             
         elif room.get_enemy() != None:
         # Displays the enemy in the room
@@ -226,8 +226,6 @@ class Game:
             else:
                 print(f"\nYou managed to sneak past {room.get_enemy().get_name()}")
                 time.sleep(self.sleep)
-
-        caught = False
 
         if not caught:
             if movement.lower() == "left":
@@ -396,13 +394,13 @@ class Game:
                             self.room.enemy = None
                             return
                         print(f"\n{victim.get_name()} dropped a {victim.loot.name}")
-                        time.sleep(1)
+                        time.sleep(self.sleep)
                         choice = input(f"\nDo you want to pick {victim.loot.name}? ( yes / no ): ")
                         if choice.lower() == "yes":
                             self.collect_loot(attacker, victim.loot)
-                            time.sleep(1)
+                            time.sleep(self.sleep)
                             print(f"\n{victim.loot.description}\n")
-                            time.sleep(1)
+                            time.sleep(self.sleep)
 
                         elif choice.lower() == "no":
                             print(f"\nYou left {victim.get_loot().get_name()} on the ground and allowed the resourceful rat to steal it")
@@ -951,13 +949,12 @@ class Game:
         elif loot.type == "accessory":
             attacker.set_accessories(loot)
             print(f"\nYou obtained a {loot.get_name()}, a powerful accessory")
-        
-        time.sleep(self.sleep)
 
         elif loot.type == "upgrade":
             attacker.upgrades.append(loot)
             print(f"\nYou obtained a {loot.name}, a powerful upgrade")
-            time.sleep(1)
+
+        time.sleep(self.sleep)
 
     def end_game(self) -> None:
         """displays scenario when user dies"""
@@ -1002,7 +999,7 @@ class Game:
     def meow(self) -> None:
         if self.room.secret == True:
             print("\nYou started communicating with the cat, leading you to discover a hidden passage\n")
-            time.sleep(1)
+            time.sleep(self.sleep)
             self.room.link_left(TheLastResort())
         else:
             choice = random.randint(1, 9)
@@ -1170,5 +1167,5 @@ class Game:
     def secret_room(self):
         print("\nAfter you successfully defeated the sentinels, a stray ginger tabby cat emerges from behind a wall and stares at you playfully\n")
         self.room.secret = True
-        time.sleep(1)
+        time.sleep(self.sleep)
 
