@@ -4,6 +4,7 @@ from weapon import *
 from accessory import *
 from spell import *
 from item import *
+from upgrade import *
 
 class Enemy:
     """
@@ -473,3 +474,30 @@ class Bowser(Enemy):
         self.set_attack(30)
         self.set_move("Koopa Army")
         self.set_loot(Cappy())
+
+class Sentinel(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
+    def __init__(self):
+        super().__init__()
+        self.set_name("Sentinels")
+        self.set_health(300)
+        self.set_description("formidable and relentless enforcers of the oppressive regime in Walled City 99. Clad in black, with masks obscuring their faces, they are known for their cold efficiency and unwavering loyalty to the city's rulers, striking fear into the hearts of those who dare to defy them")
+        self.set_attack(30)
+        self.set_move("Shocking Railgun")
+
+class KingBoo(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
+    def __init__(self):
+        super().__init__()
+        self.set_name("King Boo")
+        self.set_health(300)
+        self.set_description("formidable and relentless enforcers of the oppressive regime in Walled City 99. Clad in black, with masks obscuring their faces, they are known for their cold efficiency and unwavering loyalty to the city's rulers, striking fear into the hearts of those who dare to defy them")
+        self.set_attack(30)
+        self.set_move("Shocking Railgun")
+        self.set_loot(VirtualBoo())

@@ -184,9 +184,25 @@ class Game:
             print(f"Behind you is {room.get_back().get_name()}")
 
         time.sleep(self.sleep)
+        upgrades = []
+        for upgrade in self.character.upgrades:
+            upgrades.append(upgrade.name)
 
+        if "Virtual Boo" in upgrades:
+            if room.enemy != None:
+                print(f"\nIn the middle of the room is {room.enemy.name}, {room.enemy.description}")
+                time.sleep(1)
+                print(f"\n{room.enemy.name} has {room.enemy.health} health")
+                time.sleep(1)
+            if room.loot != None:
+                print(f"\nThere is {room.loot.name} hidden in the {room.name}")
+                time.sleep(1)
+            else:
+                print(f"\nThere is no loot hidden in {room.name}")
+                time.sleep(1)
+            
+        elif room.get_enemy() != None:
         # Displays the enemy in the room
-        if room.get_enemy() != None:
             print(f"\nIn the middle of the room is {room.get_enemy().get_name()}, {room.get_enemy().get_description()}")
 
         time.sleep(self.sleep)
@@ -210,6 +226,8 @@ class Game:
             else:
                 print(f"\nYou managed to sneak past {room.get_enemy().get_name()}")
                 time.sleep(self.sleep)
+
+        caught = False
 
         if not caught:
             if movement.lower() == "left":
@@ -273,6 +291,7 @@ class Game:
                 caught = True
             else:
                 print(f"\nBy some miracle you managed to loot the room without {self.room.get_enemy().get_name()} noticing")
+                
                 time.sleep(self.sleep)
 
         if not caught:
@@ -372,16 +391,18 @@ class Game:
                             return
                         print(f"\n{attacker.get_name()}{weapon.get_win_front()}{victim.get_name()}{weapon.get_win_back()}")
                         time.sleep(self.sleep)
-                        print(f"\n{victim.get_name()} dropped a {victim.get_loot().get_name()}")
-                        time.sleep(self.sleep)
-                        choice = input(f"\nDo you want to pick {victim.get_loot().get_name()}? ( yes / no ): ")
+                        if victim.get_name() == "Sentinels":
+                            self.secret_room()
+                            self.room.enemy = None
+                            return
+                        print(f"\n{victim.get_name()} dropped a {victim.loot.name}")
+                        time.sleep(1)
+                        choice = input(f"\nDo you want to pick {victim.loot.name}? ( yes / no ): ")
                         if choice.lower() == "yes":
-                            self.collect_loot(attacker, victim.get_loot())
-                            time.sleep(self.sleep)
-                            print()
-                            print(victim.get_loot().get_description())
-                            print()
-                            time.sleep(self.sleep)
+                            self.collect_loot(attacker, victim.loot)
+                            time.sleep(1)
+                            print(f"\n{victim.loot.description}\n")
+                            time.sleep(1)
 
                         elif choice.lower() == "no":
                             print(f"\nYou left {victim.get_loot().get_name()} on the ground and allowed the resourceful rat to steal it")
@@ -915,23 +936,28 @@ class Game:
 
     def collect_loot(self, attacker : Character, loot : Item) -> None:
         """sub method from attack() to collect loot of defeated monster"""
-        if loot.get_type() == "weapon":
+        if loot.type == "weapon":
             attacker.set_weapons(loot)
             print(f"\nYou obtained a {loot.get_name()}, a powerful weapon")
             
-        elif loot.get_type() == "spell":
+        elif loot.type == "spell":
             attacker.set_spells(loot)
             print(f"\nYou obtained a {loot.get_name()}, a powerful spell")
 
-        elif loot.get_type() == "armour":
+        elif loot.type == "armour":
             attacker.set_armours(loot)
             print(f"\nYou obtained a {loot.get_name()}, a powerful armour")
 
-        elif loot.get_type() == "accessory":
+        elif loot.type == "accessory":
             attacker.set_accessories(loot)
             print(f"\nYou obtained a {loot.get_name()}, a powerful accessory")
         
         time.sleep(self.sleep)
+
+        elif loot.type == "upgrade":
+            attacker.upgrades.append(loot)
+            print(f"\nYou obtained a {loot.name}, a powerful upgrade")
+            time.sleep(1)
 
     def end_game(self) -> None:
         """displays scenario when user dies"""
@@ -974,98 +1000,95 @@ class Game:
         self.character.set_mana_flask(997)
 
     def meow(self) -> None:
-        choice = random.randint(1, 10)
-        if choice == 1:
-            print("""  
-  __  __  U _____ u U  ___ u             
-U|' \/ '|u\| ___"|/  \/"_ \/__        __ 
-\| |\/| |/ |  _|"    | | | |\"\      /"/ 
- | |  | |  | |___.-,_| |_| |/\ \ /\ / /\ 
- |_|  |_|  |_____|\_)-\___/U  \ V  V /  U
-<<,-,,-.   <<   >>     \\  .-,_\ /\ /_,-.
- (./  \.) (__) (__)   (__)  \_)-'  '-(_/ """)
-        elif choice == 2:
-            print("""                                
-   ____ ___  ___  ____ _      __
-  / __ `__ \/ _ \/ __ \ | /| / /
- / / / / / /  __/ /_/ / |/ |/ / 
-/_/ /_/ /_/\___/\____/|__/|__/  
-                                """)
-        elif choice == 3:
-            print(""" 
- .----------------.  .----------------.  .----------------.  .----------------. 
-| .--------------. || .--------------. || .--------------. || .--------------. |
-| | ____    ____ | || |  _________   | || |     ____     | || | _____  _____ | |
-| ||_   \  /   _|| || | |_   ___  |  | || |   .'    `.   | || ||_   _||_   _|| |
-| |  |   \/   |  | || |   | |_  \_|  | || |  /  .--.  \  | || |  | | /\ | |  | |
-| |  | |\  /| |  | || |   |  _|  _   | || |  | |    | |  | || |  | |/  \| |  | |
-| | _| |_\/_| |_ | || |  _| |___/ |  | || |  \  `--'  /  | || |  |   /\   |  | |
-| ||_____||_____|| || | |_________|  | || |   `.____.'   | || |  |__/  \__|  | |
-| |              | || |              | || |              | || |              | |
-| '--------------' || '--------------' || '--------------' || '--------------' |
- '----------------'  '----------------'  '----------------'  '----------------' """)
-
-        elif choice == 4:
-            print("""                              
-                              
- _ __ ___   ___  _____      __
-| '_ ` _ \ / _ \/ _ \ \ /\ / /
-| | | | | |  __/ (_) \ V  V / 
-|_| |_| |_|\___|\___/ \_/\_/  
-                              
-                              """)
-
-        elif choice == 5:
-            print(""" 
- _  _  ____  __   _  _ 
-( \/ )(  __)/  \ / )( \
-/ \/ \ ) _)(  O )\ /\ /
-\_)(_/(____)\__/ (_/\_)""")
-
-        elif choice == 6:
-            print("""                              
- _ __ ___   ___  _____      __
-| '_ ` _ \ / _ \/ _ \ \ /\ / /
-| | | | | |  __/ (_) \ V  V / 
-|_| |_| |_|\___|\___/ \_/\_/  
-                              """)
-
-        elif choice == 7:
-            print("""                                    
-                                    
-,--,--,--. ,---.  ,---. ,--.   ,--. 
-|        || .-. :| .-. ||  |.'.|  | 
-|  |  |  |\   --.' '-' '|   .'.   | 
-`--`--`--' `----' `---' '--'   '--' 
-                                    """)
-
-        elif choice == 8:
-            print(""" 
- __    __     ______     ______     __     __    
-/\ "-./  \   /\  ___\   /\  __ \   /\ \  _ \ \   
-\ \ \-./\ \  \ \  __\   \ \ \/\ \  \ \ \/ ".\ \  
- \ \_\ \ \_\  \ \_____\  \ \_____\  \ \__/".~\_\ 
-  \/_/  \/_/   \/_____/   \/_____/   \/_/   \/_/ 
-                                                 """)
-
-        elif choice == 9:
-            print("""                                        
+        if self.room.secret == True:
+            print("\nYou started communicating with the cat, leading you to discover a hidden passage\n")
+            time.sleep(1)
+            self.room.link_left(TheLastResort())
+        else:
+            choice = random.randint(1, 9)
+            if choice == 1:
+                print("""  
+                
+      __  __  U _____ u U  ___ u             
+    U|' \/ '|u\| ___"|/  \/"_ \/__        __ 
+    \| |\/| |/ |  _|"    | | | |\"\      /"/ 
+     | |  | |  | |___.-,_| |_| |/\ \ /\ / /\ 
+     |_|  |_|  |_____|\_)-\___/U  \ V  V /  U
+    <<,-,,-.   <<   >>     \\  .-,_\ /\ /_,-.
+     (./  \.) (__) (__)   (__)  \_)-'  '-(_/ 
+                                            """)
+            elif choice == 2:
+                print("""       
+                
+       ____ ___  ___  ____ _      __
+      / __ `__ \/ _ \/ __ \ | /| / /
+     / / / / / /  __/ /_/ / |/ |/ / 
+    /_/ /_/ /_/\___/\____/|__/|__/  
+                                   """)
+    
+            elif choice == 3:
+                print("""                              
+                                  
+     _ __ ___   ___  _____      __
+    | '_ ` _ \ / _ \/ _ \ \ /\ / /
+    | | | | | |  __/ (_) \ V  V / 
+    |_| |_| |_|\___|\___/ \_/\_/  
+                                  """)
+    
+            elif choice == 4:
+                print(""" 
+                
+     _  _  ____  __   _  _ 
+    ( \/ )(  __)/  \ / )( \
+    / \/ \ ) _)(  O )\ /\ /
+    \_)(_/(____)\__/ (_/\_)
+                            """)
+    
+            elif choice == 5:
+                print("""   
+                
+     _ __ ___   ___  _____      __
+    | '_ ` _ \ / _ \/ _ \ \ /\ / /
+    | | | | | |  __/ (_) \ V  V / 
+    |_| |_| |_|\___|\___/ \_/\_/  
+                                  """)
+    
+            elif choice == 6:
+                print("""                                    
                                         
- _ .--..--.  .---.   .--.   _   _   __  
-[ `.-. .-. |/ /__\\/ .'`\ \[ \ [ \ [  ] 
- | | | | | || \__.,| \__. | \ \/\ \/ /  
-[___||__||__]'.__.' '.__.'   \__/\__/   
+    ,--,--,--. ,---.  ,---. ,--.   ,--. 
+    |        || .-. :| .-. ||  |.'.|  | 
+    |  |  |  |\   --.' '-' '|   .'.   | 
+    `--`--`--' `----' `---' '--'   '--' 
                                         """)
-
-        elif choice == 10:
-            print(""" 
-_      _____ ____  _     
-/ \__/|/  __//  _ \/ \  /|
-| |\/|||  \  | / \|| |  ||
-| |  |||  /_ | \_/|| |/\||
-\_/  \|\____\\____/\_/  \|
-                          """)
-
+    
+            elif choice == 7:
+                print(""" 
+     __    __     ______     ______     __     __    
+    /\ "-./  \   /\  ___\   /\  __ \   /\ \  _ \ \   
+    \ \ \-./\ \  \ \  __\   \ \ \/\ \  \ \ \/ ".\ \  
+     \ \_\ \ \_\  \ \_____\  \ \_____\  \ \__/".~\_\ 
+      \/_/  \/_/   \/_____/   \/_____/   \/_/   \/_/ 
+                                                     """)
+    
+            elif choice == 8:
+                print("""                                        
+                                            
+     _ .--..--.  .---.   .--.   _   _   __  
+    [ `.-. .-. |/ /__\\/ .'`\ \[ \ [ \ [  ] 
+     | | | | | || \__.,| \__. | \ \/\ \/ /  
+    [___||__||__]'.__.' '.__.'   \__/\__/   
+                                            """)
+    
+            elif choice == 9:
+                print(""" 
+     _      _____ ____  _     
+    / \__/|/  __//  _ \/ \  /|
+    | |\/|||  \  | / \|| |  ||
+    | |  |||  /_ | \_/|| |/\||
+    \_/  \|\____\\____/\_/  \|
+                              """)
+          
     def settings(self) -> None:
         """Show and change settings"""
         settings = []
@@ -1143,3 +1166,9 @@ _      _____ ____  _
             self.sleep = int(new)
             return new
                 
+
+    def secret_room(self):
+        print("\nAfter you successfully defeated the sentinels, a stray ginger tabby cat emerges from behind a wall and stares at you playfully\n")
+        self.room.secret = True
+        time.sleep(1)
+
