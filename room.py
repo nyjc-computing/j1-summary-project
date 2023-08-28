@@ -4,6 +4,7 @@ from weapon import *
 from armour import *
 from spell import *
 from item import *
+from upgrade import *
 
 class Room:
     """
@@ -62,6 +63,9 @@ class Room:
         self.back = None
         self.been_here = False
         self.loot = None
+        self.x_coord = 0
+        self.y_coord = 0
+        self.secret = False
 
     def set_been_here(self, status: bool) -> None:
         """updates the status of whether the character has been to this room"""
@@ -143,6 +147,7 @@ class Room:
     def get_loot(self) -> Item:
         """gets the loot of the room"""
         return self.loot
+    
         
 class Dirtmouth(Room):
     """
@@ -305,6 +310,7 @@ class Commencement(Room):
         self.set_name("Commencement")
         self.set_description("You stepped into a large domain located above the shattered breach of Petrichor V's moon. It is ostensibly the desolated seat of Mithrix's power, made up of the shattered remains of four individual sections, emblematic of Mithrix and Providence's tools of creation")
         self.set_loot(FlaskOfCeruleanTears())
+        self.link_back(WalledCity99())
         
 
 class Midgar(Room):
@@ -317,7 +323,7 @@ class Midgar(Room):
         self.set_enemy(Sephiroth())
         self.set_name("Midgar")
         self.set_description("You stepped into the capital city and power base of the Shinra Electric Power Company in the world of Gaia. your memories of this metropolis are a tangled web of both longing and resentment, forever intertwined with your quest for justice and redemption.")
-        self.link_forward(TheForge())
+        self.link_left(TheForge())
         self.set_loot(FlaskOfCrimsonTears())
 
 class HyruleKingdom(Room):
@@ -495,4 +501,28 @@ class TheMushroomKingdom(Room):
         self.set_enemy(Bowser())
         self.set_name("The Mushroom Kingdom")
         self.set_description("You step into a colorful and enchanting land filled with lush forests, towering mountains, and cheerful inhabitants like Toads and Yoshis")
+        self.set_loot(FlaskOfCrimsonTears())
+
+class WalledCity99(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
+    def __init__(self):
+        super().__init__()
+        self.set_enemy(Sentinel())
+        self.set_name("Walled City 99")
+        self.set_description("You step into a dystopian urban enclave characterized by towering, impenetrable walls that isolate its inhabitants from the outside world. Within these walls, a dark and oppressive society unfolds, where the residents are tightly controlled and secrets hide in every shadow")
+        self.set_loot(FlaskOfCrimsonTears())
+
+class TheLastResort(Room):
+    """
+    A room that inherits from the Room class
+    """
+    
+    def __init__(self):
+        super().__init__()
+        self.set_enemy(KingBoo())
+        self.set_name("The Last Resort")
+        self.set_description("You step into a sprawling, haunted hotel. This ominous establishment is filled with ghostly inhabitants and puzzles, offering a chilling and atmospheric backdrop")
         self.set_loot(FlaskOfCrimsonTears())

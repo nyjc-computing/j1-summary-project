@@ -4,6 +4,7 @@ from weapon import *
 from accessory import *
 from spell import *
 from item import *
+from upgrade import *
 
 class Character:
     """
@@ -104,6 +105,7 @@ class Character:
         self.health_flask = 0
         self.mana_flask = 0
         self.items = []
+        self.upgrades = []
 
     def set_name(self, name : str) -> None:
         """updates the name of the character"""
