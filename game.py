@@ -4,6 +4,7 @@ import random
 
 #import from other files
 from setup import *
+import map
 
 class Game:
     """
@@ -68,9 +69,10 @@ class Game:
         self.room = temp[0]
         self.character = temp[1]
         self.rooms = []
-        self.actions = ["help", "look", "move", "loot", "flask", "attack", "equip", "status", "info", "die", "settings", "meow"]
-        self.description = ["Gets the list of possible actions", "Looks around the room","Move to another room", "Search the room for loot", "Drink your flasks", "Attack the enemny", "Change your equipment", "See your statistics", "Find out more about your items", "Ends the game", "Change settings", "Meow"]
+        self.actions = ["help", "look", "move", "loot", "flask", "attack", "equip", "status", "info", "die", "settings", "map", "meow"]
+        self.description = ["Gets the list of possible actions", "Looks around the room","Move to another room", "Search the room for loot", "Drink your flasks", "Attack the enemny", "Change your equipment", "See your statistics", "Find out more about your items", "Ends the game", "Change settings", "Shows map", "Meow"]
         self.teleportable = False
+        self.map = map.game_map()
         
         out = []
         with open("settings.txt", "r") as f:
@@ -120,6 +122,65 @@ class Game:
             # Displays a description of the room if the player has not been there before
             self.display_room_description()
             self.rooms.append(self.room)
+            
+            if self.room.name == "Dirtmouth":
+                self.map.dirtmouth_enter()
+            elif self.room.name == "Celestial Resort":
+                self.map.celestial_resort_enter()
+            elif self.room.name == "The Forge":
+                self.map.forge_enter()
+            elif self.room.name == "Stormveil Castle":
+                self.map.stormveil_enter()
+            elif self.room.name == "Aperture Lab":
+                self.map.aperture_enter()
+            elif self.room.name == "Zebes":
+                self.map.zebes_enter()
+            elif self.room.name == "Bunker":
+                self.map.bunker_enter()
+            elif self.room.name == "Asphodel":
+                self.map.asphodel_enter()
+            elif self.room.name == "Kingdom of Ku":
+                self.map.kingdom_ku_enter()
+            elif self.room.name == "Greenhill Zone":
+                self.map.greenhill_enter()
+            elif self.room.name == "The Hallow":
+                self.map.hallow_enter()
+            elif self.room.name == "Commencement":
+                self.map.commencement_enter()
+            elif self.room.name == "Midgar":
+                self.map.midgar_enter()
+            elif self.room.name == "Hyrule Kingdom":
+                self.map.hyrule_enter()
+            elif self.room.name == "The End Dimension":
+                self.map.end_dimension_enter()
+            elif self.room.name == "Kamurocho":
+                self.map.kamurocho_enter()
+            elif self.room.name == "Tower of Fate":
+                self.map.tower_enter()
+            elif self.room.name == "Shores of Nine":
+                self.map.shores_enter()
+            elif self.room.name == "Mementos":
+                self.map.mementos_enter()
+            elif self.room.name == "Ascent":
+                self.map.ascent_enter()
+            elif self.room.name == "The Shrieking Shack":
+                self.map.shrieking_enter()
+            elif self.room.name == "6th Circle of Hell":
+                self.map.sixth_circle_enter()
+            elif self.room.name == "Snowdin":
+                self.map.snowdin_enter()
+            elif self.room.name == "The Sealed Temple":
+                self.map.sealed_temple_enter()
+            elif self.room.name == "The Astral Plane":
+                self.map.astral_plane_enter()
+            elif self.room.name == "The Obra Dinn":
+                self.map.obradinn_enter()
+            elif self.room.name == "The Mushroom Kingdom":
+                self.map.mushroom_enter()
+            elif self.room.name == "Walled City 99":
+                self.map.walled_enter()
+            elif self.room.name == "The Last Resort":
+                self.map.last_resort_enter()
         
         decision = self.get_action()
 
@@ -163,6 +224,9 @@ class Game:
 
         elif self.teleportable == True and decision.lower() == "teleport":
             self.teleport()
+
+        elif decision.lower() == "map":
+            self.map.display()
         
     def help(self) -> None:
         """main action for user to get the list of possible actions"""

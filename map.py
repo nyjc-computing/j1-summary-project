@@ -17,6 +17,8 @@ class game_map:
         """
         for row in self.map:
             print("".join(row))
+        print(legend)
+        input("Press enter to exit")
 
     def make_room(self, y: int, x: int, name: str) -> None:
         """
