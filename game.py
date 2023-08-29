@@ -227,6 +227,66 @@ class Game:
 
         elif decision.lower() == "map":
             self.map.display()
+
+        if self.room.enemy == None and self.room.loot == None:
+            if self.room.name == "Dirtmouth":
+                self.map.dirtmouth_clear()
+            elif self.room.name == "Celestial Resort":
+                self.map.celestial_resort_clear()
+            elif self.room.name == "The Forge":
+                self.map.forge_clear()
+            elif self.room.name == "Stormveil Castle":
+                self.map.stormveil_clear()
+            elif self.room.name == "Aperture Lab":
+                self.map.aperture_clear()
+            elif self.room.name == "Zebes":
+                self.map.zebes_clear()
+            elif self.room.name == "Bunker":
+                self.map.bunker_clear()
+            elif self.room.name == "Asphodel":
+                self.map.asphodel_clear()
+            elif self.room.name == "Kingdom of Ku":
+                self.map.kingdom_ku_clear()
+            elif self.room.name == "Greenhill Zone":
+                self.map.greenhill_clear()
+            elif self.room.name == "The Hallow":
+                self.map.hallow_clear()
+            elif self.room.name == "Commencement":
+                self.map.commencement_clear()
+            elif self.room.name == "Midgar":
+                self.map.midgar_clear()
+            elif self.room.name == "Hyrule Kingdom":
+                self.map.hyrule_clear()
+            elif self.room.name == "The End Dimension":
+                self.map.end_dimension_clear()
+            elif self.room.name == "Kamurocho":
+                self.map.kamurocho_clear()
+            elif self.room.name == "Tower of Fate":
+                self.map.tower_clear()
+            elif self.room.name == "Shores of Nine":
+                self.map.shores_clear()
+            elif self.room.name == "Mementos":
+                self.map.mementos_clear()
+            elif self.room.name == "Ascent":
+                self.map.ascent_clear()
+            elif self.room.name == "The Shrieking Shack":
+                self.map.shrieking_clear()
+            elif self.room.name == "6th Circle of Hell":
+                self.map.sixth_circle_clear()
+            elif self.room.name == "Snowdin":
+                self.map.snowdin_clear()
+            elif self.room.name == "The Sealed Temple":
+                self.map.sealed_temple_clear()
+            elif self.room.name == "The Astral Plane":
+                self.map.astral_plane_clear()
+            elif self.room.name == "The Obra Dinn":
+                self.map.obradinn_clear()
+            elif self.room.name == "The Mushroom Kingdom":
+                self.map.mushroom_clear()
+            elif self.room.name == "Walled City 99":
+                self.map.walled_clear()
+            elif self.room.name == "The Last Resort":
+                self.map.last_resort_clear()
         
     def help(self) -> None:
         """main action for user to get the list of possible actions"""
@@ -353,7 +413,7 @@ class Game:
         # Generate a random number to see if you successfully loot the room whithout the enemy noticing
         caught = False
 
-        if self.user.name == "meow":
+        if self.character.name == "meow":
             chance = 1
         else:
             chance = random.randint(1, 3)
