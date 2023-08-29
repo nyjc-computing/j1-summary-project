@@ -42,7 +42,6 @@ class Room:
         self.back = None
         self.been_here = False
         self.loot = None
-        self.coord = 0
         self.secret = False
 
     def link_left(self, room):

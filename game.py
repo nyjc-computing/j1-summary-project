@@ -67,8 +67,10 @@ class Game:
         self.end = False
         self.room = temp[0]
         self.character = temp[1]
+        self.rooms = []
         self.actions = ["help", "look", "move", "loot", "flask", "attack", "equip", "status", "info", "die", "settings", "meow"]
-        self.description = ["Gets the list of possible actions", "Looks around the room","Move to another room", "Search the room for loot", "Drink your flasks", "Attack the enemny", "Change your equipment", "See your statistics", "Find out more about your items", "Ends the game", "Change settings", "meow"]
+        self.description = ["Gets the list of possible actions", "Looks around the room","Move to another room", "Search the room for loot", "Drink your flasks", "Attack the enemny", "Change your equipment", "See your statistics", "Find out more about your items", "Ends the game", "Change settings", "Meow"]
+        self.teleportable = False
         
         out = []
         with open("settings.txt", "r") as f:
@@ -117,6 +119,7 @@ class Game:
         if not self.room.been_here:
             # Displays a description of the room if the player has not been there before
             self.display_room_description()
+            self.rooms.append(self.room)
         
         decision = self.get_action()
 
@@ -157,6 +160,9 @@ class Game:
 
         elif decision.lower() == "settings":
             self.settings()
+
+        elif self.teleportable == True and decision.lower() == "teleport":
+            self.teleport()
         
     def help(self) -> None:
         """main action for user to get the list of possible actions"""
@@ -215,9 +221,13 @@ class Game:
             time.sleep(self.sleep)
 
         # Generate a random number to see if you managed to sneak past the enemy
-        chance = random.randint(1, 3)
         caught = False
-        
+
+        if self.character.name == "meow":
+            chance = 2
+        else:
+            chance = random.randint(1, 3)
+            
         if room.enemy != None:
             if chance == 1:
                 caught = True
@@ -277,8 +287,12 @@ class Game:
         """main action for user to search the room for loot"""
 
         # Generate a random number to see if you successfully loot the room whithout the enemy noticing
-        chance = random.randint(1, 3)
         caught = False
+
+        if self.user.name == "meow":
+            chance = 1
+        else:
+            chance = random.randint(1, 3)
 
         if self.room.enemy != None:
             if chance != 1:
@@ -912,7 +926,7 @@ class Game:
         decision = input("\nWhat do you wish to do? (type help for list of actions): ")
 
         # Validate the users decision
-        while decision not in self.actions:
+        while decision.lower() not in self.actions:
             print(f"\nYou do not have the physical and mental capability to {decision}")
             time.sleep(self.sleep)
             decision = input("\nWhat do you wish to do? (type help for list of actions): ")
@@ -940,6 +954,10 @@ class Game:
         elif loot.type == "upgrade":
             attacker.upgrades.append(loot)
             print(f"\nYou obtained a {loot.name}, a powerful upgrade")
+            if loot.name == "Portal Gun":
+                self.teleportable = True
+                self.actions.append("teleport")
+                self.description.append("Teleport to any room you have been to before")
 
         time.sleep(self.sleep)
 
@@ -985,6 +1003,14 @@ class Game:
 
     def meow(self) -> None:
         if self.room.secret == True:
+            print("""       
+                
+       ____ ___  ___  ____ _      __
+      / __ `__ \/ _ \/ __ \ | /| / /
+     / / / / / /  __/ /_/ / |/ |/ / 
+    /_/ /_/ /_/\___/\____/|__/|__/  
+                                   """)
+            time.sleep(self.sleep)
             print("\nYou started communicating with the cat, leading you to discover a hidden passage\n")
             time.sleep(self.sleep)
             self.room.link_left(TheLastResort())
@@ -1156,3 +1182,20 @@ class Game:
         self.room.secret = True
         time.sleep(self.sleep)
 
+    def teleport(self):
+        print("\nYou can teleport to: ")
+        rooms = []
+        for room in self.rooms:
+            print(f"- {room.name}")
+            rooms.append(room.name.lower())
+        time.sleep(self.sleep)
+
+        choice = input("\nWhich room do you want to teleport to?: ")
+        
+        if choice.lower() not in rooms:
+            print(f"\nYou tried teleporting to {choice} but ended up in a dark abyss\n")
+            time.sleep(self.sleep)
+
+        else:
+            self.room = self.rooms[rooms.index(choice.lower())]
+            
