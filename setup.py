@@ -16,14 +16,14 @@ def setup() -> [Room, Character]:
     character = Character()
 
     # Sets the default statistics of the character
-    character.set_spells(WingardiumLeviosa())
-    character.set_weapon(Wand())
-    character.set_weapons(character.get_weapon())
-    character.set_health(100)
-    character.set_max_health(100)
-    character.set_mana(50)
-    character.set_max_mana(100)
-    character.set_health_flask(2)
-    character.set_mana_flask(2)
+    character.spells.append(WingardiumLeviosa())
+    character.weapon = Wand()
+    character.weapons.append(character.weapon)
+    character.health = 100
+    character.max_health = 100
+    character.mana = 50
+    character.max_mana = 100
+    character.health_flask = 2
+    character.mana_flask = 2
     
     return [map, character]
