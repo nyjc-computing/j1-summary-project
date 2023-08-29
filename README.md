@@ -6,6 +6,8 @@
 - Ming Cong
 - Ling Kai
 - Jae Zen
+- Ethan Tse
+- Brydon
 
 ## Project Name
 

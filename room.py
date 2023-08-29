@@ -30,27 +30,6 @@ class Room:
       True if the player has entered the room before, False otherwise
     - loot : Item
       The loot that can be found in the room
-
-    Methods
-    -------
-    + set_been_here(self, status: bool) -> None
-    + get_been_here(self) -> bool
-    + link_left(self, room : Room) -> None
-    + get_left(self) -> Room
-    + link_right(self, room : Room) -> None
-    + get_right(self) -> Room
-    + link_forward(self, room : Room) -> None
-    + get_forward(self) -> Room
-    + link_back(self, room : Room) -> None
-    + get_back(self) -> Room
-    + set_enemy(self, enemy : Enemy) -> None
-    + get_enemy(self) -> Enemy
-    + set_name(self, name : str) -> None
-    + get_name(self) -> str
-    + set_description(self, description : str) -> None
-    + get_description(self) -> str
-    + set_loot(self, loot : Item) -> None
-    + get_loot(self) -> Item
     """
    
     def __init__(self):
@@ -63,91 +42,23 @@ class Room:
         self.back = None
         self.been_here = False
         self.loot = None
-        self.x_coord = 0
-        self.y_coord = 0
         self.secret = False
 
-    def set_been_here(self, status: bool) -> None:
-        """updates the status of whether the character has been to this room"""
-        self.been_here = status
-        
-    def get_been_here(self) -> bool:
-        """gets the status of whether the character has been to this room"""
-        return self.been_here
-    
-    def link_left(self, room : "Room") -> None:
-        """updates the room to the left of the home room(self.name)"""
-        temp = room
-        temp.right = self
-        self.left = temp
+    def link_left(self, room):
+        room.right = self
+        self.left = room
 
-    def get_left(self) -> "Room":
-        """gets the room to the left of the home room(self.name)"""
-        return self.left
+    def link_right(self, room):
+        room.left = self
+        self.right = room
 
-    def link_right(self, room : "Room") -> None:
-        """updates the room to the right of the home room(self.name)"""
-        temp = room
-        temp.left = self
-        self.right = temp
+    def link_forward(self, room):
+        room.back = self
+        self.forward = room
 
-    def get_right(self) -> "Room":
-        """gets the room to the right of the home room(self.name)"""
-        return self.right
-
-    def link_forward(self, room : "Room") -> None:
-        """updates the room to the up of the home room(self.name)"""
-        temp = room
-        temp.back = self
-        self.forward = temp
-
-    def get_forward(self) -> "Room":
-        """gets the room to the up of the home room(self.name)"""
-        
-        return self.forward
-
-    def link_back(self, room : "Room") -> None:
-        """updates the room to the down of the home room(self.name)"""
-        temp = room
-        temp.forward = self
-        self.back = temp
-
-    def get_back(self) -> "Room":
-        """gets the room to the down of the home room(self.name)"""
-        return self.back
-
-    def set_enemy(self, enemy : Enemy) -> None:
-        """updates the enemy of the room"""
-        self.enemy = enemy
-
-    def get_enemy(self) -> Enemy:
-        """gets the enemy of the room"""
-        return self.enemy
-
-    def set_name(self, name : str) -> None:
-        """updates the name of the room"""
-        self.name = name
-        
-    def get_name(self) -> str:
-        """gets the name of the room"""
-        return self.name
-
-    def set_description(self, description : str) -> None:
-        """updates the description of the room"""
-        self.description = description
-
-    def get_description(self) -> str:
-        """gets the description of the room"""
-        return self.description
-
-    def set_loot(self, loot : Item) -> None:
-        """updates the loot of the room"""
-        self.loot = loot
-
-    def get_loot(self) -> Item:
-        """gets the loot of the room"""
-        return self.loot
-    
+    def link_back(self, room):
+        room.forward = self
+        self.back = room
         
 class Dirtmouth(Room):
     """
@@ -156,13 +67,14 @@ class Dirtmouth(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(TheRadiance())
-        self.set_name("Dirtmouth")
-        self.set_description("You stepped into Dirtmouth, a haunting cliffside town in the depths of Hallownest, standing as a silent sentinel overlooking a dark and mysterious underground world. Its dilapidated buildings and eerie stillness set the tone for your perilous journey")
+        self.enemy = TheRadiance()
+        self.name = "Dirtmouth"
+        self.description = "You stepped into Dirtmouth, a haunting cliffside town in the depths of Hallownest, standing as a silent sentinel overlooking a dark and mysterious underground world. Its dilapidated buildings and eerie stillness set the tone for your perilous journey"
+        self.loot = FlaskOfCrimsonTears()
+        
         self.link_left(Midgar())
         self.link_right(HyruleKingdom())
         self.link_forward(TheEndDimension())
-        self.set_loot(FlaskOfCrimsonTears())
 
 class CelestialResort(Room):
     """
@@ -171,11 +83,12 @@ class CelestialResort(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(MrOshiro())
-        self.set_name("Celestial Resort")
-        self.set_description("You stepped into a towering sanctuary of serenity nestled amidst the treacherous slopes of Celeste Mountain, a paradoxical challenge and a refuge for your weary soul. Its elegant halls and perilous puzzles mirrored your personal journey, a delicate dance between inner turmoil and newfound strength.")
+        self.enemy = MrOshiro()
+        self.name = "Celestial Resort"
+        self.description = "You stepped into a towering sanctuary of serenity nestled amidst the treacherous slopes of Celeste Mountain, a paradoxical challenge and a refuge for your weary soul. Its elegant halls and perilous puzzles mirrored your personal journey, a delicate dance between inner turmoil and newfound strength."
+        self.loot = FlaskOfCeruleanTears()
+        
         self.link_back(Ascent())
-        self.set_loot(FlaskOfCeruleanTears())
 
 class TheForge(Room):
     """
@@ -184,11 +97,12 @@ class TheForge(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(TheHighDragun())
-        self.set_name("The Forge")
-        self.set_description("You stepped into a blistering hellscape deep within the Gungeon, a relentless crucible where you honed your combat skills to a razor's edge. Its molten rivers and infernal denizens pushed you to your limits, but you are determined to conquer it and uncover the ultimate weapon hidden within.")
+        self.enemy = TheHighDragun()
+        self.name = "The Forge"
+        self.description = "You stepped into a blistering hellscape deep within the Gungeon, a relentless crucible where you honed your combat skills to a razor's edge. Its molten rivers and infernal denizens pushed you to your limits, but you are determined to conquer it and uncover the ultimate weapon hidden within."
+        self.loot = FlaskOfCrimsonTears()
+        
         self.link_forward(Mementos())
-        self.set_loot(FlaskOfCrimsonTears())
 
 class StormveilCastle(Room):
     """
@@ -197,12 +111,14 @@ class StormveilCastle(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(GodrickTheGrafted())
-        self.set_name("Stormveil Castle")
-        self.set_description("You stepped into a legacy dungeon, a castle that lies on the cliff of stormveil, littered with hoards of enemies")
+        self.enemy = GodrickTheGrafted()
+        self.name = "Stormveil Castle"
+        self.description = "You stepped into a legacy dungeon, a castle that lies on the cliff of stormveil, littered with hoards of enemies"
+        self.loot = FlaskOfCeruleanTears()
+        
         self.link_forward(Kamurocho())
         self.link_right(TheHallow())
-        self.set_loot(FlaskOfCeruleanTears())
+
 
 class ApertureLab(Room):
     """
@@ -211,10 +127,10 @@ class ApertureLab(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(Glados())
-        self.set_name("Aperture Lab")
-        self.set_description("You stepped into a sprawling maze of test chambers filled with menacingly cheery robots and the enigmatic AI, GLaDOS. Your journey through this surreal laboratory is a relentless quest for answers, a desperate struggle to escape its surreal confines and unmask the secrets lurking within.")
-        self.set_loot(FlaskOfCrimsonTears())
+        self.enemy = Glados()
+        self.name = "Aperture Lab"
+        self.description = "You stepped into a sprawling maze of test chambers filled with menacingly cheery robots and the enigmatic AI, GLaDOS. Your journey through this surreal laboratory is a relentless quest for answers, a desperate struggle to escape its surreal confines and unmask the secrets lurking within."
+        self.loot = FlaskOfCrimsonTears()
 
 class Zebes(Room):
     """
@@ -223,10 +139,10 @@ class Zebes(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(Ridley())
-        self.set_name("Zebes")
-        self.set_description("You stepped into a hostile and alien world, where you face some of your most harrowing battles against the Space Pirates and their nefarious plans. Its treacherous landscapes, infested with hostile creatures, hide the secrets of the Chozo and your relentless pursuit of justice.")
-        self.set_loot(DectusMedallionLeft())
+        self.enemy = Ridley()
+        self.name = "Zebes"
+        self.description = "You stepped into a hostile and alien world, where you face some of your most harrowing battles against the Space Pirates and their nefarious plans. Its treacherous landscapes, infested with hostile creatures, hide the secrets of the Chozo and your relentless pursuit of justice."
+        self.loot = DectusMedallionLeft()
 
 class Bunker(Room):
     """
@@ -235,10 +151,10 @@ class Bunker(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(Emil())
-        self.set_name("Bunker")
-        self.set_description("You stepped into a grim sanctuary suspended above the ravaged Earth, both a refuge and a reminder of the relentless war against the machines. you receive orders, grapple with the complexities of your existence, and prepare for the constant struggle to reclaim your planet from the alien invaders.")
-        self.set_loot(FlaskOfCrimsonTears())
+        self.enemy = Emil()
+        self.name = "Bunker"
+        self.description = "You stepped into a grim sanctuary suspended above the ravaged Earth, both a refuge and a reminder of the relentless war against the machines. you receive orders, grapple with the complexities of your existence, and prepare for the constant struggle to reclaim your planet from the alien invaders."
+        self.loot = FlaskOfCrimsonTears()
 
 class Asphodel(Room):
     """
@@ -247,12 +163,14 @@ class Asphodel(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(TheBoneHyrda())
-        self.set_name("Asphodel")
-        self.set_description("You stepped into a desolate collection of rocky islands amidst a sea of fire beyond Tartarus. You travel between these islands through small bone rafts")
+        self.enemy = TheBoneHyrda()
+        self.name = "Asphodel"
+        self.description = "You stepped into a desolate collection of rocky islands amidst a sea of fire beyond Tartarus. You travel between these islands through small bone rafts"
+        self.loot = FlaskOfCeruleanTears()
+        
         self.link_back(Commencement())
         self.link_forward(GreenhillZone())
-        self.set_loot(FlaskOfCeruleanTears())
+
         
 
 class KingdomOfKu(Room):
@@ -262,12 +180,13 @@ class KingdomOfKu(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(GeneralMugen())
-        self.set_name("Kingdom of Ku")
-        self.set_description("You stepped into a nation in Hinoeuma with a long and bloody history of conflict and war. Their enemies numbers many, one among several being the fallen nation of U. It was recently ruled by the aging King Jigo Ku, until a coup removed him from power")
+        self.enemy = GeneralMugen()
+        self.name = "Kingdom of Ku"
+        self.description = "You stepped into a nation in Hinoeuma with a long and bloody history of conflict and war. Their enemies numbers many, one among several being the fallen nation of U. It was recently ruled by the aging King Jigo Ku, until a coup removed him from power"
+        self.loot = FlaskOfCrimsonTears()
+        
         self.link_right(Bunker())
         self.link_forward(Zebes())
-        self.set_loot(FlaskOfCrimsonTears())
 
 class GreenhillZone(Room):
     """
@@ -276,12 +195,14 @@ class GreenhillZone(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(DoctorEggman())
-        self.set_name("Greenhill Zone")
-        self.set_description("You stepped into a high-speed playground, a vibrant expanse of lush grass and rolling hills, where you feel most at home. Its loop-de-loops and buzzing animal friends provide the perfect backdrop for your never-ending quest to thwart Dr. Robotnik and collect the precious Chaos Emerald")
+        self.enemy = DoctorEggman()
+        self.name = "Greenhill Zone"
+        self.description = "You stepped into a high-speed playground, a vibrant expanse of lush grass and rolling hills, where you feel most at home. Its loop-de-loops and buzzing animal friends provide the perfect backdrop for your never-ending quest to thwart Dr. Robotnik and collect the precious Chaos Emerald"
+        self.loot = FlaskOfCeruleanTears()
+        
         self.link_forward(KingdomOfKu())
         self.link_left(TheMushroomKingdom())
-        self.set_loot(FlaskOfCeruleanTears())
+
 
 class TheHallow(Room):
     """
@@ -290,12 +211,12 @@ class TheHallow(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(TheMoonLord())
-        self.set_name("The Hallow")
-        self.set_description("You stepped into a radiant but eerie biome, a stark contrast to the darkness that permeates the underground. It's a realm where fantastical creatures and rare resources await, but also a place where you must tread carefully to avoid its relentless and otherworldly foes.")
-        self.link_back(TheObraDinn())
-        self.set_loot(FlaskOfCrimsonTears())
+        self.enemy = TheMoonLord()
+        self.name = "The Hallow"
+        self.description = "You stepped into a radiant but eerie biome, a stark contrast to the darkness that permeates the underground. It's a realm where fantastical creatures and rare resources await, but also a place where you must tread carefully to avoid its relentless and otherworldly foes."
+        self.loot = FlaskOfCrimsonTears()
         
+        self.link_back(TheObraDinn())
 
 class Commencement(Room):
     """
@@ -304,10 +225,11 @@ class Commencement(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(Mithrix())
-        self.set_name("Commencement")
-        self.set_description("You stepped into a large domain located above the shattered breach of Petrichor V's moon. It is ostensibly the desolated seat of Mithrix's power, made up of the shattered remains of four individual sections, emblematic of Mithrix and Providence's tools of creation")
-        self.set_loot(FlaskOfCeruleanTears())
+        self.enemy = Mithrix()
+        self.name = "Commencement"
+        self.description = "You stepped into a large domain located above the shattered breach of Petrichor V's moon. It is ostensibly the desolated seat of Mithrix's power, made up of the shattered remains of four individual sections, emblematic of Mithrix and Providence's tools of creation"
+        self.loot = FlaskOfCeruleanTears()
+        
         self.link_back(WalledCity99())
         
 
@@ -318,11 +240,13 @@ class Midgar(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(Sephiroth())
-        self.set_name("Midgar")
-        self.set_description("You stepped into the capital city and power base of the Shinra Electric Power Company in the world of Gaia. your memories of this metropolis are a tangled web of both longing and resentment, forever intertwined with your quest for justice and redemption.")
+        self.enemy = Sephiroth()
+        self.name = "Midgar"
+        self.description = "You stepped into the capital city and power base of the Shinra Electric Power Company in the world of Gaia. your memories of this metropolis are a tangled web of both longing and resentment, forever intertwined with your quest for justice and redemption."
+        self.loot = FlaskOfCrimsonTears()
+        
         self.link_left(TheForge())
-        self.set_loot(FlaskOfCrimsonTears())
+
 
 class HyruleKingdom(Room):
     """
@@ -331,11 +255,13 @@ class HyruleKingdom(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(Ganondorf())
-        self.set_name("Hyrule Kingdom")
-        self.set_description("You stepped into a land steeped in legend and mystique, it is your sacred duty to protect as the Hero of Time. Its vast, rolling landscapes and iconic landmarks are both your home and the canvas upon which your destiny is written as you battle the forces of darkness and seek to rescue Princess Zelda.")
+        self.enemy = Ganondorf()
+        self.name = "Hyrule Kingdom"
+        self.description = "You stepped into a land steeped in legend and mystique, it is your sacred duty to protect as the Hero of Time. Its vast, rolling landscapes and iconic landmarks are both your home and the canvas upon which your destiny is written as you battle the forces of darkness and seek to rescue Princess Zelda."
+        self.loot = FlaskOfCeruleanTears()
+        
         self.link_back(CelestialResort())
-        self.set_loot(FlaskOfCeruleanTears())
+
 
 class TheEndDimension(Room):
     """
@@ -344,11 +270,13 @@ class TheEndDimension(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(TheEnderDragon())
-        self.set_name("The End Dimension")
-        self.set_description("You stepped into a dark, space-like dimension consisting of separate islands in the void, made out of end stone. It is inhabited by endermen and shulkers.")
+        self.enemy = TheEnderDragon()
+        self.name = "The End Dimension"
+        self.description = "You stepped into a dark, space-like dimension consisting of separate islands in the void, made out of end stone. It is inhabited by endermen and shulkers."
+        self.loot = FlaskOfCrimsonTears()
+    
         self.link_forward(TheShriekingShack())
-        self.set_loot(FlaskOfCrimsonTears())
+
 
 class Kamurocho(Room):
     """
@@ -357,11 +285,13 @@ class Kamurocho(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(Shibusawa())
-        self.set_name("Kamurocho")
-        self.set_description("You stepped into the nightlife capital of Japan. As Tojo Clan territory, the district is home to many yakuza and is often the setting of large and small-scale disputes between the Tojo Clan and their rivals such as the Omi Alliance, as well as intra-clan conflicts between Tojo subsidiaries")
+        self.enemy = Shibusawa()
+        self.name = "Kamurocho"
+        self.description = "You stepped into the nightlife capital of Japan. As Tojo Clan territory, the district is home to many yakuza and is often the setting of large and small-scale disputes between the Tojo Clan and their rivals such as the Omi Alliance, as well as intra-clan conflicts between Tojo subsidiaries"
+        self.loot = FlaskOfCeruleanTears()
+        
         self.link_forward(Snowdin())
-        self.set_loot(FlaskOfCeruleanTears())
+
 
 class TowerOfFate(Room):
     """
@@ -370,10 +300,10 @@ class TowerOfFate(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(Enchantress())
-        self.set_name("Tower of Fate")
-        self.set_description("You stepped in a looming bastion of darkness and danger, standing as the heart of your perilous journey to save your beloved Shield Knight and the realm from the Enchantress's curse. Its treacherous ascent tests your mettle and resolve, driving you to prove that you am truly a knight worthy of legend.")
-        self.set_loot(FlaskOfCrimsonTears())
+        self.enemy = Enchantress()
+        self.name = "Tower of Fate"
+        self.description = "You stepped in a looming bastion of darkness and danger, standing as the heart of your perilous journey to save your beloved Shield Knight and the realm from the Enchantress's curse. Its treacherous ascent tests your mettle and resolve, driving you to prove that you am truly a knight worthy of legend."
+        self.loot = FlaskOfCrimsonTears()
 
 class ShoresOfNine(Room):
     """
@@ -382,10 +312,10 @@ class ShoresOfNine(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(Freya())
-        self.set_name("Shores of Nine")
-        self.set_description("You stepped into a realm of Norse myth, it offers a temporary respite from the relentless chaos of your past. You navigate this strange land with your son, Atreus, in search of a new beginning, forging a path toward redemption while battling the threats lurking in these uncharted waters.")
-        self.set_loot(FlaskOfCeruleanTears())
+        self.enemy = Freya()
+        self.name = "Shores of Nine"
+        self.description = "You stepped into a realm of Norse myth, it offers a temporary respite from the relentless chaos of your past. You navigate this strange land with your son, Atreus, in search of a new beginning, forging a path toward redemption while battling the threats lurking in these uncharted waters."
+        self.loot = FlaskOfCeruleanTears()
         
 class Mementos(Room):
     """
@@ -394,12 +324,14 @@ class Mementos(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(Yaldabaoth())
-        self.set_name("Mementos")
-        self.set_description("You stepped into a sprawling, ever-changing abyss beneath the city, is where you confront the twisted desires of society's heart. It's a labyrinthine reflection of the collective unconscious, where you as a Phantom Thief embark on a mission to change hearts and expose the hidden darkness that plagues Tokyo.")
+        self.enemy = Yaldabaoth()
+        self.name = "Mementos"
+        self.description = "You stepped into a sprawling, ever-changing abyss beneath the city, is where you confront the twisted desires of society's heart. It's a labyrinthine reflection of the collective unconscious, where you as a Phantom Thief embark on a mission to change hearts and expose the hidden darkness that plagues Tokyo."
+        self.loot = FlaskOfCrimsonTears()
+        
         self.link_right(ShoresOfNine())
         self.link_left(Asphodel())
-        self.set_loot(FlaskOfCrimsonTears())
+
 
 class Ascent(Room):
     """
@@ -408,11 +340,13 @@ class Ascent(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(Reyna())
-        self.set_name("Ascent")
-        self.set_description("You step into a clearing, in the middle of what seems to be a city. Surrounding you are buildings, their appearance reminding you of Ancient Roman Architecture. A skyscraper rises into the sky in the distance, its cold, geometric features clashing with the elegant, smooth lines of the buildings surrounding you. It is only when you turn around that you realise the entire city is several hundred metres above the ground.")
+        self.enemy = Reyna()
+        self.name = "Ascent"
+        self.description = "You step into a clearing, in the middle of what seems to be a city. Surrounding you are buildings, their appearance reminding you of Ancient Roman Architecture. A skyscraper rises into the sky in the distance, its cold, geometric features clashing with the elegant, smooth lines of the buildings surrounding you. It is only when you turn around that you realise the entire city is several hundred metres above the ground."
+        self.loot = FlaskOfCeruleanTears()
+
         self.link_right(SixthCircleOfHell())
-        self.set_loot(FlaskOfCeruleanTears())
+
 
 class TheShriekingShack(Room):
     """
@@ -421,10 +355,11 @@ class TheShriekingShack(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(Voldemort())
-        self.set_name("The Shrieking Shack")
-        self.set_description("You step into a notorious and allegedly haunted building near Hogwarts School, known for its eerie and unsettling reputation as the most haunted building in Britain")
-        self.set_loot(FlaskOfCrimsonTears())
+        self.enemy = Voldemort()
+        self.name = "The Shrieking Shack"
+        self.description = "You step into a notorious and allegedly haunted building near Hogwarts School, known for its eerie and unsettling reputation as the most haunted building in Britain"
+        
+        self.loot = FlaskOfCrimsonTears()
 
 class SixthCircleOfHell(Room):
     """
@@ -433,10 +368,11 @@ class SixthCircleOfHell(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(Gabriel())
-        self.set_name("6th Circle of Hell")
-        self.set_description("You step into an abandoned church bathed in blood red light. The walls are patterned with the faces of the damned, their expressions contorted in agony, doomed to shriek silently for all eternity. On the far side of the room, a church organ looms over you, an eerie, melancholic melody flowing from its pipes. Its player, a lone figure clad in gold and silver armour")
-        self.set_loot(FlaskOfCeruleanTears())
+        self.enemy = Gabriel()
+        self.name = "6th Circle of Hell"
+        self.description = "You step into an abandoned church bathed in blood red light. The walls are patterned with the faces of the damned, their expressions contorted in agony, doomed to shriek silently for all eternity. On the far side of the room, a church organ looms over you, an eerie, melancholic melody flowing from its pipes. Its player, a lone figure clad in gold and silver armour"
+        self.loot = FlaskOfCeruleanTears()
+        
         self.link_forward(StormveilCastle())
         self.link_back(TowerOfFate())
 
@@ -447,13 +383,15 @@ class Snowdin(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(Flowey())
-        self.set_name("Snowdin")
-        self.set_description("You step into a quaint and snowy town nestled in the underground, itexudes a cozy charm with its warm, dimly lit shops and friendly monster residents. The gentle fall of snowflakes and the sound of crackling fires create a serene atmosphere that contrasts the rest of your journey")
+        self.enemy = Flowey()
+        self.name = "Snowdin"
+        self.description = "You step into a quaint and snowy town nestled in the underground, itexudes a cozy charm with its warm, dimly lit shops and friendly monster residents. The gentle fall of snowflakes and the sound of crackling fires create a serene atmosphere that contrasts the rest of your journey"
+        self.loot = FlaskOfCrimsonTears()
+        
         self.link_left(TheAstralPlane())
         self.link_right(TheSealedTemple())
         self.link_forward(ApertureLab())
-        self.set_loot(FlaskOfCrimsonTears())
+
 
 class TheSealedTemple(Room):
     """
@@ -462,10 +400,10 @@ class TheSealedTemple(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(TheHeir())
-        self.set_name("The Sealed Temple")
-        self.set_description("You step into a mysterious, ancient structure shrouded in secrecy, holding untold treasures and enigmatic relics waiting to be uncovered by the brave adventurer. Its imposing architecture and mystic aura make it a central point of intrigue and discovery")
-        self.set_loot(DectusMedallionRight())
+        self.enemy = TheHeir()
+        self.name = "The Sealed Temple"
+        self.description = "You step into a mysterious, ancient structure shrouded in secrecy, holding untold treasures and enigmatic relics waiting to be uncovered by the brave adventurer. Its imposing architecture and mystic aura make it a central point of intrigue and discovery"
+        self.loot = DectusMedallionRight()
 
 class TheAstralPlane(Room):
     """
@@ -474,10 +412,10 @@ class TheAstralPlane(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(JenaAnderson())
-        self.set_name("The Astral Plane")
-        self.set_description("You step into surreal and nightmarish realm that exists parallel to the human world, inhabited by grotesque and otherworldly creatures known as Chimeras")
-        self.set_loot(FlaskOfCrimsonTears())
+        self.enemy = JenaAnderson()
+        self.name = "The Astral Plane"
+        self.description = "You step into surreal and nightmarish realm that exists parallel to the human world, inhabited by grotesque and otherworldly creatures known as Chimeras"
+        self.loot = FlaskOfCrimsonTears()
 
 class TheObraDinn(Room):
     """
@@ -486,10 +424,10 @@ class TheObraDinn(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(TheKraken())
-        self.set_name("The Obra Dinn")
-        self.set_description("You step onto a merchant vessel that mysteriously reappeared in 1807 after being lost at sea for five years, with all of its crew either dead or missing")
-        self.set_loot(FlaskOfCeruleanTears())
+        self.enemy = TheKraken()
+        self.name = "The Obra Dinn"
+        self.description = "You step onto a merchant vessel that mysteriously reappeared in 1807 after being lost at sea for five years, with all of its crew either dead or missing"
+        self.loot = FlaskOfCeruleanTears()
 
 class TheMushroomKingdom(Room):
     """
@@ -498,10 +436,10 @@ class TheMushroomKingdom(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(Bowser())
-        self.set_name("The Mushroom Kingdom")
-        self.set_description("You step into a colorful and enchanting land filled with lush forests, towering mountains, and cheerful inhabitants like Toads and Yoshis")
-        self.set_loot(FlaskOfCrimsonTears())
+        self.enemy = Bowser()
+        self.name = "The Mushroom Kingdom"
+        self.description = "You step into a colorful and enchanting land filled with lush forests, towering mountains, and cheerful inhabitants like Toads and Yoshis"
+        self.loot = FlaskOfCrimsonTears()
 
 class WalledCity99(Room):
     """
@@ -510,10 +448,10 @@ class WalledCity99(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(Sentinel())
-        self.set_name("Walled City 99")
-        self.set_description("You step into a dystopian urban enclave characterized by towering, impenetrable walls that isolate its inhabitants from the outside world. Within these walls, a dark and oppressive society unfolds, where the residents are tightly controlled and secrets hide in every shadow")
-        self.set_loot(FlaskOfCrimsonTears())
+        self.enemy = Sentinel()
+        self.name = "Walled City 99"
+        self.description = "You step into a dystopian urban enclave characterized by towering, impenetrable walls that isolate its inhabitants from the outside world. Within these walls, a dark and oppressive society unfolds, where the residents are tightly controlled and secrets hide in every shadow"
+        self.loot = FlaskOfCrimsonTears()
 
 class TheLastResort(Room):
     """
@@ -522,7 +460,7 @@ class TheLastResort(Room):
     
     def __init__(self):
         super().__init__()
-        self.set_enemy(KingBoo())
-        self.set_name("The Last Resort")
-        self.set_description("You step into a sprawling, haunted hotel. This ominous establishment is filled with ghostly inhabitants and puzzles, offering a chilling and atmospheric backdrop")
-        self.set_loot(FlaskOfCrimsonTears())
+        self.enemy = KingBoo()
+        self.name = "The Last Resort"
+        self.description = "You step into a sprawling, haunted hotel. This ominous establishment is filled with ghostly inhabitants and puzzles, offering a chilling and atmospheric backdrop"
+        self.loot = FlaskOfCrimsonTears()
