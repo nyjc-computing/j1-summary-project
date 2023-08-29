@@ -214,8 +214,6 @@ class ApertureLab(Room):
         self.set_enemy(Glados())
         self.set_name("Aperture Lab")
         self.set_description("You stepped into a sprawling maze of test chambers filled with menacingly cheery robots and the enigmatic AI, GLaDOS. Your journey through this surreal laboratory is a relentless quest for answers, a desperate struggle to escape its surreal confines and unmask the secrets lurking within.")
-        self.link_forward(StormveilCastle())
-        self.link_back(TowerOfFate())
         self.set_loot(FlaskOfCrimsonTears())
 
 class Zebes(Room):
@@ -413,8 +411,7 @@ class Ascent(Room):
         self.set_enemy(Reyna())
         self.set_name("Ascent")
         self.set_description("You step into a clearing, in the middle of what seems to be a city. Surrounding you are buildings, their appearance reminding you of Ancient Roman Architecture. A skyscraper rises into the sky in the distance, its cold, geometric features clashing with the elegant, smooth lines of the buildings surrounding you. It is only when you turn around that you realise the entire city is several hundred metres above the ground.")
-        self.link_right(ApertureLab())
-        self.link_left(SixthCircleOfHell())
+        self.link_right(SixthCircleOfHell())
         self.set_loot(FlaskOfCeruleanTears())
 
 class TheShriekingShack(Room):
@@ -440,6 +437,8 @@ class SixthCircleOfHell(Room):
         self.set_name("6th Circle of Hell")
         self.set_description("You step into an abandoned church bathed in blood red light. The walls are patterned with the faces of the damned, their expressions contorted in agony, doomed to shriek silently for all eternity. On the far side of the room, a church organ looms over you, an eerie, melancholic melody flowing from its pipes. Its player, a lone figure clad in gold and silver armour")
         self.set_loot(FlaskOfCeruleanTears())
+        self.link_forward(StormveilCastle())
+        self.link_back(TowerOfFate())
 
 class Snowdin(Room):
     """
@@ -453,6 +452,7 @@ class Snowdin(Room):
         self.set_description("You step into a quaint and snowy town nestled in the underground, itexudes a cozy charm with its warm, dimly lit shops and friendly monster residents. The gentle fall of snowflakes and the sound of crackling fires create a serene atmosphere that contrasts the rest of your journey")
         self.link_left(TheAstralPlane())
         self.link_right(TheSealedTemple())
+        self.link_forward(ApertureLab())
         self.set_loot(FlaskOfCrimsonTears())
 
 class TheSealedTemple(Room):
