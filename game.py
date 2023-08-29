@@ -195,7 +195,7 @@ class Game:
                 print(f"\n{room.enemy.name} has {room.enemy.health} health")
                 time.sleep(self.sleep)
             if room.loot != None:
-                print(f"\nThere is {room.loot.name} hidden in the {room.name}")
+                print(f"\nThere is {room.loot.name} hidden in {room.name}")
                 time.sleep(self.sleep)
             else:
                 print(f"\nThere is no loot hidden in {room.name}")
