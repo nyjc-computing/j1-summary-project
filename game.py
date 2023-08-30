@@ -413,7 +413,7 @@ class Game:
         # Generate a random number to see if you successfully loot the room whithout the enemy noticing
         caught = False
 
-        if self.character.name == "meow":
+        if user.name == "meow":
             chance = 1
         else:
             chance = random.randint(1, 3)
@@ -519,8 +519,15 @@ class Game:
                     else:
                         # Check if dead enemy is the final boss
                         if victim.name == "Voldemort":
+                            print("\nInsert transition to second phase or alternate enemy")
+                            time.sleep(self.sleep)
+                            self.room.enemy = Phase2()
+                            self.attack(attacker, self.room.enemy)
+                            return
+                        elif victim.name == "Phase 2":
                             self.win(weapon)
                             return
+
                         print(f"\n{attacker.name}{weapon.win_front}{victim.name}{weapon.win_back}")
                         time.sleep(self.sleep)
                         if victim.name == "Sentinels":
@@ -1031,6 +1038,7 @@ class Game:
                 
     def display_room_name(self) -> None:
         """prints the room's name in a cool way"""
+        print()
         print("="*25)
         space = " "*int((25-len(self.room.name))/2)
         print(f"{space}{self.room.name}{space}")
@@ -1088,22 +1096,32 @@ class Game:
     def end_game(self) -> None:
         """displays scenario when user dies"""
         print("__   _______ _   _  ______ _____ ___________")
+        time.sleep(0.2)
         print("\ \ / /  _  | | | | |  _  \_   _|  ___|  _  \\")
+        time.sleep(0.2)
         print(" \ V /| | | | | | | | | | | | | | |__ | | | |")
+        time.sleep(0.2)
         print("  \ / | | | | | | | | | | | | | |  __|| | | |")
+        time.sleep(0.2)
         print("  | | \ \_/ / |_| | | |/ / _| |_| |___| |/ /")
+        time.sleep(0.2)
         print("  \_/  \___/ \___/  |___/  \___/\____/|___/ ")
         self.end = True
 
     def win(self, weapon) -> None:
         """displays scenario when user wins"""
-        print(f"\nUsing the almighty {weapon.name}, you struck the Dark Lord Voldemort down, crippling him of all his powers and stopping his evil tyranny over the school")
+        print(f"\nUsing the almighty {weapon.name}, you struck insert final boss down, crippling him of all his powers and stopping his evil tyranny over the school")
         time.sleep(self.sleep)
         print(" _____ ___________   _____ _       ___  _____ _   _ ")
+        time.sleep(0.2)
         print("|  __ \  _  |  _  \ /  ___| |     / _ \|_   _| \ | |")
+        time.sleep(0.2)
         print("| |  \/ | | | | | | \ `--.| |    / /_\ \ | | |  \| |")
+        time.sleep(0.2)
         print("| | __| | | | | | |  `--. \ |    |  _  | | | | . ` |")
+        time.sleep(0.2)
         print("| |_\ \ \_/ / |/ /  /\__/ / |____| | | |_| |_| |\  |")
+        time.sleep(0.2)
         print(" \____/\___/|___/   \____/\_____/\_| |_/\___/\_| \_/")
         self.end = True
 
@@ -1114,7 +1132,7 @@ class Game:
            
     def secret(self) -> None:
         """secret account that gives God like stats by setting name as meow"""
-        print("\nWelcome chosen one, the Gods smile upon you and have rained down their blessing\n")
+        print("\nWelcome chosen one, the Gods smile upon you and have rained down their blessing")
         time.sleep(self.sleep)
         self.character.health = 999
         self.character.max_health = 999
@@ -1125,6 +1143,8 @@ class Game:
         self.character.health_flask = 999
         self.character.mana_flask = 999
         self.map.full_reveal()
+        self.character.items.append(DectusMedallionLeft())
+        self.character.items.append(DectusMedallionRight())
 
     def meow(self) -> None:
         if self.room.secret == True:
@@ -1138,7 +1158,9 @@ class Game:
             time.sleep(self.sleep)
             print("\nYou started communicating with the cat, leading you to discover a hidden passage\n")
             time.sleep(self.sleep)
-            self.room.link_left(TheLastResort())
+            theLastResort = TheLastResort()
+            self.room.left = theLastResort
+            theLastResort.right = self.room
         else:
             choice = random.randint(1, 9)
             if choice == 1:
