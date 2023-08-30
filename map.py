@@ -1,7 +1,10 @@
 class game_map:
     """
     Attributes:
-    - self.map: contains the map for the game
+    - map: contains the map for the game
+    - self.e_trigger: records whether the enter event for a room has been called before
+      in order to avoid screwing up the map, each enter event should be called only once,
+      and in a specific order
     Methods:
     - each room has two map update events
         - one is for when the player enters the room for the first time
@@ -9,7 +12,8 @@ class game_map:
     """
 
     def __init__(self):
-        self.map = [[" " for x in range(125)] for x in range(35)]
+        self.map = [[" " for x in range(125)] for x in range(32)]
+        self.e_trigger = [0] * 29
 
     def display(self) -> None:
         """
@@ -72,6 +76,9 @@ class game_map:
         """
         updates map for first time visiting dirtmouth
         """
+        if self.e_trigger[0] != 0:
+            return
+        self.e_trigger[0] = 1
         #make room
         self.make_room(10,60,"Dirtmouth")
         
@@ -101,6 +108,9 @@ class game_map:
         """
         updates map for first time visiting the end
         """
+        if self.e_trigger[1] != 0:
+            return
+        self.e_trigger[1] = 1
         #make room
         self.make_room(6,60,"The End Dimension")
         
@@ -126,6 +136,9 @@ class game_map:
         """
         updates map for first time visiting hyrule
         """
+        if self.e_trigger[2] != 0:
+            return
+        self.e_trigger[2] = 1
         #make room
         self.make_room(10,75,"Hyrule Kingdom")
         
@@ -151,6 +164,9 @@ class game_map:
         """
         updates map for first time visiting celestial resort
         """
+        if self.e_trigger[3] != 0:
+            return
+        self.e_trigger[3] = 1
         #make room
         self.make_room(14,75,"Celestial Resort")
         
@@ -176,6 +192,9 @@ class game_map:
         """
         updates map for first time visiting ascent
         """
+        if self.e_trigger[4] != 0:
+            return
+        self.e_trigger[4] = 1
         #make room
         self.make_room(18,75,"Ascent")
 
@@ -201,6 +220,9 @@ class game_map:
         """
         updates map for first time visiting 6th circle of hell
         """
+        if self.e_trigger[5] != 0:
+            return
+        self.e_trigger[5] = 1
         #make room
         self.make_room(18,94,"6th Circle Of Hell")
 
@@ -229,6 +251,9 @@ class game_map:
         """
         updates map for first time visiting tower of fate
         """
+        if self.e_trigger[6] != 0:
+            return
+        self.e_trigger[6] = 1
         #make room
         self.make_room(14,94,"Tower of Fate")
 
@@ -251,6 +276,9 @@ class game_map:
         """
         updates map for first time visiting stormveil castle
         """
+        if self.e_trigger[7] != 0:
+            return
+        self.e_trigger[7] = 1
         #make room
         self.make_room(18,114,"Stormveil Castle")
 
@@ -279,6 +307,9 @@ class game_map:
         """
         updates map for first time visiting the hallow
         """
+        if self.e_trigger[8] != 0:
+            return
+        self.e_trigger[8] = 1
         #make room
         self.make_room(14,114,"The Hallow")
 
@@ -304,6 +335,9 @@ class game_map:
         """
         updates map for first time visiting the obra dinn
         """
+        if self.e_trigger[9] != 0:
+            return
+        self.e_trigger[9] = 1
         #make room
         self.make_room(10,114,"The Obra Dinn")
 
@@ -328,6 +362,9 @@ class game_map:
         """
         updates map for first time visiting kamurocho
         """
+        if self.e_trigger[10] != 0:
+            return
+        self.e_trigger[10] = 1
         #make room
         self.make_room(25,114,"Kamurocho")
 
@@ -355,6 +392,9 @@ class game_map:
         """
         updates map for first time visiting snowdin
         """
+        if self.e_trigger[11] != 0:
+            return
+        self.e_trigger[11] = 1
         #make room
         self.make_room(25,100,"Snowdin")
 
@@ -386,6 +426,9 @@ class game_map:
         """
         updates map for first time visiting aperture
         """
+        if self.e_trigger[12] != 0:
+            return
+        self.e_trigger[12] = 1
         #make room
         self.make_room(25,84,"Aperture Labs")
 
@@ -410,6 +453,9 @@ class game_map:
         """
         updates map for first time visiting the astral plane
         """
+        if self.e_trigger[13] != 0:
+            return
+        self.e_trigger[13] = 1
         #make room
         self.make_room(21,100,"The Astral Plane")
 
@@ -432,6 +478,9 @@ class game_map:
         """
         updates map for first time visiting the sealed temple
         """
+        if self.e_trigger[14] != 0:
+            return
+        self.e_trigger[14] = 1
         #make room
         self.make_room(29,100,"The Sealed Temple")
 
@@ -454,6 +503,9 @@ class game_map:
         """
         updates map for first time visiting midgar
         """
+        if self.e_trigger[15] != 0:
+            return
+        self.e_trigger[15] = 1
         #make room
         self.make_room(10,50,"Midgar")
 
@@ -481,6 +533,9 @@ class game_map:
         """
         updates map for first time visiting the forge
         """
+        if self.e_trigger[16] != 0:
+            return
+        self.e_trigger[16] = 1
         #make room
         self.make_room(10,39,"The Forge")
 
@@ -506,6 +561,9 @@ class game_map:
         """
         updates map for first time visiting mementos
         """
+        if self.e_trigger[17] != 0:
+            return
+        self.e_trigger[17] = 1
         #make room
         self.make_room(6,39,"Mementos")
 
@@ -534,6 +592,9 @@ class game_map:
         """
         updates map for first time visiting shores of 9
         """
+        if self.e_trigger[18] != 0:
+            return
+        self.e_trigger[18] = 1
         #make room
         self.make_room(2,39,"Shores of Nine")
 
@@ -558,6 +619,9 @@ class game_map:
         """
         updates map for first time visiting asphodel
         """
+        if self.e_trigger[19] != 0:
+            return
+        self.e_trigger[19] = 1
         #make room
         self.make_room(6,25,"Asphodel")
 
@@ -590,6 +654,9 @@ class game_map:
         """
         updates map for first time visiting commencement
         """
+        if self.e_trigger[20] != 0:
+            return
+        self.e_trigger[20] = 1
         #make room
         self.make_room(6,9,"Commencement")
 
@@ -615,6 +682,9 @@ class game_map:
         """
         updates map for first time visiting walled city 99
         """
+        if self.e_trigger[21] != 0:
+            return
+        self.e_trigger[21] = 1
         #make room
         self.make_room(10,9,"Walled City 99")
 
@@ -640,6 +710,9 @@ class game_map:
         """
         updates map for first time visiting the last resort
         """
+        if self.e_trigger[22] != 0:
+            return
+        self.e_trigger[22] = 1
         #make room
         self.make_room(14,10,"The Last Resort")
 
@@ -652,6 +725,9 @@ class game_map:
         """
         updates map for fully clearing the last resort
         """
+        if self.e_trigger[23] != 0:
+            return
+        self.e_trigger[23] = 1
         #make room
         self.finish_room(14,10,"The Last Resort")
 
@@ -664,6 +740,9 @@ class game_map:
         """
         updates map for first time visiting greenhill zone
         """
+        if self.e_trigger[23] != 0:
+            return
+        self.e_trigger[23] = 1
         #make room
         self.make_room(14,36,"Greenhill Zone")
 
@@ -696,6 +775,9 @@ class game_map:
         """
         updates map for first time visiting the mushroom kingdom
         """
+        if self.e_trigger[24] != 0:
+            return
+        self.e_trigger[24] = 1
         #make room
         self.make_room(14,55,"Mushroom Kingdom")
 
@@ -720,6 +802,9 @@ class game_map:
         """
         updates map for first time visiting kingdom of ku
         """
+        if self.e_trigger[25] != 0:
+            return
+        self.e_trigger[25] = 1
         #make room
         self.make_room(18,36,"The Kingdom of Ku")
 
@@ -748,6 +833,9 @@ class game_map:
         """
         updates map for first time visiting zebes
         """
+        if self.e_trigger[26] != 0:
+            return
+        self.e_trigger[26] = 1
         #make room
         self.make_room(18,50,"Zebes")
 
@@ -772,6 +860,9 @@ class game_map:
         """
         updates map for first time visiting bunker
         """
+        if self.e_trigger[27] != 0:
+            return
+        self.e_trigger[27] = 1
         #make room
         self.make_room(18,22,"Bunker")
 
@@ -796,6 +887,9 @@ class game_map:
         """
         updates map for first time visiting shrieking shack
         """
+        if self.e_trigger[28] != 0:
+            return
+        self.e_trigger[28] = 1
         #make room
         self.make_room(2,60,"Shrieking Shack")
 
@@ -816,8 +910,41 @@ class game_map:
         #(re)make paths
         self.vconnect(3,60,1)
 
-legend = """
-Legend:
+    def full_reveal(self) -> None:
+        """
+        Fully reveals the map
+        """
+        self.dirtmouth_enter()
+        self.end_dimension_enter()
+        self.shrieking_enter()
+        self.hyrule_enter()
+        self.celestial_resort_enter()
+        self.ascent_enter()
+        self.sixth_circle_enter()
+        self.tower_enter()
+        self.stormveil_enter()
+        self.hallow_enter()
+        self.obradinn_enter()
+        self.kamurocho_enter()
+        self.snowdin_enter()
+        self.sealed_temple_enter()
+        self.astral_plane_enter()
+        self.aperture_enter()
+        self.midgar_enter()
+        self.forge_enter()
+        self.mementos_enter()
+        self.shores_enter()
+        self.asphodel_enter()
+        self.commencement_enter()
+        self.walled_enter()
+        self.last_resort_enter()
+        self.greenhill_enter()
+        self.mushroom_enter()
+        self.kingdom_ku_enter()
+        self.zebes_enter()
+        self.bunker_enter()
+
+legend = """Legend:
 ┌───┐                                   ╭━━━╮
 │   │ = Room has unfinished objectives  ┃   ┃ = Fully Cleared Room
 └───┘                                   ╰━━━╯

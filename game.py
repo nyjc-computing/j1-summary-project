@@ -1124,6 +1124,7 @@ class Game:
         self.character.defence = 999
         self.character.health_flask = 999
         self.character.mana_flask = 999
+        self.map.full_reveal()
 
     def meow(self) -> None:
         if self.room.secret == True:
