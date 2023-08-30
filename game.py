@@ -540,7 +540,7 @@ class Game:
                         if choice.lower() == "yes":
                             self.collect_loot(attacker, victim.loot)
                             time.sleep(self.sleep)
-                            print(f"\n{victim.loot.description}\n")
+                            print(f"\n{victim.loot.description}")
                             time.sleep(self.sleep)
 
                         elif choice.lower() == "no":
@@ -1144,7 +1144,7 @@ class Game:
         self.character.defence = 999
         self.character.health_flask = 999
         self.character.mana_flask = 999
-        #self.map.full_reveal()
+        self.map.full_reveal()
         self.character.items.append(DectusMedallionLeft())
         self.character.items.append(DectusMedallionRight())
 
