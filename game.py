@@ -599,7 +599,9 @@ class Game:
         elif decision.lower() == "spell":
             self.display_spells(user)
             time.sleep(self.sleep)
-            spells = user.get_spells()
+            spells = []
+            for spell in user.spells:
+                spells.append(spell.name.lower())
             choice = input("\nWhich spell would you like to cast?: ")
             while choice.lower() not in spells:
                 print(f"\nYou tried to cast {choice} but it blew up in your face")
@@ -1142,7 +1144,7 @@ class Game:
         self.character.defence = 999
         self.character.health_flask = 999
         self.character.mana_flask = 999
-        self.map.full_reveal()
+        #self.map.full_reveal()
         self.character.items.append(DectusMedallionLeft())
         self.character.items.append(DectusMedallionRight())
 
