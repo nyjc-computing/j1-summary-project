@@ -438,3 +438,15 @@ class KingBoo(Enemy):
         self.attack = 30
         self.move = "Shocking Railgun"
         self.loot = VirtualBoo()
+
+class Phase2(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
+    def __init__(self):
+        super().__init__()
+        self.name = "Phase 2"
+        self.health = 1500
+        self.attack = 80
+        self.move = "insert powerful attack"
