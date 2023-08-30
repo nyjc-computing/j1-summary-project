@@ -689,11 +689,9 @@ class game_map:
         self.make_room(10,9,"Walled City 99")
 
         #make hidden rooms
-        self.make_room(14,10," ? ")
 
         #(re)make paths
         self.vconnect(7,8,1)
-        self.vconnect(11,10,1)
 
     def walled_clear(self) -> None:
         """
@@ -937,7 +935,7 @@ class game_map:
         self.asphodel_enter()
         self.commencement_enter()
         self.walled_enter()
-        self.last_resort_enter()
+        #self.last_resort_enter()
         self.greenhill_enter()
         self.mushroom_enter()
         self.kingdom_ku_enter()
