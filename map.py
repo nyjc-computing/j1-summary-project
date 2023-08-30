@@ -935,7 +935,7 @@ class game_map:
         self.asphodel_enter()
         self.commencement_enter()
         self.walled_enter()
-        #self.last_resort_enter()
+        self.last_resort_enter()
         self.greenhill_enter()
         self.mushroom_enter()
         self.kingdom_ku_enter()
