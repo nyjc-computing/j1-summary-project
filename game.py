@@ -493,12 +493,24 @@ class Game:
                 
                 if decision == "flask":
                     self.use_flask_battle(attacker)
+
+                    # Allow enemy to attack if it didn't die yet
                     if victim.health > 0:
                         damage = max(1, victim.attack - attacker.defence)
                         attacker.health = attacker.health - damage
                         print(f"\n{victim.name} used {victim.move}, dealing {damage} damage to {attacker.name}")
                         time.sleep(self.sleep)
+
+                elif decision == "shield":
+                    #get cost for shield
+                    cost = 10
                     
+                    attacker.mana = attacker.mana - 10
+                    print(f"\nYou used up {cost} mana points")
+                    print(f"You empower your shield with mana")
+                    print(f"\n{victim.name} used {victim.move}, but it was deflected by your shield")
+                    time.sleep(self.sleep)
+                
                 else:
                     damage, weapon = self.get_attack(attacker, decision)
 
@@ -558,32 +570,41 @@ class Game:
 
     def get_choice(self, user : Character) -> str:
         """sub action from attack() to prompt user for attack methods or use of flask"""
-        decision = input(f"What do you want to use? ({user.weapon.name} / Spell / Flask): ")
+        decision = input(f"What do you want to use? ({user.weapon.name} / Spell / Flask / Shield): ")
 
         # Get a list of spell cost
         cost = []
         for spell in user.spells:
             cost.append(spell.cost)
 
+        #Get shield cost
+        shield_cost = 10
+
         valid = False
         while not valid:
             valid = True
-            if decision.lower() not in [user.weapon.name.lower(), "spell", "flask"]:
+            if decision.lower() not in [user.weapon.name.lower(), "spell", "flask", "shield"]:
                 print(f"\nYou tried to use {decision} but nothing happened")
                 time.sleep(self.sleep)
-                decision = input(f"\nWhat do you want to use? ({user.weapon.name} / Spell / Flask): ")
+                decision = input(f"\nWhat do you want to use? ({user.weapon.name} / Spell / Flask / Shield): ")
                 valid = False
             # Check if user has enough mana to cast spells
             elif decision.lower() == "spell" and user.mana < min(cost):
                 print("\nYou do not have enough mana to cast spells\n")
                 time.sleep(self.sleep)
-                decision = input(f"What do you want to use? ({user.weapon.name} / Spell / Flask): ")
+                decision = input(f"What do you want to use? ({user.weapon.name} / Spell / Flask / Shield): ")
                 valid = False
             # Check if user has any flask to drink
             elif decision.lower() == "flask" and (user.health_flask + user.mana_flask) == 0:
                 print("\nYou ran out of flasks\n")
                 time.sleep(self.sleep)
-                decision = input(f"What do you want to use? ({user.weapon.name} / Spell / Flask): ")    
+                decision = input(f"What do you want to use? ({user.weapon.name} / Spell / Flask / Shield): ")    
+                valid = False
+            #Check if user has enough mana to use shield
+            elif decision.lower() == "shield" and user.mana < shield_cost:
+                print("\nYou do not have enough mana to shield yourself\n")
+                time.sleep(self.sleep)
+                decision = input(f"What do you want to use? ({user.weapon.name} / Spell / Flask / Shield): ")
                 valid = False
 
         return decision

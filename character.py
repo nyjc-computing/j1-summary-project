@@ -8,7 +8,7 @@ from upgrade import *
 
 class Character:
     """
-    A class that creates an instance of the game
+    A class that creates an instance of the player
 
     Attributes
     ----------
@@ -72,7 +72,7 @@ class Character:
     def get_spells(self):
         spells = []
         for spell in self.spells:
-            spells.append(spell.name)
+            spells.append(spell.name.lower())
         return spells
 
     def get_armours(self):
