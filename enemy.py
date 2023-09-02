@@ -44,7 +44,7 @@ class TheRadiance(Enemy):
         super().__init__()
         self.name = "The Radiance"
         self.health = 20
-        self.description = "a higher being of light similar to Essence, and as such, opposed to the Void, her ancient enemy. The Moth Tribe is born from her light and in return revered her."
+        self.description = "a higher being of light similar to Essence, and as such, opposed to the Void, her ancient enemy. The Moth Tribe is born from her light and in return revere her."
         self.attack = 2
         self.move = "Wall of Light"
         self.loot = VengefulSpirit()

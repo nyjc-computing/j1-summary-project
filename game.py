@@ -620,9 +620,7 @@ class Game:
         elif decision.lower() == "spell":
             self.display_spells(user)
             time.sleep(self.sleep)
-            spells = []
-            for spell in user.spells:
-                spells.append(spell.name.lower())
+            spells = [spell.lower() for spell in user.get_spells()]
             choice = input("\nWhich spell would you like to cast?: ")
             while choice.lower() not in spells:
                 print(f"\nYou tried to cast {choice} but it blew up in your face")
@@ -933,10 +931,11 @@ class Game:
             weapons = user.get_weapons()
             print("\nIn your inventory you have: ")
             for weapon in weapons:
-                print(f"- {weapon.name}")
+                print(f"- {weapon}")
             time.sleep(self.sleep)
 
             decision = input("\nWhich weapon do you want to find out more about? : ")
+            weapons = [weapon.lower() for weapon in weapons]
             if decision.lower() not in weapons:
                 print(f"You do not own {decision}")
 
@@ -957,10 +956,11 @@ class Game:
             spells = user.get_spells()
             print("\nIn your inventory you have: ")
             for spell in spells:
-                print(f"- {spell.name}")
+                print(f"- {spell}")
             time.sleep(self.sleep)
 
             decision = input("\nWhich spell do you want to find out more about? : ")
+            spells = [spell.lower() for spell in spells]
             if decision.lower() not in spells:
                 print(f"You do not own {decision}")
 
@@ -974,17 +974,18 @@ class Game:
         """sub action from equip() that prompts user for specific armour to find out more about"""
         # Check if the user owns any armours
         if len(user.armours) == 0:
-            print("\nYou do not own any amours yet")
+            print("\nYou do not own any armours yet")
 
         else:
             # Displays the armours the user owns
             armours = user.get_armours()
             print("\nIn your inventory you have: ")
             for armour in armours:
-                print(f"- {armour.name}")
+                print(f"- {armour}")
             time.sleep(self.sleep)
 
             decision = input("\nWhich armour do you want to find out more about? : ")
+            armours = [armour.lower() for armour in armours]
             if decision.lower() not in armours:
                 print(f"You do not own {decision}")
 
@@ -1005,10 +1006,11 @@ class Game:
             accessories = user.get_accessories()
             print("\nIn your inventory you have: ")
             for accessory in accessories:
-                print(f"- {accessory.name}")
+                print(f"- {accessory}")
             time.sleep(self.sleep)
 
             decision = input("\nWhich accesssory do you want to find out more about? : ")
+            accessories = [accessory.lower() for accessory in accessories]
             if decision.lower() not in accessories:
                 print(f"You do not own {decision}")
 
@@ -1219,7 +1221,7 @@ class Game:
                 print(""" 
                 
      _  _  ____  __   _  _ 
-    ( \/ )(  __)/  \ / )( \
+    ( \/ )(  __)/  \ / )( \\
     / \/ \ ) _)(  O )\ /\ /
     \_)(_/(____)\__/ (_/\_)
                             """)
@@ -1318,9 +1320,12 @@ class Game:
         """
         display the settings passed in
         """
+        desc = ["The time interval between messages sent by the game in seconds"]
         print("\nCurrent Settings:\n")
-        for set in settings:
+        for i, set in enumerate(settings):
             print(f"{set}: {settings[set]}")
+            print(desc[i])
+            print()
 
     def set_sleep(self, current: int) -> str:
         """
@@ -1328,7 +1333,7 @@ class Game:
         returns new value for sleep as string
         """
         count = 0
-        print("\nsleep: the interval between messages sent by the game in seconds.")
+        print("\nsleep: the time interval between messages sent by the game in seconds.")
         print(f"Current value: {current}")
         
         accept = [str(x) for x in range(6)]

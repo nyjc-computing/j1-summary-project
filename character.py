@@ -72,7 +72,7 @@ class Character:
     def get_spells(self):
         spells = []
         for spell in self.spells:
-            spells.append(spell.name.lower())
+            spells.append(spell.name)
         return spells
 
     def get_armours(self):
