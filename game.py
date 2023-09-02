@@ -552,7 +552,7 @@ class Game:
                         if choice.lower() == "yes":
                             self.collect_loot(attacker, victim.loot)
                             time.sleep(self.sleep)
-                            print(f"\n{victim.loot.description}\n")
+                            print(f"\n{victim.loot.description}")
                             time.sleep(self.sleep)
 
                         elif choice.lower() == "no":
@@ -620,7 +620,9 @@ class Game:
         elif decision.lower() == "spell":
             self.display_spells(user)
             time.sleep(self.sleep)
-            spells = user.get_spells()
+            spells = []
+            for spell in user.spells:
+                spells.append(spell.name.lower())
             choice = input("\nWhich spell would you like to cast?: ")
             while choice.lower() not in spells:
                 print(f"\nYou tried to cast {choice} but it blew up in your face")
