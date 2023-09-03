@@ -33,6 +33,7 @@ class Enemy:
         self.loot = None
         self.description = ""
         self.move = ""
+        self.defence = 0
 
 
 class TheRadiance(Enemy):

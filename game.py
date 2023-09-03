@@ -196,7 +196,7 @@ class Game:
             self.move(self.room)
             
         elif decision.lower() == "attack":
-            self.attack(self.character, self.room.enemy)
+            self.attack()
 
         elif decision.lower() == "loot":
             self.loot(self.character, self.room.loot)
@@ -346,19 +346,19 @@ class Game:
 
         # Generate a random number to see if you managed to sneak past the enemy
         caught = False
-
-        if self.character.name == "meow":
-            chance = 2
-        else:
-            chance = random.randint(1, 3)
-            
+        
         if room.enemy != None:
-            if chance == 1:
-                caught = True
+            if self.character.name != "meow":
+                chance = random.randint(1, 3)
+                if chance != 1:
+                    caught = True
+                else:
+                    print(f"\nYou managed to sneak past {room.enemy.name}")
+                    time.sleep(self.sleep)
             else:
-                print(f"\nYou managed to sneak past {room.enemy.name}")
+                print(f"\n{room.enemy.name} cowers in your presence, granting you passage through their domain.")
                 time.sleep(self.sleep)
-
+        
         if not caught:
             if movement.lower() == "left":
                 if room.left == None:
@@ -405,25 +405,24 @@ class Game:
         else:
             print(f"\nYou tried to sneak to another room but {room.enemy.name} noticed you")
             time.sleep(self.sleep)
-            self.attack(self.character, room.enemy)
+            self.attack()
 
     def loot(self, user : Character, loot : Item) -> None:
         """main action for user to search the room for loot"""
 
         # Generate a random number to see if you successfully loot the room whithout the enemy noticing
         caught = False
-
-        if user.name == "meow":
-            chance = 1
-        else:
-            chance = random.randint(1, 3)
-
+        
         if self.room.enemy != None:
-            if chance != 1:
-                caught = True
+            if self.character.name != "meow":
+                chance = random.randint(1, 3)
+                if chance != 1:
+                    caught = True
+                else:
+                    print(f"\nBy some miracle you managed to loot the room without {self.room.enemy.name} noticing")
+                    time.sleep(self.sleep)
             else:
-                print(f"\nBy some miracle you managed to loot the room without {self.room.enemy.name} noticing")
-                
+                print(f"\n{self.room.enemy.name} cowers in your presence, granting you access to their domain.")
                 time.sleep(self.sleep)
 
         if not caught:
@@ -459,7 +458,7 @@ class Game:
         else:
             print(f"\n{self.room.enemy.name} noticed you while you tried to loot the room")
             time.sleep(self.sleep)
-            self.attack(user, self.room.enemy)
+            self.attack()
 
     def flask(self, user : Character) -> None:
         """main action for user to drink their flasks"""
@@ -470,212 +469,41 @@ class Game:
         else:
             self.use_flask(user)
 
-    def attack(self, attacker : Character , victim: Enemy) -> None:
-        """main action for user to attack the enemy in the room"""
-        # Check if there is an enemy in the room
-        if victim == None:
+    def attack(self):
+        if self.room.enemy == None:
             print("\nYou attacked the air and realised how insane you looked")
             time.sleep(self.sleep)
+        if self.room.encounter.fight(self.character):
+            if self.room.name == "The Shrieking Shack":
+                weapon = self.character.weapon
+                self.win(weapon)
+            else:
+                self.drops()
+                self.room.enemy = None
         else:
-            while attacker.health > 0:
-                # Display users health and mana
-                print(f"\n{'-'*50}\n")
-                print(f"{attacker.name} has {attacker.health} health")
-                print(f"{attacker.name} has {attacker.mana} mana")
-                print(f"{attacker.name} has {attacker.health_flask} Flask of Crimson Tears")
-                print(f"{attacker.name} has {attacker.mana_flask} Flask of Cerulean Tears")
-                time.sleep(self.sleep)
-                # Display enemy's health
-                print(f"\n{victim.name} has {victim.health} health\n")
-                time.sleep(self.sleep)
-
-                decision = self.get_choice(attacker)
-                
-                if decision == "flask":
-                    self.use_flask_battle(attacker)
-
-                    # Allow enemy to attack if it didn't die yet
-                    if victim.health > 0:
-                        damage = max(1, victim.attack - attacker.defence)
-                        attacker.health = attacker.health - damage
-                        print(f"\n{victim.name} used {victim.move}, dealing {damage} damage to {attacker.name}")
-                        time.sleep(self.sleep)
-
-                elif decision == "shield":
-                    #get cost for shield
-                    cost = 10
-                    
-                    attacker.mana = attacker.mana - 10
-                    print(f"\nYou used up {cost} mana points")
-                    print(f"You empower your shield with mana")
-                    print(f"\n{victim.name} used {victim.move}, but it was deflected by your shield")
-                    time.sleep(self.sleep)
-                
-                else:
-                    damage, weapon = self.get_attack(attacker, decision)
-
-                    # Deal damage to enemy
-                    damage += attacker.attack
-                    victim.health = victim.health - damage
-                    # Check if enemy died
-                    if victim.health > 0:
-                        print(f"\n{attacker.name}{weapon.move}, dealing {damage} damage to {victim.name}")
-                        time.sleep(self.sleep)
-                    # Allow enemy to attack if it didn't die yet
-                    if victim.health > 0:
-                        damage = max(1, victim.attack - attacker.defence)
-                        attacker.health = attacker.health - damage
-                        print(f"\n{victim.name} used {victim.move}, dealing {damage} damage to {attacker.name}")
-                        time.sleep(self.sleep)
-    
-                    else:
-                        # Check if dead enemy is the final boss
-                        if victim.name == "Voldemort":
-                            print("\nInsert transition to second phase or alternate enemy")
-                            time.sleep(self.sleep)
-                            self.room.enemy = Phase2()
-                            self.attack(attacker, self.room.enemy)
-                            return
-                        elif victim.name == "Phase 2":
-                            self.win(weapon)
-                            return
-
-                        print(f"\n{attacker.name}{weapon.win_front}{victim.name}{weapon.win_back}")
-                        time.sleep(self.sleep)
-                        if victim.name == "Sentinels":
-                            self.secret_room()
-                            self.room.enemy = None
-                            return
-                        print(f"\n{victim.name} dropped a {victim.loot.name}")
-                        time.sleep(self.sleep)
-                        choice = input(f"\nDo you want to pick {victim.loot.name}? ( yes / no ): ")
-                        if choice.lower() == "yes":
-                            self.collect_loot(attacker, victim.loot)
-                            time.sleep(self.sleep)
-                            print(f"\n{victim.loot.description}")
-                            time.sleep(self.sleep)
-
-                        elif choice.lower() == "no":
-                            print(f"\nYou left {victim.loot.name} on the ground and allowed the resourceful rat to steal it")
-                            time.sleep(self.sleep)
-                        else:
-                            print(f"\nYour indecisiveness allowed the resourceful rat to steal the {victim.loot.name} when you weren't looking")
-                            time.sleep(self.sleep)
-                        # Removes the enemy from the room
-                        self.room.enemy = None
-                        break
-            # Check if the user died
-            if attacker.health <= 0:
-                self.end_game()
-
-    def get_choice(self, user : Character) -> str:
-        """sub action from attack() to prompt user for attack methods or use of flask"""
-        decision = input(f"What do you want to use? ({user.weapon.name} / Spell / Flask / Shield): ")
-
-        # Get a list of spell cost
-        cost = []
-        for spell in user.spells:
-            cost.append(spell.cost)
-
-        #Get shield cost
-        shield_cost = 10
-
-        valid = False
-        while not valid:
-            valid = True
-            if decision.lower() not in [user.weapon.name.lower(), "spell", "flask", "shield"]:
-                print(f"\nYou tried to use {decision} but nothing happened")
-                time.sleep(self.sleep)
-                decision = input(f"\nWhat do you want to use? ({user.weapon.name} / Spell / Flask / Shield): ")
-                valid = False
-            # Check if user has enough mana to cast spells
-            elif decision.lower() == "spell" and user.mana < min(cost):
-                print("\nYou do not have enough mana to cast spells\n")
-                time.sleep(self.sleep)
-                decision = input(f"What do you want to use? ({user.weapon.name} / Spell / Flask / Shield): ")
-                valid = False
-            # Check if user has any flask to drink
-            elif decision.lower() == "flask" and (user.health_flask + user.mana_flask) == 0:
-                print("\nYou ran out of flasks\n")
-                time.sleep(self.sleep)
-                decision = input(f"What do you want to use? ({user.weapon.name} / Spell / Flask / Shield): ")    
-                valid = False
-            #Check if user has enough mana to use shield
-            elif decision.lower() == "shield" and user.mana < shield_cost:
-                print("\nYou do not have enough mana to shield yourself\n")
-                time.sleep(self.sleep)
-                decision = input(f"What do you want to use? ({user.weapon.name} / Spell / Flask / Shield): ")
-                valid = False
-
-        return decision
-    
-    def get_attack(self, user : Character, decision : str) -> [int, Weapon]:
-        """sub action from attack() to get total damage done to victim"""
-
-        # Check if user used his weapon
-        if decision.lower() == user.weapon.name.lower():
-            return user.weapon.attack, user.weapon
-
-        # check if user used spells
-        elif decision.lower() == "spell":
-            self.display_spells(user)
-            time.sleep(self.sleep)
-            spells = [spell.lower() for spell in user.get_spells()]
-            choice = input("\nWhich spell would you like to cast?: ")
-            while choice.lower() not in spells:
-                print(f"\nYou tried to cast {choice} but it blew up in your face")
-                time.sleep(self.sleep)
-                choice = input("\nWhich spell would you like to cast?: ")
-            choice = choice.lower()
-            cost = user.spells[spells.index(choice)].cost
-            print(f"\nYou used up {cost} mana points")
-            time.sleep(self.sleep)
-            user.mana = user.mana - cost
-            return user.spells[spells.index(choice)].attack, user.spells[spells.index(choice)]
-
-    def use_flask_battle(self, user : Character) -> None:
-        """sub action from get_choice() to prompt user for the flask to drink"""
-        self.display_flask(user)
-        selection = input("Which flask would you like to drink?: ")
-        valid = False
-        while not valid:
-            valid = True
-            # Validates user selection
-            if selection.lower() not in ["flask of crimson tears", "flask of cerulean tears"]:
-                print(f"\nYou tried drinking {selection} but nothing happened\n")
-                time.sleep(self.sleep)
-                selection = input("Which flask would you like to drink?: ")
-                valid = False
-            # Checks if the user has enough flask of crimson tears
-            elif selection.lower() == "flask of crimson tears" and user.health_flask == 0:
-                print("\nYou ran out of Flask of Crimson Tears\n")
-                time.sleep(self.sleep)
-                selection = input("Which flask would you like to drink?: ")
-                valid = False
-            # Checks if the user has enough flask of cerulean tears
-            elif selection.lower() == "flask of cerulean tears" and user.mana_flask == 0:
-                print("\nYou ran out of Flask of Cerulean Tears\n")
-                time.sleep(self.sleep)
-                selection = input("Which flask would you like to drink?: ")
-                valid = False
-
-        if selection.lower() == "flask of crimson tears":
-            # Makes sure the health healed does not exceed the maximum health
-            final_health = min(user.max_health, user.health + FlaskOfCrimsonTears().health)
-            healing = final_health - user.health
-            print(f"\nYou drank a Flask of Crimson Tears and gained {healing} health")
-            time.sleep(self.sleep)
-            user.health = final_health
-            user.health_flask -= 1
+            self.end_game()
             
-        elif selection.lower() == "flask of cerulean tears":
-            # Makes sure the mana gained does not exceed the maximum mana
-            final_mana = min(user.max_mana, user.mana + FlaskOfCeruleanTears().mana)
-            healing = final_mana - user.mana
-            print(f"\nYou drank a Flask of Cerulean Tears and gained {healing} mana")
+    def drops(self):
+        """obtains drops from defeated enemy"""
+        
+        victim = self.room.enemy
+        player = self.character
+        
+        print(f"\n{victim.name} dropped a {victim.loot.name}")
+        time.sleep(self.sleep)
+        choice = input(f"\nDo you want to pick {victim.loot.name}? ( yes / no ): ")
+        if choice.lower() == "yes":
+            self.collect_loot(player, victim.loot)
             time.sleep(self.sleep)
-            user.mana = final_mana
-            user.mana_flask -= 1
+            print(f"\n{victim.loot.description}")
+            time.sleep(self.sleep)
+
+        elif choice.lower() == "no":
+            print(f"\nYou left {victim.loot.name} on the ground and allowed the resourceful rat to steal it")
+            time.sleep(self.sleep)
+        else:
+            print(f"\nYour indecisiveness allowed the resourceful rat to steal the {victim.loot.name} when you weren't looking")
+            time.sleep(self.sleep)
                 
     def use_flask(self, user : Character) -> None:
         """Function to allow the user to use flask but also allows them to cancel the action"""
@@ -798,20 +626,21 @@ class Game:
             print("\nIn your inventory you have: ")
             armours = user.get_armours()
             for armour in armours:
-                print(f"- {armour.name}")
+                print(f"- {armour}")
             time.sleep(self.sleep)
             option = input("\nWhich armour do you want to equip?: ")
             # Validates the users choice
+            armours = [armour.lower() for armour in armours]
             if option.lower() not in armours:
                 print(f"\nYou tried equipping {option} but realised you cant create things out of thin air")
                 time.sleep(self.sleep)
             else:
-                print(f"\nYou equipped {option}")
+                print(f"\nYou equipped the {option}")
                 time.sleep(self.sleep)
                 # Removes the defence increase of the previous armour
                 if user.armour != None:
                     user.defence = user.defence - user.armour.defence
-                armour = user.armours[items.index(option.lower())]
+                armour = user.armours[armours.index(option.lower())]
                 # Adds the defence of the new armour
                 user.defence = user.defence + armour.defence
                 user.armour = armour
@@ -827,16 +656,17 @@ class Game:
             print("\nIn your inventory you have: ")
             weapons = user.get_weapons()
             for weapon in weapons:
-                print(f"- {weapon.name}")
+                print(f"- {weapon}")
             time.sleep(self.sleep)
             # Validates the user's choice
             option = input("\nWhich weapon do you want to equip?: ")
+            weapons = [weapon.lower() for weapon in weapons]
             if option.lower() not in weapons:
                 print(f"\nYou tried equipping {option} but realised you cant create things out of thin air")
             else:
-                print(f"\nYou equipped {option}")
+                print(f"\nYou equipped the {option}")
                 time.sleep(self.sleep)
-                user.weapon = user.weapons[items.index(option.lower())]
+                user.weapon = user.weapons[weapons.index(option.lower())]
                 self.display_equipment(user)
 
     def equip_accessory(self, user : Character) -> None:
@@ -848,13 +678,14 @@ class Game:
             print("\nIn your inventory you have: ")
             accessories = user.get_accessories()
             for accessory in accessories:
-                print(f"- {accessory.name}")
+                print(f"- {accessory}")
             time.sleep(self.sleep)
             option = input("\nWhich accessory do you want to equip?: ")
+            accessories = [accessory.lower() for accessory in accessories]
             if option.lower() not in accessories:
                 print(f"\nYou tried equipping {option} but realised you cant create things out of thin air")
             else:
-                print(f"\nYou equipped {option}")
+                print(f"\nYou equipped the {option}")
                 time.sleep(self.sleep)
 
                 # Removes the stat boost from the previous accessory
@@ -874,7 +705,7 @@ class Game:
                     user.defence -= user.accessory.defence_boost
 
                 # Adds the stat boost from the new accessory
-                accessory = user.accessories[items.index(option.lower())]
+                accessory = user.accessories[accessories.index(option.lower())]
                 user.health += accessory.health_boost
                 user.max_health += accessory.health_boost
                 user.attack += accessory.attack_boost
