@@ -337,7 +337,7 @@ class Gabriel(Enemy):
     def __init__(self):
         super().__init__()
         self.name = "Gabriel, Apostate of Hate"
-        self.health = 200
+        self.health = 400
         self.description = "a seething red angelic crusader wielding twin swords, desperate to prove himself to the council"
         self.attack = 20
         self.move = "Sword Throw"

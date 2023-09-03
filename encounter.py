@@ -6,7 +6,6 @@ import time
 import item
 import enemy as enemies_
 
-
 class encounter:
     """
     Parent class for fights
@@ -19,6 +18,8 @@ class encounter:
             out = f.readlines()
             out = [x.split()[1] for x in out]
         self.sleep = int(out[0])
+        self.tips = ["Remember to restore your health and mana before every fight",
+                    "Other rooms may have useful drops that could make this fight easier"]
 
     def fight(self, player: "character") -> bool:
         """
@@ -66,6 +67,9 @@ class encounter:
             return True
 
         elif state == 2:
+            self.end_game()
+            print()
+            print(random.choice(self.tips))
             return False
         
 
@@ -128,6 +132,7 @@ class encounter:
             decision = input(prompt)
             while decision.lower() not in accepted:
                 print(f"\nYou tried to use {decision} but nothing happened")
+                time.sleep(self.sleep)
                 decision = input(prompt)
 
             decision = decision.lower()
@@ -263,6 +268,7 @@ class encounter:
             
             elif self.player.spells[accepted.index(choice.lower())].cost > self.player.mana:
                 print(f"You do not have enough mana to cast {choice}")
+                time.sleep(self.sleep)
                 
             else:
                 valid = True
@@ -275,6 +281,7 @@ class encounter:
         cost = spell.cost
         self.player.mana = self.player.mana - cost
         print(f"\nYou used up {cost} mana points")
+        time.sleep(self.sleep)
 
         self.damage(spell, target)
 
@@ -298,6 +305,7 @@ class encounter:
             
             while selection.lower() not in ["flask of crimson tears", "flask of cerulean tears", "cancel"]:
                 print(f"\nYou tried drinking {selection} but nothing happened\n")
+                time.sleep(self.sleep)
                 selection = input("Which flask would you like to drink? (type cancel to cancel): ")
 
             if selection.lower() == "flask of crimson tears":
@@ -378,6 +386,20 @@ class encounter:
         else:
             return 0
 
+    def end_game(self) -> None:
+        """displays scenario when user dies"""
+        print("__   _______ _   _  ______ _____ ___________")
+        time.sleep(0.2)
+        print("\ \ / /  _  | | | | |  _  \_   _|  ___|  _  \\")
+        time.sleep(0.2)
+        print(" \ V /| | | | | | | | | | | | | | |__ | | | |")
+        time.sleep(0.2)
+        print("  \ / | | | | | | | | | | | | | |  __|| | | |")
+        time.sleep(0.2)
+        print("  | | \ \_/ / |_| | | |/ / _| |_| |___| |/ /")
+        time.sleep(0.2)
+        print("  \_/  \___/ \___/  |___/  \___/\____/|___/ ")
+
 class voldemort_fight(encounter):
     """
     an encounter that inherits from the encounter class
@@ -406,7 +428,6 @@ class voldemort_fight(encounter):
             if len(self.phases) == 1:
                 self.phase_transfer()
             else:
-                self.enemies.remove(target)
                 target.health = 0
 
     def phase_transfer(self):
@@ -417,10 +438,13 @@ class voldemort_fight(encounter):
         self.enemies[0] = self.phases[0]
         self.phases.remove(self.phases[0])
         self.transfer = 1
+        time.sleep(self.sleep)
 
     def enemy_turn(self, player_choice: str) -> None:
         """
         let enemies attack
+
+        changing this method to prevent boss from taking a turn immediately after reviving
         """
 
         if self.transfer == 1:
@@ -460,6 +484,8 @@ class gabriel_fight(encounter):
                       "zenith", "rgx butterfly knife", "wand", "toy knife"]
         self.enemy = self.enemies[0]
         self.spin_warning = 0
+        self.tips = ["Gabriel's Spinning Blades make close range attacks risky. Try engaging him at a distance with spells.",
+                    "Gabriel doesn't activate spinning blades when he's winding up to use Sword Throw."]
 
     def enemy_turn(self, player_choice: str) -> None:
         """
@@ -474,13 +500,13 @@ class gabriel_fight(encounter):
             else:
                 damage = max(1, enemy.attack - self.player.defence)
                 self.player.health = self.player.health - damage
-                print(f"\nGabriel used light combo, dealing {damage} damage to {self.player.name}")
+                print(f"\nGabriel used Light Combo, dealing {damage} damage to {self.player.name}")
             time.sleep(self.sleep)
 
         if self.timer > 1:
             enemy.defence = 10
             self.spinning_blades = 1
-            print(f"Gabriel used spinning blades, increasing his defence by 10 for one turn")
+            print(f"Gabriel used Spinning Blades, increasing his defence by 10 for one turn")
             time.sleep(self.sleep)
 
         if self.timer == 1:

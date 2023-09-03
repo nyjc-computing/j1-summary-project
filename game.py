@@ -481,7 +481,7 @@ class Game:
                 self.drops()
                 self.room.enemy = None
         else:
-            self.end_game()
+            self.end = True
             
     def drops(self):
         """obtains drops from defeated enemy"""
