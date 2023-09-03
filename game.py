@@ -4,7 +4,14 @@ import random
 
 #import from other files
 from setup import *
+import tkinter as tk
 import map
+
+root = tk.Tk()
+root.geometry('600x600')
+root.configure(bg='black')
+text = tk.Text(root, height = 560, width = 560, state = "disabled", background = "black", foreground = "white")
+text.pack()
 
 """
 A class that creates an instance of the game
@@ -72,13 +79,20 @@ selfactions = ["help", "look", "move", "loot", "flask", "attack", "equip", "stat
 selfdescription = ["Gets the list of possible actions", "Looks around the room","Move to another room", "Search the room for loot", "Drink your flasks", "Attack the enemny", "Change your equipment", "See your statistics", "Find out more about your items", "Ends the game", "Change settings", "Shows map", "Meow"]
 selfteleportable = False
 selfmap = map.game_map()
-
 out = []
 with open("settings.txt", "r") as f:
     out = f.readlines()
     out = [x.split()[1] for x in out]
 selfsleep = int(out[0])
 
+def write(txt):
+    text['state'] = 'normal'
+    text.insert(tk.END, txt+"\n")
+    text['state'] = 'disabled'
+
+def delete():
+    text.delete("1.0", tk.END)
+    pass
 def intro():
     """print introduction for the start of the game """
     
@@ -87,7 +101,6 @@ def intro():
     time.sleep(selfsleep)
     print("\nThe Dark Lord Voldemort has taken over Hogwarts and opened multiple interdimensional gates, bringing hordes of enemies into the school. Your job as the chosen one is to traverse the school in order to locate The Shrieking Shack and thwart Voldemort's evil plan to take over the world.\n")
     time.sleep(selfsleep)
-
     decision = input('Do you wish to enter the school? ( yes / no ): ')
     
     if decision.lower() == "yes":
@@ -1351,3 +1364,5 @@ def teleport():
 intro()
 while selfend == False:
     run()
+#root.after(1, intro)
+#root.mainloop()
