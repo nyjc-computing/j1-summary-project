@@ -79,7 +79,9 @@ selfactions = ["help", "look", "move", "loot", "flask", "attack", "equip", "stat
 selfdescription = ["Gets the list of possible actions", "Looks around the room","Move to another room", "Search the room for loot", "Drink your flasks", "Attack the enemny", "Change your equipment", "See your statistics", "Find out more about your items", "Ends the game", "Change settings", "Shows map", "Meow"]
 selfteleportable = False
 selfmap = map.game_map()
+currentPressedKey = ""
 out = []
+pause_var = tk.StringVar()
 with open("settings.txt", "r") as f:
     out = f.readlines()
     out = [x.split()[1] for x in out]
@@ -93,33 +95,48 @@ def write(txt):
 def delete():
     text.delete("1.0", tk.END)
     pass
+
+def key_press(e):
+   currentPressedKey = e.char
+
+def key_released(e):
+   print(e)
+
+def wait_until_key_pressed():
+    if currentPressedKey in ["y","n"]:
+        pause_var += 1
+    root.after(0, wait_until_key_pressed)
 def intro():
     """print introduction for the start of the game """
     
     # Displays the introduction messages
-    print('Welcome to Hogwarts School of Witchcraft and Wizardry')
-    time.sleep(selfsleep)
-    print("\nThe Dark Lord Voldemort has taken over Hogwarts and opened multiple interdimensional gates, bringing hordes of enemies into the school. Your job as the chosen one is to traverse the school in order to locate The Shrieking Shack and thwart Voldemort's evil plan to take over the world.\n")
-    time.sleep(selfsleep)
-    decision = input('Do you wish to enter the school? ( yes / no ): ')
+    write('Welcome to Hogwarts School of Witchcraft and Wizardry')
+    write("\nThe Dark Lord Voldemort has taken over Hogwarts and opened multiple interdimensional gates, bringing hordes of enemies into the school. Your job as the chosen one is to traverse the school in order to locate The Shrieking Shack and thwart Voldemort's evil plan to take over the world.\n")
+    write('Do you wish to enter the school?')
+    write('[y] Yes')
+    write('[n] No')
+    root.bind('<y>', lambda x: pause_var.set("yes"))
+    root.bind("<n>", lambda x: pause_var.set("no"))
+    root.wait_variable(pause_var)
+    decision = pause_var.get()
     
     if decision.lower() == "yes":
-        name = input('\nTarnished, key in your name: ')
+        name = "c" #input('\nTarnished, key in your name: ')
         selfcharacter.name = name
         # Check if the user used the secret easter egg name
         if name == "meow":
             secret()
         else:
-            print("\nYou boldly opened the front gates of the school and made your way into the first room\n")
+            write("\nYou boldly opened the front gates of the school and made your way into the first room\n")
             time.sleep(selfsleep)
     elif decision.lower() == "no":
-        print("\nDue to your utter cowardice, voldemort continued to gain power, spreading his control and chaos all over the world, leading to the complete annihilation of the human race.")
+        write("\nDue to your utter cowardice, voldemort continued to gain power, spreading his control and chaos all over the world, leading to the complete annihilation of the human race.")
         selfend = True
         time.sleep(selfsleep)
         end_game()
         return
     else:
-        print("\nDue to your indecision, voldemort continued to gain power, spreading his control and chaos all over the world, leading to the complete annihlation of the human race.")
+        write("\nDue to your indecision, voldemort continued to gain power, spreading his control and chaos all over the world, leading to the complete annihlation of the human race.")
         selfend = True
         time.sleep(selfsleep)
         end_game()
@@ -1361,8 +1378,5 @@ def teleport():
         selfroom = selfrooms[rooms.index(choice.lower())]
             
 
-intro()
-while selfend == False:
-    run()
-#root.after(1, intro)
-#root.mainloop()
+root.after(0,intro)
+root.mainloop()
