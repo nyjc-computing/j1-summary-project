@@ -10,8 +10,9 @@ import map
 root = tk.Tk()
 root.geometry('600x600')
 root.configure(bg='black')
-text = tk.Text(root, height = 560, width = 560, state = "disabled", background = "black", foreground = "white")
+text = tk.Text(root, height = 560, width = 560, background = "black", foreground = "white")
 text.pack()
+text.focus_set()
 
 """
 A class that creates an instance of the game
@@ -93,19 +94,18 @@ def write(txt):
     text['state'] = 'disabled'
 
 def delete():
+    text['state'] = 'normal'
     text.delete("1.0", tk.END)
-    pass
-
-def key_press(e):
-   currentPressedKey = e.char
-
-def key_released(e):
-   print(e)
-
-def wait_until_key_pressed():
-    if currentPressedKey in ["y","n"]:
-        pause_var += 1
-    root.after(0, wait_until_key_pressed)
+    text['state'] = 'disabled'
+def start_typing(e):
+    text['state'] = 'normal'
+    data = text.get("1.0",'end-1c')
+    if e.keysym == "BackSpace":
+        if data != 'Tarnished, key in your name: ':
+            text.delete('end-2c','end-1c')
+    else:
+        text.insert(tk.END, e.char)
+    text['state'] = 'disabled'
 def intro():
     """print introduction for the start of the game """
     
@@ -119,24 +119,38 @@ def intro():
     root.bind("<n>", lambda x: pause_var.set("no"))
     root.wait_variable(pause_var)
     decision = pause_var.get()
+    root.unbind('<y>')
+    root.unbind('<n>')
+    delete()
+    pause_var.set("")
     
     if decision.lower() == "yes":
-        name = "c" #input('\nTarnished, key in your name: ')
+        text['state'] = 'normal'
+        text.insert(tk.END, "Tarnished, key in your name: ")
+        text['state'] = 'disabled'
+        text.bind('<Key>', start_typing)
+        root.bind('<Return>', lambda x: pause_var.set("done"))
+        root.wait_variable(pause_var)
+        root.unbind('<Return>')
+        text.unbind('<Key>')
+        pause_var.set("")
+        name = text.get("1.0",'end-1c')[29:]
+        delete()
         selfcharacter.name = name
         # Check if the user used the secret easter egg name
         if name == "meow":
             secret()
         else:
-            write("\nYou boldly opened the front gates of the school and made your way into the first room\n")
+            write("You boldly opened the front gates of the school and made your way into the first room\n")
             time.sleep(selfsleep)
     elif decision.lower() == "no":
-        write("\nDue to your utter cowardice, voldemort continued to gain power, spreading his control and chaos all over the world, leading to the complete annihilation of the human race.")
+        write("Due to your utter cowardice, voldemort continued to gain power, spreading his control and chaos all over the world, leading to the complete annihilation of the human race.")
         selfend = True
         time.sleep(selfsleep)
         end_game()
         return
     else:
-        write("\nDue to your indecision, voldemort continued to gain power, spreading his control and chaos all over the world, leading to the complete annihlation of the human race.")
+        write("Due to your indecision, voldemort continued to gain power, spreading his control and chaos all over the world, leading to the complete annihlation of the human race.")
         selfend = True
         time.sleep(selfsleep)
         end_game()
