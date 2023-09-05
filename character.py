@@ -8,7 +8,7 @@ from upgrade import *
 
 class Character:
     """
-    A class that creates an instance of the game
+    A class that creates an instance of the player
 
     Attributes
     ----------
