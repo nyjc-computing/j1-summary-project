@@ -217,7 +217,6 @@ def run():
     global selfend
     delete()
     """to be run in a loop to prompt user's action"""
-    display_room_name()
     # Checks if the player has entered the room before
     if not selfroom.been_here:
         # Displays a description of the room if the player has not been there before
@@ -282,8 +281,8 @@ def run():
             selfmap.walled_enter()
         elif selfroom.name == "The Last Resort":
             selfmap.last_resort_enter()
-    
-    decision = get_input("What do you wish to do?", selfactions, ["{} ({})".format(a,b) for a,b in zip(selfactions, selfdescription)])
+    display_room_name()
+    decision = get_input("What do you wish to do?", selfactions, ["{} ({})".format(a,b) for a,b in zip(selfactions, selfdescription)],False)
 
     # Does the action the user selected
 
@@ -780,28 +779,21 @@ def use_flask(user):
         user.mana_flask -= 1
     
         
-def equip(self):
+def equip(user):
     """main action for user to equip various items"""
 
     display_equipment(user)
 
-    decision = input("\ndo you want to change your equipment? ( yes / no ): ")
-
-    while decision.lower() not in ["yes", "no"]:
-        write("You briefly ponder the heavily nuanced and deeply intricate question of a choice between yes and no.")
-        sleep(selfsleep)
-        decision = input("\ndo you want to change your equipment? ( yes / no ): ")
-
+    decision = get_input("Do you want to change your equipment?", ["Yes","No"], None, False)
+    options = ["armour", "weapon", "accessory", "done"]
     if decision.lower() == "no":
         return
 
     elif decision.lower() == "yes":
-        choice = ""
-        while choice != "finish":
-            choice = input("\nwhat do you want to change? (type finish to quit): ")
-            while choice.lower() not in ["armour", "weapon", "accessory", "finish"]:
-                write(f"\nYou tried changing your {choice} but nothing happened")
-                choice = input("\nwhat do you want to change? (type finish to quit): ")
+        while True:
+            delete()
+            display_equipment(user)
+            choice = get_input("\nWhat do you want to change?", [x.capitalize() for x in options],None, False)
 
             if choice.lower() == "armour":
                 equip_armour(user)
@@ -811,6 +803,7 @@ def equip(self):
 
             elif choice.lower() == "accessory":
                 equip_accessory(user)
+            else: break
     
 def display_equipment(user):
     """sub action for equip() to display equipments that the user have"""
@@ -840,14 +833,11 @@ def equip_armour(user):
         sleep(selfsleep)
     else:
         # Displays the armours the user owns
-        write("\nIn your inventory you have: ")
-        armours = user.get_armours()
-        for armour in armours:
-            write(f"- {armour.name}")
-        sleep(selfsleep)
-        option = input("\nWhich armour do you want to equip?: ")
+        
+        items = [x.lower() for x in user.get_armours()]
+        option = get_input("Which armour do you want to equip?",items, [x.title() for x in items])
         # Validates the users choice
-        if option.lower() not in armours:
+        if option.lower() not in items:
             write(f"\nYou tried equipping {option} but realised you cant create things out of thin air")
             sleep(selfsleep)
         else:
@@ -860,7 +850,6 @@ def equip_armour(user):
             # Adds the defence of the new armour
             user.defence = user.defence + armour.defence
             user.armour = armour
-            display_equipment(user)
 
 def equip_weapon(user):
     """sub action from equip() for user to choose a weapon to equip"""
@@ -869,34 +858,26 @@ def equip_weapon(user):
         sleep(selfsleep)
     else:
         # Displays the weapons the user owns
-        write("\nIn your inventory you have: ")
-        weapons = user.get_weapons()
-        for weapon in weapons:
-            write(f"- {weapon.name}")
-        sleep(selfsleep)
+        items = [x.lower() for x in user.get_weapons()]
         # Validates the user's choice
-        option = input("\nWhich weapon do you want to equip?: ")
-        if option.lower() not in weapons:
+        option = get_input("\nWhich weapon do you want to equip?", items, [x.title() for x in items])
+        if option not in items:
             write(f"\nYou tried equipping {option} but realised you cant create things out of thin air")
         else:
             write(f"\nYou equipped {option}")
             sleep(selfsleep)
             user.weapon = user.weapons[items.index(option.lower())]
-            display_equipment(user)
 
 def equip_accessory(user):
     """sub action from equip() for user to choose an accessory to equip"""
     if len(user.accessories) == 0:
         write("\nYou do not have any accessories to equip")
         sleep(selfsleep)
+        delete()
     else:
-        write("\nIn your inventory you have: ")
-        accessories = user.get_accessories()
-        for accessory in accessories:
-            write(f"- {accessory.name}")
-        sleep(selfsleep)
-        option = input("\nWhich accessory do you want to equip?: ")
-        if option.lower() not in accessories:
+        items = [x.lower() for x in user.get_accessories()]
+        option = get_input("\nWhich accessory do you want to equip?", items, [x.title() for x in items])
+        if option not in items:
             write(f"\nYou tried equipping {option} but realised you cant create things out of thin air")
         else:
             write(f"\nYou equipped {option}")
@@ -928,7 +909,6 @@ def equip_accessory(user):
             user.defence += user.accessory.defence_boost
             
             user.accessory = accessory
-            display_equipment(user)
 
 def status(user):
     """main action that prints user's status"""
@@ -994,12 +974,8 @@ def spell_info(user):
     else:
         # Displays the spells the user knows
         spells = user.get_spells()
-        write("\nIn your inventory you have: ")
-        for spell in spells:
-            write(f"- {spell.name}")
-        sleep(selfsleep)
 
-        decision = input("\nWhich spell do you want to find out more about? : ")
+        decision = get_input("\nWhich spell do you want to find out more about?", spells)
         if decision.lower() not in spells:
             write(f"You do not own {decision}")
 
@@ -1008,6 +984,7 @@ def spell_info(user):
             write("\n", end="")
             write(user.spells[spells.index(decision)].description)
             sleep(selfsleep)
+            wait_for_key_press()
 
 def armour_info(user):
     """sub action from equip() that prompts user for specific armour to find out more about"""
@@ -1018,12 +995,7 @@ def armour_info(user):
     else:
         # Displays the armours the user owns
         armours = user.get_armours()
-        write("\nIn your inventory you have: ")
-        for armour in armours:
-            write(f"- {armour.name}")
-        sleep(selfsleep)
-
-        decision = input("\nWhich armour do you want to find out more about? : ")
+        decision = get_input("Which armour do you want to find out more about?", armours)
         if decision.lower() not in armours:
             write(f"You do not own {decision}")
 
@@ -1032,6 +1004,7 @@ def armour_info(user):
             write("\n", end="")
             write(user.armours[armours.index(decision)].description)
             sleep(selfsleep)
+            wait_for_key_press()
 
 def accessory_info(user):
     """sub action from equip() that prompts user for specific accessory to find out more about"""
@@ -1042,12 +1015,7 @@ def accessory_info(user):
     else:
         # Displays the accessories the user owns
         accessories = user.get_accessories()
-        write("\nIn your inventory you have: ")
-        for accessory in accessories:
-            write(f"- {accessory.name}")
-        sleep(selfsleep)
-
-        decision = input("\nWhich accesssory do you want to find out more about? : ")
+        decision = get_input("Which accesssory do you want to find out more about?", accessories)
         if decision.lower() not in accessories:
             write(f"You do not own {decision}")
 
@@ -1056,22 +1024,23 @@ def accessory_info(user):
             write("\n", end="")
             write(user.accessories[accessories.index(decision)].description)
             sleep(selfsleep)
+            wait_for_key_press()
 
 def flask_info():
     """sub action from equip() that prompts user for specific flask to find out more about"""
-    write("\nIn your inventory you have: ")
-    write("- Flask of Crimson Tears")
-    write("- Flask of Cerulean Tears")
+    flasks = ["Flask of Crimson Tears", "Flask of Cerulean Tears"]
 
-    decision = input("\nWhich accesssory do you want to find out more about? : ")
+    decision = get_input("\nWhich accesssory do you want to find out more about?", flasks)
     if decision.lower() == "flask of crimson tears":
         write("\n", end ="")
         write(FlaskOfCrimsonTears().description)
         sleep(selfsleep)
+        wait_for_key_press()
     elif decision.lower() == "flask of cerulean tears":
         write("\n", end ="")
         write(FlaskOfCeruleanTears().description)
         sleep(selfsleep)
+        wait_for_key_press()
     else:
         write(f"You do not own {decision}")
 
@@ -1083,12 +1052,7 @@ def item_info(user):
     else:
         # Displays the items the user owns
         items = user.get_items()
-        write("\nIn your inventory you have: ")
-        for item in items:
-            write(f"- {item}")
-        sleep(selfsleep)
-
-        decision = input("\nWhich item do you want to find out more about? : ")
+        decision = get_input("\nWhich item do you want to find out more about?", items)
         if decision.lower() not in items:
             write(f"You do not own {decision}")
 
@@ -1097,6 +1061,7 @@ def item_info(user):
             write()
             write(user.items[items.index(decision)].description)
             sleep(selfsleep)
+            wait_for_key_press()
                 
 def display_room_name():
     """prints the room's name in a cool way"""
@@ -1108,11 +1073,13 @@ def display_room_name():
 
 def display_room_description():
     """prints the room's description"""
+    display_room_name()
     write()
     write(selfroom.description)
     sleep(selfsleep)
     look(selfroom)
     selfroom.been_here = True
+    delete()
 
 
 
@@ -1416,7 +1383,7 @@ if __name__ == "__main__":
     pause_var = tk.StringVar()
     pointer = tk.IntVar()
     sleepCount = tk.IntVar()
-    root.geometry('600x600')
+    root.geometry('800x600')
     root.configure(bg='black')
     text = tk.Text(root, height = 560, width = 560, background = "black", foreground = "white")
     text.pack()
