@@ -214,6 +214,7 @@ def get_input(prompt, options, displayoptions = None, deletebefore = True):
         
 def run():
     global selfroom
+    global selfend
     delete()
     """to be run in a loop to prompt user's action"""
     display_room_name()
@@ -1144,6 +1145,7 @@ def collect_loot(attacker, loot):
     sleep(selfsleep)
 
 def end_game():
+    global selfend
     """displays scenario when user dies"""
     write("__   _______ _   _  ______ _____ ___________")
     sleep(0.2)
