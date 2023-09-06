@@ -26,6 +26,7 @@ selfsleep = int(out[0])
 def sleep(t):
     root.after(int(t*1000), lambda: sleepCount.set(sleepCount.get()+1))
     root.wait_variable(sleepCount)
+
 def write(txt=""):
     text['state'] = 'normal'
     text.insert(tk.END, txt+"\n")
@@ -35,6 +36,7 @@ def delete():
     text['state'] = 'normal'
     text.delete("1.0", tk.END)
     text['state'] = 'disabled'
+
 def start_typing(e):
     text['state'] = 'normal'
     data = text.get("1.0",'end-1c')
@@ -82,6 +84,7 @@ def intro():
         # Check if the user used the secret easter egg name
         if name == "meow":
             secret()
+            root.after(selfsleep*1000, run)
         else:
             write("You boldly opened the front gates of the school and made your way into the first room\n")
             root.after(selfsleep*1000, run)
@@ -128,6 +131,7 @@ def up_action(prompt, options, delete):
         pointer.set(len(options)-1)
 
     show(prompt, options, delete)
+
 def down_action(prompt, options, delete):
     p = pointer.get()
     if p != len(options)-1:
@@ -136,6 +140,7 @@ def down_action(prompt, options, delete):
         pointer.set(0)
 
     show(prompt, options, delete)
+
 def get_input(prompt, options, displayoptions = None, deletebefore = True):
     """sub action for run() that prompts user for a main action"""
     if displayoptions is None:
@@ -1127,7 +1132,6 @@ def die():
 def secret():
     """secret account that gives God like stats by setting name as meow"""
     write("\nWelcome chosen one, the Gods smile upon you and have rained down their blessing")
-    sleep(selfsleep)
     selfcharacter.health = 999
     selfcharacter.max_health = 999
     selfcharacter.mana = 999
@@ -1253,9 +1257,9 @@ def settings():
 
     display_settings(settings_dict)
     
-    change = input("\nDo you want to change your settings? ( yes / no ): ").lower()
+    change = get_input("\nDo you want to change your settings? ( yes / no ): ", ["yes", "no"], None, False)
 
-    while change not in ["yes", "no"]:
+    while change.lower() not in ["yes", "no"]:
         write("You briefly ponder the heavily nuanced and deeply intricate question of a choice between yes and no.")
         sleep(selfsleep)
         change = input("\nDo you want to change your settings? ( yes / no ): ").lower()
