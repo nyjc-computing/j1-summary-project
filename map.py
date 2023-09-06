@@ -1,3 +1,4 @@
+
 class game_map:
     """
     Attributes:
@@ -14,15 +15,6 @@ class game_map:
     def __init__(self):
         self.map = [[" " for x in range(125)] for x in range(32)]
         self.e_trigger = [0] * 29
-
-    def display(self) -> None:
-        """
-        Show the map
-        """
-        for row in self.map:
-            print("".join(row))
-        print(legend)
-        input("Press enter to exit")
 
     def make_room(self, y: int, x: int, name: str) -> None:
         """
@@ -942,8 +934,4 @@ class game_map:
         self.zebes_enter()
         self.bunker_enter()
 
-legend = """Legend:
-┌───┐                                   ╭━━━╮
-│   │ = Room has unfinished objectives  ┃   ┃ = Fully Cleared Room
-└───┘                                   ╰━━━╯
-"""
+
