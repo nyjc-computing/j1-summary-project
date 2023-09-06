@@ -79,6 +79,7 @@ def intro():
         text.unbind('<Key>')
         pause_var.set("")
         name = text.get("1.0",'end-1c')[29:]
+        name = name[:len(name)-1]
         delete()
         selfcharacter.name = name
         # Check if the user used the secret easter egg name
