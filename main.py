@@ -401,44 +401,52 @@ def move(room):
         if movement.lower() == "left":
             if room.left == None:
                 write("\nYou walked to the left and smashed into a wall")
-                sleep(selfsleep)
-
+                wait_for_key_press()
+            
             else:
                 selfroom = room.left
+                write(f"\nYou walked into {selfroom.name}")
+                wait_for_key_press()
 
         if movement.lower() == "right":
             if room.right == None:
                 write("\nYou walked to the right and smashed into a wall")
-                sleep(selfsleep)
+                wait_for_key_press()
             else:
                 selfroom = room.right
+                write(f"\nYou walked into {selfroom.name}")
+                wait_for_key_press()
 
         if movement.lower() == "forward":
             if room.forward == None:
                 write("\nYou walked forward and smashed into a wall")
-                sleep(selfsleep)
+                wait_for_key_press()
             # Check if you are going to the final boss room
             elif room.forward.name == "The Shrieking Shack":
                 items = selfcharacter.get_items()
                 # Checks if you have the required items to enter the final boss room
                 if "Dectus Medallion (right)" in items and "Dectus Medallion (left)" in items:
                     write("\nCongratulations, you placed the two Dectus Medallions together releasing trememndous amounts of energy, breaking the powerful spell on the door")
-                    sleep(selfsleep)
                     selfroom = room.forward
+                    wait_for_key_press()
                 else:
                     write("\nYou tried entering the The Shrieking Shack but the door was locked by a powerful spell")
                     sleep(selfsleep)
                     write("\nYou probably need to find a special item to break the spell (remember to loot all the rooms)")
-                    sleep(selfsleep)
+                    wait_for_key_press()
             else:
                 selfroom = room.forward
+                write(f"\nYou walked into {selfroom.name}")
+                wait_for_key_press()
 
         if movement.lower() == "back":
             if room.back == None:
                 write("\nYou turned back and smashed into a wall")
-                sleep(selfsleep)
+                wait_for_key_press()
             else:
                 selfroom = room.back
+                write(f"\nYou walked into {selfroom.name}")
+                wait_for_key_press()
 
     else:
         write(f"\nYou tried to sneak to another room but {room.enemy.name} noticed you")
@@ -468,29 +476,29 @@ def loot(user, loot):
         # Allow the user to loot the room
         if loot == None:
             write("\nYou searched every nook and cranny but there was nothing to be found")
-            sleep(selfsleep)
+            wait_for_key_press()
         
         elif loot.name == "Flask of Crimson Tears":
             write(f"\nYou found a {loot.name}, a powerful flask")
-            sleep(selfsleep)
+            wait_for_key_press()
             user.health_flask += 1
             selfroom.loot = None
 
         elif loot.name == "Flask of Cerulean Tears":
             write(f"\nYou found a {loot.name}, a powerful flask")
-            sleep(selfsleep)
+            wait_for_key_press()
             user.mana_flask += 1
             selfroom.loot = None
             
         elif loot.name == "Dectus Medallion (right)":
             write(f"\nYou found a {loot.name}, a powerful item")
-            sleep(selfsleep)
+            wait_for_key_press()
             user.items.append(loot)
             selfroom.loot = None
 
         elif loot.name == "Dectus Medallion (left)":
             write(f"\nYou found a {loot.name}, a powerful item")
-            sleep(selfsleep)
+            wait_for_key_press()
             user.items.append(loot)
             selfroom.loot = None
 
@@ -1133,6 +1141,7 @@ def die():
 def secret():
     """secret account that gives God like stats by setting name as meow"""
     write("\nWelcome chosen one, the Gods smile upon you and have rained down their blessing")
+    wait_for_key_press()
     selfcharacter.health = 999
     selfcharacter.max_health = 999
     selfcharacter.mana = 999
@@ -1146,7 +1155,6 @@ def secret():
     selfcharacter.items.append(DectusMedallionRight())
 
 def meow():
-    print("meow")
     if selfroom.secret == True:
         write("""       
             
@@ -1157,10 +1165,10 @@ def meow():
                                """)
         sleep(selfsleep)
         write("\nYou started communicating with the cat, leading you to discover a hidden passage\n")
-        sleep(selfsleep)
+        wait_for_key_press()
         theLastResort = TheLastResort()
-        selfroom.left = theLastResort
-        theLastResort.right = selfroom
+        selfroom.back = theLastResort
+        theLastResort.forward = selfroom
     else:
         choice = random.randint(1, 9)
         if choice == 1:
@@ -1259,11 +1267,6 @@ def settings():
     display_settings(settings_dict)
     
     change = get_input("\nDo you want to change your settings? ( yes / no ): ", ["yes", "no"], None, False)
-
-    while change.lower() not in ["yes", "no"]:
-        write("You briefly ponder the heavily nuanced and deeply intricate question of a choice between yes and no.")
-        sleep(selfsleep)
-        change = input("\nDo you want to change your settings? ( yes / no ): ").lower()
     
     if change == "yes":
     
@@ -1271,18 +1274,15 @@ def settings():
         accepted = list(settings_dict.keys())
         accepted.append("finish")
         while choice != "finish":
-            choice = input("\nWhich setting do you want to change? (type finish to quit): ").lower()
-            while choice not in accepted:
-                write(f"{choice} is a uniquely unmodifiable property of this realm.")
-                choice = input("\nWhich setting do you want to change? (type finish to quit): ").lower()
+            choice = get_input("\nWhich setting do you want to change? (type finish to quit): ", accepted)
 
-            if choice == "finish":
+            if choice.lower() == "finish":
                 with open("settings.txt", "w") as f:
                     for entry in settings_dict:
                         f.write(entry + " " + settings_dict[entry] + "\n")
                 return
             
-            if choice == "sleep":
+            if choice.lower() == "sleep":
                 new = set_sleep(settings_dict["sleep"])
                 settings_dict["sleep"] = new
 
@@ -1311,11 +1311,7 @@ def set_sleep(current):
     accept = [str(x) for x in range(6)]
     accept.append("cancel")
 
-    new = input("\nEnter a new value for sleep (0-5 seconds), or cancel to cancel: ")
-    while new not in accept:
-        write("You count up to five on your fingers. Slowly.")
-        sleep(selfsleep)
-        new = input("\nEnter a new value for sleep (0-5 seconds), or cancel to cancel: ")
+    new = get_input("\nEnter a new value for sleep (0-5 seconds), or cancel to cancel: ", accept)
     
     if new.lower() == "cancel":
         return current
@@ -1327,7 +1323,7 @@ def set_sleep(current):
 def secret_room():
     write("\nAfter you successfully defeated the sentinels, a stray ginger tabby cat emerges from behind a wall and stares at you playfully\n")
     selfroom.secret = True
-    sleep(selfsleep)
+    wait_for_key_press()
 
 def teleport():
     write("\nYou can teleport to: ")
