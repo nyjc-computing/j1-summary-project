@@ -681,11 +681,9 @@ class game_map:
         self.make_room(10,9,"Walled City 99")
 
         #make hidden rooms
-        self.make_room(14,10," ? ")
 
         #(re)make paths
         self.vconnect(7,8,1)
-        self.vconnect(11,10,1)
 
     def walled_clear(self) -> None:
         """
