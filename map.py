@@ -13,8 +13,9 @@ class game_map:
     """
 
     def __init__(self):
-        self.map = [[" " for x in range(125)] for x in range(32)]
+        self.map = [[" " for x in range(130)] for x in range(32)]
         self.e_trigger = [0] * 29
+        self.secret_trigger = 0
 
     def make_room(self, y: int, x: int, name: str) -> None:
         """
@@ -264,15 +265,15 @@ class game_map:
         #(re)make paths
         self.vconnect(15,94,1)
 
-    def stormveil_enter(self) -> None:
+    def haligtree_enter(self) -> None:
         """
-        updates map for first time visiting stormveil castle
+        updates map for first time visiting Miquella's Haligtree
         """
         if self.e_trigger[7] != 0:
             return
         self.e_trigger[7] = 1
         #make room
-        self.make_room(18,114,"Stormveil Castle")
+        self.make_room(18,116,"Miquella's Haligtree")
 
         #make hidden rooms
         self.make_room(14,114," ? ")
@@ -283,12 +284,12 @@ class game_map:
         self.vconnect(19,114,4)
         self.hconnect(18,103,1)
 
-    def stormveil_clear(self) -> None:
+    def haligtree_clear(self) -> None:
         """
-        updates map for fully clearing stormveil castle
+        updates map for fully clearing Miquella's haligtree
         """
         #make room
-        self.finish_room(18,114,"Stormveil Castle")
+        self.finish_room(18,116,"Miquella's haligtree")
 
         #(re)make paths
         self.vconnect(15,114,1)
@@ -696,6 +697,19 @@ class game_map:
         self.vconnect(7,8,1)
         self.vconnect(11,10,1)
 
+    def meow_reveal(self) -> None:
+        """
+        shows hidden room after unlocking secret
+        """
+        if self.secret_trigger == 0:
+            #make hidden room
+            self.make_room(14,10," ? ")
+    
+            #(re)make paths
+            self.vconnect(11,10,1)
+            
+            self.secret_trigger = 1
+
     def last_resort_enter(self) -> None:
         """
         updates map for first time visiting the last resort
@@ -912,7 +926,7 @@ class game_map:
         self.ascent_enter()
         self.sixth_circle_enter()
         self.tower_enter()
-        self.stormveil_enter()
+        self.haligtree_enter()
         self.hallow_enter()
         self.obradinn_enter()
         self.kamurocho_enter()
@@ -927,7 +941,7 @@ class game_map:
         self.asphodel_enter()
         self.commencement_enter()
         self.walled_enter()
-        self.last_resort_enter()
+        #self.last_resort_enter()
         self.greenhill_enter()
         self.mushroom_enter()
         self.kingdom_ku_enter()

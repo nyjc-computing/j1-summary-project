@@ -171,8 +171,8 @@ def run():
             selfmap.celestial_resort_enter()
         elif selfroom.name == "The Forge":
             selfmap.forge_enter()
-        elif selfroom.name == "Stormveil Castle":
-            selfmap.stormveil_enter()
+        elif selfroom.name == "Miquella's Haligtree":
+            selfmap.haligtree_enter()
         elif selfroom.name == "Aperture Lab":
             selfmap.aperture_enter()
         elif selfroom.name == "Zebes":
@@ -271,8 +271,8 @@ def run():
             selfmap.celestial_resort_clear()
         elif selfroom.name == "The Forge":
             selfmap.forge_clear()
-        elif selfroom.name == "Stormveil Castle":
-            selfmap.stormveil_clear()
+        elif selfroom.name == "Miquella's Haligtree":
+            selfmap.haligtree_clear()
         elif selfroom.name == "Aperture Lab":
             selfmap.aperture_clear()
         elif selfroom.name == "Zebes":
@@ -323,10 +323,9 @@ def run():
             selfmap.walled_clear()
         elif selfroom.name == "The Last Resort":
             selfmap.last_resort_clear()
+
     if not selfend:
         root.after(1,run)
-        
-
         
 def look(room):
     """main action to look around the room including rooms linked to the room and enemies in the room"""
@@ -529,25 +528,27 @@ def attack(room):
 def drops(room):
     """obtains drops from defeated enemy"""
     enemy = room.enemy
+    print(enemy.name)
     player = selfcharacter
 
-    write(f"\n{enemy.name} dropped a {enemy.loot.name}")
-    sleep(selfsleep)
-    choice = get_input(f"\nDo you want to pick {enemy.loot.name}?",["yes","no"])
-    if choice.lower() == "yes":
-        collect_loot(player, enemy.loot)
+    if enemy.loot != None:
+        write(f"\n{enemy.name} dropped a {enemy.loot.name}")
         sleep(selfsleep)
-        write(f"\n{enemy.loot.description}")
-        sleep(selfsleep)
-        
-    elif choice.lower() == "no":
-        write(f"\nYou left {enemy.loot.name} on the ground and allowed the resourceful rat to steal it")
-        sleep(selfsleep)
-        
-    else:
-        write(f"\nYour indecisiveness allowed the resourceful rat to steal the {enemy.loot.name} when you weren't looking")
-        sleep(selfsleep)
-    wait_for_key_press()
+        choice = get_input(f"\nDo you want to pick {enemy.loot.name}?",["yes","no"],None,False)
+        if choice.lower() == "yes":
+            collect_loot(player, enemy.loot)
+            sleep(selfsleep)
+            write(f"\n{enemy.loot.description}")
+            sleep(selfsleep)
+            
+        elif choice.lower() == "no":
+            write(f"\nYou left {enemy.loot.name} on the ground and allowed the resourceful rat to steal it")
+            sleep(selfsleep)
+            
+        else:
+            write(f"\nYour indecisiveness allowed the resourceful rat to steal the {enemy.loot.name} when you weren't looking")
+            sleep(selfsleep)
+        wait_for_key_press()
                 
 def use_flask(user):
     """Function to allow the user to use flask but also allows them to cancel the action"""
@@ -1065,6 +1066,7 @@ def meow():
         theLastResort = TheLastResort()
         selfroom.back = theLastResort
         theLastResort.forward = selfroom
+        selfmap.meow_reveal()
     else:
         choice = random.randint(1, 9)
         if choice == 1:
@@ -1237,9 +1239,9 @@ def display_map():
     """
     
     legend = """Legend:
-    ┌───┐                                   ╭━━━╮
-    │   │ = Room has unfinished objectives  ┃   ┃ = Fully Cleared Room
-    └───┘                                   ╰━━━╯
+┌───┐                                   ╭━━━╮
+│   │ = Room has unfinished objectives  ┃   ┃ = Fully Cleared Room
+└───┘                                   ╰━━━╯
     """
     for row in selfmap.map:
         write("".join(row))
@@ -1251,7 +1253,7 @@ if __name__ == "__main__":
     pause_var = tk.StringVar()
     pointer = tk.IntVar()
     sleepCount = tk.IntVar()
-    root.geometry('600x600')
+    root.geometry('1000x600')
     root.configure(bg='black')
     text = tk.Text(root, height = 560, width = 560, background = "black", foreground = "white")
     text.pack()
