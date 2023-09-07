@@ -78,18 +78,18 @@ class TheHighDragun(Enemy):
         self.move = "Bullet Stream"
         self.loot = MasterRound()
 
-class GodrickTheGrafted(Enemy):
+class Malenia(Enemy):
     """
     An enemey that inherits from the Enemy class
     """
     
     def __init__(self):
         super().__init__()
-        self.name = "Godrick The Grafted"
+        self.name = "Malenia, Blade of Miquella"
         self.health = 170
         self.description = "a grotesque and formidable boss, a creature amalgamation of flesh and metal that presents a formidable challenge to you with his overwhelming power and monstrous appearance"
         self.attack = 25
-        self.move = "Dragon Arm"
+        self.move = "Waterfowl Dance"
         self.loot = GlintstoneCometshard()
 
 class Glados(Enemy):

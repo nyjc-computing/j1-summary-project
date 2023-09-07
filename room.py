@@ -84,16 +84,16 @@ class TheForge(Room):
         self.loot = FlaskOfCrimsonTears()
         self.encounter = encounter.encounter(self.enemy)
 
-class StormveilCastle(Room):
+class MiquellasHaligtree(Room):
     """
     A room that inherits from the Room class
     """
     
     def __init__(self):
         super().__init__()
-        self.enemy = GodrickTheGrafted()
-        self.name = "Stormveil Castle"
-        self.description = "You stepped into a legacy dungeon, a castle that lies on the cliff of stormveil, littered with hoards of enemies"
+        self.enemy = Malenia()
+        self.name = "Miquella's Haligtree"
+        self.description = "You stepped into a haunting and mystical location shrouded in eerie fog and surrounded by ancient, twisted trees. You delve into its secrets and confront the enigmatic forces that reside within its dark and foreboding atmosphere"
         self.loot = FlaskOfCeruleanTears()
         self.encounter = encounter.encounter(self.enemy)
 
