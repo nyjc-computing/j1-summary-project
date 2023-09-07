@@ -235,7 +235,7 @@ def run():
         move(selfroom)
         
     elif decision.lower() == "attack":
-        attack(selfcharacter, selfroom.enemy)
+        attack(selfroom)
 
     elif decision.lower() == "loot":
         loot(selfcharacter, selfroom.loot)
@@ -374,24 +374,23 @@ def move(room):
     # Generate a random number to see if you managed to sneak past the enemy
     caught = False
 
-    if selfcharacter.name == "meow":
-        chance = 2
-    else:
-        chance = random.randint(1, 3)
-        
     if room.enemy != None:
-        if chance == 1:
-            caught = True
-        else:
-            write(f"\nYou managed to sneak past {room.enemy.name}")
+        if selfcharacter.name == "meow":
+            write(f"\n{room.enemy.name} cowers in your presence, granting you passage through their domain.")
             sleep(selfsleep)
+        else:
+            chance = random.randint(1, 3)
+            if chance == 1:
+                caught = True
+            else:
+                write(f"\nYou managed to sneak past {room.enemy.name}")
+                sleep(selfsleep)
 
     if not caught:
         if movement.lower() == "left":
             if room.left == None:
                 write("\nYou walked to the left and smashed into a wall")
                 wait_for_key_press()
-            
             else:
                 selfroom = room.left
                 write(f"\nYou walked into {selfroom.name}")
@@ -440,7 +439,7 @@ def move(room):
     else:
         write(f"\nYou tried to sneak to another room but {room.enemy.name} noticed you")
         sleep(selfsleep)
-        attack(selfcharacter, room.enemy)
+        attack(room)
 
 def loot(user, loot):
     """main action for user to search the room for loot"""
@@ -448,18 +447,17 @@ def loot(user, loot):
     # Generate a random number to see if you successfully loot the room whithout the enemy noticing
     caught = False
 
-    if user.name == "meow":
-        chance = 1
-    else:
-        chance = random.randint(1, 3)
-
     if selfroom.enemy != None:
-        if chance != 1:
-            caught = True
-        else:
-            write(f"\nBy some miracle you managed to loot the room without {selfroom.enemy.name} noticing")
-            
+        if user.name == "meow":
+            write(f"\n{selfroom.enemy.name} cowers in your presence, granting you access to their domain.")
             sleep(selfsleep)
+        else:
+            chance = random.randint(1, 3)
+            if chance != 1:
+                caught = True
+            else:
+                write(f"\nBy some miracle you managed to loot the room without {selfroom.enemy.name} noticing")
+                sleep(selfsleep)
 
     if not caught:
         # Allow the user to loot the room
@@ -494,7 +492,7 @@ def loot(user, loot):
     else:
         write(f"\n{selfroom.enemy.name} noticed you while you tried to loot the room")
         sleep(selfsleep)
-        attack(user, selfroom.enemy)
+        attack(selfroom)
 
 def flask(user):
     """main action for user to drink their flasks"""
@@ -505,176 +503,51 @@ def flask(user):
     else:
         use_flask(user)
 
-def attack(attacker, victim):
+def attack(room):
     """main action for user to attack the enemy in the room"""
-    # Check if there is an enemy in the room
-    if victim == None:
+    if room.enemy == None:
+        delete()
         write("\nYou attacked the air and realised how insane you looked")
-        sleep(selfsleep)
-    else:
-        while attacker.health > 0:
-            # Display users health and mana
-            write(f"\n{'-'*50}\n")
-            write(f"{attacker.name} has {attacker.health} health")
-            write(f"{attacker.name} has {attacker.mana} mana")
-            write(f"{attacker.name} has {attacker.health_flask} Flask of Crimson Tears")
-            write(f"{attacker.name} has {attacker.mana_flask} Flask of Cerulean Tears")
-            sleep(selfsleep)
-            # Display enemy's health
-            write(f"\n{victim.name} has {victim.health} health\n")
-            sleep(selfsleep)
-
-            decision = get_choice(attacker).lower()
-            
-            if decision == "flask":
-                use_flask_battle(attacker)
-                if victim.health > 0:
-                    damage = max(1, victim.attack - attacker.defence)
-                    attacker.health = attacker.health - damage
-                    write(f"\n{victim.name} used {victim.move}, dealing {damage} damage to {attacker.name}")
-                    sleep(selfsleep)
-                
-            else:
-                damage, weapon = get_attack(attacker, decision)
-
-                # Deal damage to enemy
-                damage += attacker.attack
-                victim.health = victim.health - damage
-                # Check if enemy died
-                if victim.health > 0:
-                    write(f"\n{attacker.name}{weapon.move}, dealing {damage} damage to {victim.name}")
-                    sleep(selfsleep)
-                # Allow enemy to attack if it didn't die yet
-                if victim.health > 0:
-                    damage = max(1, victim.attack - attacker.defence)
-                    attacker.health = attacker.health - damage
-                    write(f"\n{victim.name} used {victim.move}, dealing {damage} damage to {attacker.name}")
-                    sleep(selfsleep)
-
-                else:
-                    # Check if dead enemy is the final boss
-                    if victim.name == "Voldemort":
-                        write("\nInsert transition to second phase or alternate enemy")
-                        sleep(selfsleep)
-                        selfroom.enemy = Phase2()
-                        attack(attacker, selfroom.enemy)
-                        return
-                    elif victim.name == "Phase 2":
-                        win(weapon)
-                        return
-
-                    write(f"\n{attacker.name}{weapon.win_front}{victim.name}{weapon.win_back}")
-                    sleep(selfsleep)
-                    if victim.name == "Sentinels":
-                        secret_room()
-                        selfroom.enemy = None
-                        return
-                    write(f"\n{victim.name} dropped a {victim.loot.name}")
-                    sleep(selfsleep)
-                    choice = get_input(f"\nDo you want to pick {victim.loot.name}?",["yes","no"])
-                    if choice.lower() == "yes":
-                        collect_loot(attacker, victim.loot)
-                        sleep(selfsleep)
-                        write(f"\n{victim.loot.description}")
-                        sleep(selfsleep)
-
-                    elif choice.lower() == "no":
-                        write(f"\nYou left {victim.loot.name} on the ground and allowed the resourceful rat to steal it")
-                        sleep(selfsleep)
-                    else:
-                        write(f"\nYour indecisiveness allowed the resourceful rat to steal the {victim.loot.name} when you weren't looking")
-                        sleep(selfsleep)
-                    wait_for_key_press()
-                    # Removes the enemy from the room
-                    selfroom.enemy = None
-                    break
-        # Check if the user died
-        if attacker.health <= 0:
-            end_game()
-
-def get_choice(user):
-    """sub action from attack() to prompt user for attack methods or use of flask"""
-    cost = []
-    for spell in user.spells:
-        cost.append(spell.cost)
-    valid = False
-    while not valid:
-        decision = get_input(f"What do you want to use?", [f"{user.weapon.name}", "Spell", "Flask"], None, False)
-
-        # Get a list of spell cost
-
-        valid = True
-        if decision.lower() not in [user.weapon.name.lower(), "spell", "flask"]:
-            write(f"\nYou tried to use {decision} but nothing happened")
-            valid = False
-        # Check if user has enough mana to cast spells
-        elif decision.lower() == "spell" and user.mana < min(cost):
-            write("\nYou do not have enough mana to cast spells\n")
-            valid = False
-        # Check if user has any flask to drink
-        elif decision.lower() == "flask" and (user.health_flask + user.mana_flask) == 0:
-            write("\nYou ran out of flasks\n")
-            valid = False
-    return decision
-    
-def get_attack(user, decision):
-    """sub action from attack() to get total damage done to victim"""
-
-    # Check if user used his weapon
-    if decision.lower() == user.weapon.name.lower():
-        return user.weapon.attack, user.weapon
-
-    # check if user used spells
-    elif decision.lower() == "spell":
-        spells = []
-        for spell in user.spells:
-            spells.append(spell.name.lower())
-        choice = get_input("\nWhich spell would you like to cast?",spells, [f"{x.name} ({x.cost} mana)" for x in user.spells])
-        choice = choice.lower()
-        cost = user.spells[spells.index(choice)].cost
-        write(f"\nYou used up {cost} mana points")
-        sleep(selfsleep)
-        user.mana = user.mana - cost
-        return user.spells[spells.index(choice)].attack, user.spells[spells.index(choice)]
-
-def display_flask(user):
-    """sub action from use_flask to display flask in inventory"""
-    write(f"You have {user.health_flask} Flask of Crimson Tears (restores {FlaskOfCrimsonTears().health} health)")
-    write(f"You have {user.mana_flask} Flask of Cerulean Tears (restores {FlaskOfCeruleanTears().mana} mana)\n")
-    
-def use_flask_battle(user):
-    """sub action from get_choice() to prompt user for the flask to drink"""
-    valid = False
-    while not valid:
-        selection = get_input("Which flask would you like to drink?", ["flask of crimson tears", "flask of cerulean tears"], display_flask(user))
-        valid = True
-        if selection.lower() == "flask of crimson tears" and user.health_flask == 0:
-            write("\nYou ran out of Flask of Crimson Tears\n")
-            sleep(selfsleep)
-            valid = False
-        # Checks if the user has enough flask of cerulean tears
-        elif selection.lower() == "flask of cerulean tears" and user.mana_flask == 0:
-            write("\nYou ran out of Flask of Cerulean Tears\n")
-            sleep(selfsleep)
-            valid = False
-
-    if selection.lower() == "flask of crimson tears":
-        # Makes sure the health healed does not exceed the maximum health
-        final_health = min(user.max_health, user.health + FlaskOfCrimsonTears().health)
-        healing = final_health - user.health
-        write(f"\nYou drank a Flask of Crimson Tears and gained {healing} health")
-        sleep(selfsleep)
-        user.health = final_health
-        user.health_flask -= 1
+        wait_for_key_press()
         
-    elif selection.lower() == "flask of cerulean tears":
-        # Makes sure the mana gained does not exceed the maximum mana
-        final_mana = min(user.max_mana, user.mana + FlaskOfCeruleanTears().mana)
-        healing = final_mana - user.mana
-        write(f"\nYou drank a Flask of Cerulean Tears and gained {healing} mana")
+    else:
+        outcome = room.encounter.fight(selfcharacter, root, text)
+        if outcome == 1:
+            if room.enemy.name == "Voldemort":  
+                win(selfcharacter.weapon)
+                end_game()
+            else:
+                drops(room)
+            if room.enemy.name == "Sentinels":
+                secret_room()
+            room.enemy = None
+        elif outcome == 2:
+            end_game()
+        elif outcome == 3:
+            room.encounter.reset()
+
+def drops(room):
+    """obtains drops from defeated enemy"""
+    enemy = room.enemy
+    player = selfcharacter
+
+    write(f"\n{enemy.name} dropped a {enemy.loot.name}")
+    sleep(selfsleep)
+    choice = get_input(f"\nDo you want to pick {enemy.loot.name}?",["yes","no"])
+    if choice.lower() == "yes":
+        collect_loot(player, enemy.loot)
         sleep(selfsleep)
-        user.mana = final_mana
-        user.mana_flask -= 1
+        write(f"\n{enemy.loot.description}")
+        sleep(selfsleep)
+        
+    elif choice.lower() == "no":
+        write(f"\nYou left {enemy.loot.name} on the ground and allowed the resourceful rat to steal it")
+        sleep(selfsleep)
+        
+    else:
+        write(f"\nYour indecisiveness allowed the resourceful rat to steal the {enemy.loot.name} when you weren't looking")
+        sleep(selfsleep)
+    wait_for_key_press()
                 
 def use_flask(user):
     """Function to allow the user to use flask but also allows them to cancel the action"""
@@ -1140,18 +1013,7 @@ def collect_loot(attacker, loot):
 
 def end_game():
     global selfend
-    """displays scenario when user dies"""
-    write("__   _______ _   _  ______ _____ ___________")
-    sleep(0.2)
-    write("\ \ / /  _  | | | | |  _  \_   _|  ___|  _  \\")
-    sleep(0.2)
-    write(" \ V /| | | | | | | | | | | | | | |__ | | | |")
-    sleep(0.2)
-    write("  \ / | | | | | | | | | | | | | |  __|| | | |")
-    sleep(0.2)
-    write("  | | \ \_/ / |_| | | |/ / _| |_| |___| |/ /")
-    sleep(0.2)
-    write("  \_/  \___/ \___/  |___/  \___/\____/|___/ ")
+    """ends the game"""
     selfend = True
 
 def win(weapon):
@@ -1183,6 +1045,8 @@ def secret():
     selfcharacter.defence = 999
     selfcharacter.health_flask = 999
     selfcharacter.mana_flask = 999
+    selfcharacter.upgrades.append(Flee())
+    selfcharacter.upgrades.append(Shield())
     selfmap.full_reveal()
     selfcharacter.items.append(DectusMedallionLeft())
     selfcharacter.items.append(DectusMedallionRight())

@@ -1,10 +1,12 @@
 #import builtins
 import random
 import time
+import tkinter as tk
+import string
 
 #import local files
 import item
-import enemy as enemies_
+import enemy as e
 
 class encounter:
     """
@@ -12,22 +14,94 @@ class encounter:
     """
 
     def __init__(self, enemy: "Enemy"):
+        self.initenemy = enemy
         self.enemies = [enemy]
         self.dead = []
         with open("settings.txt", "r") as f:
             out = f.readlines()
             out = [x.split()[1] for x in out]
         self.sleep = int(out[0])
+        self.line = 1
         self.tips = ["Remember to restore your health and mana before every fight",
                     "Other rooms may have useful drops that could make this fight easier"]
 
-    def fight(self, player: "character") -> bool:
+    def reset(self):
         """
-        main loop for the encounter, return True if player wins, False if otherwise
+        resets the enemies when the player runs away
+        """
+        self.initenemy.__init__()
+        og = self.initenemy
+        self.__init__(og)
+
+    def write(self, txt):
+        """
+        writes txt to the text field
+        
+        the colors rely on the line tracker which only increments by 1
+        for each thing you write pls pls pls do not use newline characters
+        """
+        self.text['state'] = 'normal'
+        self.text.insert(tk.END, txt+"\n")
+        self.text['state'] = 'disabled'
+        self.line += 1
+
+    def write_color(self, txt, color):
+        """
+        writes red to the text field in red
+
+        the colors rely on the line tracker which only increments by 1
+        for each thing you write pls pls pls do not use newline characters
+        """
+        self.text['state'] = 'normal'
+        self.text.insert(tk.END, txt+"\n")
+
+        #generating a random tag name yeah its kinda stupid
+        stuff = string.ascii_lowercase
+        tag = "0"
+        while tag == "0" or tag in self.text.tag_names():
+            tag = "".join(random.choices(stuff, k = 10))
+        
+        self.text.tag_add(tag, f"{str(self.line)}.0", f"{str(self.line)}.end")
+        self.text.tag_config(tag, foreground = color)
+        self.text['state'] = 'disabled'
+        self.line += 1
+
+    def delete(self):
+        """
+        clears the text field
+        """
+        self.text['state'] = 'normal'
+        self.text.delete("1.0", tk.END)
+        self.text['state'] = 'disabled'
+        self.line = 1
+
+        #deleting tags
+        for tag in self.text.tag_names():
+            self.text.tag_delete(tag)
+
+    def delay(self):
+        """
+        stops execution for self.sleep seconds
+        """
+        if self.sleep == 0:
+            pass
+        else:
+            self.root.after(self.sleep*1000, lambda: self.pause.set(self.pause.get()+1))
+            self.root.wait_variable(self.pause)
+
+    def fight(self, player: "character", root: "tk.Tk()", text: "tk.Text()") -> int:
+        """
+        main loop for the encounter, return 1 if player wins, 2 if player dies, 3 if player flees
         'player' is the player character
+        'root' is the tk window
+        'text' is the text field to write messages to
         """
         self.player = player
+        self.root = root
+        self.text = text
+        self.pause = tk.IntVar()
         #for the variable 'state', 0 means the fight is ongoing, 1 means the player wins, 2 means the player loses
+        self.delete()
         state = 0
         while state == 0:
 
@@ -36,9 +110,10 @@ class encounter:
 
             advance = False
             while not advance:
+
                 decision = self.get_choice()
 
-                if decision == self.player.weapon.name.lower():
+                if decision == "weapon":
                     advance = self.attack()
 
                 elif decision == "spell":
@@ -52,8 +127,11 @@ class encounter:
                     advance = True
 
                 elif decision == "flee":
-                    print("You activate your secret technique and disengage")
-                    return False
+                    self.reset()
+                    self.delete()
+                    self.write("You activate your secret technique and disengage")
+                    self.delay()
+                    return 3
 
             state = self.over()
             if state != 0:
@@ -61,16 +139,20 @@ class encounter:
             
             self.enemy_turn(decision)
 
+            self.write("")
+            self.write(f"{'-'*50}")
+            self.write("")
+
             state = self.over()
 
         if state == 1:
-            return True
+            return 1
 
         elif state == 2:
             self.end_game()
-            print()
-            print(random.choice(self.tips))
-            return False
+            self.write("")
+            self.write(random.choice(self.tips))
+            return 2
         
 
     def status(self) -> None:
@@ -82,77 +164,90 @@ class encounter:
         dead = self.dead
 
         #print player health, mana, flasks
-        print(f"\n{'-'*50}\n")
-        print(f"{player.name} has {player.health} health")
-        print(f"{player.name} has {player.mana} mana")
-        print(f"{player.name} has {player.health_flask} Flask of Crimson Tears")
-        print(f"{player.name} has {player.mana_flask} Flask of Cerulean Tears")
+        self.write(f"{player.name} has {player.health} health")
+        self.write(f"{player.name} has {player.mana} mana")
+        self.write(f"{player.name} has {player.health_flask} Flask of Crimson Tears")
+        self.write(f"{player.name} has {player.mana_flask} Flask of Cerulean Tears")
+        self.delay()
 
         #print enemy health
-        print()
+        self.write("")
         for enemy in enemies:
-            print(f"{enemy.name} has {enemy.health} health")
+            self.write_color(f"{enemy.name} has {enemy.health} health", "red")
+        self.delay()
 
         #print dead enemies
         for die in dead:
-            print(f"{die.name} has 0 health")
+            self.write_color(f"{die.name} has 0 health", "grey")
+        if len(dead) != 0:
+            self.delay()
     
     def get_choice(self) -> str:
         """
         get choice of action from user
         """
-        #setting accepted commands
-        #setting prompt message
-        accepted = [self.player.weapon.name.lower(), "spell", "flask"]
-        add = ""
-        
-        if "Shield" in self.player.get_upgrades():
-            accepted.append("shield")
-            add += " / Shield"
-            
-        if "Flee" in self.player.get_upgrades():
-            accepted.append("flee")
-            add += " / Flee"
-            
-        prompt = f"\nWhat do you want to use? ({self.player.weapon.name} / Spell / Flask{add}): "
-
-        #getting cost of cheapest spell
-        min_cost = self.player.spells[0].cost
-        for spell in self.player.spells:
-            if spell.cost < min_cost:
-                min_cost = spell.cost
-
-        #getting cost of shield
-        shield_cost = 10
-
+        choice_var = tk.StringVar()
+        shieldin = False
         valid = False
+
         while not valid:
+            
+            self.write("")
+            self.write("What do you want to use?")
+            self.write(f"[1] {self.player.weapon.name}")
+            self.write(f"[2] Spell")
+            self.write(f"[3] Flask")
 
-            #check if decision is in accepted commands
-            decision = input(prompt)
-            while decision.lower() not in accepted:
-                print(f"\nYou tried to use {decision} but nothing happened")
-                time.sleep(self.sleep)
-                decision = input(prompt)
+            self.root.bind('1', lambda x: choice_var.set("weapon"))
+            self.root.bind('2', lambda x: choice_var.set("spell"))
+            self.root.bind('3', lambda x: choice_var.set("flask"))
+            
+            if "Shield" in self.player.get_upgrades():
+                self.write(f"[4] Shield")
+                self.root.bind('4', lambda x: choice_var.set("shield"))
+                shieldin = True
+                
+            if "Flee" in self.player.get_upgrades():
+                if shieldin == True:
+                    self.write(f"[5] Flee")
+                    self.root.bind('5', lambda x: choice_var.set("flee"))
+                else:
+                    self.write(f"[4] Flee")
+                    self.root.bind('4', lambda x: choice_var.set("flee"))
+            
+            self.root.wait_variable(choice_var)
+            choice = choice_var.get()
 
-            decision = decision.lower()
+            #getting cost of cheapest spell
+            min_cost = self.player.spells[0].cost
+            for spell in self.player.spells:
+                if spell.cost < min_cost:
+                    min_cost = spell.cost
+
+            #getting cost of shield
+            shield_cost = 10
+
             #check if user has enough mana for any spells
-            if (decision == "spell") and (self.player.mana < min_cost):
-                print("\nYou do not have enough mana to cast spells\n")
-                time.sleep(self.sleep)
+            if (choice == "spell") and (self.player.mana < min_cost):
+                self.write("")
+                self.write("You do not have enough mana to cast spells")
+                self.delay()
 
             #check if user has any flasks
-            elif (decision == "flask") and (self.player.health_flask + self.player.mana_flask == 0):
-                print("\nYou ran out of flasks\n")
-                time.sleep(self.sleep)
+            elif (choice == "flask") and (self.player.health_flask + self.player.mana_flask == 0):
+                self.write("")
+                self.write("You ran out of flasks")
+                self.delay()
 
             #check if user has enough mana to shield
-            elif (decision == "shield") and (self.player.mana < shield_cost):
-                print("\nYou do not have enough mana to shield yourself\n")
-                time.sleep(self.sleep)
+            elif (choice == "shield") and (self.player.mana < shield_cost):
+                self.write("")
+                self.write("You do not have enough mana to shield yourself")
+                self.delay()
 
             else:
-                return decision
+                valid = True
+        return choice
 
     def enemy_turn(self, player_choice: str) -> None:
         """
@@ -160,22 +255,24 @@ class encounter:
         """
 
         #enemies take turns in random order
-        enemies = self.enemies
+        enemies = self.enemies.copy()
         random.shuffle(enemies)
         
         for enemy in enemies:
 
             #negate damage if player is shielding
             if player_choice == "shield":
-                print(f"\n{enemy.name} used {enemy.move}, but it was deflected by your shield")
-                time.sleep(self.sleep)
+                self.write("")
+                self.write(f"{enemy.name} used {enemy.move}, but it was deflected by your shield")
+                self.delay()
 
             #deal damage to the player 
             else:
                 damage = max(1, enemy.attack - self.player.defence)
                 self.player.health = self.player.health - damage
-                print(f"\n{enemy.name} used {enemy.move}, dealing {damage} damage to {self.player.name}")
-                time.sleep(self.sleep)
+                self.write("")
+                self.write(f"{enemy.name} used {enemy.move}, dealing {damage} damage to {self.player.name}")
+                self.delay()
                 if self.player.health <= 0:
                     break
 
@@ -185,44 +282,55 @@ class encounter:
         returns enemy object to be attacked, or none if cancelled
         """
 
+        if len(self.enemies) == 1:
+            self.delete()
+            return self.enemies[0]
+
+        option_var = tk.StringVar()
+        cont_var = tk.StringVar()
+        def key_press(e):
+            option_var.set(e.char)
+            cont_var.set("go")
+
         enemies = self.enemies
-        print("Targets:\n")
-        for enemy in enemies:
-            print(f" - {enemy.name : <15} {str(enemy.health) + ' health remaining' : >20}")
-        print()
+        self.write("")
+        self.write("Which enemy do you want to attack?")
+        for i, enemy in enumerate(enemies):
+            self.write(f"[{i+1}] {enemy.name : <15} {str(enemy.health) + ' health remaining' : >25}")
+            self.root.bind(str(i+1), key_press)
+        self.write(f"[{len(enemies)+1}] Cancel Action")
+        self.root.bind(str(len(enemies)+1), key_press)
+
+        self.root.wait_variable(cont_var)
+        option = option_var.get()
         
-        accepted = [enemy.name.lower() for enemy in enemies]
-        accepted.append("cancel")
-            
-        target = input("Which enemy do you want to attack? (type cancel to cancel): ")
-        while target.lower() not in accepted:
-            print(f"\nYou tried to attack {target} but they seem to have mysteriously disappeared")
-            time.sleep(self.sleep)
-            target = input("Which enemy do you want to attack? (type cancel to cancel): ")
-
-        if target.lower() == "cancel":
+        if option == str(len(enemies)+1):
             return None
-
-        return enemies[accepted.index(target.lower())]
+        else:
+            self.delete()
+            return enemies[int(option)-1]
+        
 
     def damage(self, weapon: "Weapon/Spell", target: "enemy") -> None:
         """
         deal damage to target using the weapon
         """
         #calculate damage dealt
-        damage = weapon.attack + self.player.attack - target.defence
+        damage = max(1, weapon.attack + self.player.attack - target.defence)
         target.health = target.health - damage
 
         #check if enemy is dead
         if target.health > 0:
-            print(f"\n{self.player.name}{weapon.move}, dealing {damage} damage to {target.name}")
-            time.sleep(self.sleep)
+            self.write("")
+            self.write(f"{self.player.name}{weapon.move}, dealing {damage} damage to {target.name}")
+            self.delay()
         else:
-            print(f"\n{self.player.name}{weapon.win_front}{target.name}{weapon.win_back}")
+            self.write("")
+            self.write(f"{self.player.name}{weapon.win_front}{target.name}{weapon.win_back}")
             self.enemies.remove(target)
             target.health = 0
             self.dead.append(target)
-            time.sleep(self.sleep)
+            self.delay()
 
     def attack(self) -> None:
         """
@@ -243,32 +351,35 @@ class encounter:
         deducts mana from player for using a spell
         damages enemy using spell
         return True if turn passes, return False if cancelled action
-        """
-        print("\nSpells:")
+        """ 
+
+        option_var = tk.StringVar()
+        cont_var = tk.StringVar()
+        def key_press(e):
+            option_var.set(e.char)
+            cont_var.set("go")
+            
         spells = self.player.spells
-        for i, spell in enumerate(spells):
-            print(f"- {spell.name} ({spell.cost} mana)")
-        time.sleep(self.sleep)
-
-        accepted = [spell.name.lower() for spell in spells]
-        accepted.append("cancel")
-
+        
         valid = False
         while not valid:
-            
-            choice = input("\nWhich spell would you like to cast? (type cancel to cancel): ")
-            
-            while choice.lower() not in accepted:
-                print(f"\nYou tried to cast {choice} but it blew up in your face")
-                time.sleep(self.sleep)
-                choice = input("\nWhich spell would you like to cast? (type cancel to cancel): ")
 
-            if choice.lower() == "cancel":
+            self.write("")
+            self.write("Which spell would you like to cast?")
+            for i, spell in enumerate(spells):
+                self.write(f"[{i+1}] {spell.name} ({spell.cost} mana)")
+                self.root.bind(str(i+1), key_press)
+            self.write(f"[{len(spells)+1}] Cancel Action")
+            self.root.bind(str(len(spells)+1), key_press)
+
+            self.root.wait_variable(option_var)
+            option = option_var.get()
+
+            if option == str(len(spells)+1):
                 return False
             
-            elif self.player.spells[accepted.index(choice.lower())].cost > self.player.mana:
-                print(f"You do not have enough mana to cast {choice}")
-                time.sleep(self.sleep)
+            elif self.player.spells[int(option)-1].cost > self.player.mana:
+                self.write(f"You do not have enough mana to cast {choice}")
                 
             else:
                 valid = True
@@ -277,11 +388,11 @@ class encounter:
         if target == None:
             return False
         
-        spell = self.player.spells[accepted.index(choice.lower())]
+        spell = self.player.spells[int(option)-1]
         cost = spell.cost
         self.player.mana = self.player.mana - cost
-        print(f"\nYou used up {cost} mana points")
-        time.sleep(self.sleep)
+        self.write("")
+        self.write(f"You used up {cost} mana points")
 
         self.damage(spell, target)
 
@@ -292,41 +403,55 @@ class encounter:
         let player choose a flask to use
         return True if turn passes, return False if cancelled action
         """
-        user = self.player
-        print()
-        print(f"Number of Flask of Crimson Tears: {user.health_flask} (restores {item.FlaskOfCrimsonTears().health} health)")
-        print(f"Number of Flask of Cerulean Tears: {user.mana_flask} (restores {item.FlaskOfCeruleanTears().mana} mana)\n")
-        time.sleep(self.sleep)
 
+        user = self.player
+        
+        option_var = tk.StringVar()
+        cont_var = tk.StringVar()
+        def key_press(e):
+            option_var.set(e.char)
+            cont_var.set("go")
+        
         valid = False
         while not valid:
             
-            selection = input("Which flask would you like to drink? (type cancel to cancel): ")
-            
-            while selection.lower() not in ["flask of crimson tears", "flask of cerulean tears", "cancel"]:
-                print(f"\nYou tried drinking {selection} but nothing happened\n")
-                time.sleep(self.sleep)
-                selection = input("Which flask would you like to drink? (type cancel to cancel): ")
+            self.write("")
+            self.write("Which Flask would you like to drink?")
+            self.write(f"[1] Flask of Crimson Tears (restores {item.FlaskOfCrimsonTears().health} health, {user.health_flask} left)")
+            self.write(f"[2] Flask of Cerulean Tears (restores {item.FlaskOfCeruleanTears().mana} mana, {user.mana_flask} left)")
+            self.write(f"[3] Cancel Action")
+            self.root.bind(str(1), key_press)
+            self.root.bind(str(2), key_press)
+            self.root.bind(str(3), key_press)
 
-            if selection.lower() == "flask of crimson tears":
+            self.root.wait_variable(option_var)
+            option = option_var.get()
+
+            if option == "3":
+                return False
+            
+            elif option == "1":
                 if user.health_flask <= 0:
-                    print("\nYou ran out of Flasks of Crimson Tears\n")
-                    time.sleep(self.sleep)
+                    self.write("")
+                    self.write("You ran out of Flasks of Crimson Tears")
+                    self.write("")
+                    self.delay()
                 else:
+                    self.delete()
                     self.health_flask()
                     valid = True
-
-            elif selection.lower() == "flask of cerulean tears":
+                    
+            elif option == "2":
                 if user.mana_flask <= 0:
-                    print("\nYou ran out of Flasks of Cerulean Tears\n")
-                    time.sleep(self.sleep)
+                    self.write("")
+                    self.write("You ran out of Flasks of Cerulean Tears")
+                    self.write("")
+                    self.delay()
                 else:
+                    self.delete()
                     self.mana_flask()
                     valid = True
 
-            elif selection.lower() == "cancel":
-                return False
-            
         return True
     
     def health_flask(self) -> None:
@@ -340,8 +465,9 @@ class encounter:
         #heal player
         healing = min(self.player.max_health - self.player.health, item.FlaskOfCrimsonTears().health)
         self.player.health = self.player.health + healing
-        print(f"\nYou drank a Flask of Crimson Tears and gained {healing} health")
-        time.sleep(self.sleep)
+        self.write("")
+        self.write(f"You drank a Flask of Crimson Tears and gained {healing} health")
+        self.delay()
 
     def mana_flask(self) -> None:
         """
@@ -354,8 +480,9 @@ class encounter:
         #restore player mana
         mana = min(self.player.max_mana - self.player.mana, item.FlaskOfCeruleanTears().mana)
         self.player.mana = self.player.mana + mana
-        print(f"\nYou drank a Flask of Cerulean Tears and gained {mana} mana")
-        time.sleep(self.sleep)
+        self.write("")
+        self.write(f"You drank a Flask of Cerulean Tears and gained {mana} mana")
+        self.delay()
 
     def shield(self) -> None:
         """
@@ -363,10 +490,12 @@ class encounter:
         """
         #get shield cost
         cost = 10
-        
+
+        self.delete()
         self.player.mana = self.player.mana - cost
-        print(f"\nYou used up {cost} mana points to empower your shield")
-        time.sleep(self.sleep)
+        self.write("")
+        self.write(f"You used up {cost} mana points to empower your shield")
+        self.delay()
         
 
     def over(self):
@@ -385,20 +514,26 @@ class encounter:
         
         else:
             return 0
-
+        
     def end_game(self) -> None:
+
+        def short_del():
+            pause = tk.StringVar()
+            self.root.after(100, lambda: pause.set("go"))
+            self.root.wait_variable(pause)
+        
         """displays scenario when user dies"""
-        print("__   _______ _   _  ______ _____ ___________")
-        time.sleep(0.2)
-        print("\ \ / /  _  | | | | |  _  \_   _|  ___|  _  \\")
-        time.sleep(0.2)
-        print(" \ V /| | | | | | | | | | | | | | |__ | | | |")
-        time.sleep(0.2)
-        print("  \ / | | | | | | | | | | | | | |  __|| | | |")
-        time.sleep(0.2)
-        print("  | | \ \_/ / |_| | | |/ / _| |_| |___| |/ /")
-        time.sleep(0.2)
-        print("  \_/  \___/ \___/  |___/  \___/\____/|___/ ")
+        self.write("__   _______ _   _  ______ _____ ___________")
+        short_del()
+        self.write("\ \ / /  _  | | | | |  _  \_   _|  ___|  _  \\")
+        short_del()
+        self.write(" \ V /| | | | | | | | | | | | | | |__ | | | |")
+        short_del()
+        self.write("  \ / | | | | | | | | | | | | | |  __|| | | |")
+        short_del()
+        self.write("  | | \ \_/ / |_| | | |/ / _| |_| |___| |/ /")
+        short_del()
+        self.write("  \_/  \___/ \___/  |___/  \___/\____/|___/ ")
 
 class voldemort_fight(encounter):
     """
@@ -406,7 +541,7 @@ class voldemort_fight(encounter):
     """
     def __init__(self, enemy: "Enemy"):
         super().__init__(enemy)
-        self.phases = [enemies_.Phase2()]
+        self.phases = [e.Phase2()]
         self.transfer = 0
 
     def damage(self, weapon: "Weapon/Spell", target: "enemy") -> None:
@@ -421,30 +556,33 @@ class voldemort_fight(encounter):
 
         #check if enemy is dead
         if target.health > 0:
-            print(f"\n{self.player.name}{weapon.move}, dealing {damage} damage to {target.name}")
-            time.sleep(self.sleep)
+            self.write("")
+            self.write(f"{self.player.name}{weapon.move}, dealing {damage} damage to {target.name}")
+            self.delay()
         else:
             #check if enemy can revive
             if len(self.phases) == 1:
                 self.phase_transfer()
             else:
+                self.enemies.remove(target)
                 target.health = 0
 
     def phase_transfer(self):
         """
         Intermission for phase change
         """
-        print("\ninsert phase transition")
+        self.delete()
+        self.write("insert phase transition")
         self.enemies[0] = self.phases[0]
         self.phases.remove(self.phases[0])
         self.transfer = 1
-        time.sleep(self.sleep)
+        self.delay()
 
     def enemy_turn(self, player_choice: str) -> None:
         """
         let enemies attack
 
-        changing this method to prevent boss from taking a turn immediately after reviving
+        changing this method so that phase 2 doesn't take a turn immediately after reviving
         """
 
         if self.transfer == 1:
@@ -459,15 +597,17 @@ class voldemort_fight(encounter):
 
             #negate damage if player is shielding
             if player_choice == "shield":
-                print(f"\n{enemy.name} used {enemy.move}, but it was deflected by your shield")
-                time.sleep(self.sleep)
+                self.write("")
+                self.write(f"{enemy.name} used {enemy.move}, but it was deflected by your shield")
+                self.delay()
 
             #deal damage to the player 
             else:
                 damage = max(1, enemy.attack - self.player.defence)
                 self.player.health = self.player.health - damage
-                print(f"\n{enemy.name} used {enemy.move}, dealing {damage} damage to {self.player.name}")
-                time.sleep(self.sleep)
+                self.write("")
+                self.write(f"{enemy.name} used {enemy.move}, dealing {damage} damage to {self.player.name}")
+                self.delay()
                 if self.player.health <= 0:
                     break
 
@@ -496,18 +636,20 @@ class gabriel_fight(encounter):
         enemy = self.enemy
         if self.timer > 0:
             if player_choice == "shield":
-                print(f"\nGabriel used light combo, but it was deflected by your shield")
+                self.write("")
+                self.write(f"Gabriel used light combo, but it was deflected by your shield")
             else:
                 damage = max(1, enemy.attack - self.player.defence)
                 self.player.health = self.player.health - damage
-                print(f"\nGabriel used Light Combo, dealing {damage} damage to {self.player.name}")
-            time.sleep(self.sleep)
+                self.write("")
+                self.write(f"Gabriel used light combo, dealing {damage} damage to {self.player.name}")
+            self.delay()
 
         if self.timer > 1:
             enemy.defence = 10
             self.spinning_blades = 1
-            print(f"Gabriel used Spinning Blades, increasing his defence by 10 for one turn")
-            time.sleep(self.sleep)
+            self.write(f"Gabriel used spinning blades, increasing his defence by 10 for one turn")
+            self.delay()
 
         if self.timer == 1:
             enemy.defence = 0
@@ -516,20 +658,23 @@ class gabriel_fight(encounter):
         if self.timer == 0:
             self.spinning_blades = 0
             self.timer = 3
-            if player_choice == self.player.weapon.name.lower() and player_choice in self.melee:
-                print("\nGabriel used his special move, Sword Throw")
-                time.sleep(self.sleep)
-                print(f"""
-As you swung the {self.player.weapon.name}, you +PARRIED Gabriel's
-Sword Throw, sending it back to him and dealing 150 damage""")
+            if player_choice == "weapon" and self.player.weapon.name.lower() in self.melee:
+                self.write("")
+                self.write("Gabriel used his special move, Sword Throw")
+                self.delay()
+                self.write("")
+                self.write(f"As you swung the {self.player.weapon.name}, you +PARRIED Gabriel's")
+                self.write("Sword Throw, sending it back to him and dealing 150 damage")
                 enemy.health = enemy.health - 150
             else:
                 if player_choice == "shield":
-                    print(f"\nGabriel used his special move, Sword Throw, but it was deflected by your shield")
+                    self.write("")
+                    self.write(f"Gabriel used his special move, Sword Throw, but it was deflected by your shield")
                 else:
                     damage = max(1, 60 - self.player.defence)
                     self.player.health = self.player.health - damage
-                    print(f"\nGabriel used his special move, Sword Throw, dealing {damage} damage to {self.player.name}")
+                    self.write("")
+                    self.write(f"Gabriel used his special move, Sword Throw, dealing {damage} damage to {self.player.name}")
 
         self.timer = self.timer - 1
 
@@ -545,50 +690,26 @@ Sword Throw, sending it back to him and dealing 150 damage""")
 
         #check if enemy is dead
         if target.health > 0:
-            print(f"\n{self.player.name}{weapon.move}, dealing {damage} damage to {target.name}")
-            time.sleep(self.sleep)
+            self.write("")
+            self.write(f"{self.player.name}{weapon.move}, dealing {damage} damage to {target.name}")
+            self.delay()
             
         else:
-            print(f"\n{self.player.name}{weapon.win_front}{target.name}{weapon.win_back}")
+            self.write("")
+            self.write(f"{self.player.name}{weapon.win_front}{target.name}{weapon.win_back}")
             self.enemies.remove(target)
             target.health = 0
             self.dead.append(target)
-            time.sleep(self.sleep)
+            self.delay()
 
         if weapon.name.lower() in self.melee and self.spinning_blades == 1:
             damage = max(1, self.enemy.attack - self.player.defence)
             self.player.health = self.player.health - damage
-            print(f"\nGabriel's spinning blades hit you as you attacked, dealing {damage} damage to you")
+            self.write("")
+            self.write(f"Gabriel's spinning blades hit you as you attacked, dealing {damage} damage to you")
             if self.spin_warning == 0:
-                print("You would do well to keep your distance while this ability is active")
+                self.write("You would do well to keep your distance while this ability is active")
                 self.spin_warning = 1
-            
-
-    def target(self) -> "Enemy":
-        """
-        let player choose a target for their attack/spell
-        returns enemy object to be attacked, or none if cancelled
-
-        changing this method because "gabriel, apostate of hate" with punctuation is a serious pain in the ass to type out
-        """
-
-        enemy = self.enemy
-        print()
-        print(f" - {'Gabriel' : <15} {str(enemy.health) + ' health remaining' : >20}")
-        print()
-        
-        accepted = ["gabriel", "cancel"]
-            
-        target = input("Which enemy do you want to attack? (type cancel to cancel): ")
-        while target.lower() not in accepted:
-            print(f"\nYou tried to attack {target} but they seem to have mysteriously disappeared")
-            time.sleep(self.sleep)
-            target = input("Which enemy do you want to attack? (type cancel to cancel): ")
-
-        if target.lower() == "cancel":
-            return None
-
-        return self.enemies[accepted.index(target.lower())]
 
     def status(self) -> None:
         """
@@ -601,20 +722,34 @@ Sword Throw, sending it back to him and dealing 150 damage""")
         dead = self.dead
 
         #print player health, mana, flasks
-        print(f"\n{'-'*50}\n")
-        print(f"{player.name} has {player.health} health")
-        print(f"{player.name} has {player.mana} mana")
-        print(f"{player.name} has {player.health_flask} Flask of Crimson Tears")
-        print(f"{player.name} has {player.mana_flask} Flask of Cerulean Tears")
+        self.write("")
+        self.write(f"{'-'*50}")
+        self.write("")
+        self.write(f"{player.name} has {player.health} health")
+        self.write(f"{player.name} has {player.mana} mana")
+        self.write(f"{player.name} has {player.health_flask} Flask of Crimson Tears")
+        self.write(f"{player.name} has {player.mana_flask} Flask of Cerulean Tears")
+        self.delay()
 
         #print enemy health
-        print()
+        self.write("")
         for enemy in enemies:
-            print(f"{enemy.name} has {enemy.health} health")
+            self.write_color(f"{enemy.name} has {enemy.health} health", "red")
+        self.delay()
 
         #print dead enemies
         for die in dead:
-            print(f"{die.name} has 0 health")
+            self.write_color(f"{die.name} has 0 health", "grey")
+        if len(dead) != 0:
+            self.delay()
 
+        #telegraph for sword throw
         if self.timer == 0:
-            print("\nGabriel is preparing something")
+            self.write("")
+            self.write("Gabriel is preparing something")
+            
+
+
+
+
+        
