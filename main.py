@@ -1296,33 +1296,24 @@ def settings():
         for row in settings:
             key, val = row.split()
             settings_dict[key] = val
-
+    choice = ""
+    accepted = list(settings_dict.keys())
+    accepted.append("finish")
     display_settings(settings_dict)
-    
-    change = get_input("\nDo you want to change your settings? ( yes / no ): ", ["yes", "no"], None, False)
-    
-    if change == "yes":
-    
-        choice = ""
-        accepted = list(settings_dict.keys())
-        accepted.append("finish")
-        while choice != "finish":
-            choice = get_input("\nWhich setting do you want to change? (type finish to quit): ", accepted)
+    while choice != "finish":
+        choice = get_input("\nWhich setting do you want to change? (type finish to quit): ", accepted, None, False)
 
-            if choice.lower() == "finish":
-                with open("settings.txt", "w") as f:
-                    for entry in settings_dict:
-                        f.write(entry + " " + settings_dict[entry] + "\n")
-                return
-            
-            if choice.lower() == "sleep":
-                new = set_sleep(settings_dict["sleep"])
-                settings_dict["sleep"] = new
+        if choice.lower() == "finish":
+            with open("settings.txt", "w") as f:
+                for entry in settings_dict:
+                    f.write(entry + " " + settings_dict[entry] + "\n")
+            return
+        
+        if choice.lower() == "sleep":
+            new = set_sleep(settings_dict["sleep"])
+            settings_dict["sleep"] = new
 
-            display_settings(settings_dict)
-            
-    elif change == "no":
-        return
+        display_settings(settings_dict)
 
 def display_settings(settings):
     """
@@ -1333,6 +1324,7 @@ def display_settings(settings):
         write(f"{set}: {settings[set]}")
 
 def set_sleep(current):
+    global selfsleep
     """
     Change the interval between messages
     returns new value for sleep as string

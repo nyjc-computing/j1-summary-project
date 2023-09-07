@@ -87,7 +87,7 @@ class Malenia(Enemy):
         super().__init__()
         self.name = "Malenia, Blade of Miquella"
         self.health = 170
-        self.description = "a grotesque and formidable boss, a creature amalgamation of flesh and metal that presents a formidable challenge to you with his overwhelming power and monstrous appearance"
+        self.description = "a menacing warrior who has never known defeat. Wields a legendary katana using her prosthetic arm"
         self.attack = 25
         self.move = "Waterfowl Dance"
         self.loot = GlintstoneCometshard()
