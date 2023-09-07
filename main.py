@@ -12,9 +12,8 @@ selfend = False
 selfroom = temp[0]
 selfcharacter = temp[1]
 selfrooms = []
-selfactions = ["look", "move", "loot", "flask", "attack", "equip", "status", "info", "die", "settings", "map", "meow"]
-selfdescription = ["Looks around the room","Move to another room", "Search the room for loot", "Drink your flasks", "Attack the enemny", "Change your equipment", "See your statistics", "Find out more about your items", "Ends the game", "Change settings", "Shows map", "Meow"]
-selfteleportable = False
+selfactions = ["look", "move", "attack", "loot", "flask", "equip", "status", "information", "settings", "map", "meow"]
+selfdescription = ["Looks around the room","Move to another room", "Attack the enemny", "Search the room for loot", "Drink your flasks", "Change your equipment", "See your statistics", "Find out more about your items", "Change settings", "Shows map", "Meow"]
 selfmap = map.game_map()
 currentPressedKey = ""
 out = []
@@ -56,15 +55,7 @@ def intro():
     sleep(selfsleep)
     write("\nThe Dark Lord Voldemort has taken over Hogwarts and opened multiple interdimensional gates, bringing hordes of enemies into the school. Your job as the chosen one is to traverse the school in order to locate The Shrieking Shack and thwart Voldemort's evil plan to take over the world.\n")
     sleep(selfsleep)
-    write('Do you wish to enter the school?')
-    write('[y] Yes')
-    write('[n] No')
-    root.bind('<y>', lambda x: pause_var.set("yes"))
-    root.bind("<n>", lambda x: pause_var.set("no"))
-    root.wait_variable(pause_var)
-    decision = pause_var.get()
-    root.unbind('<y>')
-    root.unbind('<n>')
+    decision = get_input("Do you wish to enter the school?", ["Yes", "No"], None, False)
     delete()
     pause_var.set("")
     
@@ -88,6 +79,7 @@ def intro():
             root.after(selfsleep*1000, run)
         else:
             write("You boldly opened the front gates of the school and made your way into the first room\n")
+            wait_for_key_press()
             root.after(selfsleep*1000, run)
             
     elif decision.lower() == "no":
@@ -257,11 +249,8 @@ def run():
     elif decision.lower() == "status":
         status(selfcharacter)
 
-    elif decision.lower() == "info":
+    elif decision.lower() == "information":
         info(selfcharacter)
-
-    elif decision.lower() == "die":
-        die()
 
     elif decision.lower() == "meow":
         meow()
@@ -269,7 +258,7 @@ def run():
     elif decision.lower() == "settings":
         settings()
 
-    elif selfteleportable == True and decision.lower() == "teleport":
+    elif decision.lower() == "teleport":
         teleport()
 
     elif decision.lower() == "map":
@@ -512,7 +501,7 @@ def flask(user):
     # Check if the user still has available flasks
     if (user.health_flask + user.mana_flask) == 0:
         write("\nYou ran out of flasks\n")
-        sleep(selfsleep)
+        wait_for_key_press()
     else:
         use_flask(user)
 
@@ -650,10 +639,8 @@ def get_attack(user, decision):
 
 def display_flask(user):
     """sub action from use_flask to display flask in inventory"""
-    out = []
-    out.append(f"Flask of Crimson Tears ({user.health_flask}) (restores {FlaskOfCrimsonTears().health} health)")
-    out.append(f"Flask of Cerulean Tears ({user.mana_flask}) (restores {FlaskOfCeruleanTears().mana} mana)\n")
-    return out
+    write(f"You have {user.health_flask} Flask of Crimson Tears (restores {FlaskOfCrimsonTears().health} health)")
+    write(f"You have {user.mana_flask} Flask of Cerulean Tears (restores {FlaskOfCeruleanTears().mana} mana)\n")
     
 def use_flask_battle(user):
     """sub action from get_choice() to prompt user for the flask to drink"""
@@ -691,31 +678,61 @@ def use_flask_battle(user):
                 
 def use_flask(user):
     """Function to allow the user to use flask but also allows them to cancel the action"""
+    display_stat(user)
+    sleep(selfsleep)
     display_flask(user)
-    selection = input("Which flask would you like to drink? (type cancel to quit): ")
+    sleep(selfsleep)
+    selection = get_input("Which flask would you like to drink? ", ["Flask of Crimson Tears", "Flask of Cerulean Tears", "Cancel"], None, False)
     valid = False
     while not valid:
         valid = True
-        # Validates user selection
-        if selection.lower() not in ["flask of crimson tears", "flask of cerulean tears", "cancel"]:
-            write(f"\nYou tried drinking {selection} but nothing happened\n")
-            sleep(selfsleep)
-            selection = input("Which flask would you like to drink?: ")
-            valid = False
         # Checks if the user has enough flask of crimson tears
-        elif selection.lower() == "flask of crimson tears" and user.health_flask == 0:
+        if selection == "Flask of Crimson Tears" and user.health_flask == 0:
             write("\nYou ran out of Flask of Crimson Tears\n")
+            wait_for_key_press()
+            delete()
+            display_stat(user)
             sleep(selfsleep)
-            selection = input("Which flask would you like to drink?: ")
+            display_flask(user)
+            sleep(selfsleep)
+            selection = get_input("Which flask would you like to drink? ", ["Flask of Crimson Tears", "Flask of Cerulean Tears", "Cancel"], None, False)
             valid = False
-        # Checks if the user has enough flask of cerulean tears
-        elif selection.lower() == "flask of cerulean tears" and user.mana_flask == 0:
-            write("\nYou ran out of Flask of Cerulean Tears\n")
+            
+        elif selection == "Flask of Crimson Tears" and user.health == user.max_health:
+            write("\nYou do not need to drink a Flask of Crimson Tears\n")
+            wait_for_key_press()
+            delete()
+            display_stat(user)
             sleep(selfsleep)
-            selection = input("Which flask would you like to drink?: ")
+            display_flask(user)
+            sleep(selfsleep)
+            selection = get_input("Which flask would you like to drink? ", ["Flask of Crimson Tears", "Flask of Cerulean Tears", "Cancel"], None, False)
+            valid = False
+            
+        # Checks if the user has enough flask of cerulean tears
+        elif selection == "Flask of Cerulean Tears" and user.mana_flask == 0:
+            write("\nYou ran out of Flask of Cerulean Tears\n")
+            wait_for_key_press()
+            delete()
+            display_stat(user)
+            sleep(selfsleep)
+            display_flask(user)
+            sleep(selfsleep)
+            selection = get_input("Which flask would you like to drink? ", ["Flask of Crimson Tears", "Flask of Cerulean Tears", "Cancel"], None, False)
             valid = False
 
-        elif selection.lower() == "cancel":
+        elif selection == "Flask of Cerulean Tears" and user.mana == user.max_mana:
+            write("\nYou do not need to drink a Flask of Cerulean Tears\n")
+            wait_for_key_press()
+            delete()
+            display_stat(user)
+            sleep(selfsleep)
+            display_flask(user)
+            sleep(selfsleep)
+            selection = get_input("Which flask would you like to drink? ", ["Flask of Crimson Tears", "Flask of Cerulean Tears", "Cancel"], None, False)
+            valid = False
+
+        elif selection.lower() == "Cancel":
             return
 
     if selection.lower() == "flask of crimson tears":
@@ -723,31 +740,33 @@ def use_flask(user):
         final_health = min(user.max_health, user.health + FlaskOfCrimsonTears().health)
         healing = final_health - user.health
         write(f"\nYou drank a Flask of Crimson Tears and gained {healing} health")
-        sleep(selfsleep)
+        wait_for_key_press()
         user.health = final_health
         user.health_flask -= 1
+        delete()
+        use_flask(user)
         
     elif selection.lower() == "flask of cerulean tears":
         # Makes sure the mana gained does not exceed the maximum mana
         final_mana = min(user.max_mana, user.mana + FlaskOfCeruleanTears().mana)
         healing = final_mana - user.mana
         write(f"\nYou drank a Flask of Cerulean Tears and gained {healing} mana")
-        sleep(selfsleep)
+        wait_for_key_press()
         user.mana = final_mana
         user.mana_flask -= 1
-    
+        delete()
+        use_flask(user)
+
+def display_stat(user):
+    write(f"Health : {user.health} / {user.max_health}")
+    write(f"Mana : {user.mana} / {user.max_mana}\n")
         
 def equip(self):
     """main action for user to equip various items"""
 
-    display_equipment(user)
+    display_equipment(selfcharacter)
 
-    decision = input("\ndo you want to change your equipment? ( yes / no ): ")
-
-    while decision.lower() not in ["yes", "no"]:
-        write("You briefly ponder the heavily nuanced and deeply intricate question of a choice between yes and no.")
-        sleep(selfsleep)
-        decision = input("\ndo you want to change your equipment? ( yes / no ): ")
+    decision = get_input("\ndo you want to change your equipment? ", ["yes", "no"], None, False)
 
     if decision.lower() == "no":
         return
@@ -755,19 +774,16 @@ def equip(self):
     elif decision.lower() == "yes":
         choice = ""
         while choice != "finish":
-            choice = input("\nwhat do you want to change? (type finish to quit): ")
-            while choice.lower() not in ["armour", "weapon", "accessory", "finish"]:
-                write(f"\nYou tried changing your {choice} but nothing happened")
-                choice = input("\nwhat do you want to change? (type finish to quit): ")
+            choice = get_input("\nwhat do you want to change?", ["armour", "weapon", "accessory", "finish"], None, False)
 
-            if choice.lower() == "armour":
-                equip_armour(user)
+            if choice == "armour":
+                equip_armour(selfcharacter)
 
             elif choice.lower() == "weapon":
-                equip_weapon(user)
+                equip_weapon(selfcharacter)
 
             elif choice.lower() == "accessory":
-                equip_accessory(user)
+                equip_accessory(selfcharacter)
     
 def display_equipment(user):
     """sub action for equip() to display equipments that the user have"""
@@ -776,7 +792,7 @@ def display_equipment(user):
         write("\nArmour : Empty")
     else:
         write(f"\nArmour : {user.armour.name}")
-
+        
     if user.weapon == None:
         write("Weapon : Empty")
     else:
@@ -794,98 +810,80 @@ def equip_armour(user):
     """sub action from equip() for user to choose an armour to equip"""
     if len(user.armours) == 0:
         write("\nYou do not have any armour to equip")
-        sleep(selfsleep)
+        wait_for_key_press()
+        delete()
+        display_equipment(selfcharacter)
     else:
         # Displays the armours the user owns
         write("\nIn your inventory you have: ")
         armours = user.get_armours()
-        for armour in armours:
-            write(f"- {armour.name}")
         sleep(selfsleep)
-        option = input("\nWhich armour do you want to equip?: ")
-        # Validates the users choice
-        if option.lower() not in armours:
-            write(f"\nYou tried equipping {option} but realised you cant create things out of thin air")
-            sleep(selfsleep)
-        else:
-            write(f"\nYou equipped {option}")
-            sleep(selfsleep)
-            # Removes the defence increase of the previous armour
-            if user.armour != None:
-                user.defence = user.defence - user.armour.defence
-            armour = user.armours[items.index(option.lower())]
-            # Adds the defence of the new armour
-            user.defence = user.defence + armour.defence
-            user.armour = armour
-            display_equipment(user)
+        option = get_input("\nWhich armour do you want to equip?", armours)
+        write(f"\nYou equipped {option}")
+        wait_for_key_press()
+        # Removes the defence increase of the previous armour
+        if user.armour != None:
+            user.defence = user.defence - user.armour.defence
+        armour = user.armours[armours.index(option)]
+        # Adds the defence of the new armour
+        user.defence = user.defence + armour.defence
+        user.armour = armour
+        delete()
+        display_equipment(user)
 
 def equip_weapon(user):
     """sub action from equip() for user to choose a weapon to equip"""
-    if len(user.weapons) == 0:
-        write("\nYou do not have any weapon to equip")
-        sleep(selfsleep)
-    else:
-        # Displays the weapons the user owns
-        write("\nIn your inventory you have: ")
-        weapons = user.get_weapons()
-        for weapon in weapons:
-            write(f"- {weapon.name}")
-        sleep(selfsleep)
-        # Validates the user's choice
-        option = input("\nWhich weapon do you want to equip?: ")
-        if option.lower() not in weapons:
-            write(f"\nYou tried equipping {option} but realised you cant create things out of thin air")
-        else:
-            write(f"\nYou equipped {option}")
-            sleep(selfsleep)
-            user.weapon = user.weapons[items.index(option.lower())]
-            display_equipment(user)
+    # Displays the weapons the user owns
+    weapons = user.get_weapons()
+    # Validates the user's choice
+    option = get_input("\nWhich weapon do you want to equip?", weapons)
+    write(f"\nYou equipped {option}")
+    wait_for_key_press()
+    user.weapon = user.weapons[weapons.index(option)]
+    delete()
+    display_equipment(user)
 
 def equip_accessory(user):
     """sub action from equip() for user to choose an accessory to equip"""
     if len(user.accessories) == 0:
         write("\nYou do not have any accessories to equip")
-        sleep(selfsleep)
+        wait_for_key_press()
+        delete()
+        display_equipment(selfcharacter)
     else:
-        write("\nIn your inventory you have: ")
         accessories = user.get_accessories()
-        for accessory in accessories:
-            write(f"- {accessory.name}")
-        sleep(selfsleep)
-        option = input("\nWhich accessory do you want to equip?: ")
-        if option.lower() not in accessories:
-            write(f"\nYou tried equipping {option} but realised you cant create things out of thin air")
-        else:
-            write(f"\nYou equipped {option}")
-            sleep(selfsleep)
+        option = get_input("\nWhich accessory do you want to equip?", accessories)
+        write(f"\nYou equipped {option}")
+        wait_for_key_press()
 
-            # Removes the stat boost from the previous accessory
-            if user.accessory != None:
-                user.max_health = user.max_health - user.accessory.health_boost
+        # Removes the stat boost from the previous accessory
+        if user.accessory != None:
+            user.max_health = user.max_health - user.accessory.health_boost
 
-                new_health = min(max(1, user.health - user.accessory.health_boost), user.max_health)
-                user.health = new_health
-                
-                user.max_mana -= user.accessory.mana_boost
-
-                new_mana = min(max(0, user.mana - user.accessory.mana_boost), user.max_mana)
-                user.mana = new_mana
-
-                user.attack -= user.accessory.attack_boost
-
-                user.defence -= user.accessory.defence_boost
-
-            # Adds the stat boost from the new accessory
-            accessory = user.accessories[items.index(option.lower())]
-            user.health += accessory.health_boost
-            user.max_health += accessory.health_boost
-            user.attack += accessory.attack_boost
-            user.mana += accessory.mana_boost
-            user.max_mana += accessory.mana_boost
-            user.defence += user.accessory.defence_boost
+            new_health = min(max(1, user.health - user.accessory.health_boost), user.max_health)
+            user.health = new_health
             
-            user.accessory = accessory
-            display_equipment(user)
+            user.max_mana -= user.accessory.mana_boost
+
+            new_mana = min(max(0, user.mana - user.accessory.mana_boost), user.max_mana)
+            user.mana = new_mana
+
+            user.attack -= user.accessory.attack_boost
+
+            user.defence -= user.accessory.defence_boost
+
+        # Adds the stat boost from the new accessory
+        accessory = user.accessories[accessories.index(option)]
+        user.health += accessory.health_boost
+        user.max_health += accessory.health_boost
+        user.attack += accessory.attack_boost
+        user.mana += accessory.mana_boost
+        user.max_mana += accessory.mana_boost
+        user.defence += user.accessory.defence_boost
+        
+        user.accessory = accessory
+        delete()
+        display_equipment(user)
 
 def status(user):
     """main action that prints user's status"""
@@ -899,13 +897,10 @@ def status(user):
 
 def info(user):
     """main action that prompts user for the type of item to find out more information about"""
-    options = ["weapons", "spells", "armours", "accessories", "flasks", "items"]
+    options = ["weapons", "spells", "armours", "accessories", "flasks", "items", "upgrades", "Cancel"]
     choice = get_input("What do you want to find out more about? ", [x.capitalize() for x in options]).lower()
-    
-    if choice not in options:
-        write(f"\nYou do not own any {choice}")
 
-    elif choice == "weapons":
+    if choice == "weapons":
         weapon_info(user)
 
     elif choice == "spells":
@@ -922,138 +917,181 @@ def info(user):
 
     elif choice == "items":
         item_info(user)
+
+    elif choice == "upgrades":
+        upgrade_info(user)
+
+    elif choice == "cancel":
+        return
                 
 def weapon_info(user):
     """sub action from equip() that prompts user for specific weapon to find out more about"""
     # Check if the user owns any weapons
     if len(user.weapons) == 0:
         write("\nYou do not own any weapons yet")
-
+        wait_for_key_press()
+        delete()
+        info(user)
+    
     else:
         # Displays the weapons the user owns
         weapons = user.get_weapons()
+        weapons.append("Cancel")
         decision = get_input("\nWhich weapon do you want to find out more about?", weapons)
-        if decision not in weapons:
-            write(f"You do not own {decision}")
-
-        else:
-            # Displays the description of the weapon
-            write(user.weapons[weapons.index(decision)].description)
-            sleep(selfsleep)
-            wait_for_key_press()
+        if decision == "Cancel":
+            delete()
+            info(user)
+            return
+        # Displays the description of the weapon
+        write(user.weapons[weapons.index(decision)].description)
+        wait_for_key_press()
+        delete()
+        weapon_info(user)
 
 def spell_info(user):
     """sub action from equip() that prompts user for specific spell to find out more about"""
     # Check if the user knows any spells
     if len(user.spells) == 0:
         write("\nYou do not own any spells yet")
+        wait_for_key_press()
+        delete()
+        info(user)
 
     else:
         # Displays the spells the user knows
         spells = user.get_spells()
-        write("\nIn your inventory you have: ")
-        for spell in spells:
-            write(f"- {spell.name}")
-        sleep(selfsleep)
+        spells.append("Cancel")
 
-        decision = input("\nWhich spell do you want to find out more about? : ")
-        if decision.lower() not in spells:
-            write(f"You do not own {decision}")
+        decision = get_input("\nWhich spell do you want to find out more about?", spells)
 
-        else:
-            # Displays the description of the spell
-            write("\n", end="")
-            write(user.spells[spells.index(decision)].description)
-            sleep(selfsleep)
+        if decision == "Cancel":
+            delete()
+            info(user)
+            return
+
+        # Displays the description of the spell
+        write(user.spells[spells.index(decision)].description)
+        wait_for_key_press()
+        delete()
+        spell_info(user)
 
 def armour_info(user):
     """sub action from equip() that prompts user for specific armour to find out more about"""
     # Check if the user owns any armours
     if len(user.armours) == 0:
         write("\nYou do not own any amours yet")
+        wait_for_key_press()
+        delete()
+        info(user)
 
     else:
         # Displays the armours the user owns
         armours = user.get_armours()
-        write("\nIn your inventory you have: ")
-        for armour in armours:
-            write(f"- {armour.name}")
-        sleep(selfsleep)
+        armours.append("Cancel")
 
-        decision = input("\nWhich armour do you want to find out more about? : ")
-        if decision.lower() not in armours:
-            write(f"You do not own {decision}")
+        decision = get_input("\nWhich armour do you want to find out more about?", armours)
 
-        else:
-            # Displays the description of the armour
-            write("\n", end="")
-            write(user.armours[armours.index(decision)].description)
-            sleep(selfsleep)
+        if decision == "Cancel":
+            delete()
+            info(user)
+            return
+        # Displays the description of the armour
+        write(user.armours[armours.index(decision)].description)
+        wait_for_key_press()
+        delete()
+        armour_info(user)
 
 def accessory_info(user):
     """sub action from equip() that prompts user for specific accessory to find out more about"""
     # Checks if the user owns any accessories
     if len(user.accessories) == 0:
         write("\nYou do not own any accessories yet")
+        wait_for_key_press()
+        delete()
+        info(user)
 
     else:
         # Displays the accessories the user owns
         accessories = user.get_accessories()
-        write("\nIn your inventory you have: ")
-        for accessory in accessories:
-            write(f"- {accessory.name}")
-        sleep(selfsleep)
+        accessories.append("Cancel")
 
-        decision = input("\nWhich accesssory do you want to find out more about? : ")
-        if decision.lower() not in accessories:
-            write(f"You do not own {decision}")
+        decision = get_input("\nWhich accesssory do you want to find out more about?", accessories)
 
-        else:
-            # Displays the description of the accessory
-            write("\n", end="")
-            write(user.accessories[accessories.index(decision)].description)
-            sleep(selfsleep)
+        if decision == "Cancel":
+            delete()
+            info(user)
+            return
+
+        # Displays the description of the accessory
+        write(user.accessories[accessories.index(decision)].description)
+        wait_for_key_press()
+        delete()
+        accessory_info(user)
 
 def flask_info():
     """sub action from equip() that prompts user for specific flask to find out more about"""
-    write("\nIn your inventory you have: ")
-    write("- Flask of Crimson Tears")
-    write("- Flask of Cerulean Tears")
 
-    decision = input("\nWhich accesssory do you want to find out more about? : ")
+    decision = get_input("\nWhich accesssory do you want to find out more about?", ["Flask of Crimson Tears", "Flask of Cerulean Tears", "Cancel"])
     if decision.lower() == "flask of crimson tears":
-        write("\n", end ="")
         write(FlaskOfCrimsonTears().description)
-        sleep(selfsleep)
+        wait_for_key_press()
+        delete()
+        flask_info()
     elif decision.lower() == "flask of cerulean tears":
-        write("\n", end ="")
         write(FlaskOfCeruleanTears().description)
-        sleep(selfsleep)
-    else:
-        write(f"You do not own {decision}")
+        wait_for_key_press()
+        delete()
+        flask_info()
+    elif decision == "Cancel":
+        delete()
+        info(selfcharacter)
 
 def item_info(user):
     """sub action from equip() that prompts user for specific special item to find out more about"""
     # Check if the user owns any items
     if len(user.items) == 0:
         write("\nYou do not own any items yet")
+        wait_for_key_press()
+        delete()
+        info(user)
     else:
         # Displays the items the user owns
         items = user.get_items()
-        write("\nIn your inventory you have: ")
-        for item in items:
-            write(f"- {item}")
-        sleep(selfsleep)
+        items.append("Cancel")
 
-        decision = input("\nWhich item do you want to find out more about? : ")
-        if decision.lower() not in items:
-            write(f"You do not own {decision}")
+        decision = get_input("\nWhich item do you want to find out more about?", items)
+
+        if decision == "Cancel":
+            delete()
+            info(user)
+            return
+        # Displays the description of the items
+        write(user.items[items.index(decision)].description)
+        wait_for_key_press()
+        delete()
+        item_info(user)
+
+def upgrade_info(user):
+    if len(user.upgrades) == 0:
+        write("\nYou do not own any upgrades yet")
+        wait_for_key_press()
+        delete()
+        info(user)
+    else:
+        upgrades = user.get_upgrades()
+        upgrades.append("Cancel")
+
+        decision = get_input("\nWhich upgrade do you want to find out more about?", upgrades)
+
+        if decision == "Cancel":
+            delete()
+            info(user)
 
         else:
-            # Displays the description of the items
-            write()
-            write(user.items[items.index(decision)].description)
-            sleep(selfsleep)
+            write(user.upgrades[upgrades.index(decision)].description)
+            wait_for_key_press()
+            delete()
+            upgrade_info(user)
                 
 def display_room_name():
     """prints the room's name in a cool way"""
@@ -1095,7 +1133,6 @@ def collect_loot(attacker, loot):
         attacker.upgrades.append(loot)
         write(f"\nYou obtained a {loot.name}, a powerful upgrade")
         if loot.name == "Portal Gun":
-            selfteleportable = True
             selfactions.append("teleport")
             selfdescription.append("Teleport to any room you have been to before")
 
@@ -1133,10 +1170,6 @@ def win(weapon):
     sleep(0.2)
     write(" \____/\___/|___/   \____/\_____/\_| |_/\___/\_| \_/")
     selfend = True
-
-def die():
-    """to end the game"""
-    end_game()
        
 def secret():
     """secret account that gives God like stats by setting name as meow"""
@@ -1165,7 +1198,6 @@ def meow():
                                """)
         sleep(selfsleep)
         write("\nYou started communicating with the cat, leading you to discover a hidden passage\n")
-        wait_for_key_press()
         theLastResort = TheLastResort()
         selfroom.back = theLastResort
         theLastResort.forward = selfroom
@@ -1253,7 +1285,8 @@ U|' \/ '|u\| ___"|/  \/"_ \/__        __
 | |  |||  /_ | \_/|| |/\||
 \_/  \|\____\\____/\_/  \|
                           """)
-    sleep(3)
+    wait_for_key_press()
+    
 def settings():
     """Show and change settings"""
     settings = []
@@ -1326,21 +1359,22 @@ def secret_room():
     wait_for_key_press()
 
 def teleport():
-    write("\nYou can teleport to: ")
+    global selfroom
     rooms = []
     for room in selfrooms:
-        write(f"- {room.name}")
-        rooms.append(room.name.lower())
-    sleep(selfsleep)
+        rooms.append(room.name)
+    rooms.append("Cancel")
 
-    choice = input("\nWhich room do you want to teleport to?: ")
-    
-    if choice.lower() not in rooms:
-        write(f"\nYou tried teleporting to {choice} but ended up in a dark abyss\n")
-        sleep(selfsleep)
+    choice = get_input("\nWhich room do you want to teleport to?", rooms)
 
+    if choice == "Cancel":
+        return
     else:
-        selfroom = selfrooms[rooms.index(choice.lower())]
+        room = selfrooms[rooms.index(choice)]
+        write(f"You teleported to {room.name}")
+        wait_for_key_press()
+        selfroom = room
+
 def display_map():
     """
     Show the map
