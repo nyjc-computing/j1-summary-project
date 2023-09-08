@@ -12,7 +12,7 @@ selfend = False
 selfroom = temp[0]
 selfcharacter = temp[1]
 selfrooms = []
-selfactions = ["look", "move", "attack", "loot", "flask", "equip", "status", "information", "settings", "map", "meow"]
+selfactions = ["look", "move", "attack", "loot", "flask", "equip", "status", "information", "settings", "map", "meow", "help"]
 selfdescription = ["Looks around the room","Move to another room", "Attack the enemny", "Search the room for loot", "Drink your flasks", "Change your equipment", "See your statistics", "Find out more about your items", "Change settings", "Shows map", "Meow"]
 selfmap = map.game_map()
 currentPressedKey = ""
@@ -227,7 +227,7 @@ def run():
         elif selfroom.name == "The Last Resort":
             selfmap.last_resort_enter()
     
-    decision = get_input("What do you wish to do?", selfactions, ["{} ({})".format(a,b) for a,b in zip(selfactions, selfdescription)])
+    decision = get_input("What do you wish to do?", selfactions)
 
     # Does the action the user selected
 
@@ -267,6 +267,9 @@ def run():
 
     elif decision.lower() == "map":
         display_map()
+
+    elif decision.lower() == "help":
+        help()
 
     if selfroom.enemy == None and selfroom.loot == None:
         if selfroom.name == "Dirtmouth":
@@ -1312,6 +1315,11 @@ def display_map():
     for row in selfmap.map:
         write("".join(row))
     write(legend)
+    wait_for_key_press()
+
+def help():
+    for i in range(len(selfdescription)):
+        write(f"{selfactions[i]} : {selfdescription[i]}")
     wait_for_key_press()
     
 if __name__ == "__main__":
