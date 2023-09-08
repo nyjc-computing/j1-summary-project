@@ -5,6 +5,7 @@ from accessory import *
 from spell import *
 from item import *
 from upgrade import *
+from shield import *
 
 class Enemy:
     """
@@ -45,7 +46,6 @@ class TheRadiance(Enemy):
         super().__init__()
         self.name = "The Radiance"
         self.health = 500
-        self.description = "a higher being of light similar to Essence, and as such, opposed to the Void, her ancient enemy. The Moth Tribe is born from her light and in return revere her"
         self.attack = 50
         self.move = "Wall of Light"
         self.loot = ShadeCloak()
@@ -465,3 +465,16 @@ class Phase2(Enemy):
         self.health = 1500
         self.attack = 80
         self.move = "insert powerful attack"
+
+class CalamityGanon(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
+    def __init__(self):
+        super().__init__()
+        self.name = "Calamity Ganon"
+        self.health = 20
+        self.attack = 2
+        self.move = "Fire Axe"
+        self.loot = HylianShield()

@@ -403,7 +403,7 @@ def look(room):
 def move(room):
     global selfroom
     """main action for user to traverse from one room to another"""
-    movement = get_input('Which direction do you wish to move in?', ['left', 'right', 'forward','back'])
+    movement = get_input('Which direction do you wish to move in?', ['Left', 'Right', 'Forward','Back'])
 
     # Generate a random number to see if you managed to sneak past the enemy
     caught = False
@@ -511,13 +511,7 @@ def loot(user, loot):
             user.mana_flask += 1
             selfroom.loot = None
             
-        elif loot.name == "Dectus Medallion (right)":
-            write(f"\nYou found a {loot.name}, a powerful item")
-            wait_for_key_press()
-            user.items.append(loot)
-            selfroom.loot = None
-
-        elif loot.name == "Dectus Medallion (left)":
+        elif loot.type == "item":
             write(f"\nYou found a {loot.name}, a powerful item")
             wait_for_key_press()
             user.items.append(loot)
@@ -560,13 +554,23 @@ def attack(room):
                         save()
             if room.enemy.name == "Sentinels":
                 secret_room()
-            if room.enemy.name == "The Hollow Knight":
+            elif room.enemy.name == "The Hollow Knight":
                 room.secret = True
                 delete()
-                write(f"{room.secret_message}")
+                write(room.secret_message)
                 wait_for_key_press()
-            if room.enemy.name == "The Radiance":
+            elif room.enemy.name == "The Radiance":
                 room.secret = False
+
+            elif room.enemy.name == "Ganondorf":
+                room.secret = True
+                delete()
+                write(room.secret_message)
+                wait_for_key_press()
+
+            elif room.enemy.name == "Calamity Ganon":
+                room.secret = False
+                
             room.enemy = None
         elif outcome == 2:
             room.encounter.reset()
@@ -688,19 +692,25 @@ def equip(self):
     """main action for user to equip various items"""
 
     display_equipment(selfcharacter)
+    if len(selfcharacter.get_shields()) == 0:
+        options = ["Armour", "Weapon", "Accessory", "Finish"]
+    else:
+        options = ["Armour", "Weapon", "Accessory", "Shield", "Finish"]
     choice = ""
     while choice != "Finish":
-        choice = get_input("\nwhat do you want to change?", ["Armour", "Weapon", "Accessory", "Finish"], None, False)
+        choice = get_input("\nwhat do you want to change?", options, None, False)
 
         if choice == "Armour":
             equip_armour(selfcharacter)
 
         elif choice == "Weapon":
-            print("meow")
             equip_weapon(selfcharacter)
 
         elif choice == "Accessory":
             equip_accessory(selfcharacter)
+
+        elif choice == "Shield":
+            equip_shield(selfcharacter)
     
 def display_equipment(user):
     """sub action for equip() to display equipments that the user have"""
@@ -721,7 +731,11 @@ def display_equipment(user):
         write(f"Accessory : {user.accessory.name}")
     sleep(selfsleep)
 
-
+    if len(user.get_shields()) > 0:
+        if user.shield == None:
+            write("Shield : Empty")
+        else:
+            write(f"Shield : {user.shield.name}")
 
 def equip_armour(user):
     """sub action from equip() for user to choose an armour to equip"""
@@ -732,33 +746,56 @@ def equip_armour(user):
         display_equipment(selfcharacter)
     else:
         # Displays the armours the user owns
-        write("\nIn your inventory you have: ")
         armours = user.get_armours()
-        sleep(selfsleep)
+        armours.append("Cancel")
         option = get_input("\nWhich armour do you want to equip?", armours)
-        write(f"\nYou equipped {option}")
-        wait_for_key_press()
-        # Removes the defence increase of the previous armour
-        if user.armour != None:
-            user.defence = user.defence - user.armour.defence
-        armour = user.armours[armours.index(option)]
-        # Adds the defence of the new armour
-        user.defence = user.defence + armour.defence
-        user.armour = armour
-        delete()
-        display_equipment(user)
+        if option == "Cancel":
+            display_equipment(user)
+
+        else:
+            write(f"\nYou equipped {option}")
+            wait_for_key_press()
+            # Removes the defence increase of the previous armour
+            if user.armour != None:
+                user.defence = user.defence - user.armour.defence
+            armour = user.armours[armours.index(option)]
+            # Adds the defence of the new armour
+            user.defence = user.defence + armour.defence
+            user.armour = armour
+            delete()
+            display_equipment(user)
 
 def equip_weapon(user):
     """sub action from equip() for user to choose a weapon to equip"""
     # Displays the weapons the user owns
     weapons = user.get_weapons()
+    weapons.append("Cancel")
     # Validates the user's choice
     option = get_input("\nWhich weapon do you want to equip?", weapons)
-    write(f"\nYou equipped {option}")
-    wait_for_key_press()
-    user.weapon = user.weapons[weapons.index(option)]
-    delete()
-    display_equipment(user)
+    if option == "Cancel":
+        display_equipment(user)
+    else:
+        write(f"\nYou equipped {option}")
+        wait_for_key_press()
+        user.weapon = user.weapons[weapons.index(option)]
+        delete()
+        display_equipment(user)
+
+def equip_shield(user):
+    """sub action from equip() for user to choose a weapon to equip"""
+    # Displays the weapons the user owns
+    shields = user.get_shields()
+    shields.append("Cancel")
+    # Validates the user's choice
+    option = get_input("\nWhich shield do you want to equip?", shields)
+    if option == "Cancel":
+        display_equipment(user)
+    else:
+        write(f"\nYou equipped {option}")
+        wait_for_key_press()
+        user.shield = user.shields[shields.index(option)]
+        delete()
+        display_equipment(user)
 
 def equip_accessory(user):
     """sub action from equip() for user to choose an accessory to equip"""
@@ -769,38 +806,43 @@ def equip_accessory(user):
         display_equipment(selfcharacter)
     else:
         accessories = user.get_accessories()
+        accessories.append("Cancel")
         option = get_input("\nWhich accessory do you want to equip?", accessories)
-        write(f"\nYou equipped {option}")
-        wait_for_key_press()
+        if option == "Cancel":
+            display_equipment(user)
 
-        # Removes the stat boost from the previous accessory
-        if user.accessory != None:
-            user.max_health = user.max_health - user.accessory.health_boost
-
-            new_health = min(max(1, user.health - user.accessory.health_boost), user.max_health)
-            user.health = new_health
+        else:
+            write(f"\nYou equipped {option}")
+            wait_for_key_press()
+    
+            # Removes the stat boost from the previous accessory
+            if user.accessory != None:
+                user.max_health = user.max_health - user.accessory.health_boost
+    
+                new_health = min(max(1, user.health - user.accessory.health_boost), user.max_health)
+                user.health = new_health
+                
+                user.max_mana -= user.accessory.mana_boost
+    
+                new_mana = min(max(0, user.mana - user.accessory.mana_boost), user.max_mana)
+                user.mana = new_mana
+    
+                user.attack -= user.accessory.attack_boost
+    
+                user.defence -= user.accessory.defence_boost
+    
+            # Adds the stat boost from the new accessory
+            accessory = user.accessories[accessories.index(option)]
+            user.health += accessory.health_boost
+            user.max_health += accessory.health_boost
+            user.attack += accessory.attack_boost
+            user.mana += accessory.mana_boost
+            user.max_mana += accessory.mana_boost
+            user.defence += user.accessory.defence_boost
             
-            user.max_mana -= user.accessory.mana_boost
-
-            new_mana = min(max(0, user.mana - user.accessory.mana_boost), user.max_mana)
-            user.mana = new_mana
-
-            user.attack -= user.accessory.attack_boost
-
-            user.defence -= user.accessory.defence_boost
-
-        # Adds the stat boost from the new accessory
-        accessory = user.accessories[accessories.index(option)]
-        user.health += accessory.health_boost
-        user.max_health += accessory.health_boost
-        user.attack += accessory.attack_boost
-        user.mana += accessory.mana_boost
-        user.max_mana += accessory.mana_boost
-        user.defence += user.accessory.defence_boost
-        
-        user.accessory = accessory
-        delete()
-        display_equipment(user)
+            user.accessory = accessory
+            delete()
+            display_equipment(user)
 
 def status(user):
     """main action that prints user's status"""
@@ -814,7 +856,10 @@ def status(user):
 
 def info(user):
     """main action that prompts user for the type of item to find out more information about"""
-    options = ["weapons", "spells", "armours", "accessories", "flasks", "items", "upgrades", "Cancel"]
+    if len(user.shields) == 0:
+        options = ["weapons", "spells", "armours", "accessories", "flasks", "items", "upgrades", "Cancel"]
+    else:
+        options = ["weapons", "shields", "spells", "armours", "accessories", "flasks", "items", "upgrades", "Cancel"]
     choice = get_input("What do you want to find out more about? ", [x.capitalize() for x in options]).lower()
 
     if choice == "weapons":
@@ -840,11 +885,31 @@ def info(user):
 
     elif choice == "cancel":
         return
+
+    elif choice == "shields":
+        shield_info(user)
                 
 def weapon_info(user):
     """sub action from equip() that prompts user for specific weapon to find out more about"""
+        # Displays the weapons the user owns
+    weapons = user.get_weapons()
+    weapons.append("Cancel")
+    decision = get_input("\nWhich weapon do you want to find out more about?", weapons)
+    if decision == "Cancel":
+        delete()
+        info(user)
+        return
+    # Displays the description of the weapon
+    write(user.weapons[weapons.index(decision)].description)
+    wait_for_key_press()
+    delete()
+    weapon_info(user)
+
+def shield_info(user):
+    """sub action from equip() that prompts user for specific weapon to find out more about"""
     # Check if the user owns any weapons
-    if len(user.weapons) == 0:
+    shields = user.get_shields()
+    if len(shields) == 0:
         write("\nYou do not own any weapons yet")
         wait_for_key_press()
         delete()
@@ -852,45 +917,36 @@ def weapon_info(user):
     
     else:
         # Displays the weapons the user owns
-        weapons = user.get_weapons()
-        weapons.append("Cancel")
-        decision = get_input("\nWhich weapon do you want to find out more about?", weapons)
+        shields.append("Cancel")
+        decision = get_input("\nWhich shield do you want to find out more about?", shields)
         if decision == "Cancel":
             delete()
             info(user)
             return
         # Displays the description of the weapon
-        write(user.weapons[weapons.index(decision)].description)
+        write(user.shields[shields.index(decision)].description)
         wait_for_key_press()
         delete()
-        weapon_info(user)
+        shield_info(user)
 
 def spell_info(user):
     """sub action from equip() that prompts user for specific spell to find out more about"""
-    # Check if the user knows any spells
-    if len(user.spells) == 0:
-        write("\nYou do not own any spells yet")
-        wait_for_key_press()
+    # Displays the spells the user knows
+    spells = user.get_spells()
+    spells.append("Cancel")
+
+    decision = get_input("\nWhich spell do you want to find out more about?", spells)
+
+    if decision == "Cancel":
         delete()
         info(user)
+        return
 
-    else:
-        # Displays the spells the user knows
-        spells = user.get_spells()
-        spells.append("Cancel")
-
-        decision = get_input("\nWhich spell do you want to find out more about?", spells)
-
-        if decision == "Cancel":
-            delete()
-            info(user)
-            return
-
-        # Displays the description of the spell
-        write(user.spells[spells.index(decision)].description)
-        wait_for_key_press()
-        delete()
-        spell_info(user)
+    # Displays the description of the spell
+    write(user.spells[spells.index(decision)].description)
+    wait_for_key_press()
+    delete()
+    spell_info(user)
 
 def armour_info(user):
     """sub action from equip() that prompts user for specific armour to find out more about"""
@@ -1057,6 +1113,10 @@ def collect_loot(attacker, loot):
         attacker.items.append(loot)
         write(f"\nYou obtained a {loot.name}, an item")
 
+    elif loot.type == "shield":
+        attacker.shields.append(loot)
+        write(f"\nYou obtained a {loot.name}, a powerful shield")
+
     sleep(selfsleep)
 
 def end_game():
@@ -1102,8 +1162,8 @@ def secret():
     selfcharacter.max_health = 999
     selfcharacter.mana = 999
     selfcharacter.max_mana = 999
-    selfcharacter.attack = 999
-    selfcharacter.defence = 999
+    selfcharacter.attack = 0
+    selfcharacter.defence = 0
     selfcharacter.health_flask = 999
     selfcharacter.mana_flask = 999
     #selfcharacter.upgrades.append(ShadeCloak())
@@ -1114,6 +1174,7 @@ def secret():
     selfcharacter.items.append(MementoMortem())
     #selfcharacter.upgrades.append(PortalGun())
     #selfcharacter.upgrades.append(VirtualBoo())
+    selfcharacter.items.append(BlackBox())
 
 def meow():
     if selfroom.secret == True:
@@ -1401,36 +1462,44 @@ def item():
         if choice == "Memento Mortem" and selfroom.name == "Dirtmouth" and selfroom.secret:
             write("You used the Memento Mortem on the empty vessel, transporting you to the past where you face The Radiance, The source of the infection in Hallownest")
             wait_for_key_press()
-            boss = enemy.TheRadiance()
-            secret = encounter.encounter(boss)
-            outcome = secret.fight(selfcharacter, root, text)
+            secret_attack(enemy.TheRadiance())
 
-            if outcome == 1:
-                write(f"\n{boss.name} dropped a {boss.loot.name}")
-                sleep(selfsleep)
-                choice = get_input(f"\nDo you want to pick up {boss.loot.name}?",["Yes","No"],None,False)
-                if choice.lower() == "yes":
-                    collect_loot(selfcharacter, boss.loot)
-                    sleep(selfsleep)
-                    write(f"\n{boss.loot.description}")
-                    wait_for_key_press()
+        elif choice == "Black Box" and selfroom.name == "Hyrule Kingdom" and selfroom.secret:
+            write("You activated the Black Box, breaking a hole in the ground, Calamity Ganon, a dark, amorphous, and monstrous entity, then crawls out of the hole")
+            wait_for_key_press()
+            secret_attack(enemy.CalamityGanon())
             
-                elif choice.lower() == "no":
-                    write(f"\nYou left {boss.loot.name} on the ground and allowed the resourceful rat to steal it")
-                    wait_for_key_press()
-
-                selfroom.secret = False
-
-            elif outcome == 2:
-                selfroom.encounter.reset()
-                end_game()
-                
-            elif outcome == 3:
-                selfroom.encounter.reset()
     
         else:
             write(f"You used {choice} but nothing happened")
             wait_for_key_press()
+
+def secret_attack(boss):
+    secret = encounter.encounter(boss)
+    outcome = secret.fight(selfcharacter, root, text)
+
+    if outcome == 1:
+        write(f"\n{boss.name} dropped a {boss.loot.name}")
+        sleep(selfsleep)
+        choice = get_input(f"\nDo you want to pick up {boss.loot.name}?",["Yes","No"],None,False)
+        if choice.lower() == "yes":
+            collect_loot(selfcharacter, boss.loot)
+            sleep(selfsleep)
+            write(f"\n{boss.loot.description}")
+            wait_for_key_press()
+    
+        elif choice.lower() == "no":
+            write(f"\nYou left {boss.loot.name} on the ground and allowed the resourceful rat to steal it")
+            wait_for_key_press()
+
+        selfroom.secret = False
+
+    elif outcome == 2:
+        selfroom.encounter.reset()
+        end_game()
+        
+    elif outcome == 3:
+        selfroom.encounter.reset()
             
 if __name__ == "__main__":
     root = tk.Tk()

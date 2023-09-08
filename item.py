@@ -72,4 +72,14 @@ class MementoMortem(Item):
         super().__init__()
         self.name = "Memento Mortem"
         self.description = "The Memento Mortem is a mystical pocket watch that allows the user to view the moment of a person's death"
+
+class BlackBox(Item):
+    """
+    An accessory that inherits from the Accessory class
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.name = "Black Box"
+        self.description = "an item created by reusing the core of a machine lifeform, explodes when triggered"
         

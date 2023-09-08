@@ -144,7 +144,7 @@ class Bunker(Room):
         self.enemy = Emil()
         self.name = "Bunker"
         self.description = "You stepped into a grim sanctuary suspended above the ravaged Earth, both a refuge and a reminder of the relentless war against the machines. you receive orders, grapple with the complexities of your existence, and prepare for the constant struggle to reclaim your planet from the alien invaders."
-        self.loot = FlaskOfCrimsonTears()
+        self.loot = BlackBox()
         self.encounter = encounter.encounter(self.enemy)
 
 class Asphodel(Room):
@@ -243,6 +243,7 @@ class HyruleKingdom(Room):
         self.description = "You stepped into a land steeped in legend and mystique, it is your sacred duty to protect as the Hero of Time. Its vast, rolling landscapes and iconic landmarks are both your home and the canvas upon which your destiny is written as you battle the forces of darkness and seek to rescue Princess Zelda."
         self.loot = FlaskOfCeruleanTears()
         self.encounter = encounter.encounter(self.enemy)
+        self.secret_message = "You notice cracks on some parts of the ground"
 
 class TheEndDimension(Room):
     """

@@ -183,8 +183,8 @@ class encounter:
                 elif decision.lower() == "flask":
                     advance = self.flask()
 
-                elif decision.lower() == "shield":
-                    self.shield()
+                elif decision.lower() == "defend":
+                    self.write(f"You raise up your {self.player.shield.name}")
                     advance = True
 
                 elif decision.lower() == "escape":
@@ -252,34 +252,14 @@ class encounter:
 
         choices = ["Weapon", "Spell", "Flask"]
 
-        if "Shield" in self.player.get_upgrades():
+        if self.player.shield != None:
             choices.append("Defend")
 
         if "Shade Cloak" in self.player.get_upgrades():
             choices.append("Escape")
 
-        while not valid:
-            self.write("")
-            choice = self.get_input("What do you want to use?", choices, None, False)
-
-            #getting cost of cheapest spell
-            min_cost = self.player.spells[0].cost
-            for spell in self.player.spells:
-                if spell.cost < min_cost:
-                    min_cost = spell.cost
-
-            #getting cost of shield
-            shield_cost = 10
-
-            #check if user has enough mana to shield
-            if (choice.lower() == "shield") and (self.player.mana < shield_cost):
-                self.write("")
-                self.write("You do not have enough mana to shield yourself")
-                self.delay()
-
-            else:
-                valid = True
-        return choice
+        self.write("")
+        return self.get_input("What do you want to use?", choices, None, False)
 
     def enemy_turn(self, player_choice: str) -> None:
         """
@@ -293,20 +273,17 @@ class encounter:
         for enemy in enemies:
 
             #negate damage if player is shielding
-            if player_choice == "shield":
-                self.write("")
-                self.write(f"{enemy.name} used {enemy.move}, but it was deflected by your shield")
-                self.delay()
-
-            #deal damage to the player 
-            else:
-                damage = max(1, enemy.attack - self.player.defence)
-                self.player.health = self.player.health - damage
-                self.write("")
-                self.write(f"{enemy.name} used {enemy.move}, dealing {damage} damage to {self.player.name}")
-                self.delay()
-                if self.player.health <= 0:
-                    break
+            damage = max(1, enemy.attack - self.player.defence)
+            if player_choice.lower() == "defend":
+                damage = int((self.player.shield.negation/100)*(damage))
+                
+                
+            self.player.health = self.player.health - damage
+            self.write("")
+            self.write(f"{enemy.name} used {enemy.move}, dealing {damage} damage to {self.player.name}")
+            self.delay()
+            if self.player.health <= 0:
+                break
 
     def target(self) -> "Enemy":
         """
@@ -513,7 +490,6 @@ class encounter:
         deducts 10 mana from player for using shield
         """
         #get shield cost
-        cost = 10
 
         self.delete()
         self.player.mana = self.player.mana - cost

@@ -68,6 +68,8 @@ class Character:
         self.mana_flask = 0
         self.items = []
         self.upgrades = []
+        self.shield = None
+        self.shields = []
 
     def get_spells(self):
         spells = []
@@ -104,4 +106,10 @@ class Character:
         for upgrade in self.upgrades:
             upgrades.append(upgrade.name)
         return upgrades
+
+    def get_shields(self):
+        shields = []
+        for shield in self.shields:
+            shields.append(shield.name)
+        return shields
         
