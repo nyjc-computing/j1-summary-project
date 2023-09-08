@@ -540,16 +540,16 @@ def drops(room):
     if enemy.loot != None:
         write(f"\n{enemy.name} dropped a {enemy.loot.name}")
         sleep(selfsleep)
-        choice = get_input(f"\nDo you want to pick {enemy.loot.name}?",["yes","no"],None,False)
+        choice = get_input(f"\nDo you want to pick {enemy.loot.name}?",["Yes","No"],None,False)
         if choice.lower() == "yes":
             collect_loot(player, enemy.loot)
             sleep(selfsleep)
             write(f"\n{enemy.loot.description}")
-            sleep(selfsleep)
+            wait_for_key_press()
             
         elif choice.lower() == "no":
             write(f"\nYou left {enemy.loot.name} on the ground and allowed the resourceful rat to steal it")
-            sleep(selfsleep)
+            wait_for_key_press()
                 
 def use_flask(user):
     """Function to allow the user to use flask but also allows them to cancel the action"""
@@ -645,25 +645,18 @@ def equip(self):
     """main action for user to equip various items"""
 
     display_equipment(selfcharacter)
+    choice = ""
+    while choice != "finish":
+        choice = get_input("\nwhat do you want to change?", ["armour", "weapon", "accessory", "finish"], None, False)
 
-    decision = get_input("\ndo you want to change your equipment? ", ["yes", "no"], None, False)
+        if choice == "armour":
+            equip_armour(selfcharacter)
 
-    if decision.lower() == "no":
-        return
+        elif choice.lower() == "weapon":
+            equip_weapon(selfcharacter)
 
-    elif decision.lower() == "yes":
-        choice = ""
-        while choice != "finish":
-            choice = get_input("\nwhat do you want to change?", ["armour", "weapon", "accessory", "finish"], None, False)
-
-            if choice == "armour":
-                equip_armour(selfcharacter)
-
-            elif choice.lower() == "weapon":
-                equip_weapon(selfcharacter)
-
-            elif choice.lower() == "accessory":
-                equip_accessory(selfcharacter)
+        elif choice.lower() == "accessory":
+            equip_accessory(selfcharacter)
     
 def display_equipment(user):
     """sub action for equip() to display equipments that the user have"""
@@ -1052,8 +1045,8 @@ def secret():
     selfcharacter.defence = 999
     selfcharacter.health_flask = 999
     selfcharacter.mana_flask = 999
-    selfcharacter.upgrades.append(Flee())
-    selfcharacter.upgrades.append(Shield())
+    #selfcharacter.upgrades.append(Flee())
+    #selfcharacter.upgrades.append(Shield())
     #selfmap.full_reveal()
     selfcharacter.items.append(DectusMedallionLeft())
     selfcharacter.items.append(DectusMedallionRight())
