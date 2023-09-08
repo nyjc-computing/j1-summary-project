@@ -1313,7 +1313,7 @@ def display_map():
         write("".join(row))
     write(legend)
     wait_for_key_press()
-    
+
 if __name__ == "__main__":
     root = tk.Tk()
     pause_var = tk.StringVar()
