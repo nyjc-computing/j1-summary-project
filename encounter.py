@@ -742,9 +742,6 @@ class gabriel_fight(encounter):
         dead = self.dead
 
         #print player health, mana, flasks
-        self.write("")
-        self.write(f"{'-'*50}")
-        self.write("")
         self.write(f"{player.name} has {player.health} health")
         self.write(f"{player.name} has {player.mana} mana")
         self.write(f"{player.name} has {player.health_flask} Flask of Crimson Tears")
@@ -767,9 +764,3 @@ class gabriel_fight(encounter):
         if self.timer == 0:
             self.write("")
             self.write("Gabriel is preparing something")
-            
-
-
-
-
-        
