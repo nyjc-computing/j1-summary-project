@@ -474,7 +474,7 @@ class CalamityGanon(Enemy):
     def __init__(self):
         super().__init__()
         self.name = "Calamity Ganon"
-        self.health = 20
-        self.attack = 2
+        self.health = 500
+        self.attack = 50
         self.move = "Fire Axe"
         self.loot = HylianShield()
