@@ -181,63 +181,63 @@ class game_map:
         self.vconnect(11,75,1)
         self.vconnect(15,75,1)
 
-    def ascent_enter(self) -> None:
+    def sixth_circle_enter(self) -> None:
         """
-        updates map for first time visiting ascent
+        updates map for first time visiting 6th circle of hell
         """
         if self.e_trigger[4] != 0:
             return
         self.e_trigger[4] = 1
         #make room
-        self.make_room(18,75,"Ascent")
+        self.make_room(18,75,"6th Circle Of Hell")
 
         #make hidden rooms
-        self.make_room(18,86," ? ")
+        self.make_room(18,92," ? ")
 
         #(re)make paths
         self.vconnect(15,75,1)
-        self.hconnect(18,78,5)
-
-    def ascent_clear(self) -> None:
-        """
-        updates map for fully clearing ascent
-        """
-        #make room
-        self.finish_room(18,75,"Ascent")
-
-        #(re)make paths
-        self.vconnect(15,75,1)
-        self.hconnect(18,78,5)
-
-    def sixth_circle_enter(self) -> None:
-        """
-        updates map for first time visiting 6th circle of hell
-        """
-        if self.e_trigger[5] != 0:
-            return
-        self.e_trigger[5] = 1
-        #make room
-        self.make_room(18,94,"6th Circle Of Hell")
-
-        #make hidden rooms
-        self.make_room(14,94," ? ")
-        self.make_room(18,107," ? ")
-
-        #(re)make paths
-        self.hconnect(18,78,5)
-        self.hconnect(18,103,1)
-        self.vconnect(15,94,1)
+        self.hconnect(18,84,5)
 
     def sixth_circle_clear(self) -> None:
         """
         updates map for fully clearing 6th circle of hell
         """
         #make room
-        self.finish_room(18,94,"6th Circle Of Hell")
+        self.finish_room(18,75,"6th Circle Of Hell")
 
         #(re)make paths
-        self.hconnect(18,78,5)
-        self.hconnect(18,103,1)
+        self.vconnect(15,75,1)
+        self.hconnect(18,84,5)
+
+    def ascent_enter(self) -> None:
+        """
+        updates map for first time visiting ascent
+        """
+        if self.e_trigger[5] != 0:
+            return
+        self.e_trigger[5] = 1
+        #make room
+        self.make_room(18,94,"Ascent")
+
+        #make hidden rooms
+        self.make_room(14,94," ? ")
+        self.make_room(18,107," ? ")
+
+        #(re)make paths
+        self.hconnect(18,84,5)
+        self.hconnect(18,97,7)
+        self.vconnect(15,94,1)
+
+    def ascent_clear(self) -> None:
+        """
+        updates map for fully clearing ascent
+        """
+        #make room
+        self.finish_room(18,94,"Ascent")
+
+        #(re)make paths
+        self.hconnect(18,84,5)
+        self.hconnect(18,97,7)
         self.vconnect(15,94,1)
 
     def tower_enter(self) -> None:
@@ -282,7 +282,7 @@ class game_map:
         #(re)make paths
         self.vconnect(15,114,1)
         self.vconnect(19,114,4)
-        self.hconnect(18,103,1)
+        self.hconnect(18,97,7)
 
     def haligtree_clear(self) -> None:
         """
@@ -294,7 +294,7 @@ class game_map:
         #(re)make paths
         self.vconnect(15,114,1)
         self.vconnect(19,114,4)
-        self.hconnect(18,103,1)
+        self.hconnect(18,97,7)
 
     def hallow_enter(self) -> None:
         """
@@ -729,13 +729,8 @@ class game_map:
         """
         updates map for fully clearing the last resort
         """
-        if self.e_trigger[23] != 0:
-            return
-        self.e_trigger[23] = 1
         #make room
         self.finish_room(14,10,"The Last Resort")
-
-        #make hidden rooms
 
         #(re)make paths
         self.vconnect(11,10,1)
@@ -923,8 +918,8 @@ class game_map:
         self.shrieking_enter()
         self.hyrule_enter()
         self.celestial_resort_enter()
-        self.ascent_enter()
         self.sixth_circle_enter()
+        self.ascent_enter()
         self.tower_enter()
         self.haligtree_enter()
         self.hallow_enter()
@@ -941,11 +936,45 @@ class game_map:
         self.asphodel_enter()
         self.commencement_enter()
         self.walled_enter()
-        #self.last_resort_enter()
+        self.last_resort_enter()
         self.greenhill_enter()
         self.mushroom_enter()
         self.kingdom_ku_enter()
         self.zebes_enter()
         self.bunker_enter()
+        
+    def full_clear(self) -> None:
+        """
+        Fully clears the map
+        """
+        self.dirtmouth_clear()
+        self.end_dimension_clear()
+        self.shrieking_clear()
+        self.hyrule_clear()
+        self.celestial_resort_clear()
+        self.sixth_circle_clear()
+        self.ascent_clear()
+        self.tower_clear()
+        self.haligtree_clear()
+        self.hallow_clear()
+        self.obradinn_clear()
+        self.kamurocho_clear()
+        self.snowdin_clear()
+        self.sealed_temple_clear()
+        self.astral_plane_clear()
+        self.aperture_clear()
+        self.midgar_clear()
+        self.forge_clear()
+        self.mementos_clear()
+        self.shores_clear()
+        self.asphodel_clear()
+        self.commencement_clear()
+        self.walled_clear()
+        self.last_resort_clear()
+        self.greenhill_clear()
+        self.mushroom_clear()
+        self.kingdom_ku_clear()
+        self.zebes_clear()
+        self.bunker_clear()
 
 
