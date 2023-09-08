@@ -21,6 +21,8 @@ with open("settings.txt", "r") as f:
     out = f.readlines()
     out = [x.split()[1] for x in out]
 selfsleep = int(out[0])
+selfup = out[1]
+selfdown = out[2]
 
 def sleep(t):
     root.after(int(t*1000), lambda: sleepCount.set(sleepCount.get()+1))
@@ -140,12 +142,12 @@ def get_input(prompt, options, displayoptions = None, deletebefore = True):
         displayoptions = options
     show(prompt, displayoptions, deletebefore)
     root.bind('<Return>', lambda x: pause_var.set("done"))
-    root.bind('<Up>', lambda e: up_action(prompt, displayoptions, deletebefore))
-    root.bind('<Down>', lambda e: down_action(prompt, displayoptions, deletebefore))
+    root.bind(f"<{selfup}>", lambda e: up_action(prompt, displayoptions, deletebefore))
+    root.bind(f"<{selfdown}>", lambda e: down_action(prompt, displayoptions, deletebefore))
     root.wait_variable(pause_var)
     root.unbind('<Return>')
-    root.unbind('<Up>')
-    root.unbind('<Down>')
+    root.unbind(f"<{selfup}>")
+    root.unbind(f"<{selfdown}>")
     pause_var.set("")
     decision = options[pointer.get()]
     pointer.set(0)
@@ -1161,11 +1163,9 @@ def settings():
             key, val = row.split()
             settings_dict[key] = val
     choice = ""
-    accepted = list(settings_dict.keys())
-    accepted.append("finish")
     display_settings(settings_dict)
     while choice != "finish":
-        choice = get_input("\nWhich setting do you want to change? (type finish to quit): ", accepted, None, False)
+        choice = get_input("\nWhich setting do you want to change?", ["sleep", "controls", "finish"], None, False)
 
         if choice.lower() == "finish":
             with open("settings.txt", "w") as f:
@@ -1176,6 +1176,11 @@ def settings():
         if choice.lower() == "sleep":
             new = set_sleep(settings_dict["sleep"])
             settings_dict["sleep"] = new
+
+        elif choice == "controls":
+            set_controls()
+            settings_dict["up"] = selfup
+            settings_dict["down"] = selfdown
 
         display_settings(settings_dict)
 
@@ -1200,15 +1205,46 @@ def set_sleep(current):
     accept = [str(x) for x in range(6)]
     accept.append("cancel")
 
-    new = get_input("\nEnter a new value for sleep (0-5 seconds), or cancel to cancel: ", accept)
+    new = get_input("\nEnter a new value for sleep", accept)
     
     if new.lower() == "cancel":
         return current
     else:
         selfsleep = int(new)
         return new
-            
 
+def set_controls():
+    choice = get_input("\nWhich control do you want to change?", ["Up", "Down", "Finish"])
+
+    if choice == "Up":
+        write("\nPress the key you want to change for scrolling up")
+        root.bind("<Key>", change_up)
+        root.wait_variable(pause_var)
+        pause_var.set("")
+        root.unbind("<Key>")
+        delete()
+
+    elif choice == "Down":
+        write("\nPress the key you want to change for scrolling down")
+        root.bind("<Key>", change_down)
+        root.wait_variable(pause_var)
+        pause_var.set("")
+        root.unbind("<Key>")
+        delete()
+
+    elif choice == "Cancel":
+        return
+
+def change_up(e):
+    global selfup
+    selfup = e.keysym
+    pause_var.set("done")
+
+def change_down(e):
+    global selfdown
+    selfdown = e.keysym
+    pause_var.set("done")
+            
 def secret_room():
     write("\nAfter you successfully defeated the sentinels, a stray ginger tabby cat emerges from behind a wall and stares at you playfully\n")
     selfroom.secret = True

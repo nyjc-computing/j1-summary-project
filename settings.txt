@@ -1,1 +1,3 @@
-sleep 1
+sleep 0
+up a
+down d
