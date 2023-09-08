@@ -535,7 +535,7 @@ def drops(room):
 
     write(f"\n{enemy.name} dropped a {enemy.loot.name}")
     sleep(selfsleep)
-    choice = get_input(f"\nDo you want to pick {enemy.loot.name}?",["yes","no"])
+    choice = get_input(f"\nDo you want to pick {enemy.loot.name}?",["yes","no"], None, False)
     if choice.lower() == "yes":
         collect_loot(player, enemy.loot)
         sleep(selfsleep)
@@ -546,9 +546,6 @@ def drops(room):
         write(f"\nYou left {enemy.loot.name} on the ground and allowed the resourceful rat to steal it")
         sleep(selfsleep)
         
-    else:
-        write(f"\nYour indecisiveness allowed the resourceful rat to steal the {enemy.loot.name} when you weren't looking")
-        sleep(selfsleep)
     wait_for_key_press()
                 
 def use_flask(user):
@@ -635,6 +632,11 @@ def use_flask(user):
 def display_stat(user):
     write(f"Health : {user.health} / {user.max_health}")
     write(f"Mana : {user.mana} / {user.max_mana}\n")
+
+def display_flask(user):
+    write(f"Flask of Crimson Tears : {user.health_flask}")
+    write(f"Flask of Cerulean Tears : {user.mana_flask}")
+    write("")
         
 def equip(self):
     """main action for user to equip various items"""
