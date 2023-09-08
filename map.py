@@ -286,10 +286,10 @@ class game_map:
 
     def haligtree_clear(self) -> None:
         """
-        updates map for fully clearing Miquella's haligtree
+        updates map for fully clearing Miquella's Haligtree
         """
         #make room
-        self.finish_room(18,116,"Miquella's haligtree")
+        self.finish_room(18,116,"Miquella's Haligtree")
 
         #(re)make paths
         self.vconnect(15,114,1)

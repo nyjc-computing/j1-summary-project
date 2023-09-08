@@ -87,15 +87,4 @@ class HolyCross(Accessory):
         self.defence_boost = 20
         self.description = f"The Holy Cross powerful, sacred artifact that bestows unique abilities upon the player\nBoost defence by {self.defence_boost} points"
 
-class MementoMortem(Accessory):
-    """
-    An accessory that inherits from the Accessory class
-    """
-
-    def __init__(self):
-        super().__init__()
-        self.name = "Memento Mortem"
-        self.mana_boost = 20
-        self.defence_boost = 10
-        self.description = f"The Memento Mortem is a mystical pocket watch that allows the user to view the moment of a person's death\nBoost mana by {self.mana_boost} points\nBoost defence by {self.defence_boost} points"
 

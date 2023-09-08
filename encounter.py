@@ -26,10 +26,20 @@ class encounter:
         self.line = 1
         self.tips = ["Remember to restore your health and mana before every fight",
                     "Other rooms may have useful drops that could make this fight easier"]
+        self.taglines = []
 
+    def reapply_tag(self):
+        for tag in self.text.tag_names():
+            self.text.tag_delete(tag)
+
+        for i, line in enumerate(self.taglines):
+            color, start, end = line
+            self.text.tag_add(f"colour{i}", start, end)
+            self.text.tag_config(f"colour{i}", foreground=color)
+        
     def show(self, prompt, options, deletebefore):
         data = self.text.get("1.0",'end-1c')
-        self.delete()
+        self.delete(True)
         keep = ""
         if not deletebefore:
             keep = data.split(prompt)[0]
@@ -42,6 +52,7 @@ class encounter:
             arrow = " "
             if p == i: arrow = ">"
             self.write(f"{arrow} {e}")
+        self.reapply_tag()
         
     def up_action(self, prompt, options, delete):
         p = self.pointer.get()
@@ -109,18 +120,11 @@ class encounter:
         self.text['state'] = 'normal'
         self.text.insert(tk.END, txt+"\n")
 
-        #generating a random tag name yeah its kinda stupid
-        stuff = string.ascii_lowercase
-        tag = "0"
-        while tag == "0" or tag in self.text.tag_names():
-            tag = "".join(random.choices(stuff, k = 10))
-        
-        self.text.tag_add(tag, f"{str(self.line)}.0", f"{str(self.line)}.end")
-        self.text.tag_config(tag, foreground = color)
+        self.taglines.append([color, f"{self.line}.0", f"{self.line}.end"])
         self.text['state'] = 'disabled'
         self.line += 1
 
-    def delete(self):
+    def delete(self, keeptag=False):
         """
         clears the text field
         """
@@ -130,8 +134,8 @@ class encounter:
         self.line = 1
 
         #deleting tags
-        for tag in self.text.tag_names():
-            self.text.tag_delete(tag)
+        if not keeptag:
+            self.taglines = []
 
     def delay(self):
         """
@@ -183,10 +187,10 @@ class encounter:
                     self.shield()
                     advance = True
 
-                elif decision.lower() == "flee":
+                elif decision.lower() == "escape":
                     self.reset()
                     self.delete()
-                    self.write("You activate your secret technique and disengage")
+                    self.write("You put on the shade cloak and dashed away from the enemy")
                     self.delay()
                     return 3
 
@@ -222,8 +226,8 @@ class encounter:
         #print player health, mana, flasks
         self.write("")
         self.write(f"{player.name}")
-        self.write(f"Health : {player.health} / {player.max_health}")
-        self.write(f"Mana : {player.mana} / {player.max_mana}")
+        self.write_color(f"Health : {player.health} / {player.max_health}", "green")
+        self.write_color(f"Mana : {player.mana} / {player.max_mana}", "blue")
         self.write(f"Flask of Crimson Tears : {player.health_flask}")
         self.write(f"Flask of Cerulean Tears : {player.mana_flask}")
         self.delay()
@@ -251,8 +255,8 @@ class encounter:
         if "Shield" in self.player.get_upgrades():
             choices.append("Defend")
 
-        if "Flee" in self.player.get_upgrades():
-            choices.append("Flee")
+        if "Shade Cloak" in self.player.get_upgrades():
+            choices.append("Escape")
 
         while not valid:
             self.write("")

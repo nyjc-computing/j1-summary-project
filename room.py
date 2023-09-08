@@ -44,6 +44,10 @@ class Room:
         self.been_here = False
         self.loot = None
         self.secret = False
+        self.secret_message = ""
+        self.save = False
+        self.save_text = ""
+        self.save_message = ""
         
 class Dirtmouth(Room):
     """
@@ -52,11 +56,15 @@ class Dirtmouth(Room):
     
     def __init__(self):
         super().__init__()
-        self.enemy = TheRadiance()
+        self.enemy = TheHollowKnight()
         self.name = "Dirtmouth"
         self.description = "You stepped into Dirtmouth, a haunting cliffside town in the depths of Hallownest, standing as a silent sentinel overlooking a dark and mysterious underground world. Its dilapidated buildings and eerie stillness set the tone for your perilous journey"
         self.loot = FlaskOfCrimsonTears()
         self.encounter = encounter.encounter(self.enemy)
+        self.save = True
+        self.save_text = "You notice a simple rustic bench in the corner of the room"
+        self.save_message = "You sit on the bench, feeling more rejuvenated than ever"
+        self.secret_message = "The empty vessel lies on the floor lifelessly"
 
 class CelestialResort(Room):
     """
@@ -96,6 +104,9 @@ class MiquellasHaligtree(Room):
         self.description = "You stepped into a haunting and mystical location shrouded in eerie fog and surrounded by ancient, twisted trees. You delve into its secrets and confront the enigmatic forces that reside within its dark and foreboding atmosphere"
         self.loot = FlaskOfCeruleanTears()
         self.encounter = encounter.encounter(self.enemy)
+        self.save = True
+        self.save_text = "You see a luminous remnant of Grace, enshrined by a small stump of roots"
+        self.save_message = "LOST GRACE DISCOVERED"
 
 class ApertureLab(Room):
     """
@@ -200,6 +211,9 @@ class Commencement(Room):
         self.description = "You stepped into a large domain located above the shattered breach of Petrichor V's moon. It is ostensibly the desolated seat of Mithrix's power, made up of the shattered remains of four individual sections, emblematic of Mithrix and Providence's tools of creation"
         self.loot = FlaskOfCeruleanTears()
         self.encounter = encounter.encounter(self.enemy)
+        self.save = True
+        self.save_text = "You see a Primordial teleporter"
+        self.save_message = "You waited for the teleporter to charge up, providing a moment of solitude "
         
 class Midgar(Room):
     """
@@ -291,6 +305,9 @@ class Mementos(Room):
         self.description = "You stepped into a sprawling, ever-changing abyss beneath the city, is where you confront the twisted desires of society's heart. It's a labyrinthine reflection of the collective unconscious, where you as a Phantom Thief embark on a mission to change hearts and expose the hidden darkness that plagues Tokyo."
         self.loot = FlaskOfCrimsonTears()
         self.encounter = encounter.encounter(self.enemy)
+        self.save = True
+        self.save_text = "You see an abandoned train station"
+        self.save_message = "You rest on the vacant seats, the absence of distortions provides you a moment of rest"
 
 class Ascent(Room):
     """
@@ -331,6 +348,9 @@ class SixthCircleOfHell(Room):
         self.description = "You step into an abandoned church bathed in blood red light. The walls are patterned with the faces of the damned, their expressions contorted in agony, doomed to shriek silently for all eternity. On the far side of the room, a church organ looms over you, an eerie, melancholic melody flowing from its pipes. Its player, a lone figure clad in gold and silver armour"
         self.loot = FlaskOfCeruleanTears()
         self.encounter = encounter.gabriel_fight(self.enemy)
+        self.save = True
+        self.save_text = "You See a floating translucent banner saying 'Checkpoint'"
+        self.save_message = "You walk past the banner, feeling completely revitalised"
 
 class Snowdin(Room):
     """
@@ -344,6 +364,9 @@ class Snowdin(Room):
         self.description = "You step into a quaint and snowy town nestled in the underground, itexudes a cozy charm with its warm, dimly lit shops and friendly monster residents. The gentle fall of snowflakes and the sound of crackling fires create a serene atmosphere that contrasts the rest of your journey"
         self.loot = FlaskOfCrimsonTears()
         self.encounter = encounter.encounter(self.enemy)
+        self.save = True
+        self.save_text = "You see a glowing star on the ground"
+        self.save_message = "You are filled with determination"
 
 class TheSealedTemple(Room):
     """
@@ -409,6 +432,7 @@ class WalledCity99(Room):
         self.description = "You step into a dystopian urban enclave characterized by towering, impenetrable walls that isolate its inhabitants from the outside world. Within these walls, a dark and oppressive society unfolds, where the residents are tightly controlled and secrets hide in every shadow"
         self.loot = FlaskOfCrimsonTears()
         self.encounter = encounter.encounter(self.enemy)
+        self.secret_message = "A stray ginger tabby cat emerges from behind a wall and stares at you playfully"
 
 class TheLastResort(Room):
     """
