@@ -1,3 +1,4 @@
 sleep 0
-up w
-down s
+up Up
+down Down
+enter Return

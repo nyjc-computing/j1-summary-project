@@ -23,6 +23,7 @@ with open("settings.txt", "r") as f:
 selfsleep = int(out[0])
 selfup = out[1]
 selfdown = out[2]
+selfreturn = out[3]
 
 def sleep(t):
     root.after(int(t*1000), lambda: sleepCount.set(sleepCount.get()+1))
@@ -66,9 +67,9 @@ def intro():
         text.insert(tk.END, "Tarnished, key in your name: ")
         text['state'] = 'disabled'
         text.bind('<Key>', start_typing)
-        root.bind('<Return>', lambda x: pause_var.set("done"))
+        root.bind(f'<{selfreturn}>', lambda x: pause_var.set("done"))
         root.wait_variable(pause_var)
-        root.unbind('<Return>')
+        root.unbind(f'<{selfreturn}>')
         text.unbind('<Key>')
         pause_var.set("")
         name = text.get("1.0",'end-1c')[29:]
@@ -141,11 +142,11 @@ def get_input(prompt, options, displayoptions = None, deletebefore = True):
     if displayoptions is None:
         displayoptions = options
     show(prompt, displayoptions, deletebefore)
-    root.bind('<Return>', lambda x: pause_var.set("done"))
+    root.bind(f'<{selfreturn}>', lambda x: pause_var.set("done"))
     root.bind(f"<{selfup}>", lambda e: up_action(prompt, displayoptions, deletebefore))
     root.bind(f"<{selfdown}>", lambda e: down_action(prompt, displayoptions, deletebefore))
     root.wait_variable(pause_var)
-    root.unbind('<Return>')
+    root.unbind(f'<{selfreturn}>')
     root.unbind(f"<{selfup}>")
     root.unbind(f"<{selfdown}>")
     pause_var.set("")
@@ -1183,6 +1184,7 @@ def settings():
             set_controls()
             settings_dict["up"] = selfup
             settings_dict["down"] = selfdown
+            settings_dict["enter"] = selfreturn
 
         display_settings(settings_dict)
 
@@ -1216,7 +1218,7 @@ def set_sleep(current):
         return new
 
 def set_controls():
-    choice = get_input("\nWhich control do you want to change?", ["Up", "Down", "Finish"])
+    choice = get_input("\nWhich control do you want to change?", ["Up", "Down", "Enter", "Finish"])
 
     if choice == "Up":
         write("\nPress the key you want to change for scrolling up")
@@ -1234,17 +1236,45 @@ def set_controls():
         root.unbind("<Key>")
         delete()
 
+    elif choice  == "Enter":
+        write("\nPress the key you want to change for selecting options")
+        root.bind("<Key>", change_enter)
+        root.wait_variable(pause_var)
+        pause_var.set("")
+        root.unbind("<Key>")
+        delete()        
+
     elif choice == "Cancel":
         return
 
 def change_up(e):
     global selfup
-    selfup = e.keysym
+    if e.keysym == selfdown or e.keysym == selfreturn:
+        delete()
+        write(f"'{e.keysym}' is already binded to another control")
+        wait_for_key_press()
+    else:
+        selfup = e.keysym
     pause_var.set("done")
 
 def change_down(e):
     global selfdown
-    selfdown = e.keysym
+    if e.keysym == selfup or e.keysym == selfreturn:
+        delete()
+        write(f"'{e.keysym}' is already binded to another control")
+        wait_for_key_press()
+    else:
+        selfdown = e.keysym
+    pause_var.set("done")
+
+def change_enter(e):
+    global selfreturn
+    if e.keysym == selfup or e.keysym == selfdown:
+        delete()
+        write(f"'{e.keysym}' is already binded to another control")
+        wait_for_key_press()
+    else:
+        selfreturn = e.keysym
     pause_var.set("done")
             
 def secret_room():
