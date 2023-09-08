@@ -90,7 +90,7 @@ def setup() -> [Room, Character]:
     character.weapons.append(character.weapon)
     character.health = 100
     character.max_health = 100
-    character.mana = 50
+    character.mana = 5
     character.max_mana = 100
     character.health_flask = 2
     character.mana_flask = 2

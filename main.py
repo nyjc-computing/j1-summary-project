@@ -21,6 +21,9 @@ with open("settings.txt", "r") as f:
     out = f.readlines()
     out = [x.split()[1] for x in out]
 selfsleep = int(out[0])
+selfup = out[1]
+selfdown = out[2]
+selfreturn = out[3]
 
 def sleep(t):
     root.after(int(t*1000), lambda: sleepCount.set(sleepCount.get()+1))
@@ -64,9 +67,9 @@ def intro():
         text.insert(tk.END, "Tarnished, key in your name: ")
         text['state'] = 'disabled'
         text.bind('<Key>', start_typing)
-        root.bind('<Return>', lambda x: pause_var.set("done"))
+        root.bind(f'<{selfreturn}>', lambda x: pause_var.set("done"))
         root.wait_variable(pause_var)
-        root.unbind('<Return>')
+        root.unbind(f'<{selfreturn}>')
         text.unbind('<Key>')
         pause_var.set("")
         name = text.get("1.0",'end-1c')[29:]
@@ -139,13 +142,13 @@ def get_input(prompt, options, displayoptions = None, deletebefore = True):
     if displayoptions is None:
         displayoptions = options
     show(prompt, displayoptions, deletebefore)
-    root.bind('<Return>', lambda x: pause_var.set("done"))
-    root.bind('<Up>', lambda e: up_action(prompt, displayoptions, deletebefore))
-    root.bind('<Down>', lambda e: down_action(prompt, displayoptions, deletebefore))
+    root.bind(f'<{selfreturn}>', lambda x: pause_var.set("done"))
+    root.bind(f"<{selfup}>", lambda e: up_action(prompt, displayoptions, deletebefore))
+    root.bind(f"<{selfdown}>", lambda e: down_action(prompt, displayoptions, deletebefore))
     root.wait_variable(pause_var)
-    root.unbind('<Return>')
-    root.unbind('<Up>')
-    root.unbind('<Down>')
+    root.unbind(f'<{selfreturn}>')
+    root.unbind(f"<{selfup}>")
+    root.unbind(f"<{selfdown}>")
     pause_var.set("")
     decision = options[pointer.get()]
     pointer.set(0)
@@ -544,11 +547,6 @@ def drops(room):
         elif choice.lower() == "no":
             write(f"\nYou left {enemy.loot.name} on the ground and allowed the resourceful rat to steal it")
             sleep(selfsleep)
-            
-        else:
-            write(f"\nYour indecisiveness allowed the resourceful rat to steal the {enemy.loot.name} when you weren't looking")
-            sleep(selfsleep)
-        wait_for_key_press()
                 
 def use_flask(user):
     """Function to allow the user to use flask but also allows them to cancel the action"""
@@ -634,6 +632,11 @@ def use_flask(user):
 def display_stat(user):
     write(f"Health : {user.health} / {user.max_health}")
     write(f"Mana : {user.mana} / {user.max_mana}\n")
+
+def display_flask(user):
+    write(f"Flask of Crimson Tears : {user.health_flask}")
+    write(f"Flask of Cerulean Tears : {user.mana_flask}")
+    write("")
         
 def equip(self):
     """main action for user to equip various items"""
@@ -1163,11 +1166,9 @@ def settings():
             key, val = row.split()
             settings_dict[key] = val
     choice = ""
-    accepted = list(settings_dict.keys())
-    accepted.append("finish")
     display_settings(settings_dict)
     while choice != "finish":
-        choice = get_input("\nWhich setting do you want to change? (type finish to quit): ", accepted, None, False)
+        choice = get_input("\nWhich setting do you want to change?", ["sleep", "controls", "finish"], None, False)
 
         if choice.lower() == "finish":
             with open("settings.txt", "w") as f:
@@ -1178,6 +1179,12 @@ def settings():
         if choice.lower() == "sleep":
             new = set_sleep(settings_dict["sleep"])
             settings_dict["sleep"] = new
+
+        elif choice == "controls":
+            set_controls()
+            settings_dict["up"] = selfup
+            settings_dict["down"] = selfdown
+            settings_dict["enter"] = selfreturn
 
         display_settings(settings_dict)
 
@@ -1202,15 +1209,74 @@ def set_sleep(current):
     accept = [str(x) for x in range(6)]
     accept.append("cancel")
 
-    new = get_input("\nEnter a new value for sleep (0-5 seconds), or cancel to cancel: ", accept)
+    new = get_input("\nEnter a new value for sleep", accept)
     
     if new.lower() == "cancel":
         return current
     else:
         selfsleep = int(new)
         return new
-            
 
+def set_controls():
+    choice = get_input("\nWhich control do you want to change?", ["Up", "Down", "Enter", "Finish"])
+
+    if choice == "Up":
+        write("\nPress the key you want to change for scrolling up")
+        root.bind("<Key>", change_up)
+        root.wait_variable(pause_var)
+        pause_var.set("")
+        root.unbind("<Key>")
+        delete()
+
+    elif choice == "Down":
+        write("\nPress the key you want to change for scrolling down")
+        root.bind("<Key>", change_down)
+        root.wait_variable(pause_var)
+        pause_var.set("")
+        root.unbind("<Key>")
+        delete()
+
+    elif choice  == "Enter":
+        write("\nPress the key you want to change for selecting options")
+        root.bind("<Key>", change_enter)
+        root.wait_variable(pause_var)
+        pause_var.set("")
+        root.unbind("<Key>")
+        delete()        
+
+    elif choice == "Cancel":
+        return
+
+def change_up(e):
+    global selfup
+    if e.keysym == selfdown or e.keysym == selfreturn:
+        delete()
+        write(f"'{e.keysym}' is already binded to another control")
+        wait_for_key_press()
+    else:
+        selfup = e.keysym
+    pause_var.set("done")
+
+def change_down(e):
+    global selfdown
+    if e.keysym == selfup or e.keysym == selfreturn:
+        delete()
+        write(f"'{e.keysym}' is already binded to another control")
+        wait_for_key_press()
+    else:
+        selfdown = e.keysym
+    pause_var.set("done")
+
+def change_enter(e):
+    global selfreturn
+    if e.keysym == selfup or e.keysym == selfdown:
+        delete()
+        write(f"'{e.keysym}' is already binded to another control")
+        wait_for_key_press()
+    else:
+        selfreturn = e.keysym
+    pause_var.set("done")
+            
 def secret_room():
     write("\nAfter you successfully defeated the sentinels, a stray ginger tabby cat emerges from behind a wall and stares at you playfully\n")
     selfroom.secret = True
