@@ -767,7 +767,7 @@ class game_map:
         self.vconnect(7,25,6)
         self.hconnect(14,25,2)
         self.map[14][25] = "╚"
-        self.hconnect(14,43,1)
+        self.hconnect(14,43,2)
         self.vconnect(15,36,1)
         
     def mushroom_enter(self) -> None:
