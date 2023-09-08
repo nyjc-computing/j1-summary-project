@@ -1,4 +1,4 @@
-sleep 0
-up Up
-down Down
-enter Return
+Sleep 0
+Up Up
+Down Down
+Enter Return
