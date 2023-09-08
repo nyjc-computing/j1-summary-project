@@ -682,7 +682,7 @@ class gabriel_fight(encounter):
         if self.timer == 0:
             self.spinning_blades = 0
             self.timer = 3
-            if player_choice == "weapon" and self.player.weapon.name.lower() in self.melee:
+            if player_choice == "Weapon" and self.player.weapon.name.lower() in self.melee:
                 self.write("")
                 self.write("Gabriel used his special move, Sword Throw")
                 self.delay()
