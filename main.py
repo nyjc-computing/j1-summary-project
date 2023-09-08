@@ -6,14 +6,16 @@ import random
 from setup import *
 import tkinter as tk
 import map
+import encounter
+import enemy
 
 temp = setup()
 selfend = False
 selfroom = temp[0]
 selfcharacter = temp[1]
 selfrooms = []
-selfactions = ["Look", "Move", "Attack", "Loot", "Flask", "Equip", "Status", "Information", "Settings", "Map", "Meow", "Help"]
-selfdescription = ["Looks around the room","Move to another room", "Attack the enemny", "Search the room for loot", "Drink your flasks", "Change your equipment", "See your statistics", "Find out more about your items", "Change settings", "Shows map", "Meow"]
+selfactions = ["Look", "Move", "Attack", "Loot", "Flask", "Equip", "Status", "Information", "Item", "Settings", "Map", "Meow", "Help"]
+selfdescription = ["Looks around the room","Move to another room", "Attack the enemny", "Search the room for loot", "Drink your flasks", "Change your equipment", "See your statistics", "Find out more about your items", "Use your item", "Change settings", "Shows map", "Meow"]
 selfmap = map.game_map()
 currentPressedKey = ""
 out = []
@@ -288,6 +290,9 @@ def run():
     elif decision.lower() == "save":
         save()
 
+    elif decision.lower() == "item":
+        item()
+
     if selfroom.enemy == None and selfroom.loot == None:
         if selfroom.name == "Dirtmouth":
             selfmap.dirtmouth_clear()
@@ -387,6 +392,12 @@ def look(room):
     elif room.enemy != None:
     # Displays the enemy in the room
         write(f"\nIn the middle of the room is {room.enemy.name}, {room.enemy.description}")
+
+    if room.enemy == None and room.save:
+        write(f"\n{room.save_text}")
+
+    if room.enemy == None and room.secret:
+        write(f"\n{room.secret_message}")
     wait_for_key_press()
 
 def move(room):
@@ -549,11 +560,19 @@ def attack(room):
                         save()
             if room.enemy.name == "Sentinels":
                 secret_room()
+            if room.enemy.name == "The Hollow Knight":
+                room.secret = True
+                delete()
+                write(f"{room.secret_message}")
+                wait_for_key_press()
+            if room.enemy.name == "The Radiance":
+                room.secret = False
             room.enemy = None
         elif outcome == 2:
             room.encounter.reset()
             end_game()
         elif outcome == 3:
+            wait_for_key_press()
             room.encounter.reset()
 
 def drops(room):
@@ -1031,8 +1050,12 @@ def collect_loot(attacker, loot):
         attacker.upgrades.append(loot)
         write(f"\nYou obtained a {loot.name}, a powerful upgrade")
         if loot.name == "Portal Gun":
-            selfactions.append("teleport")
+            selfactions.append("Teleport")
             selfdescription.append("Teleport to any room you have been to before")
+
+    elif loot.type == "item":
+        attacker.items.append(loot)
+        write(f"\nYou obtained a {loot.name}, an item")
 
     sleep(selfsleep)
 
@@ -1083,11 +1106,14 @@ def secret():
     selfcharacter.defence = 999
     selfcharacter.health_flask = 999
     selfcharacter.mana_flask = 999
-    #selfcharacter.upgrades.append(Flee())
+    #selfcharacter.upgrades.append(ShadeCloak())
     #selfcharacter.upgrades.append(Shield())
     #selfmap.full_reveal()
-    selfcharacter.items.append(DectusMedallionLeft())
-    selfcharacter.items.append(DectusMedallionRight())
+    #selfcharacter.items.append(DectusMedallionLeft())
+    #selfcharacter.items.append(DectusMedallionRight())
+    #selfcharacter.items.append(MementoMortem())
+    #selfcharacter.upgrades.append(PortalGun())
+    #selfcharacter.upgrades.append(VirtualBoo())
 
 def meow():
     if selfroom.secret == True:
@@ -1104,6 +1130,7 @@ def meow():
         selfroom.back = theLastResort
         theLastResort.forward = selfroom
         selfmap.meow_reveal()
+        selfroom.secret = False
     else:
         choice = random.randint(1, 9)
         if choice == 1:
@@ -1360,6 +1387,48 @@ def save():
     selfcharacter.mana = selfcharacter.max_mana
     write(selfroom.save_message)
     wait_for_key_press()
+
+def item():
+    items = selfcharacter.get_items()
+
+    if len(items) == 0:
+        write("You do not own any items\n")
+        wait_for_key_press()
+
+    else:
+        choice = get_input("Which item do you want to use?", items)
+    
+        if choice == "Memento Mortem" and selfroom.name == "Dirtmouth" and selfroom.secret:
+            write("You used the Memento Mortem on the empty vessel, transporting you to the past where you face The Radiance, The source of the infection in Hallownest")
+            wait_for_key_press()
+            boss = enemy.TheRadiance()
+            secret = encounter.encounter(boss)
+            outcome = secret.fight(selfcharacter, root, text)
+
+            if outcome == 1:
+                write(f"\n{boss.name} dropped a {boss.loot.name}")
+                sleep(selfsleep)
+                choice = get_input(f"\nDo you want to pick up {boss.loot.name}?",["Yes","No"],None,False)
+                if choice.lower() == "yes":
+                    collect_loot(selfcharacter, boss.loot)
+                    sleep(selfsleep)
+                    write(f"\n{boss.loot.description}")
+                    wait_for_key_press()
+            
+                elif choice.lower() == "no":
+                    write(f"\nYou left {boss.loot.name} on the ground and allowed the resourceful rat to steal it")
+                    wait_for_key_press()
+
+            elif outcome == 2:
+                selfroom.encounter.reset()
+                end_game()
+                
+            elif outcome == 3:
+                selfroom.encounter.reset()
+    
+        else:
+            write(f"You used {choice} but nothing happened")
+            wait_for_key_press()
     
 if __name__ == "__main__":
     root = tk.Tk()

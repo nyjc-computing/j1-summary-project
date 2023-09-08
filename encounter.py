@@ -187,10 +187,10 @@ class encounter:
                     self.shield()
                     advance = True
 
-                elif decision.lower() == "flee":
+                elif decision.lower() == "escape":
                     self.reset()
                     self.delete()
-                    self.write("You activate your secret technique and disengage")
+                    self.write("You put on the shade cloak and dashed away from the enemy")
                     self.delay()
                     return 3
 
@@ -255,8 +255,8 @@ class encounter:
         if "Shield" in self.player.get_upgrades():
             choices.append("Defend")
 
-        if "Flee" in self.player.get_upgrades():
-            choices.append("Flee")
+        if "Shade Cloak" in self.player.get_upgrades():
+            choices.append("Escape")
 
         while not valid:
             self.write("")

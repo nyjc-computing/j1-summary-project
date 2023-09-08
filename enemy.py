@@ -44,10 +44,24 @@ class TheRadiance(Enemy):
     def __init__(self):
         super().__init__()
         self.name = "The Radiance"
-        self.health = 20
-        self.description = "a higher being of light similar to Essence, and as such, opposed to the Void, her ancient enemy. The Moth Tribe is born from her light and in return revere her."
-        self.attack = 2
+        self.health = 500
+        self.description = "a higher being of light similar to Essence, and as such, opposed to the Void, her ancient enemy. The Moth Tribe is born from her light and in return revere her"
+        self.attack = 50
         self.move = "Wall of Light"
+        self.loot = ShadeCloak()
+
+class TheHollowKnight(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
+    def __init__(self):
+        super().__init__()
+        self.name = "The Hollow Knight"
+        self.health = 20
+        self.description = "a tall, armored, and humanoid figure with a dark, hollow, and mask-like visage. Its armor is ornate and tarnished, adorned with intricate patterns and spikes. It wields a large nail as a weapon, and its appearance exudes a sense of somber and eerie presence"
+        self.attack = 2
+        self.move = "Triple Slash"
         self.loot = VengefulSpirit()
 
 class MrOshiro(Enemy):

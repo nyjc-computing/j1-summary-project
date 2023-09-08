@@ -15,6 +15,7 @@ class Item:
     """
     
     def __init__(self):
+        self.type = "item"
         self.name = ""
         self.description = ""
         self.health = 0
@@ -61,4 +62,14 @@ class DectusMedallionLeft(Item):
         super().__init__()
         self.name = "Dectus Medallion (left)"
         self.description = "The left half of a medallion with the power to break a powerful spell"
+
+class MementoMortem(Item):
+    """
+    An accessory that inherits from the Accessory class
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.name = "Memento Mortem"
+        self.description = "The Memento Mortem is a mystical pocket watch that allows the user to view the moment of a person's death"
         

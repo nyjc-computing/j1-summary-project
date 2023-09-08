@@ -25,9 +25,9 @@ class Shield(Upgrade):
         self.name = "Shield"
         self.description = "literally sheet metal on a stick. good enough for shielding"
 
-class Flee(Upgrade):
+class ShadeCloak(Upgrade):
     """placeholder flee"""
     def __init__(self):
         super().__init__()
-        self.name = "Flee"
-        self.description = "The secret family technique of the joestars. use it wisely"
+        self.name = "Shade Cloak"
+        self.description = "The Shade Cloak is formed from the substance of the Abyss\nAllows the wearer to escape from battles unscathed"
