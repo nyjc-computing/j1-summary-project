@@ -232,6 +232,7 @@ def run():
     # Does the action the user selected
 
     if decision.lower() == "look":
+        display_room_name()
         look(selfroom)
         
     elif decision.lower() == "move":
@@ -531,7 +532,6 @@ def attack(room):
 def drops(room):
     """obtains drops from defeated enemy"""
     enemy = room.enemy
-    print(enemy.name)
     player = selfcharacter
 
     if enemy.loot != None:
@@ -1051,7 +1051,7 @@ def secret():
     selfcharacter.mana_flask = 999
     selfcharacter.upgrades.append(Flee())
     selfcharacter.upgrades.append(Shield())
-    selfmap.full_reveal()
+    #selfmap.full_reveal()
     selfcharacter.items.append(DectusMedallionLeft())
     selfcharacter.items.append(DectusMedallionRight())
 
