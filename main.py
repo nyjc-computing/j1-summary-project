@@ -293,7 +293,7 @@ def run():
     elif decision.lower() == "item":
         item()
 
-    if selfroom.enemy == None and selfroom.loot == None:
+    if selfroom.enemy == None and selfroom.loot == None and not selfroom.secret:
         if selfroom.name == "Dirtmouth":
             selfmap.dirtmouth_clear()
         elif selfroom.name == "Celestial Resort":
@@ -1111,7 +1111,7 @@ def secret():
     #selfmap.full_reveal()
     #selfcharacter.items.append(DectusMedallionLeft())
     #selfcharacter.items.append(DectusMedallionRight())
-    #selfcharacter.items.append(MementoMortem())
+    selfcharacter.items.append(MementoMortem())
     #selfcharacter.upgrades.append(PortalGun())
     #selfcharacter.upgrades.append(VirtualBoo())
 
@@ -1418,6 +1418,8 @@ def item():
                 elif choice.lower() == "no":
                     write(f"\nYou left {boss.loot.name} on the ground and allowed the resourceful rat to steal it")
                     wait_for_key_press()
+
+                selfroom.secret = False
 
             elif outcome == 2:
                 selfroom.encounter.reset()
