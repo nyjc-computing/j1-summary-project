@@ -172,6 +172,9 @@ class KingdomOfKu(Room):
         self.description = "You stepped into a nation in Hinoeuma with a long and bloody history of conflict and war. Their enemies numbers many, one among several being the fallen nation of U. It was recently ruled by the aging King Jigo Ku, until a coup removed him from power"
         self.loot = FlaskOfCrimsonTears()
         self.encounter = encounter.encounter(self.enemy)
+        self.save = True
+        self.save_text = "You see a small pillar with a book on top of it"
+        self.save_message = "You journal down your journey so far, taking a much needed break"
 
 class GreenhillZone(Room):
     """
