@@ -348,6 +348,9 @@ class SixthCircleOfHell(Room):
         self.description = "You step into an abandoned church bathed in blood red light. The walls are patterned with the faces of the damned, their expressions contorted in agony, doomed to shriek silently for all eternity. On the far side of the room, a church organ looms over you, an eerie, melancholic melody flowing from its pipes. Its player, a lone figure clad in gold and silver armour"
         self.loot = FlaskOfCeruleanTears()
         self.encounter = encounter.gabriel_fight(self.enemy)
+        self.save = True
+        self.save_text = "You See a floating translucent banner saying 'Checkpoint'"
+        self.save_message = "You walk past the banner, feeling completely revitalised"
 
 class Snowdin(Room):
     """

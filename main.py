@@ -1108,7 +1108,7 @@ def secret():
     selfcharacter.mana_flask = 999
     #selfcharacter.upgrades.append(ShadeCloak())
     #selfcharacter.upgrades.append(Shield())
-    #selfmap.full_reveal()
+    selfmap.full_reveal()
     #selfcharacter.items.append(DectusMedallionLeft())
     #selfcharacter.items.append(DectusMedallionRight())
     selfcharacter.items.append(MementoMortem())
