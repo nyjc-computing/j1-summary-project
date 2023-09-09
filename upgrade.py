@@ -3,6 +3,7 @@ class Upgrade:
         self.type = "upgrade"
         self.name = ""
         self.description = ""
+        self.cost = 0
 
 class VirtualBoo(Upgrade):
 
@@ -18,16 +19,18 @@ class PortalGun(Upgrade):
         self.name = "Portal Gun"
         self.description = "The Portal Gun is a hand-held device which has the ability to manufacture two linked portals. No matter the distance between them, any object which passes through one portal will emerge from the other and vice versa instantaneously\nAllows the user to teleport to any room they have been to before"
 
-class Shield(Upgrade):
-    """placeholder shield"""
-    def __init__(self):
-        super().__init__()
-        self.name = "Shield"
-        self.description = "literally sheet metal on a stick. good enough for shielding"
-
 class ShadeCloak(Upgrade):
     """placeholder flee"""
     def __init__(self):
         super().__init__()
         self.name = "Shade Cloak"
         self.description = "The Shade Cloak is formed from the substance of the Abyss\nAllows the wearer to escape from battles unscathed"
+
+class SmokeBombs(Upgrade):
+
+    def __init__(self):
+        super().__init__()
+        self.name = "Smoke Bombs"
+        self.description = "Use it to temporarily become invisible to enemies\nAllows the user to move between and loot rooms without being caught"
+        self.cost = 500
+

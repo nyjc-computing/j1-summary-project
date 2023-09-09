@@ -272,6 +272,7 @@ class Kamurocho(Room):
         self.description = "You stepped into the nightlife capital of Japan. As Tojo Clan territory, the district is home to many yakuza and is often the setting of large and small-scale disputes between the Tojo Clan and their rivals such as the Omi Alliance, as well as intra-clan conflicts between Tojo subsidiaries"
         self.loot = FlaskOfCeruleanTears()
         self.encounter = encounter.encounter(self.enemy)
+        self.secret_message = "You see a homeless drunk man sitting on the ground"
 
 class TowerOfFate(Room):
     """
@@ -352,7 +353,7 @@ class SixthCircleOfHell(Room):
         self.enemy = Gabriel()
         self.name = "6th Circle of Hell"
         self.description = "You step into an abandoned church bathed in blood red light. The walls are patterned with the faces of the damned, their expressions contorted in agony, doomed to shriek silently for all eternity. On the far side of the room, a church organ looms over you, an eerie, melancholic melody flowing from its pipes. Its player, a lone figure clad in gold and silver armour"
-        self.loot = FlaskOfCeruleanTears()
+        self.loot = RoboticArm()
         self.encounter = encounter.gabriel_fight(self.enemy)
         self.save = True
         self.save_text = "You See a floating translucent banner saying 'Checkpoint'"

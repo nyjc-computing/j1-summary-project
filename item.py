@@ -97,3 +97,9 @@ class ScotchWhiskey(Item):
         self.name = "Scotch Whiskey"
         self.description = "A bottle of Scotch Whiskey, a popular alcholic drink"
         self.cost = 100
+
+class RoboticArm(Item):
+    def __init__(self):
+        super().__init__()
+        self.name = "Robotic Arm"
+        self.description = "A robotic left arm that still looks functional"

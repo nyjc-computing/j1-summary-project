@@ -8,6 +8,7 @@ import tkinter as tk
 import map
 import encounter
 import enemy
+import games
 
 temp = setup()
 selfend = False
@@ -249,7 +250,14 @@ def run():
     elif "Shop" in selfactions and selfroom.name != "The Forge":
         selfactions.remove("Shop")
         selfdescription.remove("Buy stuff from the shop")
-    
+
+    if "Gamble" not in selfactions and selfroom.name == "Kamurocho" and selfcharacter.gamble:
+        selfactions.insert(-1, "Gamble")
+        selfdescription.append("Go to the Underground Casino")
+    elif "Gamble" in selfactions and selfroom.name != "Kamurocho":
+        selfactions.remove("Gamble")
+        selfdescription.remove("Go to the Underground Casino")
+        
     decision = get_input("What do you wish to do?", selfactions)
 
     # Does the action the user selected
@@ -302,6 +310,9 @@ def run():
 
     elif decision.lower() == "shop":
         shop()
+
+    elif decision.lower() == "gamble":
+        gamble()
 
     if selfroom.enemy == None and selfroom.loot == None and not selfroom.secret:
         if selfroom.name == "Dirtmouth":
@@ -421,11 +432,17 @@ def move(room):
 
     # Generate a random number to see if you managed to sneak past the enemy
     caught = False
-
+    upgrades = selfcharacter.get_upgrades()
+    
     if room.enemy != None:
-        if selfcharacter.name == "meow":
+        if "Smoke Bombs" in upgrades:
+            write(f"\nYou used your Smoke Bombs to sneak past {room.enemy.name}")
+            sleep(selfsleep)
+        
+        elif selfcharacter.name == "meow":
             write(f"\n{room.enemy.name} cowers in your presence, granting you passage through their domain.")
             sleep(selfsleep)
+            
         else:
             chance = random.randint(1, 3)
             if chance == 1:
@@ -494,9 +511,14 @@ def loot(user, loot):
 
     # Generate a random number to see if you successfully loot the room whithout the enemy noticing
     caught = False
+    upgrades = user.get_upgrades()
 
     if selfroom.enemy != None:
-        if user.name == "meow":
+        if "Smoke Bombs" in upgrades:
+            write(f"\nYou used your Smoke Bombs to loot the room without being caught by {selfroom.enemy.name}")
+            sleep(selfsleep)
+        
+        elif user.name == "meow":
             write(f"\n{selfroom.enemy.name} cowers in your presence, granting you access to their domain.")
             sleep(selfsleep)
         else:
@@ -586,6 +608,12 @@ def attack(room):
                 room.secret = False
 
             elif room.enemy.name == "Bowser":
+                room.secret = True
+                delete()
+                write(room.secret_message)
+                wait_for_key_press()
+
+            elif room.enemy.name == "Shibusawa":
                 room.secret = True
                 delete()
                 write(room.secret_message)
@@ -1186,6 +1214,7 @@ def secret():
     selfcharacter.defence = 999
     selfcharacter.health_flask = 999
     selfcharacter.mana_flask = 999
+    selfcharacter.money = 999
     #selfcharacter.upgrades.append(ShadeCloak())
     #selfcharacter.upgrades.append(Shield())
     selfmap.full_reveal()
@@ -1196,6 +1225,8 @@ def secret():
     #selfcharacter.upgrades.append(VirtualBoo())
     selfcharacter.items.append(BlackBox())
     selfcharacter.items.append(RustyKey())
+    selfcharacter.items.append(RoboticArm())
+    selfcharacter.items.append(ScotchWhiskey())
     selfactions.insert(-1, "Teleport")
 
 def meow():
@@ -1497,11 +1528,38 @@ def item():
         
         elif choice == "Rusty Key" and selfroom.name == "The Mushroom Kingdom" and selfroom.secret:
             write("You used the Rusty Key to free the Robot")
+            sleep(selfsleep)
             write()
             write("The robot thanks you for saving him and asks you to meet him in The Forge")
             wait_for_key_press()
             selfroom.secret = False
             selfcharacter.shop = True
+            selfcharacter.items.pop(items.index(choice))
+
+        elif choice == "Robotic Arm" and selfroom.name == "The Forge" and selfroom.secret and selfroom.secret_message == "You notice that Ox is missing his left arm":
+            write("You gave the Robotic Arm to Ox")
+            sleep(selfsleep)
+            write()
+            write("Ox thanks you tremendously as its a perfect fit for him")
+            sleep(selfsleep)
+            write()
+            write("There are new items you can purchase from the store now")
+            wait_for_key_press()
+            selfcharacter.shop_inventory.append(SmokeBombs())
+            selfroom.secret = False
+            selfcharacter.items.pop(items.index(choice))
+
+        elif choice == "Scotch Whiskey" and selfroom.name == "Kamurocho" and selfroom.secret:
+            write("You gave the drunk man the bottle of Scotch Whiskey")
+            sleep(selfsleep)
+            write()
+            write("The man then led you to an underground Casino")
+            wait_for_key_press()
+            delete()
+            gamble()
+            selfcharacter.gamble = True
+            selfcharacter.items.pop(items.index(choice))
+            selfroom.secret = False
             
     
         else:
@@ -1543,6 +1601,11 @@ def shop():
         selfroom.secret_message = "You notice that Ox is missing his left arm"
     items = selfcharacter.shop_inventory.copy()
 
+    if len(items) == 0:
+        write("You bought out everything in the store")
+        wait_for_key_press()
+        return
+
     display = []
     for item in items:
         display.append(f"{item.name} ({item.cost} runes)")
@@ -1559,12 +1622,77 @@ def shop():
             write(f"You do not have enough runes to buy {choice.name}")
             wait_for_key_press()
         else:
-            write(f"You bought {choice.name}")
+            write(f"You bought {choice.name}, a {choice.type}")
+            sleep(selfsleep)
+            write()
+            write(choice.description)
             wait_for_key_press()
-            selfcharacter.items.append(choice)
+            if choice.type == "item":
+                selfcharacter.items.append(choice)
+            elif choice.type == "upgrade":
+                selfcharacter.upgrades.append(choice)
             selfcharacter.money -= choice.cost
+            selfcharacter.shop_inventory.pop(items.index(choice))
+        delete()
         shop()
-            
+
+def gamble():
+    write("You step into a vibrant and bustling establishment of lavish and extravagant design, with neon lights and flashy signage")
+
+    advance = False
+    while not advance:
+        choice = get_input(f"Which game would you like to play? (You have {selfcharacter.money} runes)", ["Jan Ken Pon", "Finish"], None, False)
+    
+        if choice == "Finish":
+            advance = True
+        elif choice == "Jan Ken Pon":
+            if selfcharacter.money == 0:
+                write("Sorry you do not have enough runes to play this game")
+                delete()
+            else:
+                amount = 1
+                bets = []
+                while selfcharacter.money >= amount:
+                    bets.append(str(amount))
+                    amount *= 10
+
+                bets.append("Cancel")
+
+                bet = get_input("How much would you like to bet?", bets)
+
+                if bet == "Cancel":
+                    delete()
+
+                else:
+                    moves = ["Rock", "Paper", "Scissors"]
+                    selection = get_input("What do you want to use?", moves)
+                    opponent_selection = random.choice(moves)
+                    if selection == opponent_selection:
+                        write(f"The opponent also used {selection}, its a draw")
+                        sleep(selfsleep)
+                        write()
+                        write(f"You get back {bet} runes")
+                        wait_for_key_press()
+                        delete()
+
+                    elif (selection == "Rock" and opponent_selection == "Paper") or (selection == "Paper" and opponent_selection == "Scissors") or (selection == "Scissors" and opponent_selection == "Rock"):
+                        write(f"The opponent used {opponent_selection}, you lost")
+                        sleep(selfsleep)
+                        write()
+                        write(f"You lost {bet} runes")
+                        selfcharacter.money -= int(bet)
+                        wait_for_key_press()
+                        delete()
+                    
+                    else:
+                        write(f"The opponent used {opponent_selection}, you won")
+                        sleep(selfsleep)
+                        write()
+                        write(f"You earned {bet} runes")
+                        selfcharacter.money += int(bet)
+                        wait_for_key_press()
+                        delete()
+                
 if __name__ == "__main__":
     root = tk.Tk()
     pause_var = tk.StringVar()

@@ -3,6 +3,8 @@ from room import *
 from character import *
 from weapon import *
 from spell import *
+from item import *
+from upgrade import *
 
 def link_left(room1, room2):
     room1.left = room2

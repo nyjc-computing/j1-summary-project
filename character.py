@@ -70,9 +70,10 @@ class Character:
         self.upgrades = []
         self.shield = None
         self.shields = []
-        self.money = 100
+        self.money = 0
         self.shop = False
         self.shop_inventory = [ScotchWhiskey()]
+        self.gamble = False
 
     def get_spells(self):
         spells = []
