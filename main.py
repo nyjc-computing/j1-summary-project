@@ -242,6 +242,13 @@ def run():
     elif "Save" in selfactions and not selfroom.save:
         selfactions.remove("Save")
         selfdescription.remove("Saves the game")
+
+    if "Shop" not in selfactions and selfcharacter.shop and selfroom.name == "The Forge":
+        selfactions.insert(-1, "Shop")
+        selfdescription.append("Buy stuff from the shop")
+    elif "Shop" in selfactions and selfroom.name != "The Forge":
+        selfactions.remove("Shop")
+        selfdescription.remove("Buy stuff from the shop")
     
     decision = get_input("What do you wish to do?", selfactions)
 
@@ -292,6 +299,9 @@ def run():
 
     elif decision.lower() == "item":
         item()
+
+    elif decision.lower() == "shop":
+        shop()
 
     if selfroom.enemy == None and selfroom.loot == None and not selfroom.secret:
         if selfroom.name == "Dirtmouth":
@@ -395,8 +405,12 @@ def look(room):
 
     if room.enemy == None and room.save:
         write(f"\n{room.save_text}")
+        
+    if room.name == "The Forge":
+        if room.enemy == None and room.secret and selfcharacter.shop:
+            write(f"\n{room.secret_message}")
 
-    if room.enemy == None and room.secret:
+    elif room.enemy == None and room.secret:
         write(f"\n{room.secret_message}")
     wait_for_key_press()
 
@@ -570,6 +584,12 @@ def attack(room):
 
             elif room.enemy.name == "Calamity Ganon":
                 room.secret = False
+
+            elif room.enemy.name == "Bowser":
+                room.secret = True
+                delete()
+                write(room.secret_message)
+                wait_for_key_press()
                 
             room.enemy = None
         elif outcome == 2:
@@ -1106,7 +1126,7 @@ def collect_loot(attacker, loot):
         attacker.upgrades.append(loot)
         write(f"\nYou obtained a {loot.name}, a powerful upgrade")
         if loot.name == "Portal Gun":
-            selfactions.append("Teleport")
+            selfactions.insert(-1, "Teleport")
             selfdescription.append("Teleport to any room you have been to before")
 
     elif loot.type == "item":
@@ -1162,8 +1182,8 @@ def secret():
     selfcharacter.max_health = 999
     selfcharacter.mana = 999
     selfcharacter.max_mana = 999
-    selfcharacter.attack = 0
-    selfcharacter.defence = 0
+    selfcharacter.attack = 999
+    selfcharacter.defence = 999
     selfcharacter.health_flask = 999
     selfcharacter.mana_flask = 999
     #selfcharacter.upgrades.append(ShadeCloak())
@@ -1175,6 +1195,8 @@ def secret():
     #selfcharacter.upgrades.append(PortalGun())
     #selfcharacter.upgrades.append(VirtualBoo())
     selfcharacter.items.append(BlackBox())
+    selfcharacter.items.append(RustyKey())
+    selfactions.insert(-1, "Teleport")
 
 def meow():
     if selfroom.secret == True:
@@ -1457,9 +1479,13 @@ def item():
         wait_for_key_press()
 
     else:
+        items.append("Cancel")
         choice = get_input("Which item do you want to use?", items)
+
+        if choice == "Cancel":
+            return
     
-        if choice == "Memento Mortem" and selfroom.name == "Dirtmouth" and selfroom.secret:
+        elif choice == "Memento Mortem" and selfroom.name == "Dirtmouth" and selfroom.secret:
             write("You used the Memento Mortem on the empty vessel, transporting you to the past where you face The Radiance, The source of the infection in Hallownest")
             wait_for_key_press()
             secret_attack(enemy.TheRadiance())
@@ -1468,6 +1494,14 @@ def item():
             write("You activated the Black Box, breaking a hole in the ground, Calamity Ganon, a dark, amorphous, and monstrous entity, then crawls out of the hole")
             wait_for_key_press()
             secret_attack(enemy.CalamityGanon())
+        
+        elif choice == "Rusty Key" and selfroom.name == "The Mushroom Kingdom" and selfroom.secret:
+            write("You used the Rusty Key to free the Robot")
+            write()
+            write("The robot thanks you for saving him and asks you to meet him in The Forge")
+            wait_for_key_press()
+            selfroom.secret = False
+            selfcharacter.shop = True
             
     
         else:
@@ -1500,6 +1534,36 @@ def secret_attack(boss):
         
     elif outcome == 3:
         selfroom.encounter.reset()
+
+def shop():
+    if selfroom.secret_message == "The Robot has set up a shop in The Forge":
+        write("The robot introduces himself as Ox")
+        write()
+        write("You notice that Ox is missing his left arm")
+        selfroom.secret_message = "You notice that Ox is missing his left arm"
+    items = selfcharacter.shop_inventory.copy()
+
+    display = []
+    for item in items:
+        display.append(f"{item.name} ({item.cost} runes)")
+    items.append("Finish")
+    display.append("Finish")
+
+    write()
+    choice = get_input(f"Which item would you like to purchase? (You have {selfcharacter.money} runes)", items, display, False)
+
+    if choice == "Finish":
+        return
+    else:
+        if selfcharacter.money < choice.cost:
+            write(f"You do not have enough runes to buy {choice.name}")
+            wait_for_key_press()
+        else:
+            write(f"You bought {choice.name}")
+            wait_for_key_press()
+            selfcharacter.items.append(choice)
+            selfcharacter.money -= choice.cost
+        shop()
             
 if __name__ == "__main__":
     root = tk.Tk()

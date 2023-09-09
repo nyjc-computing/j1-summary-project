@@ -91,6 +91,8 @@ class TheForge(Room):
         self.description = "You stepped into a blistering hellscape deep within the Gungeon, a relentless crucible where you honed your combat skills to a razor's edge. Its molten rivers and infernal denizens pushed you to your limits, but you are determined to conquer it and uncover the ultimate weapon hidden within."
         self.loot = FlaskOfCrimsonTears()
         self.encounter = encounter.encounter(self.enemy)
+        self.secret = True
+        self.secret_message = "The Robot has set up a shop in The Forge"
 
 class MiquellasHaligtree(Room):
     """
@@ -102,7 +104,7 @@ class MiquellasHaligtree(Room):
         self.enemy = Malenia()
         self.name = "Miquella's Haligtree"
         self.description = "You stepped into a haunting and mystical location shrouded in eerie fog and surrounded by ancient, twisted trees. You delve into its secrets and confront the enigmatic forces that reside within its dark and foreboding atmosphere"
-        self.loot = FlaskOfCeruleanTears()
+        self.loot = RustyKey()
         self.encounter = encounter.encounter(self.enemy)
         self.save = True
         self.save_text = "You see a luminous remnant of Grace, enshrined by a small stump of roots"
@@ -423,6 +425,7 @@ class TheMushroomKingdom(Room):
         self.description = "You step into a colorful and enchanting land filled with lush forests, towering mountains, and cheerful inhabitants like Toads and Yoshis"
         self.loot = FlaskOfCrimsonTears()
         self.encounter = encounter.encounter(self.enemy)
+        self.secret_message = "You found a robot locked up in a cage"
 
 class WalledCity99(Room):
     """

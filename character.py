@@ -70,6 +70,9 @@ class Character:
         self.upgrades = []
         self.shield = None
         self.shields = []
+        self.money = 100
+        self.shop = False
+        self.shop_inventory = [ScotchWhiskey()]
 
     def get_spells(self):
         spells = []
@@ -112,4 +115,10 @@ class Character:
         for shield in self.shields:
             shields.append(shield.name)
         return shields
+
+    def get_shop_inventory(self):
+        items = []
+        for item in self.shop_inventory:
+            items.append(item.name)
+        return items
         

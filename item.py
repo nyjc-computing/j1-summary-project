@@ -20,6 +20,7 @@ class Item:
         self.description = ""
         self.health = 0
         self.mana = 0
+        self.cost = 0
 
 class FlaskOfCrimsonTears(Item):
     """
@@ -81,5 +82,18 @@ class BlackBox(Item):
     def __init__(self):
         super().__init__()
         self.name = "Black Box"
-        self.description = "an item created by reusing the core of a machine lifeform, explodes when triggered"
-        
+        self.description = "An item created by reusing the core of a machine lifeform, explodes when triggered"
+
+class RustyKey(Item):
+
+    def __init__(self):
+        super().__init__()
+        self.name = "Rusty Key"
+        self.description = "A Rusty Key"
+
+class ScotchWhiskey(Item):
+    def __init__(self):
+        super().__init__()
+        self.name = "Scotch Whiskey"
+        self.description = "A bottle of Scotch Whiskey, a popular alcholic drink"
+        self.cost = 100
