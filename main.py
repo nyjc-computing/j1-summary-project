@@ -408,7 +408,7 @@ def look(room):
             write(f"\n{room.enemy.name} has {room.enemy.health} health")
             sleep(selfsleep)
         if room.loot != None:
-            write(f"\nThere is {room.loot.name} hidden in {room.name}")
+            write(f"\nThere is a {room.loot.name} hidden in {room.name}")
             sleep(selfsleep)
         else:
             write(f"\nThere is no loot hidden in {room.name}")
@@ -508,6 +508,7 @@ def move(room):
     else:
         write(f"\nYou tried to sneak to another room but {room.enemy.name} noticed you")
         sleep(selfsleep)
+        wait_for_key_press()
         attack(room)
 
 def loot(user, loot):
@@ -560,6 +561,7 @@ def loot(user, loot):
     else:
         write(f"\n{selfroom.enemy.name} noticed you while you tried to loot the room")
         sleep(selfsleep)
+        wait_for_key_press()
         attack(selfroom)
 
 def flask(user):
@@ -572,6 +574,7 @@ def flask(user):
         use_flask(user)
 
 def attack(room):
+    global selfend
     """main action for user to attack the enemy in the room"""
     if room.enemy == None:
         delete()
@@ -583,7 +586,8 @@ def attack(room):
         if outcome == 1:
             if room.enemy.name == "Voldemort":  
                 win(selfcharacter.weapon)
-                end_game()
+                selfend = True
+                return
             else:
                 drops(room)
                 money(room)
@@ -595,7 +599,11 @@ def attack(room):
                     if choice == "Yes":
                         save()
             if room.enemy.name == "Sentinels":
-                secret_room()
+                room.secret = True
+                delete()
+                write()
+                write("After you successfully defeated the sentinels, a stray ginger tabby cat emerges from behind a wall and stares at you playfully")
+                wait_for_key_press()
             elif room.enemy.name == "The Hollow Knight":
                 room.secret = True
                 delete()
@@ -1220,7 +1228,33 @@ def win(weapon):
     write("| |_\ \ \_/ / |/ /  /\__/ / |____| | | |_| |_| |\  |")
     sleep(0.2)
     write(" \____/\___/|___/   \____/\_____/\_| |_/\___/\_| \_/")
+    if selfcompletion == 28:
+        write()
+        write("Thanks for putting in the effort to 100% the game, hope you enjoyed playing :)")
+        sleep(self.sleep)
+    wait_for_key_press()
+    delete()
+    write()
+    write("Credits")
+    write()
+    write("Programmers:")
+    write("Noah Lee")
+    write("Ethan Tse")
+    write("Brydon Ti")
+    write()
+    write("Play testers:")
+    write("Ming Cong")
+    write("Ling Kai")
+    write("Jae Zen")
+    write("Vincent Tse")
+    write("Yi Heng")
+    write("Josiah Lin")
+
+    write()
+    write("Special thanks to Mr Ng for providing us the opportunity to code this game")
+    
     selfend = True
+    
        
 def secret():
     """secret account that gives God like stats by setting name as meow"""
@@ -1238,8 +1272,8 @@ def secret():
     #selfcharacter.upgrades.append(ShadeCloak())
     #selfcharacter.upgrades.append(Shield())
     selfmap.full_reveal()
-    #selfcharacter.items.append(DectusMedallionLeft())
-    #selfcharacter.items.append(DectusMedallionRight())
+    selfcharacter.items.append(DectusMedallionLeft())
+    selfcharacter.items.append(DectusMedallionRight())
     selfcharacter.items.append(MementoMortem())
     #selfcharacter.upgrades.append(PortalGun())
     #selfcharacter.upgrades.append(VirtualBoo())
@@ -1471,11 +1505,6 @@ def change_enter(e):
     else:
         selfreturn = e.keysym
     pause_var.set("done")
-            
-def secret_room():
-    write("\nAfter you successfully defeated the sentinels, a stray ginger tabby cat emerges from behind a wall and stares at you playfully\n")
-    selfroom.secret = True
-    wait_for_key_press()
 
 def teleport():
     global selfroom
@@ -1526,7 +1555,7 @@ def item():
     items = selfcharacter.get_items()
 
     if len(items) == 0:
-        write("You do not own any items\n")
+        write("You do not own any items")
         wait_for_key_press()
 
     else:
