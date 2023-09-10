@@ -133,11 +133,12 @@ class encounter:
         self.text.delete("1.0", tk.END)
         self.text['state'] = 'disabled'
         self.line = 1
-        self.taglines = []
 
         #deleting tags
         if not keeptag:
             self.taglines = []
+            for tag in self.text.tag_names():
+                self.text.tag_delete(tag)
 
     def delay(self):
         """

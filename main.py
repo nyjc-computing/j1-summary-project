@@ -594,6 +594,7 @@ def attack(room):
             elif room.enemy.name == "The Hollow Knight":
                 room.secret = True
                 delete()
+                write()
                 write(room.secret_message)
                 wait_for_key_press()
             elif room.enemy.name == "The Radiance":
@@ -602,6 +603,7 @@ def attack(room):
             elif room.enemy.name == "Ganondorf":
                 room.secret = True
                 delete()
+                write()
                 write(room.secret_message)
                 wait_for_key_press()
 
@@ -611,12 +613,14 @@ def attack(room):
             elif room.enemy.name == "Bowser":
                 room.secret = True
                 delete()
+                write()
                 write(room.secret_message)
                 wait_for_key_press()
 
             elif room.enemy.name == "Shibusawa":
                 room.secret = True
                 delete()
+                write()
                 write(room.secret_message)
                 wait_for_key_press()
                 
@@ -1651,23 +1655,30 @@ def gamble():
 
     advance = False
     while not advance:
-        choice = get_input(f"Which game would you like to play? (You have {selfcharacter.money} runes)", ["Jan Ken Pon", "Blackjack", "Finish"], None, False)
+        choice = get_input(f"Which game would you like to play? (You have {selfcharacter.money} runes)", ["Jan Ken Pon", "Blackjack", "Slots", "Finish"], None, False)
     
         if choice == "Finish":
             advance = True
         elif choice == "Jan Ken Pon":
-            if self.player.money == 0:
-                self.write("Sorry you do not have any runes to gamble")
-                self.delete()
+            if selfcharacter.money == 0:
+                write("Sorry you do not have any runes to gamble")
+                delete()
             else:
                 games.JanKenPon(selfcharacter, root, text).play()
 
         elif choice == "Blackjack":
-            if self.player.money == 0:
-                self.write("Sorry you do not have any runes to gamble")
-                self.delete()
+            if selfcharacter.money == 0:
+                write("Sorry you do not have any runes to gamble")
+                delete()
             else:
                 games.Blackjack(selfcharacter, root, text).play()
+
+        elif choice == "Slots":
+            if selfcharacter.money == 0:
+                write("Sorry you do not have any runes to gamble")
+                delete()
+            else:
+                games.Slots(selfcharacter, root, text).play()
                 
 if __name__ == "__main__":
     root = tk.Tk()
