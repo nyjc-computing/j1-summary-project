@@ -35,7 +35,7 @@ class Enemy:
         self.description = ""
         self.move = ""
         self.defence = 0
-        self.money = 10
+        self.money = 50
 
 
 class TheRadiance(Enemy):
