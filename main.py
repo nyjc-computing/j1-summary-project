@@ -582,6 +582,7 @@ def attack(room):
                 end_game()
             else:
                 drops(room)
+                money(room)
                 if selfroom.save == True:
                     delete()
                     write(selfroom.save_text)
@@ -645,6 +646,14 @@ def drops(room):
         elif choice.lower() == "no":
             write(f"\nYou left {enemy.loot.name} on the ground and allowed the resourceful rat to steal it")
             wait_for_key_press()
+
+def money(room):
+    if room.enemy.money != 0:
+        delete()
+        write(f"\nYou gained {room.enemy.money} runes from defeating {room.enemy.name}")
+        sleep(selfsleep)
+        selfcharacter.money += room.enemy.money
+        wait_for_key_press()
                 
 def use_flask(user):
     """Function to allow the user to use flask but also allows them to cancel the action"""
@@ -900,6 +909,7 @@ def status(user):
     write(f"Mana: {user.mana} / {user.max_mana}")
     write(f"Defence: {user.defence}")
     write(f"Strength: {user.attack}")
+    write(f"Runes : {user.money}")
     wait_for_key_press()
 
 def info(user):
