@@ -339,9 +339,9 @@ class Voldemort(Enemy):
     def __init__(self):
         super().__init__()
         self.name = "Voldemort"
-        self.health = 1000
+        self.health = 800
         self.description = "a malevolent dark wizard, seeking power and immortality while spreading fear and chaos throughout the wizarding world"
-        self.attack = 60
+        self.attack = 50
         self.move = "Avada Kedavra"
 
 class Gabriel(Enemy):
@@ -463,8 +463,8 @@ class Phase2(Enemy):
     def __init__(self):
         super().__init__()
         self.name = "Phase 2"
-        self.health = 1500
-        self.attack = 80
+        self.health = 1000
+        self.attack = 60
         self.move = "insert powerful attack"
 
 class CalamityGanon(Enemy):

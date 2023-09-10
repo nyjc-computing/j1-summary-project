@@ -28,6 +28,7 @@ selfup = out[1]
 selfdown = out[2]
 selfreturn = out[3]
 selfsaveroom = None
+selfcompletion = 0
 
 def sleep(t):
     root.after(int(t*1000), lambda: sleepCount.set(sleepCount.get()+1))
@@ -169,6 +170,7 @@ def get_input(prompt, options, displayoptions = None, deletebefore = True):
 def run():
     global selfroom
     global selfend
+    global selfcompletion
     delete()
     """to be run in a loop to prompt user's action"""
     display_room_name()
@@ -314,7 +316,7 @@ def run():
     elif decision.lower() == "gamble":
         gamble()
 
-    if selfroom.enemy == None and selfroom.loot == None and not selfroom.secret:
+    if selfroom.enemy == None and selfroom.loot == None and not selfroom.secret and not selfroom.complete:
         if selfroom.name == "Dirtmouth":
             selfmap.dirtmouth_clear()
         elif selfroom.name == "Celestial Resort":
@@ -373,6 +375,8 @@ def run():
             selfmap.walled_clear()
         elif selfroom.name == "The Last Resort":
             selfmap.last_resort_clear()
+        selfcompletion += 1
+        selfroom.complete = True
 
     if not selfend:
         root.after(1,run)
@@ -585,6 +589,7 @@ def attack(room):
                 money(room)
                 if selfroom.save == True:
                     delete()
+                    write()
                     write(selfroom.save_text)
                     choice = get_input("\nDo you wish to save?", ["Yes", "No"], None, False)
                     if choice == "Yes":
@@ -914,6 +919,7 @@ def status(user):
     write(f"Defence: {user.defence}")
     write(f"Strength: {user.attack}")
     write(f"Runes : {user.money}")
+    write(f"Completion : {int((selfcompletion/28)*100)}%")
     wait_for_key_press()
 
 def info(user):

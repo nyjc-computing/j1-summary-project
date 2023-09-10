@@ -48,6 +48,7 @@ class Room:
         self.save = False
         self.save_text = ""
         self.save_message = ""
+        self.complete = False
         
 class Dirtmouth(Room):
     """
