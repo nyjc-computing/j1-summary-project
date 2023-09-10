@@ -1651,57 +1651,23 @@ def gamble():
 
     advance = False
     while not advance:
-        choice = get_input(f"Which game would you like to play? (You have {selfcharacter.money} runes)", ["Jan Ken Pon", "Finish"], None, False)
+        choice = get_input(f"Which game would you like to play? (You have {selfcharacter.money} runes)", ["Jan Ken Pon", "Blackjack", "Finish"], None, False)
     
         if choice == "Finish":
             advance = True
         elif choice == "Jan Ken Pon":
-            if selfcharacter.money == 0:
-                write("Sorry you do not have enough runes to play this game")
-                delete()
+            if self.player.money == 0:
+                self.write("Sorry you do not have any runes to gamble")
+                self.delete()
             else:
-                amount = 1
-                bets = []
-                while selfcharacter.money >= amount:
-                    bets.append(str(amount))
-                    amount *= 10
+                games.JanKenPon(selfcharacter, root, text).play()
 
-                bets.append("Cancel")
-
-                bet = get_input("How much would you like to bet?", bets)
-
-                if bet == "Cancel":
-                    delete()
-
-                else:
-                    moves = ["Rock", "Paper", "Scissors"]
-                    selection = get_input("What do you want to use?", moves)
-                    opponent_selection = random.choice(moves)
-                    if selection == opponent_selection:
-                        write(f"The opponent also used {selection}, its a draw")
-                        sleep(selfsleep)
-                        write()
-                        write(f"You get back {bet} runes")
-                        wait_for_key_press()
-                        delete()
-
-                    elif (selection == "Rock" and opponent_selection == "Paper") or (selection == "Paper" and opponent_selection == "Scissors") or (selection == "Scissors" and opponent_selection == "Rock"):
-                        write(f"The opponent used {opponent_selection}, you lost")
-                        sleep(selfsleep)
-                        write()
-                        write(f"You lost {bet} runes")
-                        selfcharacter.money -= int(bet)
-                        wait_for_key_press()
-                        delete()
-                    
-                    else:
-                        write(f"The opponent used {opponent_selection}, you won")
-                        sleep(selfsleep)
-                        write()
-                        write(f"You earned {bet} runes")
-                        selfcharacter.money += int(bet)
-                        wait_for_key_press()
-                        delete()
+        elif choice == "Blackjack":
+            if self.player.money == 0:
+                self.write("Sorry you do not have any runes to gamble")
+                self.delete()
+            else:
+                games.Blackjack(selfcharacter, root, text).play()
                 
 if __name__ == "__main__":
     root = tk.Tk()

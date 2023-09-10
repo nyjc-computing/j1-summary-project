@@ -23,6 +23,7 @@ class encounter:
         self.sleep = int(out[0])
         self.up = out[1]
         self.down = out[2]
+        self.enter = out[3]
         self.line = 1
         self.tips = ["Remember to restore your health and mana before every fight",
                     "Other rooms may have useful drops that could make this fight easier"]
@@ -77,11 +78,11 @@ class encounter:
         if displayoptions is None:
             displayoptions = options
         self.show(prompt, displayoptions, deletebefore)
-        self.root.bind('<Return>', lambda x: self.pause_var.set("done"))
+        self.root.bind(f'<{self.enter}>', lambda x: self.pause_var.set("done"))
         self.root.bind(f"<{self.up}>", lambda e: self.up_action(prompt, displayoptions, deletebefore))
         self.root.bind(f"<{self.down}>", lambda e: self.down_action(prompt, displayoptions, deletebefore))
         self.root.wait_variable(self.pause_var)
-        self.root.unbind('<Return>')
+        self.root.unbind(f'<{self.enter}>')
         self.root.unbind(f"<{self.up}>")
         self.root.unbind(f"<{self.down}>")
         self.pause_var.set("")
@@ -132,6 +133,7 @@ class encounter:
         self.text.delete("1.0", tk.END)
         self.text['state'] = 'disabled'
         self.line = 1
+        self.taglines = []
 
         #deleting tags
         if not keeptag:
