@@ -417,7 +417,7 @@ class encounter:
         health, mana = item.FlaskOfCrimsonTears(), item.FlaskOfCeruleanTears()
 
         flasks = [health, mana, "Cancel"]
-        display = [f"Flask of Crimson Tears (restores {health.health} health)", f"Flask of Cerulean Tears (restores {mana.mana} health)", "Cancel"]
+        display = [f"Flask of Crimson Tears (restores {health.health} health)", f"Flask of Cerulean Tears (restores {mana.mana} mana)", "Cancel"]
         
         valid = False
 
