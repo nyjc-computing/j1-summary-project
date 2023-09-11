@@ -17,13 +17,6 @@ class encounter:
         self.initenemy = enemy
         self.enemies = [enemy]
         self.dead = []
-        with open("settings.txt", "r") as f:
-            out = f.readlines()
-            out = [x.split()[1] for x in out]
-        self.sleep = int(out[0])
-        self.up = out[1]
-        self.down = out[2]
-        self.enter = out[3]
         self.line = 1
         self.tips = ["Remember to restore your health and mana before every fight",
                     "Other rooms may have useful drops that could make this fight easier"]
@@ -163,6 +156,13 @@ class encounter:
         self.pause = tk.IntVar()
         self.pointer = tk.IntVar()
         self.pause_var = tk.StringVar()
+        with open("settings.txt", "r") as f:
+            out = f.readlines()
+            out = [x.split()[1] for x in out]
+        self.sleep = int(out[0])
+        self.up = out[1]
+        self.down = out[2]
+        self.enter = out[3]
         #for the variable 'state', 0 means the fight is ongoing, 1 means the player wins, 2 means the player loses
         self.delete()
         state = 0
@@ -661,7 +661,7 @@ class gabriel_fight(encounter):
         if self.timer == 0:
             self.spinning_blades = 0
             self.timer = 3
-            if player_choice == "weapon" and self.player.weapon.name.lower() in self.melee:
+            if player_choice == "Weapon" and self.player.weapon.name.lower() in self.melee:
                 self.write("")
                 self.write("Gabriel used his special move, Sword Throw")
                 self.delay()
