@@ -5,6 +5,7 @@ from accessory import *
 from spell import *
 from item import *
 from upgrade import *
+from shield import *
 
 class Enemy:
     """
@@ -34,6 +35,7 @@ class Enemy:
         self.description = ""
         self.move = ""
         self.defence = 0
+        self.money = 50
 
 
 class TheRadiance(Enemy):
@@ -45,7 +47,6 @@ class TheRadiance(Enemy):
         super().__init__()
         self.name = "The Radiance"
         self.health = 500
-        self.description = "a higher being of light similar to Essence, and as such, opposed to the Void, her ancient enemy. The Moth Tribe is born from her light and in return revere her"
         self.attack = 50
         self.move = "Wall of Light"
         self.loot = ShadeCloak()
@@ -338,9 +339,9 @@ class Voldemort(Enemy):
     def __init__(self):
         super().__init__()
         self.name = "Voldemort"
-        self.health = 1000
+        self.health = 800
         self.description = "a malevolent dark wizard, seeking power and immortality while spreading fear and chaos throughout the wizarding world"
-        self.attack = 60
+        self.attack = 50
         self.move = "Avada Kedavra"
 
 class Gabriel(Enemy):
@@ -462,6 +463,19 @@ class Phase2(Enemy):
     def __init__(self):
         super().__init__()
         self.name = "Phase 2"
-        self.health = 1500
-        self.attack = 80
+        self.health = 1000
+        self.attack = 60
         self.move = "insert powerful attack"
+
+class CalamityGanon(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
+    def __init__(self):
+        super().__init__()
+        self.name = "Calamity Ganon"
+        self.health = 500
+        self.attack = 50
+        self.move = "Fire Axe"
+        self.loot = HylianShield()

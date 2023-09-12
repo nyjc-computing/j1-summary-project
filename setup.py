@@ -3,6 +3,8 @@ from room import *
 from character import *
 from weapon import *
 from spell import *
+from item import *
+from upgrade import *
 
 def link_left(room1, room2):
     room1.left = room2
@@ -90,8 +92,8 @@ def setup() -> [Room, Character]:
     character.weapons.append(character.weapon)
     character.health = 100
     character.max_health = 100
-    character.mana = 5
-    character.max_mana = 100
+    character.mana = 50
+    character.max_mana = 50
     character.health_flask = 2
     character.mana_flask = 2
     

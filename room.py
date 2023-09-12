@@ -48,6 +48,7 @@ class Room:
         self.save = False
         self.save_text = ""
         self.save_message = ""
+        self.complete = False
         
 class Dirtmouth(Room):
     """
@@ -91,6 +92,8 @@ class TheForge(Room):
         self.description = "You stepped into a blistering hellscape deep within the Gungeon, a relentless crucible where you honed your combat skills to a razor's edge. Its molten rivers and infernal denizens pushed you to your limits, but you are determined to conquer it and uncover the ultimate weapon hidden within."
         self.loot = FlaskOfCrimsonTears()
         self.encounter = encounter.encounter(self.enemy)
+        self.secret = True
+        self.secret_message = "The Robot has set up a shop in The Forge"
 
 class MiquellasHaligtree(Room):
     """
@@ -102,7 +105,7 @@ class MiquellasHaligtree(Room):
         self.enemy = Malenia()
         self.name = "Miquella's Haligtree"
         self.description = "You stepped into a haunting and mystical location shrouded in eerie fog and surrounded by ancient, twisted trees. You delve into its secrets and confront the enigmatic forces that reside within its dark and foreboding atmosphere"
-        self.loot = FlaskOfCeruleanTears()
+        self.loot = RustyKey()
         self.encounter = encounter.encounter(self.enemy)
         self.save = True
         self.save_text = "You see a luminous remnant of Grace, enshrined by a small stump of roots"
@@ -144,7 +147,7 @@ class Bunker(Room):
         self.enemy = Emil()
         self.name = "Bunker"
         self.description = "You stepped into a grim sanctuary suspended above the ravaged Earth, both a refuge and a reminder of the relentless war against the machines. you receive orders, grapple with the complexities of your existence, and prepare for the constant struggle to reclaim your planet from the alien invaders."
-        self.loot = FlaskOfCrimsonTears()
+        self.loot = BlackBox()
         self.encounter = encounter.encounter(self.enemy)
 
 class Asphodel(Room):
@@ -172,6 +175,9 @@ class KingdomOfKu(Room):
         self.description = "You stepped into a nation in Hinoeuma with a long and bloody history of conflict and war. Their enemies numbers many, one among several being the fallen nation of U. It was recently ruled by the aging King Jigo Ku, until a coup removed him from power"
         self.loot = FlaskOfCrimsonTears()
         self.encounter = encounter.encounter(self.enemy)
+        self.save = True
+        self.save_text = "You see a small pillar with a book on top of it"
+        self.save_message = "You journal down your journey so far, taking a much needed break"
 
 class GreenhillZone(Room):
     """
@@ -240,6 +246,7 @@ class HyruleKingdom(Room):
         self.description = "You stepped into a land steeped in legend and mystique, it is your sacred duty to protect as the Hero of Time. Its vast, rolling landscapes and iconic landmarks are both your home and the canvas upon which your destiny is written as you battle the forces of darkness and seek to rescue Princess Zelda."
         self.loot = FlaskOfCeruleanTears()
         self.encounter = encounter.encounter(self.enemy)
+        self.secret_message = "You notice cracks on some parts of the ground"
 
 class TheEndDimension(Room):
     """
@@ -266,6 +273,7 @@ class Kamurocho(Room):
         self.description = "You stepped into the nightlife capital of Japan. As Tojo Clan territory, the district is home to many yakuza and is often the setting of large and small-scale disputes between the Tojo Clan and their rivals such as the Omi Alliance, as well as intra-clan conflicts between Tojo subsidiaries"
         self.loot = FlaskOfCeruleanTears()
         self.encounter = encounter.encounter(self.enemy)
+        self.secret_message = "You see a homeless drunk man sitting on the ground"
 
 class TowerOfFate(Room):
     """
@@ -346,7 +354,7 @@ class SixthCircleOfHell(Room):
         self.enemy = Gabriel()
         self.name = "6th Circle of Hell"
         self.description = "You step into an abandoned church bathed in blood red light. The walls are patterned with the faces of the damned, their expressions contorted in agony, doomed to shriek silently for all eternity. On the far side of the room, a church organ looms over you, an eerie, melancholic melody flowing from its pipes. Its player, a lone figure clad in gold and silver armour"
-        self.loot = FlaskOfCeruleanTears()
+        self.loot = RoboticArm()
         self.encounter = encounter.gabriel_fight(self.enemy)
         self.save = True
         self.save_text = "You See a floating translucent banner saying 'Checkpoint'"
@@ -419,6 +427,7 @@ class TheMushroomKingdom(Room):
         self.description = "You step into a colorful and enchanting land filled with lush forests, towering mountains, and cheerful inhabitants like Toads and Yoshis"
         self.loot = FlaskOfCrimsonTears()
         self.encounter = encounter.encounter(self.enemy)
+        self.secret_message = "You found a robot locked up in a cage"
 
 class WalledCity99(Room):
     """

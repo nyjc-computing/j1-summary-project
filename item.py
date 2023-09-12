@@ -20,6 +20,7 @@ class Item:
         self.description = ""
         self.health = 0
         self.mana = 0
+        self.cost = 0
 
 class FlaskOfCrimsonTears(Item):
     """
@@ -72,4 +73,33 @@ class MementoMortem(Item):
         super().__init__()
         self.name = "Memento Mortem"
         self.description = "The Memento Mortem is a mystical pocket watch that allows the user to view the moment of a person's death"
-        
+
+class BlackBox(Item):
+    """
+    An accessory that inherits from the Accessory class
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.name = "Black Box"
+        self.description = "An item created by reusing the core of a machine lifeform, explodes when triggered"
+
+class RustyKey(Item):
+
+    def __init__(self):
+        super().__init__()
+        self.name = "Rusty Key"
+        self.description = "A Rusty Key"
+
+class ScotchWhiskey(Item):
+    def __init__(self):
+        super().__init__()
+        self.name = "Scotch Whiskey"
+        self.description = "A bottle of Scotch Whiskey, a popular alcholic drink"
+        self.cost = 100
+
+class RoboticArm(Item):
+    def __init__(self):
+        super().__init__()
+        self.name = "Robotic Arm"
+        self.description = "A robotic left arm that still looks functional"

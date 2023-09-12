@@ -68,6 +68,12 @@ class Character:
         self.mana_flask = 0
         self.items = []
         self.upgrades = []
+        self.shield = None
+        self.shields = []
+        self.money = 0
+        self.shop = False
+        self.shop_inventory = [ScotchWhiskey()]
+        self.gamble = False
 
     def get_spells(self):
         spells = []
@@ -104,4 +110,16 @@ class Character:
         for upgrade in self.upgrades:
             upgrades.append(upgrade.name)
         return upgrades
+
+    def get_shields(self):
+        shields = []
+        for shield in self.shields:
+            shields.append(shield.name)
+        return shields
+
+    def get_shop_inventory(self):
+        items = []
+        for item in self.shop_inventory:
+            items.append(item.name)
+        return items
         

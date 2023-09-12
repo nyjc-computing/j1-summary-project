@@ -17,12 +17,6 @@ class encounter:
         self.initenemy = enemy
         self.enemies = [enemy]
         self.dead = []
-        with open("settings.txt", "r") as f:
-            out = f.readlines()
-            out = [x.split()[1] for x in out]
-        self.sleep = int(out[0])
-        self.up = out[1]
-        self.down = out[2]
         self.line = 1
         self.tips = ["Remember to restore your health and mana before every fight",
                     "Other rooms may have useful drops that could make this fight easier"]
@@ -77,11 +71,11 @@ class encounter:
         if displayoptions is None:
             displayoptions = options
         self.show(prompt, displayoptions, deletebefore)
-        self.root.bind('<Return>', lambda x: self.pause_var.set("done"))
+        self.root.bind(f'<{self.enter}>', lambda x: self.pause_var.set("done"))
         self.root.bind(f"<{self.up}>", lambda e: self.up_action(prompt, displayoptions, deletebefore))
         self.root.bind(f"<{self.down}>", lambda e: self.down_action(prompt, displayoptions, deletebefore))
         self.root.wait_variable(self.pause_var)
-        self.root.unbind('<Return>')
+        self.root.unbind(f'<{self.enter}>')
         self.root.unbind(f"<{self.up}>")
         self.root.unbind(f"<{self.down}>")
         self.pause_var.set("")
@@ -136,6 +130,8 @@ class encounter:
         #deleting tags
         if not keeptag:
             self.taglines = []
+            for tag in self.text.tag_names():
+                self.text.tag_delete(tag)
 
     def delay(self):
         """
@@ -160,6 +156,13 @@ class encounter:
         self.pause = tk.IntVar()
         self.pointer = tk.IntVar()
         self.pause_var = tk.StringVar()
+        with open("settings.txt", "r") as f:
+            out = f.readlines()
+            out = [x.split()[1] for x in out]
+        self.sleep = int(out[0])
+        self.up = out[1]
+        self.down = out[2]
+        self.enter = out[3]
         #for the variable 'state', 0 means the fight is ongoing, 1 means the player wins, 2 means the player loses
         self.delete()
         state = 0
@@ -183,8 +186,8 @@ class encounter:
                 elif decision.lower() == "flask":
                     advance = self.flask()
 
-                elif decision.lower() == "shield":
-                    self.shield()
+                elif decision.lower() == "defend":
+                    self.write(f"You raise up your {self.player.shield.name}")
                     advance = True
 
                 elif decision.lower() == "escape":
@@ -252,34 +255,14 @@ class encounter:
 
         choices = ["Weapon", "Spell", "Flask"]
 
-        if "Shield" in self.player.get_upgrades():
+        if self.player.shield != None:
             choices.append("Defend")
 
         if "Shade Cloak" in self.player.get_upgrades():
             choices.append("Escape")
 
-        while not valid:
-            self.write("")
-            choice = self.get_input("What do you want to use?", choices, None, False)
-
-            #getting cost of cheapest spell
-            min_cost = self.player.spells[0].cost
-            for spell in self.player.spells:
-                if spell.cost < min_cost:
-                    min_cost = spell.cost
-
-            #getting cost of shield
-            shield_cost = 10
-
-            #check if user has enough mana to shield
-            if (choice.lower() == "shield") and (self.player.mana < shield_cost):
-                self.write("")
-                self.write("You do not have enough mana to shield yourself")
-                self.delay()
-
-            else:
-                valid = True
-        return choice
+        self.write("")
+        return self.get_input("What do you want to use?", choices, None, False)
 
     def enemy_turn(self, player_choice: str) -> None:
         """
@@ -293,20 +276,17 @@ class encounter:
         for enemy in enemies:
 
             #negate damage if player is shielding
-            if player_choice == "shield":
-                self.write("")
-                self.write(f"{enemy.name} used {enemy.move}, but it was deflected by your shield")
-                self.delay()
-
-            #deal damage to the player 
-            else:
-                damage = max(1, enemy.attack - self.player.defence)
-                self.player.health = self.player.health - damage
-                self.write("")
-                self.write(f"{enemy.name} used {enemy.move}, dealing {damage} damage to {self.player.name}")
-                self.delay()
-                if self.player.health <= 0:
-                    break
+            damage = max(1, enemy.attack - self.player.defence)
+            if player_choice.lower() == "defend":
+                damage = int((self.player.shield.negation/100)*(damage))
+                
+                
+            self.player.health = self.player.health - damage
+            self.write("")
+            self.write(f"{enemy.name} used {enemy.move}, dealing {damage} damage to {self.player.name}")
+            self.delay()
+            if self.player.health <= 0:
+                break
 
     def target(self) -> "Enemy":
         """
@@ -437,7 +417,7 @@ class encounter:
         health, mana = item.FlaskOfCrimsonTears(), item.FlaskOfCeruleanTears()
 
         flasks = [health, mana, "Cancel"]
-        display = [f"Flask of Crimson Tears (restores {health.health} health)", f"Flask of Cerulean Tears (restores {mana.mana} health)", "Cancel"]
+        display = [f"Flask of Crimson Tears (restores {health.health} health)", f"Flask of Cerulean Tears (restores {mana.mana} mana)", "Cancel"]
         
         valid = False
 
@@ -513,7 +493,6 @@ class encounter:
         deducts 10 mana from player for using shield
         """
         #get shield cost
-        cost = 10
 
         self.delete()
         self.player.mana = self.player.mana - cost
