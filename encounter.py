@@ -199,7 +199,7 @@ class encounter:
                     self.delete()
                     self.write("You put on the shade cloak and dashed away from the enemy")
                     self.delay()
-                    pygame.mixer.music.stop()
+                    pygame.mixer.music.fadeout(1000)
                     return 3
 
             state = self.over()
@@ -214,14 +214,14 @@ class encounter:
             state = self.over()
 
         if state == 1:
-            pygame.mixer.music.stop()
+            pygame.mixer.music.fadeout(1000)
             return 1
 
         elif state == 2:
             self.end_game()
             self.write("")
             self.write(random.choice(self.tips))
-            pygame.mixer.music.stop()
+            pygame.mixer.music.fadeout(1000)
             return 2
         
 
