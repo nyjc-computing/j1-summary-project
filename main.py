@@ -8,6 +8,7 @@ import tkinter as tk
 import map
 import encounter
 import enemy
+import games
 
 temp = setup()
 selfend = False
@@ -27,6 +28,7 @@ selfup = out[1]
 selfdown = out[2]
 selfreturn = out[3]
 selfsaveroom = None
+selfcompletion = 0
 
 def sleep(t):
     root.after(int(t*1000), lambda: sleepCount.set(sleepCount.get()+1))
@@ -168,6 +170,7 @@ def get_input(prompt, options, displayoptions = None, deletebefore = True):
 def run():
     global selfroom
     global selfend
+    global selfcompletion
     delete()
     """to be run in a loop to prompt user's action"""
     display_room_name()
@@ -242,7 +245,21 @@ def run():
     elif "Save" in selfactions and not selfroom.save:
         selfactions.remove("Save")
         selfdescription.remove("Saves the game")
-    
+
+    if "Shop" not in selfactions and selfcharacter.shop and selfroom.name == "The Forge":
+        selfactions.insert(-1, "Shop")
+        selfdescription.append("Buy stuff from the shop")
+    elif "Shop" in selfactions and selfroom.name != "The Forge":
+        selfactions.remove("Shop")
+        selfdescription.remove("Buy stuff from the shop")
+
+    if "Gamble" not in selfactions and selfroom.name == "Kamurocho" and selfcharacter.gamble:
+        selfactions.insert(-1, "Gamble")
+        selfdescription.append("Go to the Underground Casino")
+    elif "Gamble" in selfactions and selfroom.name != "Kamurocho":
+        selfactions.remove("Gamble")
+        selfdescription.remove("Go to the Underground Casino")
+        
     decision = get_input("What do you wish to do?", selfactions)
 
     # Does the action the user selected
@@ -293,7 +310,13 @@ def run():
     elif decision.lower() == "item":
         item()
 
-    if selfroom.enemy == None and selfroom.loot == None and not selfroom.secret:
+    elif decision.lower() == "shop":
+        shop()
+
+    elif decision.lower() == "gamble":
+        gamble()
+
+    if selfroom.enemy == None and selfroom.loot == None and not selfroom.secret and not selfroom.complete:
         if selfroom.name == "Dirtmouth":
             selfmap.dirtmouth_clear()
         elif selfroom.name == "Celestial Resort":
@@ -352,6 +375,8 @@ def run():
             selfmap.walled_clear()
         elif selfroom.name == "The Last Resort":
             selfmap.last_resort_clear()
+        selfcompletion += 1
+        selfroom.complete = True
 
     if not selfend:
         root.after(1,run)
@@ -383,7 +408,7 @@ def look(room):
             write(f"\n{room.enemy.name} has {room.enemy.health} health")
             sleep(selfsleep)
         if room.loot != None:
-            write(f"\nThere is {room.loot.name} hidden in {room.name}")
+            write(f"\nThere is a {room.loot.name} hidden in {room.name}")
             sleep(selfsleep)
         else:
             write(f"\nThere is no loot hidden in {room.name}")
@@ -395,23 +420,33 @@ def look(room):
 
     if room.enemy == None and room.save:
         write(f"\n{room.save_text}")
+        
+    if room.name == "The Forge":
+        if room.enemy == None and room.secret and selfcharacter.shop:
+            write(f"\n{room.secret_message}")
 
-    if room.enemy == None and room.secret:
+    elif room.enemy == None and room.secret:
         write(f"\n{room.secret_message}")
     wait_for_key_press()
 
 def move(room):
     global selfroom
     """main action for user to traverse from one room to another"""
-    movement = get_input('Which direction do you wish to move in?', ['left', 'right', 'forward','back'])
+    movement = get_input('Which direction do you wish to move in?', ['Left', 'Right', 'Forward','Back'])
 
     # Generate a random number to see if you managed to sneak past the enemy
     caught = False
-
+    upgrades = selfcharacter.get_upgrades()
+    
     if room.enemy != None:
-        if selfcharacter.name == "meow":
+        if "Smoke Bombs" in upgrades:
+            write(f"\nYou used your Smoke Bombs to sneak past {room.enemy.name}")
+            sleep(selfsleep)
+        
+        elif selfcharacter.name == "meow":
             write(f"\n{room.enemy.name} cowers in your presence, granting you passage through their domain.")
             sleep(selfsleep)
+            
         else:
             chance = random.randint(1, 3)
             if chance == 1:
@@ -473,6 +508,7 @@ def move(room):
     else:
         write(f"\nYou tried to sneak to another room but {room.enemy.name} noticed you")
         sleep(selfsleep)
+        wait_for_key_press()
         attack(room)
 
 def loot(user, loot):
@@ -480,9 +516,14 @@ def loot(user, loot):
 
     # Generate a random number to see if you successfully loot the room whithout the enemy noticing
     caught = False
+    upgrades = user.get_upgrades()
 
     if selfroom.enemy != None:
-        if user.name == "meow":
+        if "Smoke Bombs" in upgrades:
+            write(f"\nYou used your Smoke Bombs to loot the room without being caught by {selfroom.enemy.name}")
+            sleep(selfsleep)
+        
+        elif user.name == "meow":
             write(f"\n{selfroom.enemy.name} cowers in your presence, granting you access to their domain.")
             sleep(selfsleep)
         else:
@@ -511,13 +552,7 @@ def loot(user, loot):
             user.mana_flask += 1
             selfroom.loot = None
             
-        elif loot.name == "Dectus Medallion (right)":
-            write(f"\nYou found a {loot.name}, a powerful item")
-            wait_for_key_press()
-            user.items.append(loot)
-            selfroom.loot = None
-
-        elif loot.name == "Dectus Medallion (left)":
+        elif loot.type == "item":
             write(f"\nYou found a {loot.name}, a powerful item")
             wait_for_key_press()
             user.items.append(loot)
@@ -526,6 +561,7 @@ def loot(user, loot):
     else:
         write(f"\n{selfroom.enemy.name} noticed you while you tried to loot the room")
         sleep(selfsleep)
+        wait_for_key_press()
         attack(selfroom)
 
 def flask(user):
@@ -538,6 +574,7 @@ def flask(user):
         use_flask(user)
 
 def attack(room):
+    global selfend
     """main action for user to attack the enemy in the room"""
     if room.enemy == None:
         delete()
@@ -549,24 +586,57 @@ def attack(room):
         if outcome == 1:
             if room.enemy.name == "Voldemort":  
                 win(selfcharacter.weapon)
-                end_game()
+                selfend = True
+                return
             else:
                 drops(room)
+                money(room)
                 if selfroom.save == True:
                     delete()
+                    write()
                     write(selfroom.save_text)
                     choice = get_input("\nDo you wish to save?", ["Yes", "No"], None, False)
                     if choice == "Yes":
                         save()
             if room.enemy.name == "Sentinels":
-                secret_room()
-            if room.enemy.name == "The Hollow Knight":
                 room.secret = True
                 delete()
-                write(f"{room.secret_message}")
+                write()
+                write("After you successfully defeated the sentinels, a stray ginger tabby cat emerges from behind a wall and stares at you playfully")
                 wait_for_key_press()
-            if room.enemy.name == "The Radiance":
+            elif room.enemy.name == "The Hollow Knight":
+                room.secret = True
+                delete()
+                write()
+                write(room.secret_message)
+                wait_for_key_press()
+            elif room.enemy.name == "The Radiance":
                 room.secret = False
+
+            elif room.enemy.name == "Ganondorf":
+                room.secret = True
+                delete()
+                write()
+                write(room.secret_message)
+                wait_for_key_press()
+
+            elif room.enemy.name == "Calamity Ganon":
+                room.secret = False
+
+            elif room.enemy.name == "Bowser":
+                room.secret = True
+                delete()
+                write()
+                write(room.secret_message)
+                wait_for_key_press()
+
+            elif room.enemy.name == "Shibusawa":
+                room.secret = True
+                delete()
+                write()
+                write(room.secret_message)
+                wait_for_key_press()
+                
             room.enemy = None
         elif outcome == 2:
             room.encounter.reset()
@@ -593,6 +663,14 @@ def drops(room):
         elif choice.lower() == "no":
             write(f"\nYou left {enemy.loot.name} on the ground and allowed the resourceful rat to steal it")
             wait_for_key_press()
+
+def money(room):
+    if room.enemy.money != 0:
+        delete()
+        write(f"\nYou gained {room.enemy.money} runes from defeating {room.enemy.name}")
+        sleep(selfsleep)
+        selfcharacter.money += room.enemy.money
+        wait_for_key_press()
                 
 def use_flask(user):
     """Function to allow the user to use flask but also allows them to cancel the action"""
@@ -688,9 +766,13 @@ def equip(self):
     """main action for user to equip various items"""
 
     display_equipment(selfcharacter)
+    if len(selfcharacter.get_shields()) == 0:
+        options = ["Armour", "Weapon", "Accessory", "Finish"]
+    else:
+        options = ["Armour", "Weapon", "Accessory", "Shield", "Finish"]
     choice = ""
     while choice != "Finish":
-        choice = get_input("\nwhat do you want to change?", ["Armour", "Weapon", "Accessory", "Finish"], None, False)
+        choice = get_input("\nwhat do you want to change?", options, None, False)
 
         if choice == "Armour":
             equip_armour(selfcharacter)
@@ -700,6 +782,9 @@ def equip(self):
 
         elif choice == "Accessory":
             equip_accessory(selfcharacter)
+
+        elif choice == "Shield":
+            equip_shield(selfcharacter)
     
 def display_equipment(user):
     """sub action for equip() to display equipments that the user have"""
@@ -720,7 +805,11 @@ def display_equipment(user):
         write(f"Accessory : {user.accessory.name}")
     sleep(selfsleep)
 
-
+    if len(user.get_shields()) > 0:
+        if user.shield == None:
+            write("Shield : Empty")
+        else:
+            write(f"Shield : {user.shield.name}")
 
 def equip_armour(user):
     """sub action from equip() for user to choose an armour to equip"""
@@ -731,33 +820,56 @@ def equip_armour(user):
         display_equipment(selfcharacter)
     else:
         # Displays the armours the user owns
-        write("\nIn your inventory you have: ")
         armours = user.get_armours()
-        sleep(selfsleep)
+        armours.append("Cancel")
         option = get_input("\nWhich armour do you want to equip?", armours)
-        write(f"\nYou equipped {option}")
-        wait_for_key_press()
-        # Removes the defence increase of the previous armour
-        if user.armour != None:
-            user.defence = user.defence - user.armour.defence
-        armour = user.armours[armours.index(option)]
-        # Adds the defence of the new armour
-        user.defence = user.defence + armour.defence
-        user.armour = armour
-        delete()
-        display_equipment(user)
+        if option == "Cancel":
+            display_equipment(user)
+
+        else:
+            write(f"\nYou equipped {option}")
+            wait_for_key_press()
+            # Removes the defence increase of the previous armour
+            if user.armour != None:
+                user.defence = user.defence - user.armour.defence
+            armour = user.armours[armours.index(option)]
+            # Adds the defence of the new armour
+            user.defence = user.defence + armour.defence
+            user.armour = armour
+            delete()
+            display_equipment(user)
 
 def equip_weapon(user):
     """sub action from equip() for user to choose a weapon to equip"""
     # Displays the weapons the user owns
     weapons = user.get_weapons()
+    weapons.append("Cancel")
     # Validates the user's choice
     option = get_input("\nWhich weapon do you want to equip?", weapons)
-    write(f"\nYou equipped {option}")
-    wait_for_key_press()
-    user.weapon = user.weapons[weapons.index(option)]
-    delete()
-    display_equipment(user)
+    if option == "Cancel":
+        display_equipment(user)
+    else:
+        write(f"\nYou equipped {option}")
+        wait_for_key_press()
+        user.weapon = user.weapons[weapons.index(option)]
+        delete()
+        display_equipment(user)
+
+def equip_shield(user):
+    """sub action from equip() for user to choose a weapon to equip"""
+    # Displays the weapons the user owns
+    shields = user.get_shields()
+    shields.append("Cancel")
+    # Validates the user's choice
+    option = get_input("\nWhich shield do you want to equip?", shields)
+    if option == "Cancel":
+        display_equipment(user)
+    else:
+        write(f"\nYou equipped {option}")
+        wait_for_key_press()
+        user.shield = user.shields[shields.index(option)]
+        delete()
+        display_equipment(user)
 
 def equip_accessory(user):
     """sub action from equip() for user to choose an accessory to equip"""
@@ -768,38 +880,43 @@ def equip_accessory(user):
         display_equipment(selfcharacter)
     else:
         accessories = user.get_accessories()
+        accessories.append("Cancel")
         option = get_input("\nWhich accessory do you want to equip?", accessories)
-        write(f"\nYou equipped {option}")
-        wait_for_key_press()
+        if option == "Cancel":
+            display_equipment(user)
 
-        # Removes the stat boost from the previous accessory
-        if user.accessory != None:
-            user.max_health = user.max_health - user.accessory.health_boost
-
-            new_health = min(max(1, user.health - user.accessory.health_boost), user.max_health)
-            user.health = new_health
+        else:
+            write(f"\nYou equipped {option}")
+            wait_for_key_press()
+    
+            # Removes the stat boost from the previous accessory
+            if user.accessory != None:
+                user.max_health = user.max_health - user.accessory.health_boost
+    
+                new_health = min(max(1, user.health - user.accessory.health_boost), user.max_health)
+                user.health = new_health
+                
+                user.max_mana -= user.accessory.mana_boost
+    
+                new_mana = min(max(0, user.mana - user.accessory.mana_boost), user.max_mana)
+                user.mana = new_mana
+    
+                user.attack -= user.accessory.attack_boost
+    
+                user.defence -= user.accessory.defence_boost
+    
+            # Adds the stat boost from the new accessory
+            accessory = user.accessories[accessories.index(option)]
+            user.health += accessory.health_boost
+            user.max_health += accessory.health_boost
+            user.attack += accessory.attack_boost
+            user.mana += accessory.mana_boost
+            user.max_mana += accessory.mana_boost
+            user.defence += accessory.defence_boost
             
-            user.max_mana -= user.accessory.mana_boost
-
-            new_mana = min(max(0, user.mana - user.accessory.mana_boost), user.max_mana)
-            user.mana = new_mana
-
-            user.attack -= user.accessory.attack_boost
-
-            user.defence -= user.accessory.defence_boost
-
-        # Adds the stat boost from the new accessory
-        accessory = user.accessories[accessories.index(option)]
-        user.health += accessory.health_boost
-        user.max_health += accessory.health_boost
-        user.attack += accessory.attack_boost
-        user.mana += accessory.mana_boost
-        user.max_mana += accessory.mana_boost
-        user.defence += accessory.defence_boost
-        
-        user.accessory = accessory
-        delete()
-        display_equipment(user)
+            user.accessory = accessory
+            delete()
+            display_equipment(user)
 
 def status(user):
     """main action that prints user's status"""
@@ -809,11 +926,16 @@ def status(user):
     write(f"Mana: {user.mana} / {user.max_mana}")
     write(f"Defence: {user.defence}")
     write(f"Strength: {user.attack}")
+    write(f"Runes : {user.money}")
+    write(f"Completion : {int((selfcompletion/28)*100)}%")
     wait_for_key_press()
 
 def info(user):
     """main action that prompts user for the type of item to find out more information about"""
-    options = ["weapons", "spells", "armours", "accessories", "flasks", "items", "upgrades", "Cancel"]
+    if len(user.shields) == 0:
+        options = ["weapons", "spells", "armours", "accessories", "flasks", "items", "upgrades", "Cancel"]
+    else:
+        options = ["weapons", "shields", "spells", "armours", "accessories", "flasks", "items", "upgrades", "Cancel"]
     choice = get_input("What do you want to find out more about? ", [x.capitalize() for x in options]).lower()
 
     if choice == "weapons":
@@ -839,11 +961,31 @@ def info(user):
 
     elif choice == "cancel":
         return
+
+    elif choice == "shields":
+        shield_info(user)
                 
 def weapon_info(user):
     """sub action from equip() that prompts user for specific weapon to find out more about"""
+        # Displays the weapons the user owns
+    weapons = user.get_weapons()
+    weapons.append("Cancel")
+    decision = get_input("\nWhich weapon do you want to find out more about?", weapons)
+    if decision == "Cancel":
+        delete()
+        info(user)
+        return
+    # Displays the description of the weapon
+    write(user.weapons[weapons.index(decision)].description)
+    wait_for_key_press()
+    delete()
+    weapon_info(user)
+
+def shield_info(user):
+    """sub action from equip() that prompts user for specific weapon to find out more about"""
     # Check if the user owns any weapons
-    if len(user.weapons) == 0:
+    shields = user.get_shields()
+    if len(shields) == 0:
         write("\nYou do not own any weapons yet")
         wait_for_key_press()
         delete()
@@ -851,45 +993,36 @@ def weapon_info(user):
     
     else:
         # Displays the weapons the user owns
-        weapons = user.get_weapons()
-        weapons.append("Cancel")
-        decision = get_input("\nWhich weapon do you want to find out more about?", weapons)
+        shields.append("Cancel")
+        decision = get_input("\nWhich shield do you want to find out more about?", shields)
         if decision == "Cancel":
             delete()
             info(user)
             return
         # Displays the description of the weapon
-        write(user.weapons[weapons.index(decision)].description)
+        write(user.shields[shields.index(decision)].description)
         wait_for_key_press()
         delete()
-        weapon_info(user)
+        shield_info(user)
 
 def spell_info(user):
     """sub action from equip() that prompts user for specific spell to find out more about"""
-    # Check if the user knows any spells
-    if len(user.spells) == 0:
-        write("\nYou do not own any spells yet")
-        wait_for_key_press()
+    # Displays the spells the user knows
+    spells = user.get_spells()
+    spells.append("Cancel")
+
+    decision = get_input("\nWhich spell do you want to find out more about?", spells)
+
+    if decision == "Cancel":
         delete()
         info(user)
+        return
 
-    else:
-        # Displays the spells the user knows
-        spells = user.get_spells()
-        spells.append("Cancel")
-
-        decision = get_input("\nWhich spell do you want to find out more about?", spells)
-
-        if decision == "Cancel":
-            delete()
-            info(user)
-            return
-
-        # Displays the description of the spell
-        write(user.spells[spells.index(decision)].description)
-        wait_for_key_press()
-        delete()
-        spell_info(user)
+    # Displays the description of the spell
+    write(user.spells[spells.index(decision)].description)
+    wait_for_key_press()
+    delete()
+    spell_info(user)
 
 def armour_info(user):
     """sub action from equip() that prompts user for specific armour to find out more about"""
@@ -1049,12 +1182,16 @@ def collect_loot(attacker, loot):
         attacker.upgrades.append(loot)
         write(f"\nYou obtained a {loot.name}, a powerful upgrade")
         if loot.name == "Portal Gun":
-            selfactions.append("Teleport")
+            selfactions.insert(-1, "Teleport")
             selfdescription.append("Teleport to any room you have been to before")
 
     elif loot.type == "item":
         attacker.items.append(loot)
         write(f"\nYou obtained a {loot.name}, an item")
+
+    elif loot.type == "shield":
+        attacker.shields.append(loot)
+        write(f"\nYou obtained a {loot.name}, a powerful shield")
 
     sleep(selfsleep)
 
@@ -1091,7 +1228,33 @@ def win(weapon):
     write("| |_\ \ \_/ / |/ /  /\__/ / |____| | | |_| |_| |\  |")
     sleep(0.2)
     write(" \____/\___/|___/   \____/\_____/\_| |_/\___/\_| \_/")
+    if selfcompletion == 28:
+        write()
+        write("Thanks for putting in the effort to 100% the game, hope you enjoyed playing :)")
+        sleep(self.sleep)
+    wait_for_key_press()
+    delete()
+    write()
+    write("Credits")
+    write()
+    write("Programmers:")
+    write("Noah Lee")
+    write("Ethan Tse")
+    write("Brydon Ti")
+    write()
+    write("Play testers:")
+    write("Ming Cong")
+    write("Ling Kai")
+    write("Jae Zen")
+    write("Vincent Tse")
+    write("Yi Heng")
+    write("Josiah Lin")
+
+    write()
+    write("Special thanks to Mr Ng for providing us the opportunity to code this game")
+    
     selfend = True
+    
        
 def secret():
     """secret account that gives God like stats by setting name as meow"""
@@ -1105,17 +1268,23 @@ def secret():
     selfcharacter.defence = 999
     selfcharacter.health_flask = 999
     selfcharacter.mana_flask = 999
+    selfcharacter.money = 999
     #selfcharacter.upgrades.append(ShadeCloak())
     #selfcharacter.upgrades.append(Shield())
     selfmap.full_reveal()
-    #selfcharacter.items.append(DectusMedallionLeft())
-    #selfcharacter.items.append(DectusMedallionRight())
+    selfcharacter.items.append(DectusMedallionLeft())
+    selfcharacter.items.append(DectusMedallionRight())
     selfcharacter.items.append(MementoMortem())
     #selfcharacter.upgrades.append(PortalGun())
     #selfcharacter.upgrades.append(VirtualBoo())
+    selfcharacter.items.append(BlackBox())
+    selfcharacter.items.append(RustyKey())
+    selfcharacter.items.append(RoboticArm())
+    selfcharacter.items.append(ScotchWhiskey())
+    selfactions.insert(-1, "Teleport")
 
 def meow():
-    if selfroom.secret == True:
+    if selfroom.secret == True and selfroom.name == "Walled City 99":
         write("""       
             
    ____ ___  ___  ____ _      __
@@ -1336,11 +1505,6 @@ def change_enter(e):
     else:
         selfreturn = e.keysym
     pause_var.set("done")
-            
-def secret_room():
-    write("\nAfter you successfully defeated the sentinels, a stray ginger tabby cat emerges from behind a wall and stares at you playfully\n")
-    selfroom.secret = True
-    wait_for_key_press()
 
 def teleport():
     global selfroom
@@ -1391,46 +1555,166 @@ def item():
     items = selfcharacter.get_items()
 
     if len(items) == 0:
-        write("You do not own any items\n")
+        write("You do not own any items")
         wait_for_key_press()
 
     else:
+        items.append("Cancel")
         choice = get_input("Which item do you want to use?", items)
+
+        if choice == "Cancel":
+            return
     
-        if choice == "Memento Mortem" and selfroom.name == "Dirtmouth" and selfroom.secret:
+        elif choice == "Memento Mortem" and selfroom.name == "Dirtmouth" and selfroom.secret:
             write("You used the Memento Mortem on the empty vessel, transporting you to the past where you face The Radiance, The source of the infection in Hallownest")
             wait_for_key_press()
-            boss = enemy.TheRadiance()
-            secret = encounter.encounter(boss)
-            outcome = secret.fight(selfcharacter, root, text)
+            secret_attack(enemy.TheRadiance())
 
-            if outcome == 1:
-                write(f"\n{boss.name} dropped a {boss.loot.name}")
-                sleep(selfsleep)
-                choice = get_input(f"\nDo you want to pick up {boss.loot.name}?",["Yes","No"],None,False)
-                if choice.lower() == "yes":
-                    collect_loot(selfcharacter, boss.loot)
-                    sleep(selfsleep)
-                    write(f"\n{boss.loot.description}")
-                    wait_for_key_press()
+        elif choice == "Black Box" and selfroom.name == "Hyrule Kingdom" and selfroom.secret:
+            write("You activated the Black Box, breaking a hole in the ground, Calamity Ganon, a dark, amorphous, and monstrous entity, then crawls out of the hole")
+            wait_for_key_press()
+            secret_attack(enemy.CalamityGanon())
+        
+        elif choice == "Rusty Key" and selfroom.name == "The Mushroom Kingdom" and selfroom.secret:
+            write("You used the Rusty Key to free the Robot")
+            sleep(selfsleep)
+            write()
+            write("The robot thanks you for saving him and asks you to meet him in The Forge")
+            wait_for_key_press()
+            selfroom.secret = False
+            selfcharacter.shop = True
+            selfcharacter.items.pop(items.index(choice))
+
+        elif choice == "Robotic Arm" and selfroom.name == "The Forge" and selfroom.secret and selfroom.secret_message == "You notice that Ox is missing his left arm":
+            write("You gave the Robotic Arm to Ox")
+            sleep(selfsleep)
+            write()
+            write("Ox thanks you tremendously as its a perfect fit for him")
+            sleep(selfsleep)
+            write()
+            write("There are new items you can purchase from the store now")
+            wait_for_key_press()
+            selfcharacter.shop_inventory.append(SmokeBombs())
+            selfroom.secret = False
+            selfcharacter.items.pop(items.index(choice))
+
+        elif choice == "Scotch Whiskey" and selfroom.name == "Kamurocho" and selfroom.secret:
+            write("You gave the drunk man the bottle of Scotch Whiskey")
+            sleep(selfsleep)
+            write()
+            write("The man then led you to an underground Casino")
+            wait_for_key_press()
+            delete()
+            gamble()
+            selfcharacter.gamble = True
+            selfcharacter.items.pop(items.index(choice))
+            selfroom.secret = False
             
-                elif choice.lower() == "no":
-                    write(f"\nYou left {boss.loot.name} on the ground and allowed the resourceful rat to steal it")
-                    wait_for_key_press()
-
-                selfroom.secret = False
-
-            elif outcome == 2:
-                selfroom.encounter.reset()
-                end_game()
-                
-            elif outcome == 3:
-                selfroom.encounter.reset()
     
         else:
             write(f"You used {choice} but nothing happened")
             wait_for_key_press()
-            
+
+def secret_attack(boss):
+    secret = encounter.encounter(boss)
+    outcome = secret.fight(selfcharacter, root, text)
+
+    if outcome == 1:
+        write(f"\n{boss.name} dropped a {boss.loot.name}")
+        sleep(selfsleep)
+        choice = get_input(f"\nDo you want to pick up {boss.loot.name}?",["Yes","No"],None,False)
+        if choice.lower() == "yes":
+            collect_loot(selfcharacter, boss.loot)
+            sleep(selfsleep)
+            write(f"\n{boss.loot.description}")
+            wait_for_key_press()
+    
+        elif choice.lower() == "no":
+            write(f"\nYou left {boss.loot.name} on the ground and allowed the resourceful rat to steal it")
+            wait_for_key_press()
+
+        selfroom.secret = False
+
+    elif outcome == 2:
+        selfroom.encounter.reset()
+        end_game()
+        
+    elif outcome == 3:
+        selfroom.encounter.reset()
+
+def shop():
+    if selfroom.secret_message == "The Robot has set up a shop in The Forge":
+        write("The robot introduces himself as Ox")
+        write()
+        write("You notice that Ox is missing his left arm")
+        selfroom.secret_message = "You notice that Ox is missing his left arm"
+    items = selfcharacter.shop_inventory.copy()
+
+    if len(items) == 0:
+        write("You bought out everything in the store")
+        wait_for_key_press()
+        return
+
+    display = []
+    for item in items:
+        display.append(f"{item.name} ({item.cost} runes)")
+    items.append("Finish")
+    display.append("Finish")
+
+    write()
+    choice = get_input(f"Which item would you like to purchase? (You have {selfcharacter.money} runes)", items, display, False)
+
+    if choice == "Finish":
+        return
+    else:
+        if selfcharacter.money < choice.cost:
+            write(f"You do not have enough runes to buy {choice.name}")
+            wait_for_key_press()
+        else:
+            write(f"You bought {choice.name}, a {choice.type}")
+            sleep(selfsleep)
+            write()
+            write(choice.description)
+            wait_for_key_press()
+            if choice.type == "item":
+                selfcharacter.items.append(choice)
+            elif choice.type == "upgrade":
+                selfcharacter.upgrades.append(choice)
+            selfcharacter.money -= choice.cost
+            selfcharacter.shop_inventory.pop(items.index(choice))
+        delete()
+        shop()
+
+def gamble():
+    write("You step into a vibrant and bustling establishment of lavish and extravagant design, with neon lights and flashy signage")
+
+    advance = False
+    while not advance:
+        choice = get_input(f"Which game would you like to play? (You have {selfcharacter.money} runes)", ["Jan Ken Pon", "Blackjack", "Slots", "Finish"], None, False)
+    
+        if choice == "Finish":
+            advance = True
+        elif choice == "Jan Ken Pon":
+            if selfcharacter.money == 0:
+                write("Sorry you do not have any runes to gamble")
+                delete()
+            else:
+                games.JanKenPon(selfcharacter, root, text).play()
+
+        elif choice == "Blackjack":
+            if selfcharacter.money == 0:
+                write("Sorry you do not have any runes to gamble")
+                delete()
+            else:
+                games.Blackjack(selfcharacter, root, text).play()
+
+        elif choice == "Slots":
+            if selfcharacter.money == 0:
+                write("Sorry you do not have any runes to gamble")
+                delete()
+            else:
+                games.Slots(selfcharacter, root, text).play()
+                
 if __name__ == "__main__":
     root = tk.Tk()
     pause_var = tk.StringVar()
