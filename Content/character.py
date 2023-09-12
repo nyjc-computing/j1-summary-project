@@ -1,5 +1,5 @@
 #importing from other files
-from armour import *
+from Content.armour import *
 from Content.weapon import *
 from Content.accessory import *
 from Content.spell import *

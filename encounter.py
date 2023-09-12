@@ -3,7 +3,12 @@ import random
 import time
 import tkinter as tk
 import string
-import pygame
+
+bgm = True
+try:
+    import pygame
+except ModuleNotFoundError:
+    bgm = False
 
 #import local files
 import Content.item as item
@@ -144,16 +149,14 @@ class encounter:
             self.root.after(self.sleep*1000, lambda: self.pause.set(self.pause.get()+1))
             self.root.wait_variable(self.pause)
 
-    def fight(self, player: "character", root: "tk.Tk()", text: "tk.Text()", music) -> int:
+    def fight(self, player: "character", root: "tk.Tk()", text: "tk.Text()") -> int:
         """
         main loop for the encounter, return 1 if player wins, 2 if player dies, 3 if player flees
         'player' is the player character
         'root' is the tk window
         'text' is the text field to write messages to
         """
-        pygame.mixer.init()
-        pygame.mixer.music.load(music)
-        pygame.mixer.music.play()
+
         self.player = player
         self.root = root
         self.text = text
@@ -164,11 +167,18 @@ class encounter:
             out = f.readlines()
             out = [x.split()[1] for x in out]
         self.sleep = int(out[0])
-        self.up = out[1]
-        self.down = out[2]
-        self.enter = out[3]
+        self.music = out[1]
+        self.up = out[2]
+        self.down = out[3]
+        self.enter = out[4]
         #for the variable 'state', 0 means the fight is ongoing, 1 means the player wins, 2 means the player loses
         self.delete()
+
+        if bgm and self.music == "On":
+            pygame.mixer.init()
+            pygame.mixer.music.load(f"Music/{self.enemies[0].music}")
+            pygame.mixer.music.play(fade_ms=2000)
+
         state = 0
         while state == 0:
 
@@ -199,7 +209,8 @@ class encounter:
                     self.delete()
                     self.write("You put on the shade cloak and dashed away from the enemy")
                     self.delay()
-                    pygame.mixer.music.fadeout(1000)
+                    if bgm and self.music == "On":
+                        pygame.mixer.music.fadeout(1000)
                     return 3
 
             state = self.over()
@@ -214,14 +225,16 @@ class encounter:
             state = self.over()
 
         if state == 1:
-            pygame.mixer.music.fadeout(1000)
+            if bgm and self.music == "On":
+                pygame.mixer.music.fadeout(1000)
             return 1
 
         elif state == 2:
             self.end_game()
             self.write("")
             self.write(random.choice(self.tips))
-            pygame.mixer.music.fadeout(1000)
+            if bgm and self.music == "On":
+                pygame.mixer.music.fadeout(1000)
             return 2
         
 

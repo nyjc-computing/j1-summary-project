@@ -1,5 +1,5 @@
 #importing from other files
-from armour import *
+from Content.armour import *
 from Content.weapon import *
 from Content.accessory import *
 from Content.spell import *
@@ -36,6 +36,7 @@ class Enemy:
         self.move = ""
         self.defence = 0
         self.money = 50
+        self.music = "Battle_Theme.mp3"
 
 
 class TheRadiance(Enemy):
@@ -50,6 +51,7 @@ class TheRadiance(Enemy):
         self.attack = 50
         self.move = "Wall of Light"
         self.loot = ShadeCloak()
+        self.music = "The_Radiance.mp3"
 
 class TheHollowKnight(Enemy):
     """
@@ -64,6 +66,7 @@ class TheHollowKnight(Enemy):
         self.attack = 2
         self.move = "Triple Slash"
         self.loot = VengefulSpirit()
+        self.music = "The_Hollow_Knight.mp3"
 
 class MrOshiro(Enemy):
     """
@@ -78,6 +81,7 @@ class MrOshiro(Enemy):
         self.attack = 8
         self.move = "Charge"
         self.loot = GoldenFeather()
+        self.music = "Mr_Oshiro.mp3"
 
 class TheHighDragun(Enemy):
     """
@@ -106,6 +110,7 @@ class Malenia(Enemy):
         self.attack = 25
         self.move = "Waterfowl Dance"
         self.loot = GlintstoneCometshard()
+        self.music = "Malenia.mp3"
 
 class Glados(Enemy):
     """
@@ -134,6 +139,7 @@ class Yaldabaoth(Enemy):
         self.attack = 15
         self.move = "Divine Punishment"
         self.loot = Megidolaon()
+        self.music = "Persona_5.mp3"
 
 class Ridley(Enemy):
     """
@@ -176,6 +182,7 @@ class TheBoneHyrda(Enemy):
         self.attack = 20
         self.move = "Ground Slam"
         self.loot = Coronacht()
+        self.music = "Bone_Hydra.mp3"
 
 class GeneralMugen(Enemy):
     """
@@ -218,6 +225,7 @@ class TheMoonLord(Enemy):
         self.attack = 30
         self.move = "Phantasmal Eyes"
         self.loot = Zenith()
+        self.music = "Moon_Lord.mp3"
 
 class Mithrix(Enemy):
     """
@@ -232,6 +240,7 @@ class Mithrix(Enemy):
         self.attack = 20
         self.move = "Lunar Hammer Smash"
         self.loot = WillOTheWisp()
+        self.music = "Mithrix.mp3"
 
 class Sephiroth(Enemy):
     """
@@ -246,6 +255,7 @@ class Sephiroth(Enemy):
         self.attack = 10
         self.move = "Super Nova"
         self.loot = BusterSword()
+        self.music = "Sephiroth.mp3"
 
 class Ganondorf(Enemy):
     """
@@ -260,6 +270,7 @@ class Ganondorf(Enemy):
         self.attack = 10
         self.move = "Dark Magic"
         self.loot = MasterSword()
+        self.music = "Ganondorf.mp3"
 
 class TheEnderDragon(Enemy):
     """
@@ -274,6 +285,7 @@ class TheEnderDragon(Enemy):
         self.attack = 10
         self.move = "Dragon's breath"
         self.loot = NetheriteArmour()
+        self.music = "The_Ender_Dragon.mp3"
 
 class Shibusawa(Enemy):  
     """
@@ -288,6 +300,7 @@ class Shibusawa(Enemy):
         self.attack = 10
         self.move = "Beast Style"
         self.loot = DragonAmulet()
+        self.music = "Shibusawa.mp3"
 
 class Enchantress(Enemy):
     """
@@ -371,6 +384,7 @@ class Flowey(Enemy):
         self.attack = 35
         self.move = "Flamethrower"
         self.loot = ToyKnife()
+        self.music = "Sans.mp3"
 
 class TheHeir(Enemy):
     """

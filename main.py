@@ -24,9 +24,9 @@ with open("settings.txt", "r") as f:
     out = f.readlines()
     out = [x.split()[1] for x in out]
 selfsleep = int(out[0])
-selfup = out[1]
-selfdown = out[2]
-selfreturn = out[3]
+selfup = out[2]
+selfdown = out[3]
+selfreturn = out[4]
 selfsaveroom = None
 selfcompletion = 0
 
@@ -582,7 +582,7 @@ def attack(room):
         wait_for_key_press()
         
     else:
-        outcome = room.encounter.fight(selfcharacter, root, text, room.music)
+        outcome = room.encounter.fight(selfcharacter, root, text)
         if outcome == 1:
             if room.enemy.name == "Voldemort":  
                 win(selfcharacter.weapon)
@@ -1397,7 +1397,11 @@ def settings():
     choice = ""
     display_settings(settings_dict)
     while choice != "finish":
-        choice = get_input("\nWhich setting do you want to change?", ["Sleep", "Controls", "Finish"], None, False)
+        choice = get_input("\nWhich setting do you want to change?", ["Sleep", "Music", "Controls", "Finish"], None, False)
+
+        if choice.lower() == "music":
+            new = set_music(settings_dict["Music"])
+            settings_dict["Music"] = new
 
         if choice.lower() == "finish":
             with open("settings.txt", "w") as f:
@@ -1431,7 +1435,7 @@ def set_sleep(current):
     Change the interval between messages
     returns new value for sleep as string
     """
-    count = 0
+
     write("\nsleep: the interval between messages sent by the game in seconds.")
     write(f"Current value: {current}")
     
@@ -1444,6 +1448,15 @@ def set_sleep(current):
         return current
     else:
         selfsleep = int(new)
+        return new
+    
+def set_music(current):
+
+    new = get_input("\nMusic: ", ["On", "Off", "Cancel"])
+    
+    if new.lower() == "cancel":
+        return current
+    else:
         return new
 
 def set_controls():
