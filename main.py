@@ -1284,7 +1284,7 @@ def secret():
     selfactions.insert(-1, "Teleport")
 
 def meow():
-    if selfroom.secret == True:
+    if selfroom.secret == True and selfroom.name == "Walled City 99":
         write("""       
             
    ____ ___  ___  ____ _      __
