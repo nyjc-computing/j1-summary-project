@@ -3,6 +3,7 @@ import random
 import time
 import tkinter as tk
 import string
+import pygame
 
 #import local files
 import item
@@ -150,6 +151,9 @@ class encounter:
         'root' is the tk window
         'text' is the text field to write messages to
         """
+        pygame.mixer.init()
+        pygame.mixer.music.load("Battle_Theme.mp3")
+        pygame.mixer.music.play()
         self.player = player
         self.root = root
         self.text = text
@@ -195,6 +199,7 @@ class encounter:
                     self.delete()
                     self.write("You put on the shade cloak and dashed away from the enemy")
                     self.delay()
+                    pygame.mixer.music.stop()
                     return 3
 
             state = self.over()
@@ -209,12 +214,14 @@ class encounter:
             state = self.over()
 
         if state == 1:
+            pygame.mixer.music.stop()
             return 1
 
         elif state == 2:
             self.end_game()
             self.write("")
             self.write(random.choice(self.tips))
+            pygame.mixer.music.stop()
             return 2
         
 
