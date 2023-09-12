@@ -6,8 +6,8 @@ import string
 import pygame
 
 #import local files
-import item
-import enemy as e
+import Content.item as item
+import Content.enemy as e
 
 class encounter:
     """
@@ -144,7 +144,7 @@ class encounter:
             self.root.after(self.sleep*1000, lambda: self.pause.set(self.pause.get()+1))
             self.root.wait_variable(self.pause)
 
-    def fight(self, player: "character", root: "tk.Tk()", text: "tk.Text()") -> int:
+    def fight(self, player: "character", root: "tk.Tk()", text: "tk.Text()", music) -> int:
         """
         main loop for the encounter, return 1 if player wins, 2 if player dies, 3 if player flees
         'player' is the player character
@@ -152,7 +152,7 @@ class encounter:
         'text' is the text field to write messages to
         """
         pygame.mixer.init()
-        pygame.mixer.music.load("Battle_Theme.mp3")
+        pygame.mixer.music.load(music)
         pygame.mixer.music.play()
         self.player = player
         self.root = root

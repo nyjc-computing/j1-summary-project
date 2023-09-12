@@ -1,10 +1,10 @@
 #importing from other files
-from enemy import *
-from weapon import *
+from Content.enemy import *
+from Content.weapon import *
 from armour import *
-from spell import *
-from item import *
-from upgrade import *
+from Content.spell import *
+from Content.item import *
+from Content.upgrade import *
 import encounter
 
 class Room:
@@ -49,6 +49,7 @@ class Room:
         self.save_text = ""
         self.save_message = ""
         self.complete = False
+        self.music = "Battle_Theme.mp3"
         
 class Dirtmouth(Room):
     """

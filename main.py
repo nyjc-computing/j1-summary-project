@@ -7,8 +7,8 @@ from setup import *
 import tkinter as tk
 import map
 import encounter
-import enemy
-import games
+import Content.enemy as enemy
+import Content.games as games
 
 temp = setup()
 selfend = False
@@ -582,7 +582,7 @@ def attack(room):
         wait_for_key_press()
         
     else:
-        outcome = room.encounter.fight(selfcharacter, root, text)
+        outcome = room.encounter.fight(selfcharacter, root, text, room.music)
         if outcome == 1:
             if room.enemy.name == "Voldemort":  
                 win(selfcharacter.weapon)

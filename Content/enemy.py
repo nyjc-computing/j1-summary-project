@@ -1,11 +1,11 @@
 #importing from other files
 from armour import *
-from weapon import *
-from accessory import *
-from spell import *
-from item import *
-from upgrade import *
-from shield import *
+from Content.weapon import *
+from Content.accessory import *
+from Content.spell import *
+from Content.item import *
+from Content.upgrade import *
+from Content.shield import *
 
 class Enemy:
     """
