@@ -36,7 +36,7 @@ class Enemy:
         self.move = ""
         self.defence = 0
         self.money = 50
-        self.music = "Battle_Theme.mp3"
+        self.music = "General_Mugen.mp3"
 
 
 class TheRadiance(Enemy):
@@ -197,6 +197,7 @@ class GeneralMugen(Enemy):
         self.attack = 35
         self.move = "Ordained Punishment"
         self.loot = DragonMail()
+        self.music = "General_Mugen.mp3"
 
 class DoctorEggman(Enemy):
     """

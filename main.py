@@ -10,6 +10,13 @@ import encounter
 import Content.enemy as enemy
 import Content.games as games
 
+bgm = True
+try:
+    import pygame
+    pygame.mixer.init()
+except ModuleNotFoundError:
+    bgm = False
+
 temp = setup()
 selfend = False
 selfroom = temp[0]
@@ -24,11 +31,13 @@ with open("settings.txt", "r") as f:
     out = f.readlines()
     out = [x.split()[1] for x in out]
 selfsleep = int(out[0])
+selfmusic = out[1]
 selfup = out[2]
 selfdown = out[3]
 selfreturn = out[4]
 selfsaveroom = None
 selfcompletion = 0
+selfsong = None
 
 def sleep(t):
     root.after(int(t*1000), lambda: sleepCount.set(sleepCount.get()+1))
@@ -171,6 +180,12 @@ def run():
     global selfroom
     global selfend
     global selfcompletion
+    global selfsong
+
+    if bgm and selfmusic == "On" and selfsong != selfroom.music:
+        pygame.mixer.music.load(f"Music/Room/{selfroom.music}")
+        pygame.mixer.music.play(fade_ms=2000)
+        selfsong = selfroom.music
     delete()
     """to be run in a loop to prompt user's action"""
     display_room_name()
@@ -464,6 +479,8 @@ def move(room):
                 selfroom = room.left
                 write(f"\nYou walked into {selfroom.name}")
                 wait_for_key_press()
+                if bgm and selfmusic == "On":
+                    pygame.mixer.music.fadeout(1000)
 
         if movement.lower() == "right":
             if room.right == None:
@@ -473,6 +490,8 @@ def move(room):
                 selfroom = room.right
                 write(f"\nYou walked into {selfroom.name}")
                 wait_for_key_press()
+                if bgm and selfmusic == "On":
+                    pygame.mixer.music.fadeout(1000)
 
         if movement.lower() == "forward":
             if room.forward == None:
@@ -486,6 +505,8 @@ def move(room):
                     write("\nCongratulations, you placed the two Dectus Medallions together releasing trememndous amounts of energy, breaking the powerful spell on the door")
                     selfroom = room.forward
                     wait_for_key_press()
+                    if bgm and selfmusic == "On":
+                        pygame.mixer.music.fadeout(1000)
                 else:
                     write("\nYou tried entering the The Shrieking Shack but the door was locked by a powerful spell")
                     sleep(selfsleep)
@@ -495,6 +516,8 @@ def move(room):
                 selfroom = room.forward
                 write(f"\nYou walked into {selfroom.name}")
                 wait_for_key_press()
+                if bgm and selfmusic == "On":
+                    pygame.mixer.music.fadeout(1000)
 
         if movement.lower() == "back":
             if room.back == None:
@@ -504,11 +527,15 @@ def move(room):
                 selfroom = room.back
                 write(f"\nYou walked into {selfroom.name}")
                 wait_for_key_press()
+                if bgm and selfmusic == "On":
+                    pygame.mixer.music.fadeout(1000)
 
     else:
         write(f"\nYou tried to sneak to another room but {room.enemy.name} noticed you")
         sleep(selfsleep)
         wait_for_key_press()
+        if bgm and selfmusic == "On":
+            pygame.mixer.music.fadeout(1000)
         attack(room)
 
 def loot(user, loot):
@@ -562,6 +589,8 @@ def loot(user, loot):
         write(f"\n{selfroom.enemy.name} noticed you while you tried to loot the room")
         sleep(selfsleep)
         wait_for_key_press()
+        if bgm and selfmusic == "On":
+            pygame.mixer.music.fadeout(1000)
         attack(selfroom)
 
 def flask(user):
@@ -583,6 +612,9 @@ def attack(room):
         
     else:
         outcome = room.encounter.fight(selfcharacter, root, text)
+        if bgm and selfmusic == "On":
+            pygame.mixer.music.load(f"Music/{selfroom.music}")
+            pygame.mixer.music.play(fade_ms=2000)
         if outcome == 1:
             if room.enemy.name == "Voldemort":  
                 win(selfcharacter.weapon)

@@ -49,6 +49,7 @@ class Room:
         self.save_text = ""
         self.save_message = ""
         self.complete = False
+        self.music = "Kingdom_Of_Ku.mp3"
         
 class Dirtmouth(Room):
     """
@@ -66,6 +67,7 @@ class Dirtmouth(Room):
         self.save_text = "You notice a simple rustic bench in the corner of the room"
         self.save_message = "You sit on the bench, feeling more rejuvenated than ever"
         self.secret_message = "The empty vessel lies on the floor lifelessly"
+        self.music = "Dirtmouth.mp3"
 
 class CelestialResort(Room):
     """
@@ -79,6 +81,7 @@ class CelestialResort(Room):
         self.description = "You stepped into a towering sanctuary of serenity nestled amidst the treacherous slopes of Celeste Mountain, a paradoxical challenge and a refuge for your weary soul. Its elegant halls and perilous puzzles mirrored your personal journey, a delicate dance between inner turmoil and newfound strength."
         self.loot = FlaskOfCeruleanTears()
         self.encounter = encounter.encounter(self.enemy)
+        self.music = "Celestial_Resort.mp3"
 
 class TheForge(Room):
     """
@@ -94,6 +97,7 @@ class TheForge(Room):
         self.encounter = encounter.encounter(self.enemy)
         self.secret = True
         self.secret_message = "The Robot has set up a shop in The Forge"
+        self.music = "The_Forge.mp3"
 
 class MiquellasHaligtree(Room):
     """
@@ -162,6 +166,7 @@ class Asphodel(Room):
         self.description = "You stepped into a desolate collection of rocky islands amidst a sea of fire beyond Tartarus. You travel between these islands through small bone rafts"
         self.loot = FlaskOfCeruleanTears()
         self.encounter = encounter.encounter(self.enemy)
+        self.music = "Asphodel.mp3"
 
 class KingdomOfKu(Room):
     """
@@ -178,6 +183,7 @@ class KingdomOfKu(Room):
         self.save = True
         self.save_text = "You see a small pillar with a book on top of it"
         self.save_message = "You journal down your journey so far, taking a much needed break"
+        self.music = "Kingdom_Of_Ku.mp3"
 
 class GreenhillZone(Room):
     """
@@ -191,6 +197,7 @@ class GreenhillZone(Room):
         self.description = "You stepped into a high-speed playground, a vibrant expanse of lush grass and rolling hills, where you feel most at home. Its loop-de-loops and buzzing animal friends provide the perfect backdrop for your never-ending quest to thwart Dr. Robotnik and collect the precious Chaos Emerald"
         self.loot = FlaskOfCeruleanTears()
         self.encounter = encounter.encounter(self.enemy)
+        self.music = "Greenhill_Zone.mp3"
 
 class TheHallow(Room):
     """
@@ -204,6 +211,7 @@ class TheHallow(Room):
         self.description = "You stepped into a radiant but eerie biome, a stark contrast to the darkness that permeates the underground. It's a realm where fantastical creatures and rare resources await, but also a place where you must tread carefully to avoid its relentless and otherworldly foes."
         self.loot = FlaskOfCrimsonTears()
         self.encounter = encounter.encounter(self.enemy)
+        self.music = "The_Hallow.mp3"
 
 class Commencement(Room):
     """
@@ -220,6 +228,7 @@ class Commencement(Room):
         self.save = True
         self.save_text = "You see a Primordial teleporter"
         self.save_message = "You waited for the teleporter to charge up, providing a moment of solitude "
+        self.music = "Commencement.mp3"
         
 class Midgar(Room):
     """
@@ -233,6 +242,7 @@ class Midgar(Room):
         self.description = "You stepped into the capital city and power base of the Shinra Electric Power Company in the world of Gaia. your memories of this metropolis are a tangled web of both longing and resentment, forever intertwined with your quest for justice and redemption."
         self.loot = FlaskOfCrimsonTears()
         self.encounter = encounter.encounter(self.enemy)
+        self.music = "Midgar.mp3"
 
 class HyruleKingdom(Room):
     """
@@ -247,6 +257,7 @@ class HyruleKingdom(Room):
         self.loot = FlaskOfCeruleanTears()
         self.encounter = encounter.encounter(self.enemy)
         self.secret_message = "You notice cracks on some parts of the ground"
+        self.music = "Hyrule_Kingdom.mp3"
 
 class TheEndDimension(Room):
     """
@@ -274,6 +285,7 @@ class Kamurocho(Room):
         self.loot = FlaskOfCeruleanTears()
         self.encounter = encounter.encounter(self.enemy)
         self.secret_message = "You see a homeless drunk man sitting on the ground"
+        self.music = "Kamurocho.mp3"
 
 class TowerOfFate(Room):
     """
@@ -287,6 +299,7 @@ class TowerOfFate(Room):
         self.description = "You stepped in a looming bastion of darkness and danger, standing as the heart of your perilous journey to save your beloved Shield Knight and the realm from the Enchantress's curse. Its treacherous ascent tests your mettle and resolve, driving you to prove that you am truly a knight worthy of legend."
         self.loot = FlaskOfCrimsonTears()
         self.encounter = encounter.encounter(self.enemy)
+        self.music = "Tower_Of_Fate.mp3"
 
 class ShoresOfNine(Room):
     """
@@ -316,6 +329,7 @@ class Mementos(Room):
         self.save = True
         self.save_text = "You see an abandoned train station"
         self.save_message = "You rest on the vacant seats, the absence of distortions provides you a moment of rest"
+        self.music = "Mementos.mp3"
 
 class Ascent(Room):
     """
@@ -375,6 +389,7 @@ class Snowdin(Room):
         self.save = True
         self.save_text = "You see a glowing star on the ground"
         self.save_message = "You are filled with determination"
+        self.music = "Snowdin.mp3"
 
 class TheSealedTemple(Room):
     """
@@ -428,6 +443,7 @@ class TheMushroomKingdom(Room):
         self.loot = FlaskOfCrimsonTears()
         self.encounter = encounter.encounter(self.enemy)
         self.secret_message = "You found a robot locked up in a cage"
+        self.music = "Mushroom_Kingdom.mp3"
 
 class WalledCity99(Room):
     """
