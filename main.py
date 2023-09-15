@@ -1,7 +1,7 @@
 #import from python built in libraries
 import time
 import random
-
+import platform
 #import from other files
 from setup import *
 import tkinter as tk
@@ -194,10 +194,9 @@ def get_input(prompt, options, displayoptions = None, deletebefore = True):
         
 def run():
     global selfroom
-    global selfend
+    global selfend 
     global selfcompletion
     global selfsong
-
     if bgm and selfmusic == "On" and selfsong != selfroom.music:
         pygame.mixer.music.load(f"Music/Room/{selfroom.music}")
         pygame.mixer.music.play(fade_ms=2000)
@@ -1832,7 +1831,11 @@ if __name__ == "__main__":
     sleepCount = tk.IntVar()
     root.geometry('1000x600')
     root.configure(bg='black')
-    text = tk.Text(root, height = 560, width = 560, background = "black", foreground = "white")
+    windowsFont = ("Meslo LG S", 9, "normal")
+    if platform.system() == "Windows":
+        text = tk.Text(root, height = 560, width = 560, background = "black", foreground = "white", font = windowsFont)
+    else:
+        text = tk.Text(root, height = 560, width = 560, background = "black", foreground = "white")
     text.pack()
     text.focus_set()
     root.after(0,intro)
