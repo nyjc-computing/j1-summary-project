@@ -657,14 +657,13 @@ class gabriel_fight(encounter):
         """
         enemy = self.enemy
         if self.timer > 0:
-            if player_choice == "shield":
-                self.write("")
-                self.write(f"Gabriel used light combo, but it was deflected by your shield")
-            else:
-                damage = max(1, enemy.attack - self.player.defence)
-                self.player.health = self.player.health - damage
-                self.write("")
-                self.write(f"Gabriel used light combo, dealing {damage} damage to {self.player.name}")
+            damage = max(1, enemy.attack - self.player.defence)
+            if player_choice.lower() == "defend":
+                damage = int((self.player.shield.negation/100)*(damage))
+
+            self.player.health = self.player.health - damage
+            self.write("")
+            self.write(f"Gabriel used light combo, dealing {damage} damage to {self.player.name}")
             self.delay()
 
         if self.timer > 1:
@@ -679,25 +678,30 @@ class gabriel_fight(encounter):
 
         if self.timer == 0:
             self.spinning_blades = 0
-            self.timer = 3
+            self.timer = 4
+            
             if player_choice == "Weapon" and self.player.weapon.name.lower() in self.melee:
                 self.write("")
                 self.write("Gabriel used his special move, Sword Throw")
                 self.delay()
                 self.write("")
-                self.write(f"As you swung the {self.player.weapon.name}, you +PARRIED Gabriel's")
-                self.write("Sword Throw, sending it back to him and dealing 150 damage")
-                enemy.health = enemy.health - 150
-            else:
-                if player_choice == "shield":
-                    self.write("")
-                    self.write(f"Gabriel used his special move, Sword Throw, but it was deflected by your shield")
+                self.write(f"As you swung the {self.player.weapon.name}, you +PARRIED Gabriel's Sword Throw")
+                enemy.health = enemy.health - 100
+                if enemy.health <= 0:
+                    self.write("The Sword pierces Gabriel's armor and explodes, vanquishing the angel")
                 else:
-                    damage = max(1, 60 - self.player.defence)
-                    self.player.health = self.player.health - damage
-                    self.write("")
-                    self.write(f"Gabriel used his special move, Sword Throw, dealing {damage} damage to {self.player.name}")
+                    self.write("It rockets back towards Gabriel, exploding for 100 damage")
 
+            else:
+                damage = max(1, 60 - self.player.defence)
+                if player_choice.lower() == "defend":
+                    damage = int((self.player.shield.negation/100)*(damage))
+                             
+                self.player.health = self.player.health - damage
+                self.write("")
+                self.write(f"Gabriel used his special move, Sword Throw, dealing {damage} damage to {self.player.name}")
+                self.delay()
+                
         self.timer = self.timer - 1
 
     def damage(self, weapon: "Weapon/Spell", target: "enemy") -> None:
