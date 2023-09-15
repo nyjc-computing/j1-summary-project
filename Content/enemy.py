@@ -372,14 +372,14 @@ class Gabriel(Enemy):
         self.move = "Sword Throw"
         self.loot = MarksmanRevolver()
 
-class Flowey(Enemy):
+class Papyrus(Enemy):
     """
     An enemey that inherits from the Enemy class
     """
     
     def __init__(self):
         super().__init__()
-        self.name = "Flowey"
+        self.name = "Papyrus"
         self.health = 350
         self.description = "a malevolent flower with a cunning and manipulative personality"
         self.attack = 35
@@ -470,17 +470,17 @@ class KingBoo(Enemy):
         self.move = "Shocking Railgun"
         self.loot = VirtualBoo()
 
-class Phase2(Enemy):
+class Dio(Enemy):
     """
     An enemey that inherits from the Enemy class
     """
     
     def __init__(self):
         super().__init__()
-        self.name = "Phase 2"
+        self.name = "Dio Brando"
         self.health = 1000
         self.attack = 60
-        self.move = "insert powerful attack"
+        self.move = ""
 
 class CalamityGanon(Enemy):
     """

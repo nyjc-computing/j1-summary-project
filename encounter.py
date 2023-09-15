@@ -563,7 +563,7 @@ class voldemort_fight(encounter):
     """
     def __init__(self, enemy: "Enemy"):
         super().__init__(enemy)
-        self.phases = [e.Phase2()]
+        self.phases = [e.Dio()]
         self.transfer = 0
 
     def damage(self, weapon: "Weapon/Spell", target: "enemy") -> None:

@@ -10,9 +10,9 @@ class Game:
             out = f.readlines()
             out = [x.split()[1] for x in out]
         self.selfsleep = int(out[0])
-        self.selfup = out[1]
-        self.selfdown = out[2]
-        self.selfreturn = out[3]
+        self.selfup = out[2]
+        self.selfdown = out[3]
+        self.selfreturn = out[4]
         self.line = 1
         self.taglines = []
 

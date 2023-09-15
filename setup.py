@@ -22,7 +22,7 @@ def link_back(room1, room2):
     room1.back = room2
     room2.forward = room1
 
-def setup() -> [Room, Character]:
+def setup(load=False) -> [Room, Character]:
     """
     Generates the map and the character and returns it in a list
     """
@@ -54,6 +54,15 @@ def setup() -> [Room, Character]:
     theAstralPlane = TheAstralPlane()
     apertureLab = ApertureLab()
     theSealedTemple = TheSealedTemple()
+
+    if load:
+        with open("save.txt", "r") as f:
+            out = f.readlines()
+            character = [x.split() for x in out[6:30]]
+            rooms  = []
+            for i in range(28):
+                rooms.append([out[31+i*6].strip(), out[33+i*6].split()[1], out[34+i*6].split()[1], out[35+i*6].split()[1]])
+            print(rooms)
 
     link_forward(walledCity99, commencement)
     link_right(commencement, asphodel)
@@ -87,14 +96,20 @@ def setup() -> [Room, Character]:
     character = Character()
 
     # Sets the default statistics of the character
-    character.spells.append(WingardiumLeviosa())
-    character.weapon = Wand()
-    character.weapons.append(character.weapon)
-    character.health = 100
-    character.max_health = 100
-    character.mana = 50
-    character.max_mana = 50
-    character.health_flask = 2
-    character.mana_flask = 2
+    if load:
+        pass
+    else:
+        character.spells.append(WingardiumLeviosa())
+        character.weapon = Wand()
+        character.weapons.append(character.weapon)
+        character.health = 100
+        character.max_health = 100
+        character.mana = 50
+        character.max_mana = 50
+        character.health_flask = 2
+        character.mana_flask = 2
     
-    return [dirtmouth, character]
+    if load:
+        pass
+    else:
+        return [dirtmouth, character]

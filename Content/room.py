@@ -381,7 +381,7 @@ class Snowdin(Room):
     
     def __init__(self):
         super().__init__()
-        self.enemy = Flowey()
+        self.enemy = Papyrus()
         self.name = "Snowdin"
         self.description = "You step into a quaint and snowy town nestled in the underground, itexudes a cozy charm with its warm, dimly lit shops and friendly monster residents. The gentle fall of snowflakes and the sound of crackling fires create a serene atmosphere that contrasts the rest of your journey"
         self.loot = FlaskOfCrimsonTears()

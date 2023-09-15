@@ -1,0 +1,198 @@
+Save True
+
+Rooms 
+
+Character
+
+name meow
+health 0
+max_health 0
+spells []
+attack 0
+mana 0
+max_mana 0
+defence 0
+armour None
+armours []
+weapon None
+weapons []
+accessory None
+accessories []
+health_flask 0
+mana_flask 0
+items []
+upgrades []
+shield None
+shields []
+money 0
+shop False
+shop_inventory [ScotchWhiskey]
+gamble False
+
+zebes
+
+enemy Ridley
+loot FlaskOfCrimsonTears
+secret False
+
+kingdomOfKu
+
+enemy GeneralMugen
+loot FlaskOfCrimsonTears
+secret False
+
+bunker
+
+enemy Emil
+loot FlaskOfCrimsonTears
+secret False
+
+greenhillZone 
+
+enemy DoctorEggman
+loot FlaskOfCrimsonTears
+secret False
+
+theMushroomKingdom
+
+enemy Bowser
+loot FlaskOfCrimsonTears
+secret False
+
+asphodel
+
+enemy TheBoneHyrda
+loot FlaskOfCrimsonTears
+secret False
+
+commencement 
+
+enemy Mithrix
+loot FlaskOfCrimsonTears
+secret False
+
+walledCity99
+
+enemy Sentinels
+loot FlaskOfCrimsonTears 
+secret False
+
+mementos 
+
+enemy Yaldabaoth
+loot FlaskOfCrimsonTears 
+secret False
+
+shoresOfNine
+
+enemy Freya
+loot FlaskOfCrimsonTears 
+secret False
+
+theForge
+
+enemy TheHighDragun
+loot FlaskOfCrimsonTears 
+secret False
+
+midgar 
+
+enemy Sephiroth
+loot FlaskOfCrimsonTears 
+secret False 
+
+dirtmouth 
+
+enemy TheHollowKnight
+loot FlaskOfCrimsonTears 
+secret False 
+
+theEndDimension
+
+enemy TheEnderDragon
+loot FlaskOfCrimsonTears 
+secret False 
+
+theShriekingShack
+
+enemy voldemort
+loot FlaskOfCrimsonTears 
+secret False 
+
+hyruleKingdom 
+
+enemy Ganondorf
+loot FlaskOfCrimsonTears 
+secret False 
+
+celestialResort 
+
+enemy MrOshiro
+loot FlaskOfCrimsonTears 
+secret False 
+
+ascent 
+
+enemy Reyna
+loot FlaskOfCrimsonTears 
+secret False 
+
+sixthCircleOfHell
+
+enemy Gabriel
+loot FlaskOfCrimsonTears 
+secret False 
+
+towerOfFate 
+
+enemy Enchantress
+loot FlaskOfCrimsonTears 
+secret False 
+
+miquellasHaligtree 
+
+enemy Malenia
+loot FlaskOfCrimsonTears 
+secret False 
+
+theHallow
+
+enemy TheMoonLord
+loot FlaskOfCrimsonTears 
+secret False 
+
+theObraDinn
+
+enemy TheKraken
+loot FlaskOfCrimsonTears 
+secret False 
+
+kamurocho
+
+enemy Shibusawa
+loot FlaskOfCrimsonTears 
+secret False 
+
+snowdin 
+
+enemy Papyrus
+loot FlaskOfCrimsonTears 
+secret False 
+
+theAstralPlane 
+
+enemy JenaAnderson
+loot FlaskOfCrimsonTears 
+secret False 
+
+apertureLab
+
+enemy Glados
+loot FlaskOfCrimsonTears 
+secret False 
+
+theSealedTemple
+
+enemy TheHeir
+loot FlaskOfCrimsonTears 
+secret False 

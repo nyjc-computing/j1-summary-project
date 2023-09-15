@@ -48,6 +48,21 @@ def write(txt=""):
     text.insert(tk.END, txt+"\n")
     text['state'] = 'disabled'
 
+def write_animation(txt=""):
+    global time
+    def skip(e):
+        global time
+        time = 0
+    time = 0.05
+    root.bind(f'<{selfreturn}>', skip)
+    for i in txt:
+        text['state'] = 'normal'
+        text.insert(tk.END, i)
+        text['state'] = 'disabled'
+        sleep(time)
+    root.unbind(f'<{selfreturn}>')
+    write()
+
 def delete():
     text['state'] = 'normal'
     text.delete("1.0", tk.END)
@@ -68,9 +83,10 @@ def intro():
     """print introduction for the start of the game """
     
     # Displays the introduction messages
-    write('Welcome to Hogwarts School of Witchcraft and Wizardry')
+    write_animation('Welcome to Hogwarts School of Witchcraft and Wizardry')
     sleep(selfsleep)
-    write("\nThe Dark Lord Voldemort has taken over Hogwarts and opened multiple interdimensional gates, bringing hordes of enemies into the school. Your job as the chosen one is to traverse the school in order to locate The Shrieking Shack and thwart Voldemort's evil plan to take over the world.\n")
+    write()
+    write_animation("The Dark Lord Voldemort has taken over Hogwarts and opened multiple interdimensional gates, bringing hordes of enemies into the school. Your job as the chosen one is to traverse the school in order to locate The Shrieking Shack and thwart Voldemort's evil plan to take over the world.\n")
     sleep(selfsleep)
     decision = get_input("Do you wish to enter the school?", ["Yes", "No"], None, False)
     delete()
@@ -444,6 +460,54 @@ def look(room):
         write(f"\n{room.secret_message}")
     wait_for_key_press()
 
+def look_animation(room):
+    """main action to look around the room including rooms linked to the room and enemies in the room"""
+    write()
+
+    # Displays the connected rooms
+    if room.left != None:
+        write_animation(f"To the left is {room.left.name}")
+        
+    if room.right != None:
+        write_animation(f"To the right is {room.right.name}")
+        
+    if room.forward != None:
+        write_animation(f"In front of you is {room.forward.name}")
+        
+    if room.back != None:
+        write_animation(f"Behind you is {room.back.name}")
+
+    sleep(selfsleep)
+    upgrades = selfcharacter.get_upgrades()
+
+    if "Virtual Boo" in upgrades:
+        if room.enemy != None:
+            write_animation(f"\nIn the middle of the room is {room.enemy.name}, {room.enemy.description}")
+            sleep(selfsleep)
+            write_animation(f"\n{room.enemy.name} has {room.enemy.health} health")
+            sleep(selfsleep)
+        if room.loot != None:
+            write_animation(f"\nThere is a {room.loot.name} hidden in {room.name}")
+            sleep(selfsleep)
+        else:
+            write_animation(f"\nThere is no loot hidden in {room.name}")
+            sleep(selfsleep)
+        
+    elif room.enemy != None:
+    # Displays the enemy in the room
+        write_animation(f"\nIn the middle of the room is {room.enemy.name}, {room.enemy.description}")
+
+    if room.enemy == None and room.save:
+        write_animation(f"\n{room.save_text}")
+        
+    if room.name == "The Forge":
+        if room.enemy == None and room.secret and selfcharacter.shop:
+            write_animation(f"\n{room.secret_message}")
+
+    elif room.enemy == None and room.secret:
+        write_animation(f"\n{room.secret_message}")
+    wait_for_key_press()
+
 def move(room):
     global selfroom
     """main action for user to traverse from one room to another"""
@@ -480,7 +544,7 @@ def move(room):
                 write(f"\nYou walked into {selfroom.name}")
                 wait_for_key_press()
                 if bgm and selfmusic == "On":
-                    pygame.mixer.music.fadeout(1000)
+                    pygame.mixer.music.fadeout(100)
 
         if movement.lower() == "right":
             if room.right == None:
@@ -491,7 +555,7 @@ def move(room):
                 write(f"\nYou walked into {selfroom.name}")
                 wait_for_key_press()
                 if bgm and selfmusic == "On":
-                    pygame.mixer.music.fadeout(1000)
+                    pygame.mixer.music.fadeout(100)
 
         if movement.lower() == "forward":
             if room.forward == None:
@@ -506,7 +570,7 @@ def move(room):
                     selfroom = room.forward
                     wait_for_key_press()
                     if bgm and selfmusic == "On":
-                        pygame.mixer.music.fadeout(1000)
+                        pygame.mixer.music.fadeout(100)
                 else:
                     write("\nYou tried entering the The Shrieking Shack but the door was locked by a powerful spell")
                     sleep(selfsleep)
@@ -517,7 +581,7 @@ def move(room):
                 write(f"\nYou walked into {selfroom.name}")
                 wait_for_key_press()
                 if bgm and selfmusic == "On":
-                    pygame.mixer.music.fadeout(1000)
+                    pygame.mixer.music.fadeout(100)
 
         if movement.lower() == "back":
             if room.back == None:
@@ -528,14 +592,14 @@ def move(room):
                 write(f"\nYou walked into {selfroom.name}")
                 wait_for_key_press()
                 if bgm and selfmusic == "On":
-                    pygame.mixer.music.fadeout(1000)
+                    pygame.mixer.music.fadeout(100)
 
     else:
         write(f"\nYou tried to sneak to another room but {room.enemy.name} noticed you")
         sleep(selfsleep)
         wait_for_key_press()
         if bgm and selfmusic == "On":
-            pygame.mixer.music.fadeout(1000)
+            pygame.mixer.music.fadeout(100)
         attack(room)
 
 def loot(user, loot):
@@ -590,7 +654,7 @@ def loot(user, loot):
         sleep(selfsleep)
         wait_for_key_press()
         if bgm and selfmusic == "On":
-            pygame.mixer.music.fadeout(1000)
+            pygame.mixer.music.fadeout(100)
         attack(selfroom)
 
 def flask(user):
@@ -613,7 +677,7 @@ def attack(room):
     else:
         outcome = room.encounter.fight(selfcharacter, root, text)
         if bgm and selfmusic == "On":
-            pygame.mixer.music.load(f"Music/{selfroom.music}")
+            pygame.mixer.music.load(f"Music/Room/{selfroom.music}")
             pygame.mixer.music.play(fade_ms=2000)
         if outcome == 1:
             if room.enemy.name == "Voldemort":  
@@ -1185,9 +1249,9 @@ def display_room_name():
 def display_room_description():
     """prints the room's description"""
     write()
-    write(selfroom.description)
+    write_animation(selfroom.description)
     sleep(selfsleep)
-    look(selfroom)
+    look_animation(selfroom)
     selfroom.been_here = True
 
 
