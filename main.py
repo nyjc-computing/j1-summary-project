@@ -1008,7 +1008,7 @@ def equip_accessory(user):
             user.attack += accessory.attack_boost
             user.mana += accessory.mana_boost
             user.max_mana += accessory.mana_boost
-            user.defence += accessory.defence_boost
+            user.defence += user.accessory.defence_boost
             
             user.accessory = accessory
             delete()
@@ -1633,6 +1633,7 @@ def teleport():
         selfroom = room
 
 def display_map():
+    delete()
     """
     Show the map
     """
