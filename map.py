@@ -37,14 +37,9 @@ class game_map:
         draws a bold box, centered on coords (x,y) on the map
         name is the name of the room
         """
-        if platform.system() == "Windows":
-            layer1 = "┌" + "─"*len(name) + "┐"
-            layer2 = "│" + name + "│"
-            layer3 = "└"+ "─"*len(name) + "┘"
-        else:
-            layer1 = "╭" + "━"*len(name) + "╮"
-            layer2 = "┃" + name + "┃"
-            layer3 = "╰"+ "━"*len(name) + "╯"
+        layer1 = "╭" + "━"*len(name) + "╮"
+        layer2 = "┃" + name + "┃"
+        layer3 = "╰"+ "━"*len(name) + "╯"
         box = [layer1, layer2, layer3]
         x = x - int(len(name)/2) - 1
         y = y - 1
