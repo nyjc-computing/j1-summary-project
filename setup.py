@@ -1,10 +1,10 @@
 # importing from other files
-from room import *
-from character import *
-from weapon import *
-from spell import *
-from item import *
-from upgrade import *
+from Content.room import *
+from Content.character import *
+from Content.weapon import *
+from Content.spell import *
+from Content.item import *
+from Content.upgrade import *
 
 def link_left(room1, room2):
     room1.left = room2
