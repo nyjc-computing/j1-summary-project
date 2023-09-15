@@ -51,6 +51,9 @@ class Room:
         self.complete = False
         self.music = "Kingdom_Of_Ku.mp3"
         
+    def get_save_name(self):
+        return self.name.replace(" ", "")
+        
 class Dirtmouth(Room):
     """
     A room that inherits from the Room class

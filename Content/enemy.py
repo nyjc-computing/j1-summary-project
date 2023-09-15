@@ -38,6 +38,9 @@ class Enemy:
         self.money = 50
         self.music = "General_Mugen.mp3"
 
+    def get_save_name(self):
+        return self.name.replace(" ", "")
+
 
 class TheRadiance(Enemy):
     """

@@ -22,6 +22,9 @@ class Item:
         self.mana = 0
         self.cost = 0
 
+    def get_save_name(self):
+        return self.name.replace(" ", "")
+
 class FlaskOfCrimsonTears(Item):
     """
     An item that inherits from the Item class

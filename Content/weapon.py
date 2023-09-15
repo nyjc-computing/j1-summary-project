@@ -29,6 +29,9 @@ class Weapon:
         self.win_front = ""
         self.win_back = ""
 
+    def get_save_name(self):
+        return self.name.replace(" ", "")
+
 class BusterSword(Weapon):
     """
     A weapon that inherits from the Weapon class

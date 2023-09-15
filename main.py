@@ -677,7 +677,7 @@ def attack(room):
     else:
         outcome = room.encounter.fight(selfcharacter, root, text)
         if bgm and selfmusic == "On":
-            pygame.mixer.music.load(f"Music/Room/{selfroom.music}")
+            pygame.mixer.music.load(f"Music/Room/{room.music}")
             pygame.mixer.music.play(fade_ms=2000)
         if outcome == 1:
             if room.enemy.name == "Voldemort":  
@@ -687,13 +687,6 @@ def attack(room):
             else:
                 drops(room)
                 money(room)
-                if selfroom.save == True:
-                    delete()
-                    write()
-                    write(selfroom.save_text)
-                    choice = get_input("\nDo you wish to save?", ["Yes", "No"], None, False)
-                    if choice == "Yes":
-                        save()
             if room.enemy.name == "Sentinels":
                 room.secret = True
                 delete()
@@ -734,6 +727,13 @@ def attack(room):
                 wait_for_key_press()
                 
             room.enemy = None
+            if room.save == True:
+                delete()
+                write()
+                write(room.save_text)
+                choice = get_input("\nDo you wish to save?", ["Yes", "No"], None, False)
+                if choice == "Yes":
+                    save()
         elif outcome == 2:
             room.encounter.reset()
             end_game()
@@ -1659,6 +1659,169 @@ def save():
     selfcharacter.health = selfcharacter.max_health
     selfcharacter.mana = selfcharacter.max_mana
     write(selfroom.save_message)
+
+    visited_rooms = []
+    for room in selfrooms:
+        visited_rooms.append(room.get_save_name())
+
+    with open("save.txt", "r") as f:
+        out = f.readlines()
+        all_rooms  = []
+        for i in range(28):
+            all_rooms.append([out[33+i*6].strip(), out[35+i*6].split()[1], out[36+i*6].split()[1], out[37+i*6].split()[1]])
+
+    stats = []
+    stats.append(["name", selfcharacter.name])
+    stats.append(["health", str(selfcharacter.health)])
+    stats.append(["max_health", str(selfcharacter.max_health)])
+
+    if len(selfcharacter.spells) == 0:
+            stats.append(["spells", "None"])
+    else:
+        temp = ""
+        for spell in selfcharacter.spells:
+            temp += spell.get_save_name()
+            temp += " "
+        stats.append(["spells", temp])
+
+    stats.append(["attack", str(selfcharacter.attack)])
+    stats.append(["mana", str(selfcharacter.mana)])
+    stats.append(["max_mana", str(selfcharacter.max_mana)])
+    stats.append(["defence", str(selfcharacter.defence)])
+
+    if selfcharacter.armour == None:
+        stats.append(["armour", "None"])
+    else:
+        stats.append(["armour", selfcharacter.armour.get_save_name()])
+
+    if len(selfcharacter.armours) == 0:
+            stats.append(["armours", "None"])
+    else:
+        temp = ""
+        for armour in selfcharacter.armours:
+            temp += armour.get_save_name()
+            temp += " "
+        stats.append(["armours", temp])
+
+    if selfcharacter.weapon == None:
+        stats.append(["weapon", "None"])
+    else:
+        stats.append(["weapon", selfcharacter.weapon.get_save_name()])
+
+    if len(selfcharacter.weapons) == 0:
+            stats.append(["weapons", "None"])
+    else:
+        temp = ""
+        for weapon in selfcharacter.weapons:
+            temp += weapon.get_save_name()
+            temp += " "
+        stats.append(["weapons", temp])
+
+    if selfcharacter.accessory == None:
+        stats.append(["accessory", "None"])
+    else:
+        stats.append(["accessory", selfcharacter.accessory.get_save_name()])
+
+    if len(selfcharacter.accessories) == 0:
+            stats.append(["accessories", "None"])
+    else:
+        temp = ""
+        for accessory in selfcharacter.accessories:
+            temp += accessory.get_save_name()
+            temp += " "
+        stats.append(["accessories", temp])
+    
+    stats.append(["health_flask", str(selfcharacter.health_flask)])
+    stats.append(["mana_flask", str(selfcharacter.mana_flask)])
+
+    if len(selfcharacter.items) == 0:
+            stats.append(["items", "None"])
+    else:
+        temp = ""
+        for item in selfcharacter.items:
+            temp += item.get_save_name()
+            temp += " "
+        stats.append(["items", temp])
+
+    if len(selfcharacter.upgrades) == 0:
+            stats.append(["upgrades", "None"])
+    else:
+        temp = ""
+        for upgrade in selfcharacter.upgrades:
+            temp += upgrade.get_save_name()
+            temp += " "
+        stats.append(["upgrades", temp])
+
+    if selfcharacter.shield == None:
+        stats.append(["shield", "None"])
+    else:
+        stats.append(["shield", selfcharacter.shield.get_save_name()])
+
+    if len(selfcharacter.shields) == 0:
+            stats.append(["shields", "None"])
+    else:
+        temp = ""
+        for shield in selfcharacter.shields:
+            temp += shield.get_save_name()
+            temp += " "
+        stats.append(["shields", temp])
+
+    stats.append(["money", str(selfcharacter.money)])
+
+    if selfcharacter.shop:
+        stats.append(["shop", "True"])
+    else:
+        stats.append(["shop", "False"])
+
+    if len(selfcharacter.shop_inventory) == 0:
+            stats.append(["shop_inventory", "None"])
+    else:
+        temp = ""
+        for item in selfcharacter.shop_inventory:
+            temp += item.get_save_name()
+            temp += " "
+        stats.append(["shop_inventory", temp])
+
+    if selfcharacter.gamble:
+        stats.append(["gamble", "True"])
+    else:
+        stats.append(["gamble", "False"])
+
+    for i in range(len(all_rooms)):
+
+        if all_rooms[i][0] in visited_rooms:
+
+            current_room = selfrooms[visited_rooms.index(all_rooms[i][0])]
+
+            if current_room.enemy == None:
+                all_rooms[i][1] = "None"
+            else:
+                all_rooms[i][1] = current_room.enemy.get_save_name()
+
+            if current_room.loot == None:
+                all_rooms[i][2] = "None"
+            else:
+                all_rooms[i][2] = current_room.loot.get_save_name()
+            
+            if current_room.secret:
+                all_rooms[i][3] = "True"
+            else:
+                all_rooms[i][3] = "False"
+
+    with open("save.txt", "w") as f:
+        f.write("Save True\n\n")
+        f.write(f"Room {selfroom.get_save_name()}\n\n")
+        f.write(f"Rooms {' '.join(visited_rooms)}\n\n")
+        f.write("Character\n\n")
+        for stat in stats:
+            f.write(f"{stat[0]} {stat[1]}\n")
+        f.write("\n")
+        for room in all_rooms:
+            f.write(f"{room[0]}\n\n")
+            f.write(f"enemy {room[1]}\n")
+            f.write(f"loot {room[2]}\n")
+            f.write(f"secret {room[3]}\n\n")
+
     wait_for_key_press()
 
 def item():

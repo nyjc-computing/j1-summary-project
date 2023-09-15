@@ -5,6 +5,9 @@ class Shield:
         self.description = ""
         self.negation = 0
 
+    def get_save_name(self):
+        return self.name.replace(" ", "")
+
 class HylianShield(Shield):
     def __init__(self):
         super().__init__()

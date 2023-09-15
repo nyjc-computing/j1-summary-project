@@ -19,6 +19,9 @@ class Armour:
         self.name = ""
         self.description = ""
         self.defence = 0
+    
+    def get_save_name(self):
+        return self.name.replace(" ", "")
 
 class NetheriteArmour(Armour):
     """
