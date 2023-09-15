@@ -1,32 +1,32 @@
-Save True
+Save False
 
-Room Dirtmouth
+Room Mementos
 
-Rooms Dirtmouth
+Rooms Dirtmouth Midgar TheForge TheEndDimension Mementos
 
 Character
 
-name meow
-health 999
-max_health 999
-spells WingardiumLeviosa VengefulSpirit 
-attack 999
-mana 999
-max_mana 999
-defence 999
+name ncerl
+health 100
+max_health 100
+spells WingardiumLeviosa VengefulSpirit Megidolaon 
+attack 0
+mana 50
+max_mana 50
+defence 0
 armour None
-armours None
+armours NetheriteArmour 
 weapon Wand
-weapons Wand 
+weapons Wand BusterSword 
 accessory None
-accessories None
-health_flask 999
-mana_flask 999
-items DectusMedallion(left) DectusMedallion(right) MementoMortem BlackBox RustyKey RoboticArm ScotchWhiskey 
+accessories MasterRound 
+health_flask 1
+mana_flask 2
+items None
 upgrades None
 shield None
 shields None
-money 1049
+money 250
 shop False
 shop_inventory ScotchWhiskey 
 gamble False
@@ -81,7 +81,7 @@ secret False
 
 Mementos
 
-enemy Yaldabaoth
+enemy None
 loot FlaskofCrimsonTears
 secret False
 
@@ -93,13 +93,13 @@ secret False
 
 TheForge
 
-enemy TheHighDragun
+enemy None
 loot FlaskofCrimsonTears
-secret False
+secret True
 
 Midgar
 
-enemy Sephiroth
+enemy None
 loot FlaskofCrimsonTears
 secret False
 
@@ -111,7 +111,7 @@ secret True
 
 TheEndDimension
 
-enemy TheEnderDragon
+enemy None
 loot FlaskofCrimsonTears
 secret False
 

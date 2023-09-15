@@ -41,7 +41,6 @@ class Room:
         self.right = None
         self.forward = None
         self.back = None
-        self.been_here = False
         self.loot = None
         self.secret = False
         self.secret_message = ""

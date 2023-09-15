@@ -17,11 +17,7 @@ try:
 except ModuleNotFoundError:
     bgm = False
 
-temp = setup()
 selfend = False
-selfroom = temp[0]
-selfcharacter = temp[1]
-selfrooms = []
 selfactions = ["Look", "Move", "Attack", "Loot", "Flask", "Equip", "Status", "Information", "Item", "Settings", "Map", "Meow", "Help"]
 selfdescription = ["Looks around the room","Move to another room", "Attack the enemny", "Search the room for loot", "Drink your flasks", "Change your equipment", "See your statistics", "Find out more about your items", "Use your item", "Change settings", "Shows map", "Meow"]
 selfmap = map.game_map()
@@ -38,6 +34,8 @@ selfreturn = out[4]
 selfsaveroom = None
 selfcompletion = 0
 selfsong = None
+
+
 
 def sleep(t):
     root.after(int(t*1000), lambda: sleepCount.set(sleepCount.get()+1))
@@ -85,8 +83,8 @@ def hide_hud(fullscreen = True):
     hud['state'] = 'disabled'
 def show_hud():
     text.place(x = 0, y= 0, height = 600, width = 580)
-    update_hud()
-def update_hud(user = selfcharacter):
+    update_hud(selfcharacter)
+def update_hud(user):
     
     hud['state'] = 'normal'
     hud.delete("1.0", tk.END)
@@ -263,7 +261,7 @@ def run():
     """to be run in a loop to prompt user's action"""
     display_room_name()
     # Checks if the player has entered the room before
-    if not selfroom.been_here:
+    if selfroom not in selfrooms:
         # Displays a description of the room if the player has not been there before
         display_room_description()
         selfrooms.append(selfroom)
@@ -736,7 +734,7 @@ def attack(room):
         if bgm and selfmusic == "On":
             pygame.mixer.music.load(f"Music/Room/{room.music}")
             pygame.mixer.music.play(fade_ms=2000)
-        update_hud()
+        update_hud(selfcharacter)
         if outcome == 1:
             if room.enemy.name == "Voldemort":  
                 win(selfcharacter.weapon)
@@ -824,7 +822,7 @@ def money(room):
         write(f"\nYou gained {room.enemy.money} runes from defeating {room.enemy.name}")
         sleep(selfsleep)
         selfcharacter.money += room.enemy.money
-        update_hud()
+        update_hud(selfcharacter)
         wait_for_key_press()
                 
 def use_flask(user):
@@ -940,7 +938,7 @@ def equip(self):
 
         elif choice == "Shield":
             equip_shield(selfcharacter)
-        update_hud()
+        update_hud(selfcharacter)
     
 def display_equipment(user):
     """sub action for equip() to display equipments that the user have"""
@@ -1313,7 +1311,6 @@ def display_room_description():
     write_animation(selfroom.description)
     sleep(selfsleep)
     look_animation(selfroom)
-    selfroom.been_here = True
     show_hud()
 
 
@@ -2071,7 +2068,32 @@ if __name__ == "__main__":
     text.place(x = 0, y= 0, height = window_height, width = 580)
     hud.place(x = 640, y = 0, height = window_height, width = 210)
     text.focus_set()
-    #update_hud()
-    #write("This is an extremely long line of text to test if the word wrapping works. I need to make this line longer so these words exists. Hopefully I will be able to see the full sentence without having to expand the window screen")
-    root.after(0,intro)
+    write("""  
+  _____            _                 _ _   _ 
+ |  __ \          | |               | | | (_)
+ | |__) |___  __ _| |_ __ ___  _   _| | |_ _ 
+ |  _  // _ \/ _` | | '_ ` _ \| | | | | __| |
+ | | \ \  __/ (_| | | | | | | | |_| | | |_| |
+ |_|  \_\___|\__,_|_|_| |_| |_|\__,_|_|\__|_|
+                                             
+                                             """)
+    wait_for_key_press()
+    with open("save.txt", "r") as f:
+        if f.readline().split()[1] == "True":
+            choice = ["Continue Game", "New Game"]
+        else:
+            choice = ["New Game"]
+    decision = get_input("", choice)
+    if decision == "New Game":
+        temp = setup()
+        selfroom = temp[0]
+        selfcharacter = temp[1]
+        selfrooms = []
+        root.after(0,intro)
+    else:
+        temp = setup(True)
+        selfroom = temp[0]
+        selfcharacter = temp[1]
+        selfrooms = temp[2]
+        root.after(0,run)
     root.mainloop()
