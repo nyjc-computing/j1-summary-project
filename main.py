@@ -1,7 +1,7 @@
 #import from python built in libraries
 import time
 import random
-
+import platform
 #import from other files
 from setup import *
 import tkinter as tk
@@ -77,11 +77,68 @@ def start_typing(e):
     else:
         text.insert(tk.END, e.char)
     text['state'] = 'disabled'
+def hide_hud(fullscreen = True):
+    w = window_width if fullscreen else 580
+    text.place(x = 0, y= 0, height = 600, width = w)
+    hud['state'] = 'normal'
+    hud.delete("1.0", tk.END)
+    hud['state'] = 'disabled'
+def show_hud():
+    text.place(x = 0, y= 0, height = 600, width = 580)
+    update_hud()
+def update_hud(user = selfcharacter):
+    
+    hud['state'] = 'normal'
+    hud.delete("1.0", tk.END)
+    
+    hud.tag_add('default', '1.0', tk.END)
+    hud.tag_config('default', foreground = "#999594")
+    hud.tag_add('title', '1.0', tk.END)
+    hud.tag_config('title', foreground = "#c9c0bf")
+    hud.tag_add('red', '1.0', tk.END)
+    hud.tag_config('red', foreground = "red")
+    hud.tag_add('blue', '1.0', tk.END)
+    hud.tag_config('blue', foreground = "#68c2f5")
+    hud.tag_add('green', '1.0', tk.END)
+    hud.tag_config('green', foreground = "#67f55b")
+    hud.tag_add('gold', '1.0', tk.END)
+    hud.tag_config('gold', foreground = "#d9a002")
+    hud.tag_add('white', '1.0', tk.END)
+    hud.tag_config('white', foreground = "white")
+    hud.tag_add('room', '1.0', tk.END)
+    hud.tag_config('room', foreground = "white")
 
-
+    hud.insert('1.0', f"\n{selfroom.name}\n", ('room',))
+    hud.insert(tk.END, f"------------------\n\n", ('title',))
+    
+    hud.insert(tk.END, "Attributes\n", ('title',))
+    hud.insert(tk.END, "\nHealth: ", ('default',))
+    hud.insert(tk.END, f"{user.health} / {user.max_health} ", ('green',))
+    hud.insert(tk.END, "\nMana: ", ('default',))
+    hud.insert(tk.END, f"{user.mana} / {user.max_mana}", ('blue',))
+    hud.insert(tk.END, "\nDefence: ", ('default',))
+    hud.insert(tk.END, f"{user.defence}", ('blue',))
+    hud.insert(tk.END, "\nStrength: ", ('default',))
+    hud.insert(tk.END, f"{user.attack}", ('red',))
+    hud.insert(tk.END, "\nRunes: ", ('default',))
+    hud.insert(tk.END, f"{user.money}", ('gold',))
+    hud.insert(tk.END, "\nCompletion: ", ('default',))
+    hud.insert(tk.END, f"{int((selfcompletion/28)*100)}%", ('white',))
+    hud.insert(tk.END, f"\n------------------\n\n", ('title',))
+    hud.insert(tk.END, "Equipment\n", ('title',))
+    hud.insert(tk.END, "\nArmour: ", ('default',))
+    hud.insert(tk.END, f"{user.armour.name if not user.armour is None else 'Empty'}", ('white',))
+    hud.insert(tk.END, "\nWeapon: ", ('default',))
+    hud.insert(tk.END, f"{user.weapon.name if not user.weapon is None else 'Empty'}", ('white',))
+    hud.insert(tk.END, "\nAccessory: ", ('default',))
+    hud.insert(tk.END, f"{user.accessory.name if not user.accessory is None else 'Empty'}", ('white',))
+    hud.insert(tk.END, "\nShield: ", ('default',))
+    hud.insert(tk.END, f"{user.shield.name if not user.shield is None else 'Empty'}", ('white',))
+    hud['state'] = 'disabled'
+    
 def intro():
     """print introduction for the start of the game """
-    
+    hide_hud(False)
     # Displays the introduction messages
     write_animation('Welcome to Hogwarts School of Witchcraft and Wizardry')
     sleep(selfsleep)
@@ -194,15 +251,15 @@ def get_input(prompt, options, displayoptions = None, deletebefore = True):
         
 def run():
     global selfroom
-    global selfend
+    global selfend 
     global selfcompletion
     global selfsong
-
     if bgm and selfmusic == "On" and selfsong != selfroom.music:
         pygame.mixer.music.load(f"Music/Room/{selfroom.music}")
         pygame.mixer.music.play(fade_ms=2000)
         selfsong = selfroom.music
     delete()
+    update_hud(selfcharacter)
     """to be run in a loop to prompt user's action"""
     display_room_name()
     # Checks if the player has entered the room before
@@ -679,6 +736,7 @@ def attack(room):
         if bgm and selfmusic == "On":
             pygame.mixer.music.load(f"Music/Room/{selfroom.music}")
             pygame.mixer.music.play(fade_ms=2000)
+        update_hud()
         if outcome == 1:
             if room.enemy.name == "Voldemort":  
                 win(selfcharacter.weapon)
@@ -766,6 +824,7 @@ def money(room):
         write(f"\nYou gained {room.enemy.money} runes from defeating {room.enemy.name}")
         sleep(selfsleep)
         selfcharacter.money += room.enemy.money
+        update_hud()
         wait_for_key_press()
                 
 def use_flask(user):
@@ -881,6 +940,7 @@ def equip(self):
 
         elif choice == "Shield":
             equip_shield(selfcharacter)
+        update_hud()
     
 def display_equipment(user):
     """sub action for equip() to display equipments that the user have"""
@@ -1247,12 +1307,14 @@ def display_room_name():
     write("="*25)
 
 def display_room_description():
+    hide_hud()
     """prints the room's description"""
     write()
     write_animation(selfroom.description)
     sleep(selfsleep)
     look_animation(selfroom)
     selfroom.been_here = True
+    show_hud()
 
 
 
@@ -1634,6 +1696,7 @@ def teleport():
 
 def display_map():
     delete()
+    hide_hud()
     """
     Show the map
     """
@@ -1647,6 +1710,7 @@ def display_map():
         write("".join(row))
     write(legend)
     wait_for_key_press()
+    show_hud()
 
 def help():
     for i in range(len(selfdescription)):
@@ -1826,14 +1890,25 @@ def gamble():
                 games.Slots(selfcharacter, root, text).play()
                 
 if __name__ == "__main__":
+    window_width = 850
+    window_height = 600
     root = tk.Tk()
     pause_var = tk.StringVar()
     pointer = tk.IntVar()
     sleepCount = tk.IntVar()
-    root.geometry('1000x600')
+    root.geometry(f'{window_width}x{window_height}')
     root.configure(bg='black')
-    text = tk.Text(root, height = 560, width = 560, background = "black", foreground = "white")
-    text.pack()
+    windowsFont = ("Meslo LG S", 9, "normal")
+    frame=tk.Frame(root, width=window_width, height=window_height, background = "black")
+    frame.pack()
+    text = tk.Text(frame, background = "black", foreground = "white", font = windowsFont, borderwidth=0, wrap = tk.WORD)
+    hud = tk.Text(frame,  background = "black", foreground = "white", font = windowsFont, borderwidth=0)
+    if platform.system() == "Windows":
+        text.config(font = windowsFont)
+    text.place(x = 0, y= 0, height = window_height, width = 580)
+    hud.place(x = 640, y = 0, height = window_height, width = 210)
     text.focus_set()
+    #update_hud()
+    #write("This is an extremely long line of text to test if the word wrapping works. I need to make this line longer so these words exists. Hopefully I will be able to see the full sentence without having to expand the window screen")
     root.after(0,intro)
     root.mainloop()
