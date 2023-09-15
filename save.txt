@@ -6,27 +6,27 @@ Rooms Dirtmouth
 
 Character
 
-name meowy
-health 100
-max_health 100
+name meow
+health 999
+max_health 999
 spells WingardiumLeviosa VengefulSpirit 
-attack 0
-mana 50
-max_mana 50
-defence 0
+attack 999
+mana 999
+max_mana 999
+defence 999
 armour None
 armours None
 weapon Wand
 weapons Wand 
 accessory None
 accessories None
-health_flask 2
-mana_flask 2
-items None
+health_flask 999
+mana_flask 999
+items DectusMedallion(left) DectusMedallion(right) MementoMortem BlackBox RustyKey RoboticArm ScotchWhiskey 
 upgrades None
 shield None
 shields None
-money 50
+money 1049
 shop False
 shop_inventory ScotchWhiskey 
 gamble False
