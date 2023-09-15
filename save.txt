@@ -1,32 +1,32 @@
-Save False
+Save True
 
-Room Mementos
+Room Dirtmouth
 
-Rooms Dirtmouth Midgar TheForge TheEndDimension Mementos
+Rooms Dirtmouth
 
 Character
 
 name ncerl
 health 100
 max_health 100
-spells WingardiumLeviosa VengefulSpirit Megidolaon 
+spells WingardiumLeviosa VengefulSpirit 
 attack 0
 mana 50
 max_mana 50
 defence 0
 armour None
-armours NetheriteArmour 
+armours None
 weapon Wand
-weapons Wand BusterSword 
+weapons Wand 
 accessory None
-accessories MasterRound 
-health_flask 1
+accessories None
+health_flask 2
 mana_flask 2
 items None
 upgrades None
 shield None
 shields None
-money 250
+money 50
 shop False
 shop_inventory ScotchWhiskey 
 gamble False
