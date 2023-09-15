@@ -74,6 +74,8 @@ class Character:
         self.shop = False
         self.shop_inventory = [ScotchWhiskey()]
         self.gamble = False
+        self.additional_shop = False
+        self.completion = 0
 
     def get_spells(self):
         spells = []

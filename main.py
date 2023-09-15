@@ -18,9 +18,7 @@ except ModuleNotFoundError:
     bgm = False
 
 selfend = False
-selfactions = ["Map", "Move", "Attack", "Loot", "Inventory", "Settings", "Meow", "Quit"]
-selfdescription = ["Looks around the room","Move to another room", "Attack the enemny", "Search the room for loot", "Change your equipment", "Find out more about your items", "Use your item", "Change settings", "Shows map", "Meow"]
-selfmap = map.game_map()
+selfactions = ["Map", "Move", "Attack", "Loot", "Inventory", "Settings", "Meow"]
 currentPressedKey = ""
 out = []
 with open("settings.txt", "r") as f:
@@ -32,10 +30,7 @@ selfup = out[2]
 selfdown = out[3]
 selfreturn = out[4]
 selfsaveroom = None
-selfcompletion = 0
 selfsong = None
-
-
 
 def sleep(t):
     root.after(int(t*1000), lambda: sleepCount.set(sleepCount.get()+1))
@@ -121,7 +116,7 @@ def update_hud(user):
     hud.insert(tk.END, "\nRunes: ", ('default',))
     hud.insert(tk.END, f"{user.money}", ('gold',))
     hud.insert(tk.END, "\nCompletion: ", ('default',))
-    hud.insert(tk.END, f"{int((selfcompletion/28)*100)}%", ('white',))
+    hud.insert(tk.END, f"{int((selfcharacter.completion/28)*100)}%", ('white',))
     hud.insert(tk.END, f"\n------------------\n\n", ('title',))
     hud.insert(tk.END, "Equipment\n", ('title',))
     hud.insert(tk.END, "\nArmour: ", ('default',))
@@ -138,6 +133,9 @@ def intro():
     """print introduction for the start of the game """
     hide_hud(False)
     # Displays the introduction messages
+    if bgm and selfmusic == "On":
+        pygame.mixer.music.load("Music/Intro.mp3")
+        pygame.mixer.music.play(fade_ms=100)
     write_animation('Welcome to Hogwarts School of Witchcraft and Wizardry')
     sleep(selfsleep)
     write()
@@ -149,7 +147,7 @@ def intro():
     
     if decision.lower() == "yes":
         text['state'] = 'normal'
-        text.insert(tk.END, "Tarnished, key in your name: ")
+        text.insert(tk.END, "Wizard, key in your name: ")
         text['state'] = 'disabled'
         text.bind('<Key>', start_typing)
         root.bind(f'<{selfreturn}>', lambda x: pause_var.set("done"))
@@ -157,11 +155,14 @@ def intro():
         root.unbind(f'<{selfreturn}>')
         text.unbind('<Key>')
         pause_var.set("")
-        name = text.get("1.0",'end-1c')[29:]
+        name = text.get("1.0",'end-1c')[26:]
         name = name[:len(name)-1]
         delete()
         selfcharacter.name = name
         # Check if the user used the secret easter egg name
+        if bgm and selfmusic == "On":
+            pygame.mixer.music.fadeout(100)
+
         if name == "meow":
             secret()
             root.after(selfsleep*1000, run)
@@ -250,7 +251,6 @@ def get_input(prompt, options, displayoptions = None, deletebefore = True):
 def run():
     global selfroom
     global selfend 
-    global selfcompletion
     global selfsong
     if bgm and selfmusic == "On" and selfsong != selfroom.music:
         pygame.mixer.music.load(f"Music/Room/{selfroom.music}")
@@ -330,28 +330,18 @@ def run():
 
     if "Portal Gun" in upgrades and "Teleport" not in selfactions:
         selfactions.insert(-1, "Teleport")
-        selfdescription.append("Teleport to any room you have been to before")
-
-    if "Save" not in selfactions and selfroom.save and selfroom.enemy == None:
-        selfactions.insert(-1, "Save")
-        selfdescription.append("Saves the game")
-    elif "Save" in selfactions and not selfroom.save:
-        selfactions.remove("Save")
-        selfdescription.remove("Saves the game")
 
     if "Shop" not in selfactions and selfcharacter.shop and selfroom.name == "The Forge":
         selfactions.insert(-1, "Shop")
-        selfdescription.append("Buy stuff from the shop")
+
     elif "Shop" in selfactions and selfroom.name != "The Forge":
         selfactions.remove("Shop")
-        selfdescription.remove("Buy stuff from the shop")
 
     if "Gamble" not in selfactions and selfroom.name == "Kamurocho" and selfcharacter.gamble:
         selfactions.insert(-1, "Gamble")
-        selfdescription.append("Go to the Underground Casino")
+
     elif "Gamble" in selfactions and selfroom.name != "Kamurocho":
         selfactions.remove("Gamble")
-        selfdescription.remove("Go to the Underground Casino")
         
     decision = get_input("What do you wish to do?", selfactions, None, False)
 
@@ -453,7 +443,7 @@ def run():
             selfmap.walled_clear()
         elif selfroom.name == "The Last Resort":
             selfmap.last_resort_clear()
-        selfcompletion += 1
+        selfcharacter.completion += 1
         selfroom.complete = True
 
     if not selfend:
@@ -548,7 +538,10 @@ def look_animation(room):
 def move(room):
     global selfroom
     """main action for user to traverse from one room to another"""
-    movement = get_input('Which direction do you wish to move in?', ['Left', 'Right', 'Forward','Back'])
+    movement = get_input('Which direction do you wish to move in?', ['Left', 'Right', 'Forward','Back', "Cancel"])
+
+    if movement.lower() == "cancel":
+        return
 
     # Generate a random number to see if you managed to sneak past the enemy
     caught = False
@@ -955,18 +948,6 @@ def equip_accessory(user):
             delete()
             display_equipment(user)
 
-def status(user):
-    """main action that prints user's status"""
-    # Displays the users statistics
-    write(f"\nName: {user.name}")
-    write(f"Health: {user.health} / {user.max_health}")
-    write(f"Mana: {user.mana} / {user.max_mana}")
-    write(f"Defence: {user.defence}")
-    write(f"Strength: {user.attack}")
-    write(f"Runes : {user.money}")
-    write(f"Completion : {int((selfcompletion/28)*100)}%")
-    wait_for_key_press()
-
 def info(user):
     """main action that prompts user for the type of item to find out more information about"""
     if len(user.shields) == 0:
@@ -1244,7 +1225,7 @@ def win(weapon):
     write("| |_\ \ \_/ / |/ /  /\__/ / |____| | | |_| |_| |\  |")
     sleep(0.2)
     write(" \____/\___/|___/   \____/\_____/\_| |_/\___/\_| \_/")
-    if selfcompletion == 28:
+    if selfcharacter.completion == 28:
         write()
         write("Thanks for putting in the effort to 100% the game, hope you enjoyed playing :)")
         sleep(self.sleep)
@@ -1410,61 +1391,38 @@ def settings():
         for row in settings:
             key, val = row.split()
             settings_dict[key] = val
-    choice = ""
-    display_settings(settings_dict)
-    while choice != "finish":
-        choice = get_input("\nWhich setting do you want to change?", ["Sleep", "Music", "Controls", "Finish"], None, False)
 
-        if choice.lower() == "music":
+    choices = ["Controls", "Music", "Quit", "Finish"]
+
+    if selfroom.enemy == None:
+        choices = ["Controls", "Music", "Save", "Quit", "Finish"]
+
+    decision = ""
+
+    while decision != "finish":
+        decision = get_input("", choices)
+
+        if decision.lower() == "save":
+            save()
+
+        elif decision.lower() == "quit":
+            finish()
+
+        elif decision.lower() == "music":
             new = set_music(settings_dict["Music"])
             settings_dict["Music"] = new
 
-        if choice.lower() == "finish":
+        elif decision.lower() == "finish":
             with open("settings.txt", "w") as f:
                 for entry in settings_dict:
                     f.write(entry + " " + settings_dict[entry] + "\n")
             return
-        
-        if choice.lower() == "sleep":
-            new = set_sleep(settings_dict["Sleep"])
-            settings_dict["Sleep"] = new
 
-        elif choice.lower() == "controls":
+        elif decision.lower() == "controls":
             set_controls()
             settings_dict["Up"] = selfup
             settings_dict["Down"] = selfdown
             settings_dict["Enter"] = selfreturn
-
-        display_settings(settings_dict)
-
-def display_settings(settings):
-    """
-    display the settings passed in
-    """
-    write("\nCurrent Settings:\n")
-    for set in settings:
-        write(f"{set}: {settings[set]}")
-
-def set_sleep(current):
-    global selfsleep
-    """
-    Change the interval between messages
-    returns new value for sleep as string
-    """
-
-    write("\nsleep: the interval between messages sent by the game in seconds.")
-    write(f"Current value: {current}")
-    
-    accept = [str(x) for x in range(6)]
-    accept.append("cancel")
-
-    new = get_input("\nEnter a new value for sleep", accept)
-    
-    if new.lower() == "cancel":
-        return current
-    else:
-        selfsleep = int(new)
-        return new
     
 def set_music(current):
     global selfsong
@@ -1486,7 +1444,11 @@ def set_music(current):
     return new
 
 def set_controls():
-    choice = get_input("\nWhich control do you want to change?", ["Up", "Down", "Enter", "Finish"])
+    write(f"Up : {selfup}")
+    write(f"Down : {selfdown}")
+    write(f"Enter : {selfreturn}")
+
+    choice = get_input("\nWhich control do you want to change?", ["Up", "Down", "Enter", "Finish"], None, False)
 
     if choice == "Up":
         write("\nPress the key you want to change for scrolling up")
@@ -1512,8 +1474,10 @@ def set_controls():
         root.unbind("<Key>")
         delete()        
 
-    elif choice == "Cancel":
+    elif choice == "Finish":
         return
+    
+    set_controls()
 
 def change_up(e):
     global selfup
@@ -1580,11 +1544,6 @@ def display_map():
     wait_for_key_press()
     show_hud()
 
-def help():
-    for i in range(len(selfdescription)):
-        write(f"{selfactions[i]} : {selfdescription[i]}")
-    wait_for_key_press()
-
 def save():
     global selfsaveroom
     selfsaveroom = selfroom
@@ -1600,7 +1559,7 @@ def save():
         out = f.readlines()
         all_rooms  = []
         for i in range(28):
-            all_rooms.append([out[33+i*6].strip(), out[35+i*6].split()[1], out[36+i*6].split()[1], out[37+i*6].split()[1]])
+            all_rooms.append([out[35+i*6].strip(), out[37+i*6].split()[1], out[38+i*6].split()[1], out[39+i*6].split()[1]])
 
     stats = []
     stats.append(["name", selfcharacter.name])
@@ -1718,6 +1677,13 @@ def save():
         stats.append(["gamble", "True"])
     else:
         stats.append(["gamble", "False"])
+
+    if selfcharacter.additional_shop:
+        stats.append(["additional_shop", "True"])
+    else:
+        stats.append(["additional_shop", "False"])
+
+    stats.append(["completion", str(selfcharacter.completion)])
 
     for i in range(len(all_rooms)):
 
@@ -1940,6 +1906,9 @@ if __name__ == "__main__":
     text.place(x = 0, y= 0, height = window_height, width = 580)
     hud.place(x = 640, y = 0, height = window_height, width = 210)
     text.focus_set()
+    if bgm and selfmusic == "On":
+        pygame.mixer.music.load(f"Music/Title.mp3")
+        pygame.mixer.music.play()
     write("""  
   _____            _                 _ _   _ 
  |  __ \          | |               | | | (_)
@@ -1955,17 +1924,31 @@ if __name__ == "__main__":
             choice = ["Continue Game", "New Game"]
         else:
             choice = ["New Game"]
-    decision = get_input("", choice)
+    
+    while True:
+        decision = get_input("", choice)
+        if decision == "New Game" and len(choice) == 2:
+            selection = get_input("\nAre you sure you want to overwrite your save file?", ["Yes", "No"])
+            if selection == "Yes":
+                break
+
+        else:
+            break
+
+    if bgm and selfmusic == "On":
+        pygame.mixer.music.fadeout(100)
     if decision == "New Game":
         temp = setup()
         selfroom = temp[0]
         selfcharacter = temp[1]
-        selfrooms = []
+        selfrooms = temp[2]
+        selfmap = temp[3]
         root.after(0,intro)
     else:
         temp = setup(True)
         selfroom = temp[0]
         selfcharacter = temp[1]
         selfrooms = temp[2]
+        selfmap = temp[3]
         root.after(0,run)
     root.mainloop()

@@ -5,6 +5,7 @@ from Content.weapon import *
 from Content.spell import *
 from Content.item import *
 from Content.upgrade import *
+import map
 
 def link_left(room1, room2):
     room1.left = room2
@@ -28,6 +29,8 @@ def setup(load=False) -> [Room, Character]:
     """
 
     character = Character()
+
+    output_map = map.game_map()
 
     zebes = Zebes()
     kingdomOfKu = KingdomOfKu()
@@ -175,171 +178,164 @@ def setup(load=False) -> [Room, Character]:
     
     shops = {ScotchWhiskey().get_save_name() : ScotchWhiskey(),
              SmokeBombs().get_save_name() : SmokeBombs()}
-    
-    '''
-    room_stats = []
-    stats = []
 
-    stats.append(["name", character.name])
-    stats.append(["health", str(character.health)])
-    stats.append(["max_health", str(character.max_health)])
-
-    if len(character.spells) == 0:
-            stats.append(["spells", "None"])
-    else:
-        temp = ""
-        for spell in character.spells:
-            temp += spell.get_save_name()
-            temp += " "
-        stats.append(["spells", temp])
-
-    stats.append(["attack", str(character.attack)])
-    stats.append(["mana", str(character.mana)])
-    stats.append(["max_mana", str(character.max_mana)])
-    stats.append(["defence", str(character.defence)])
-
-    if character.armour == None:
-        stats.append(["armour", "None"])
-    else:
-        stats.append(["armour", character.armour.get_save_name()])
-
-    if len(character.armours) == 0:
-            stats.append(["armours", "None"])
-    else:
-        temp = ""
-        for armour in character.armours:
-            temp += armour.get_save_name()
-            temp += " "
-        stats.append(["armours", temp])
-
-    if character.weapon == None:
-        stats.append(["weapon", "None"])
-    else:
-        stats.append(["weapon", character.weapon.get_save_name()])
-
-    if len(character.weapons) == 0:
-            stats.append(["weapons", "None"])
-    else:
-        temp = ""
-        for weapon in character.weapons:
-            temp += weapon.get_save_name()
-            temp += " "
-        stats.append(["weapons", temp])
-
-    if character.accessory == None:
-        stats.append(["accessory", "None"])
-    else:
-        stats.append(["accessory", character.accessory.get_save_name()])
-
-    if len(character.accessories) == 0:
-            stats.append(["accessories", "None"])
-    else:
-        temp = ""
-        for accessory in character.accessories:
-            temp += accessory.get_save_name()
-            temp += " "
-        stats.append(["accessories", temp])
-    
-    stats.append(["health_flask", str(character.health_flask)])
-    stats.append(["mana_flask", str(character.mana_flask)])
-
-    if len(character.items) == 0:
-            stats.append(["items", "None"])
-    else:
-        temp = ""
-        for item in character.items:
-            temp += item.get_save_name()
-            temp += " "
-        stats.append(["items", temp])
-
-    if len(character.upgrades) == 0:
-            stats.append(["upgrades", "None"])
-    else:
-        temp = ""
-        for upgrade in character.upgrades:
-            temp += upgrade.get_save_name()
-            temp += " "
-        stats.append(["upgrades", temp])
-
-    if character.shield == None:
-        stats.append(["shield", "None"])
-    else:
-        stats.append(["shield", character.shield.get_save_name()])
-
-    if len(character.shields) == 0:
-            stats.append(["shields", "None"])
-    else:
-        temp = ""
-        for shield in character.shields:
-            temp += shield.get_save_name()
-            temp += " "
-        stats.append(["shields", temp])
-
-    stats.append(["money", str(character.money)])
-
-    if character.shop:
-        stats.append(["shop", "True"])
-    else:
-        stats.append(["shop", "False"])
-
-    if len(character.shop_inventory) == 0:
-            stats.append(["shop_inventory", "None"])
-    else:
-        temp = ""
-        for item in character.shop_inventory:
-            temp += item.get_save_name()
-            temp += " "
-        stats.append(["shop_inventory", temp])
-
-    if character.gamble:
-        stats.append(["gamble", "True"])
-    else:
-        stats.append(["gamble", "False"])
-
-    with open("save.txt", "w") as f:
-        f.write("Save True\n\n")
-        f.write(f"Rooms {' '.join(room_names)}\n\n")
-        f.write("Character\n\n")
-        for stat in stats:
-            f.write(f"{stat[0]} {stat[1]}\n")
-        f.write("\n")
-        for room in room_stats:
-            f.write(f"{room[0]}\n\n")
-            f.write(f"enemy {room[1]}\n")
-            f.write(f"loot {room[2]}\n")
-            f.write(f"secret {room[3]}\n\n")
-    '''
+    output_rooms = []
 
     if load:
         with open("save.txt", "r") as f:
             out = f.readlines()
             current_room = out[2].split()[1]
             visited_rooms = out[4].split()
-            character_stats = [x.split() for x in out[8:32]]
+            character_stats = [x.split() for x in out[8:34]]
             all_rooms  = []
             for i in range(28):
-                all_rooms.append([out[33+i*6].strip(), out[35+i*6].split()[1], out[36+i*6].split()[1], out[37+i*6].split()[1]])
+                all_rooms.append([out[35+i*6].strip(), out[37+i*6].split()[1], out[38+i*6].split()[1], out[39+i*6].split()[1]])
 
-        output_rooms = []
         for room in visited_rooms[1:]:
             output_rooms.append(rooms[room])
-    
+
+        all_room_names = []
+
         for room in all_rooms:
-            if room[0] in visited_rooms:
-                if room[1] == "None":
-                    rooms[room[0]].enemy = None
-                else:
-                    rooms[room[0]].enemy = enemies[room[1]]
+            all_room_names.append(room[0])
+    
+        for name in visited_rooms[1:]:
+            
+            room = all_rooms[all_room_names.index(name)]
 
-                if room[2] == "None":
-                    rooms[room[0]].loot = None
-                else:
-                    rooms[room[0]].loot = loots[room[2]]
+            if room[1] == "None":
+                rooms[room[0]].enemy = None
+            else:
+                rooms[room[0]].enemy = enemies[room[1]]
 
-                if room[3] == "True":
-                    rooms[room[0]].secret = True
-                else:
-                    rooms[room[0]].secret = False
+            if room[2] == "None":
+                rooms[room[0]].loot = None
+            else:
+                rooms[room[0]].loot = loots[room[2]]
+
+            if room[3] == "True":
+                rooms[room[0]].secret = True
+            else:
+                rooms[room[0]].secret = False
+
+            if rooms[room[0]].name == "Dirtmouth":
+                output_map.dirtmouth_enter()
+            elif rooms[room[0]].name == "Celestial Resort":
+                output_map.celestial_resort_enter()
+            elif rooms[room[0]].name == "The Forge":
+                output_map.forge_enter()
+            elif rooms[room[0]].name == "Miquella's Haligtree":
+                output_map.haligtree_enter()
+            elif rooms[room[0]].name == "Aperture Lab":
+                output_map.aperture_enter()
+            elif rooms[room[0]].name == "Zebes":
+                output_map.zebes_enter()
+            elif rooms[room[0]].name == "Bunker":
+                output_map.bunker_enter()
+            elif rooms[room[0]].name == "Asphodel":
+                output_map.asphodel_enter()
+            elif rooms[room[0]].name == "Kingdom of Ku":
+                output_map.kingdom_ku_enter()
+            elif rooms[room[0]].name == "Greenhill Zone":
+                output_map.greenhill_enter()
+            elif rooms[room[0]].name == "The Hallow":
+                output_map.hallow_enter()
+            elif rooms[room[0]].name == "Commencement":
+                output_map.commencement_enter()
+            elif rooms[room[0]].name == "Midgar":
+                output_map.midgar_enter()
+            elif rooms[room[0]].name == "Hyrule Kingdom":
+                output_map.hyrule_enter()
+            elif rooms[room[0]].name == "The End Dimension":
+                output_map.end_dimension_enter()
+            elif rooms[room[0]].name == "Kamurocho":
+                output_map.kamurocho_enter()
+            elif rooms[room[0]].name == "Tower of Fate":
+                output_map.tower_enter()
+            elif rooms[room[0]].name == "Shores of Nine":
+                output_map.shores_enter()
+            elif rooms[room[0]].name == "Mementos":
+                output_map.mementos_enter()
+            elif rooms[room[0]].name == "Ascent":
+                output_map.ascent_enter()
+            elif rooms[room[0]].name == "The Shrieking Shack":
+                output_map.shrieking_enter()
+            elif rooms[room[0]].name == "6th Circle of Hell":
+                output_map.sixth_circle_enter()
+            elif rooms[room[0]].name == "Snowdin":
+                output_map.snowdin_enter()
+            elif rooms[room[0]].name == "The Sealed Temple":
+                output_map.sealed_temple_enter()
+            elif rooms[room[0]].name == "The Astral Plane":
+                output_map.astral_plane_enter()
+            elif rooms[room[0]].name == "The Obra Dinn":
+                output_map.obradinn_enter()
+            elif rooms[room[0]].name == "The Mushroom Kingdom":
+                output_map.mushroom_enter()
+            elif rooms[room[0]].name == "Walled City 99":
+                output_map.walled_enter()
+            elif rooms[room[0]].name == "The Last Resort":
+                output_map.last_resort_enter()
+        
+            if room[1] == "None" and room[2] == "None" and room[3] == "False":
+                if rooms[room[0]].name == "Dirtmouth":
+                    output_map.dirtmouth_clear()
+                elif rooms[room[0]].name == "Celestial Resort":
+                    output_map.celestial_resort_clear()
+                elif rooms[room[0]].name == "The Forge":
+                    output_map.forge_clear()
+                elif rooms[room[0]].name == "Miquella's Haligtree":
+                    output_map.haligtree_clear()
+                elif rooms[room[0]].name == "Aperture Lab":
+                    output_map.aperture_clear()
+                elif rooms[room[0]].name == "Zebes":
+                    output_map.zebes_clear()
+                elif rooms[room[0]].name == "Bunker":
+                    output_map.bunker_clear()
+                elif rooms[room[0]].name == "Asphodel":
+                    output_map.asphodel_clear()
+                elif rooms[room[0]].name == "Kingdom of Ku":
+                    output_map.kingdom_ku_clear()
+                elif rooms[room[0]].name == "Greenhill Zone":
+                    output_map.greenhill_clear()
+                elif rooms[room[0]].name == "The Hallow":
+                    output_map.hallow_clear()
+                elif rooms[room[0]].name == "Commencement":
+                    output_map.commencement_clear()
+                elif rooms[room[0]].name == "Midgar":
+                    output_map.midgar_clear()
+                elif rooms[room[0]].name == "Hyrule Kingdom":
+                    output_map.hyrule_clear()
+                elif rooms[room[0]].name == "The End Dimension":
+                    output_map.end_dimension_clear()
+                elif rooms[room[0]].name == "Kamurocho":
+                    output_map.kamurocho_clear()
+                elif rooms[room[0]].name == "Tower of Fate":
+                    output_map.tower_clear()
+                elif rooms[room[0]].name == "Shores of Nine":
+                    output_map.shores_clear()
+                elif rooms[room[0]].name == "Mementos":
+                    output_map.mementos_clear()
+                elif rooms[room[0]].name == "Ascent":
+                    output_map.ascent_clear()
+                elif rooms[room[0]].name == "The Shrieking Shack":
+                    output_map.shrieking_clear()
+                elif rooms[room[0]].name == "6th Circle of Hell":
+                    output_map.sixth_circle_clear()
+                elif rooms[room[0]].name == "Snowdin":
+                    output_map.snowdin_clear()
+                elif rooms[room[0]].name == "The Sealed Temple":
+                    output_map.sealed_temple_clear()
+                elif rooms[room[0]].name == "The Astral Plane":
+                    output_map.astral_plane_clear()
+                elif rooms[room[0]].name == "The Obra Dinn":
+                    output_map.obradinn_clear()
+                elif rooms[room[0]].name == "The Mushroom Kingdom":
+                    output_map.mushroom_clear()
+                elif rooms[room[0]].name == "Walled City 99":
+                    output_map.walled_clear()
+                elif rooms[room[0]].name == "The Last Resort":
+                    output_map.last_resort_clear()
         
     link_forward(walledCity99, commencement)
     link_right(commencement, asphodel)
@@ -378,7 +374,7 @@ def setup(load=False) -> [Room, Character]:
             if name == "name":
                 character.name = stat[0]
 
-            elif name in ["health", "max_health", "attack", "mana", "max_mana", "defence", "health_flask", "mana_flask", "money"]:
+            elif name in ["health", "max_health", "attack", "mana", "max_mana", "defence", "health_flask", "mana_flask", "money", "completion"]:
                 setattr(character, name, int(stat[0]))
 
             elif name == "spells":
@@ -479,6 +475,6 @@ def setup(load=False) -> [Room, Character]:
         character.mana_flask = 2
     
     if load:
-        return [rooms[current_room], character, output_rooms]
+        return [rooms[current_room], character, output_rooms, output_map]
     else:
-        return [dirtmouth, character]
+        return [dirtmouth, character, output_rooms, output_map]

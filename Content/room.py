@@ -44,9 +44,9 @@ class Room:
         self.loot = None
         self.secret = False
         self.secret_message = ""
-        self.save = False
-        self.save_text = ""
-        self.save_message = ""
+        self.save = True
+        self.save_text = "You notice a save point"
+        self.save_message = "You saved the game"
         self.complete = False
         self.music = "Kingdom_Of_Ku.mp3"
         
