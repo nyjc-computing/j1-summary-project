@@ -60,6 +60,7 @@ def setup(load=False) -> [Room, Character]:
     theAstralPlane = TheAstralPlane()
     apertureLab = ApertureLab()
     theSealedTemple = TheSealedTemple()
+    theLastResort = TheLastResort()
 
     enemies = {TheRadiance().get_save_name() : TheRadiance(),
                TheHollowKnight().get_save_name() : TheHollowKnight(),
@@ -121,7 +122,8 @@ def setup(load=False) -> [Room, Character]:
              kamurocho.get_save_name() : kamurocho, 
              snowdin.get_save_name() : snowdin, 
              theAstralPlane.get_save_name() : theAstralPlane, 
-             theSealedTemple.get_save_name() : theSealedTemple}
+             theSealedTemple.get_save_name() : theSealedTemple,
+             theLastResort.get_save_name() : theLastResort}
     
     loots = {FlaskOfCrimsonTears().get_save_name() : FlaskOfCeruleanTears(),
              FlaskOfCeruleanTears().get_save_name() : FlaskOfCeruleanTears(),
@@ -196,6 +198,8 @@ def setup(load=False) -> [Room, Character]:
 
         all_room_names = []
 
+        secret_passage = False
+
         for room in all_rooms:
             all_room_names.append(room[0])
     
@@ -217,6 +221,10 @@ def setup(load=False) -> [Room, Character]:
                 rooms[room[0]].secret = True
             else:
                 rooms[room[0]].secret = False
+
+            if room[0] == "WalledCity99" and room[3] == "False":
+                secret_passage = True
+                output_map.meow_reveal()
 
             if rooms[room[0]].name == "Dirtmouth":
                 output_map.dirtmouth_enter()
@@ -364,6 +372,8 @@ def setup(load=False) -> [Room, Character]:
     link_left(snowdin, apertureLab)
     link_forward(snowdin, theAstralPlane)
     link_back(snowdin, theSealedTemple) 
+    if secret_passage:
+        link_back(walledCity99, theLastResort)
 
     # Sets the default statistics of the character
     if load:
@@ -462,6 +472,8 @@ def setup(load=False) -> [Room, Character]:
                     setattr(character, name, True)
                 else:
                     setattr(character, name, False)
+        if character.additional_shop:
+            theForge.secret_message = "You notice that Ox is missing his left arm"
             
     else:
         character.spells.append(WingardiumLeviosa())

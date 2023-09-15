@@ -1,37 +1,37 @@
 Save False
 
-Room Midgar
+Room TheLastResort
 
-Rooms Dirtmouth Midgar
+Rooms Dirtmouth Midgar TheForge Mementos Asphodel Commencement WalledCity99 TheLastResort
 
 Character
 
-name ncerl
-health 100
-max_health 100
-spells WingardiumLeviosa VengefulSpirit 
-attack 0
-mana 50
-max_mana 50
-defence 0
+name meow
+health 999
+max_health 999
+spells WingardiumLeviosa 
+attack 999
+mana 999
+max_mana 999
+defence 999
 armour None
 armours None
 weapon Wand
-weapons Wand BusterSword 
+weapons Wand 
 accessory None
 accessories None
-health_flask 3
-mana_flask 2
-items None
-upgrades None
+health_flask 999
+mana_flask 999
+items DectusMedallion(left) DectusMedallion(right) MementoMortem BlackBox RustyKey RoboticArm ScotchWhiskey 
+upgrades VirtualBoo 
 shield None
 shields None
-money 100
+money 1099
 shop False
 shop_inventory ScotchWhiskey 
 gamble False
 additional_shop False
-completion 1
+completion 0
 
 Zebes
 
@@ -77,14 +77,14 @@ secret False
 
 WalledCity99
 
-enemy Sentinels
-loot FlaskofCrimsonTears
+enemy None
+loot FlaskofCeruleanTears
 secret False
 
 Mementos
 
-enemy None
-loot FlaskofCrimsonTears
+enemy Yaldabaoth
+loot FlaskofCeruleanTears
 secret False
 
 ShoresofNine
@@ -95,21 +95,21 @@ secret False
 
 TheForge
 
-enemy None
-loot FlaskofCrimsonTears
+enemy TheHighDragun
+loot FlaskofCeruleanTears
 secret True
 
 Midgar
 
-enemy None
-loot None
+enemy Sephiroth
+loot FlaskofCeruleanTears
 secret False
 
 Dirtmouth
 
-enemy None
-loot FlaskofCrimsonTears
-secret True
+enemy TheHollowKnight
+loot FlaskofCeruleanTears
+secret False
 
 TheEndDimension
 
@@ -197,7 +197,7 @@ secret False
 
 TheLastResort
 
-enemy KingBoo
+enemy None
 loot FlaskofCrimsonTears
 secret False
 

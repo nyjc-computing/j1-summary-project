@@ -1268,7 +1268,7 @@ def secret():
     selfcharacter.money = 999
     #selfcharacter.upgrades.append(ShadeCloak())
     #selfcharacter.upgrades.append(Shield())
-    selfmap.full_reveal()
+    #selfmap.full_reveal()
     selfcharacter.items.append(DectusMedallionLeft())
     selfcharacter.items.append(DectusMedallionRight())
     selfcharacter.items.append(MementoMortem())
@@ -1818,6 +1818,7 @@ def shop():
         write("The robot introduces himself as Ox")
         write()
         write("You notice that Ox is missing his left arm")
+        selfcharacter.additional_shop = True
         selfroom.secret_message = "You notice that Ox is missing his left arm"
     items = selfcharacter.shop_inventory.copy()
 
