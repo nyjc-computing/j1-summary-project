@@ -78,13 +78,14 @@ def start_typing(e):
         text.insert(tk.END, e.char)
     text['state'] = 'disabled'
 def hide_hud(fullscreen = True):
-    w = window_width if fullscreen else 580
+    w = window_width if fullscreen else text_width
     text.place(x = 0, y= 0, height = 600, width = w)
     hud['state'] = 'normal'
+    hud.lower()
     hud.delete("1.0", tk.END)
     hud['state'] = 'disabled'
 def show_hud():
-    text.place(x = 0, y= 0, height = 600, width = 580)
+    text.place(x = 0, y= 0, height = window_height, width = text_width)
     update_hud()
 def update_hud(user = selfcharacter):
     
@@ -1307,7 +1308,7 @@ def display_room_name():
     write("="*25)
 
 def display_room_description():
-    hide_hud()
+    hide_hud(False)
     """prints the room's description"""
     write()
     write_animation(selfroom.description)
@@ -1890,7 +1891,8 @@ def gamble():
                 games.Slots(selfcharacter, root, text).play()
                 
 if __name__ == "__main__":
-    window_width = 850
+    window_width = 1000
+    text_width = 700
     window_height = 600
     root = tk.Tk()
     pause_var = tk.StringVar()
@@ -1901,12 +1903,12 @@ if __name__ == "__main__":
     windowsFont = ("Meslo LG S", 9, "normal")
     frame=tk.Frame(root, width=window_width, height=window_height, background = "black")
     frame.pack()
-    text = tk.Text(frame, background = "black", foreground = "white", font = windowsFont, borderwidth=0, wrap = tk.WORD)
-    hud = tk.Text(frame,  background = "black", foreground = "white", font = windowsFont, borderwidth=0)
+    text = tk.Text(frame, background = "black", foreground = "white", font = windowsFont, borderwidth=0, highlightthickness = 0, wrap = tk.WORD)
+    hud = tk.Text(frame,  background = "black", foreground = "white", font = windowsFont, borderwidth=0, highlightthickness = 0)
     if platform.system() == "Windows":
         text.config(font = windowsFont)
     text.place(x = 0, y= 0, height = window_height, width = 580)
-    hud.place(x = 640, y = 0, height = window_height, width = 210)
+    hud.place(x = text_width+40, y = 0, height = window_height, width = window_width-(text_width+40))
     text.focus_set()
     #update_hud()
     #write("This is an extremely long line of text to test if the word wrapping works. I need to make this line longer so these words exists. Hopefully I will be able to see the full sentence without having to expand the window screen")
