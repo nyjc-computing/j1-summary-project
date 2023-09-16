@@ -71,15 +71,16 @@ def start_typing(e):
         text.insert(tk.END, e.char)
     text['state'] = 'disabled'
 def hide_hud(fullscreen = True):
-    w = window_width if fullscreen else 580
+    w = window_width if fullscreen else text_width
     text.place(x = 0, y= 0, height = 600, width = w)
     hud['state'] = 'normal'
+    hud.lower()
     hud.delete("1.0", tk.END)
     hud['state'] = 'disabled'
 def show_hud():
-    text.place(x = 0, y= 0, height = 600, width = 580)
-    update_hud(selfcharacter)
-def update_hud(user):
+    text.place(x = 0, y= 0, height = window_height, width = text_width)
+    update_hud()
+def update_hud(user = selfcharacter):
     
     hud['state'] = 'normal'
     hud.delete("1.0", tk.END)
@@ -1888,7 +1889,8 @@ def gamble():
                 games.Slots(selfcharacter, root, text).play()
                 
 if __name__ == "__main__":
-    window_width = 850
+    window_width = 1000
+    text_width = 700
     window_height = 600
     root = tk.Tk()
     pause_var = tk.StringVar()
@@ -1905,7 +1907,7 @@ if __name__ == "__main__":
         text.config(font = windowsFont)
         hud.config(font = windowsFont)
     text.place(x = 0, y= 0, height = window_height, width = 580)
-    hud.place(x = 640, y = 0, height = window_height, width = 210)
+    hud.place(x = text_width+40, y = 0, height = window_height, width = window_width-(text_width+40))
     text.focus_set()
     if bgm and selfmusic == "On":
         pygame.mixer.music.load(f"Music/Title.mp3")
