@@ -765,31 +765,30 @@ class gabriel_fight(encounter):
     def status(self) -> None:
         """
         print the status of player and all enemies
-
-        changing this method to telegraph gabriel's sword throw
         """
         player = self.player
         enemies = self.enemies
         dead = self.dead
 
         #print player health, mana, flasks
-        self.write(f"{player.name} has {player.health} health")
-        self.write(f"{player.name} has {player.mana} mana")
-        self.write(f"{player.name} has {player.health_flask} Flask of Crimson Tears")
-        self.write(f"{player.name} has {player.mana_flask} Flask of Cerulean Tears")
+        self.write("")
+        self.write(f"{player.name}")
+        self.write_color(f"Health : {player.health} / {player.max_health}", "green")
+        self.write_color(f"Mana : {player.mana} / {player.max_mana}", "blue")
+        self.write(f"Flask of Crimson Tears : {player.health_flask}")
+        self.write(f"Flask of Cerulean Tears : {player.mana_flask}")
         self.delay()
 
         #print enemy health
         self.write("")
         for enemy in enemies:
             self.write_color(f"{enemy.name} has {enemy.health} health", "red")
-        self.delay()
 
         #print dead enemies
         for die in dead:
             self.write_color(f"{die.name} has 0 health", "grey")
-        if len(dead) != 0:
-            self.delay()
+            
+        self.delay()
 
         #telegraph for sword throw
         if self.timer == 0:
@@ -824,6 +823,10 @@ class glados_fight(encounter):
         self.rocket_cooldown = 1
         self.rocket_state = 0
 
+        self.tips = ["Damage dealt to turrets is dealt to GLaDOS as well.",
+                     "After taking a certain amount of damage, GLaDOS will drop a core. Do it enough times and maybe something will happen.",
+                     "Rocket Turrets deal a lot of damage, but they take a long time to arm. Destroy them before they can fire."]
+
 
     def intro(self) -> None:
         self.write("")
@@ -840,10 +843,8 @@ class glados_fight(encounter):
         'player' is the player character
         'root' is the tk window
         'text' is the text field to write messages to
-
-        changing this function to make neurotoxin progress
-        changing this method to allow core transfer
         """
+
         self.player = player
         self.root = root
         self.text = text
@@ -854,10 +855,17 @@ class glados_fight(encounter):
             out = f.readlines()
             out = [x.split()[1] for x in out]
         self.sleep = int(out[0])
-        self.up = out[1]
-        self.down = out[2]
-        self.enter = out[3]
+        self.music = out[1]
+        self.up = out[2]
+        self.down = out[3]
+        self.enter = out[4]
         #for the variable 'state', 0 means the fight is ongoing, 1 means the player wins, 2 means the player loses
+        self.delete()
+
+        if bgm and self.music == "On":
+            pygame.mixer.music.load(f"Music/Enemy/{self.enemies[0].music}")
+            pygame.mixer.music.play(-1, fade_ms=2000)
+            
         self.delete()
         state = 0
         while state == 0:
@@ -1164,7 +1172,6 @@ class glados_fight(encounter):
 
         changing this method to let player perform core transfer once conditions are fulfilled
         """
-        valid = False
 
         choices = ["Weapon", "Spell", "Flask"]
 
@@ -1179,7 +1186,7 @@ class glados_fight(encounter):
 
         self.write("")
         return self.get_input("What do you want to use?", choices, None, False)
-
+    
     def core_drop(self) -> None:
         """
         drop a core from glados mainframe
