@@ -79,8 +79,8 @@ def hide_hud(fullscreen = True):
     hud['state'] = 'disabled'
 def show_hud():
     text.place(x = 0, y= 0, height = window_height, width = text_width)
-    update_hud()
-def update_hud(user = selfcharacter):
+    update_hud(selfcharacter)
+def update_hud(user):
     
     hud['state'] = 'normal'
     hud.delete("1.0", tk.END)
@@ -1269,7 +1269,7 @@ def secret():
     selfcharacter.money = 999
     #selfcharacter.upgrades.append(ShadeCloak())
     #selfcharacter.upgrades.append(Shield())
-    #selfmap.full_reveal()
+    selfmap.full_reveal()
     selfcharacter.items.append(DectusMedallionLeft())
     selfcharacter.items.append(DectusMedallionRight())
     selfcharacter.items.append(MementoMortem())
@@ -1891,7 +1891,7 @@ def gamble():
 if __name__ == "__main__":
     window_width = 1000
     text_width = 700
-    window_height = 600
+    window_height = 5000
     root = tk.Tk()
     pause_var = tk.StringVar()
     pointer = tk.IntVar()
