@@ -143,7 +143,7 @@ def intro():
     # Displays the introduction messages
     if bgm and selfmusic == "On":
         pygame.mixer.music.load("Music/Intro.mp3")
-        pygame.mixer.music.play(fade_ms=100)
+        pygame.mixer.music.play(-1, fade_ms=100)
     write_animation('\nWelcome to Hogwarts School of Witchcraft and Wizardry')
     sleep(selfsleep)
     write()
@@ -299,7 +299,7 @@ def run():
     global selfsong
     if bgm and selfmusic == "On" and selfsong != selfroom.music:
         pygame.mixer.music.load(f"Music/Room/{selfroom.music}")
-        pygame.mixer.music.play(fade_ms=2000)
+        pygame.mixer.music.play(-1, fade_ms=2000)
         selfsong = selfroom.music
     delete()
     update_hud(selfcharacter)
@@ -739,7 +739,7 @@ def attack(room):
         outcome = room.encounter.fight(selfcharacter, root, text)
         if bgm and selfmusic == "On":
             pygame.mixer.music.load(f"Music/Room/{room.music}")
-            pygame.mixer.music.play(fade_ms=2000)
+            pygame.mixer.music.play(-1, fade_ms=2000)
         update_hud(selfcharacter)
         if outcome == 1:
             if room.enemy.name == "Voldemort":  
@@ -1480,7 +1480,7 @@ def set_music(current):
         selfsong = None
     elif new.lower() == "on" and bgm and selfsong != selfroom.music:
         pygame.mixer.music.load(f"Music/Room/{selfroom.music}")
-        pygame.mixer.music.play(fade_ms=1000)
+        pygame.mixer.music.play(-1, fade_ms=1000)
         selfsong = selfroom.music
         
     selfmusic = new
@@ -1937,7 +1937,7 @@ def title():
     global selfmap
     if bgm and selfmusic == "On":
         pygame.mixer.music.load(f"Music/Title.mp3")
-        pygame.mixer.music.play()
+        pygame.mixer.music.play(-1)
     write("""  
   _____            _                 _ _   _ 
  |  __ \          | |               | | | (_)

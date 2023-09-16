@@ -176,7 +176,7 @@ class encounter:
 
         if bgm and self.music == "On":
             pygame.mixer.music.load(f"Music/Enemy/{self.enemies[0].music}")
-            pygame.mixer.music.play(fade_ms=2000)
+            pygame.mixer.music.play(-1, fade_ms=2000)
 
         state = 0
         while state == 0:
