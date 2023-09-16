@@ -31,14 +31,20 @@ selfdown = out[3]
 selfreturn = out[4]
 selfsaveroom = None
 selfsong = None
+selfroom = None
+selfcharacter = None
+selfrooms = None
+selfmap = None
 
 def sleep(t):
     root.after(int(t*1000), lambda: sleepCount.set(sleepCount.get()+1))
     root.wait_variable(sleepCount)
 
-def write(txt=""):
+def write(txt="", newline=True):
     text['state'] = 'normal'
-    text.insert(tk.END, txt+"\n")
+    text.insert(tk.END, txt)
+    if newline:
+        text.insert(tk.END, "\n")
     text['state'] = 'disabled'
 
 def write_animation(txt="", newline=True):
@@ -66,7 +72,7 @@ def start_typing(e):
     text['state'] = 'normal'
     data = text.get("1.0",'end-1c')
     if e.keysym == "BackSpace":
-        if data != 'Tarnished, key in your name: ':
+        if data != 'Wizard, key in your name: ':
             text.delete('end-2c','end-1c')
     else:
         text.insert(tk.END, e.char)
@@ -169,7 +175,7 @@ def intro():
                 pygame.mixer.music.fadeout(100)
             root.after(selfsleep*1000, run)
         else:
-            write_animation("You boldly opened the front gates of the school and made your way into the first room")
+            write_animation("\nYou boldly opened the front gates of the school and made your way into the first room")
             wait_for_key_press()
             if bgm and selfmusic == "On":
                 pygame.mixer.music.fadeout(100)
@@ -189,9 +195,8 @@ def intro():
         sleep(0.2)
         write("  \_/  \___/ \___/  |___/  \___/\____/|___/ ")
         wait_for_key_press()
-        if bgm and selfmusic == "On":
-            pygame.mixer.music.stop()
-        root.destroy()
+        delete()
+        root.after(0, title)
 
 def wait_for_key_press():
     write("\nPress any key to continue")
@@ -226,7 +231,7 @@ def show_animation(prompt, options, deletebefore):
     """main action for user to get the list of possible actions"""
     # Displays the list of actions the user can do
     p = pointer.get()
-    write(keep)
+    write(keep, False)
     write_animation(prompt+"\n")
     for i, e in enumerate(options):
         arrow = " "
@@ -1338,10 +1343,10 @@ def meow():
             
   __  __  U _____ u U  ___ u             
 U|' \/ '|u\| ___"|/  \/"_ \/__        __ 
-\| |\/| |/ |  _|"    | | | |\"\      /"/ 
+\| |\/| |/ |  _|"    | | | |\\\"\      /"/ 
  | |  | |  | |___.-,_| |_| |/\ \ /\ / /\ 
  |_|  |_|  |_____|\_)-\___/U  \ V  V /  U
-<<,-,,-.   <<   >>     \\  .-,_\ /\ /_,-.
+<<,-,,-.   <<   >>     \\\\  .-,_\ /\ /_,-.
  (./  \.) (__) (__)   (__)  \_)-'  '-(_/ 
                                         """)
         elif choice == 2:
@@ -1366,7 +1371,7 @@ U|' \/ '|u\| ___"|/  \/"_ \/__        __
             write(""" 
             
  _  _  ____  __   _  _ 
-( \/ )(  __)/  \ / )( \
+( \/ )(  __)/  \ / )( \\
 / \/ \ ) _)(  O )\ /\ /
 \_)(_/(____)\__/ (_/\_)
                         """)
@@ -1402,7 +1407,7 @@ U|' \/ '|u\| ___"|/  \/"_ \/__        __
             write("""                                        
                                         
  _ .--..--.  .---.   .--.   _   _   __  
-[ `.-. .-. |/ /__\\/ .'`\ \[ \ [ \ [  ] 
+[ `.-. .-. |/ /__\\\/ .'`\ \[ \ [ \ [  ] 
  | | | | | || \__.,| \__. | \ \/\ \/ /  
 [___||__||__]'.__.' '.__.'   \__/\__/   
                                         """)
@@ -1442,7 +1447,10 @@ def settings():
             save()
 
         elif decision.lower() == "quit":
-            selfend = True
+            selection = get_input("\nAre you sure you want to exit the game?", ["Yes", "No"])
+            if selection == "Yes":
+                selfend = True
+                return
         elif decision.lower() == "music":
             new = set_music(settings_dict["Music"])
             settings_dict["Music"] = new
@@ -1921,6 +1929,66 @@ def gamble():
                 delete()
             else:
                 games.Slots(selfcharacter, root, text).play()
+
+def title():
+    global selfroom
+    global selfcharacter
+    global selfrooms
+    global selfmap
+    if bgm and selfmusic == "On":
+        pygame.mixer.music.load(f"Music/Title.mp3")
+        pygame.mixer.music.play()
+    write("""  
+  _____            _                 _ _   _ 
+ |  __ \          | |               | | | (_)
+ | |__) |___  __ _| |_ __ ___  _   _| | |_ _ 
+ |  _  // _ \/ _` | | '_ ` _ \| | | | | __| |
+ | | \ \  __/ (_| | | | | | | | |_| | | |_| |
+ |_|  \_\___|\__,_|_|_| |_| |_|\__,_|_|\__|_|
+                                             
+                                             """)
+    wait_for_key_press()
+    with open("save.txt", "r") as f:
+        if f.readline().split()[1] == "True":
+            choice = ["Continue Game", "New Game", "Exit"]
+        else:
+            choice = ["New Game", "Exit"]
+    
+    while True:
+        decision = get_input("", choice)
+        if decision == "New Game" and "Continue Game" in choice:
+            selection = get_input("\nAre you sure you want to overwrite your save file?", ["Yes", "No"])
+            if selection == "Yes":
+                break
+
+        elif decision == "Exit":
+            selection = get_input("\nAre you sure you want to exit the game?", ["Yes", "No"])
+            if selection == "Yes":
+                break
+        
+        else:
+            break
+
+    if bgm and selfmusic == "On":
+        pygame.mixer.music.fadeout(100)
+    if decision == "New Game":
+        temp = setup()
+        selfroom = temp[0]
+        selfcharacter = temp[1]
+        selfrooms = temp[2]
+        selfmap = temp[3]
+        root.after(0,intro)
+    elif decision == "Continue Game":
+        temp = setup(True)
+        selfroom = temp[0]
+        selfcharacter = temp[1]
+        selfrooms = temp[2]
+        selfmap = temp[3]
+        root.after(0,run)
+    else:
+        if bgm and selfmusic == "On":
+            pygame.mixer.music.stop()
+        root.destroy()
                 
 if __name__ == "__main__":
     window_width = 1000
@@ -1943,49 +2011,5 @@ if __name__ == "__main__":
     text.place(x = 0, y= 0, height = window_height, width = 580)
     hud.place(x = text_width+40, y = 0, height = window_height, width = window_width-(text_width+40))
     text.focus_set()
-    if bgm and selfmusic == "On":
-        pygame.mixer.music.load(f"Music/Title.mp3")
-        pygame.mixer.music.play()
-    write("""  
-  _____            _                 _ _   _ 
- |  __ \          | |               | | | (_)
- | |__) |___  __ _| |_ __ ___  _   _| | |_ _ 
- |  _  // _ \/ _` | | '_ ` _ \| | | | | __| |
- | | \ \  __/ (_| | | | | | | | |_| | | |_| |
- |_|  \_\___|\__,_|_|_| |_| |_|\__,_|_|\__|_|
-                                             
-                                             """)
-    wait_for_key_press()
-    with open("save.txt", "r") as f:
-        if f.readline().split()[1] == "True":
-            choice = ["Continue Game", "New Game"]
-        else:
-            choice = ["New Game"]
-    
-    while True:
-        decision = get_input("", choice)
-        if decision == "New Game" and len(choice) == 2:
-            selection = get_input("\nAre you sure you want to overwrite your save file?", ["Yes", "No"])
-            if selection == "Yes":
-                break
-
-        else:
-            break
-
-    if bgm and selfmusic == "On":
-        pygame.mixer.music.fadeout(100)
-    if decision == "New Game":
-        temp = setup()
-        selfroom = temp[0]
-        selfcharacter = temp[1]
-        selfrooms = temp[2]
-        selfmap = temp[3]
-        root.after(0,intro)
-    else:
-        temp = setup(True)
-        selfroom = temp[0]
-        selfcharacter = temp[1]
-        selfrooms = temp[2]
-        selfmap = temp[3]
-        root.after(0,run)
+    root.after(0, title)
     root.mainloop()
