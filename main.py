@@ -41,7 +41,7 @@ def write(txt=""):
     text.insert(tk.END, txt+"\n")
     text['state'] = 'disabled'
 
-def write_animation(txt=""):
+def write_animation(txt="", newline=True):
     global time
     def skip(e):
         global time
@@ -54,7 +54,8 @@ def write_animation(txt=""):
         text['state'] = 'disabled'
         sleep(time)
     root.unbind(f'<{selfreturn}>')
-    write()
+    if newline:
+        write()
 
 def delete():
     text['state'] = 'normal'
@@ -72,7 +73,7 @@ def start_typing(e):
     text['state'] = 'disabled'
 def hide_hud(fullscreen = True):
     w = window_width if fullscreen else text_width
-    text.place(x = 0, y= 0, height = 600, width = w)
+    text.place(x = 0, y= 0, height = window_height, width = w)
     hud['state'] = 'normal'
     hud.lower()
     hud.delete("1.0", tk.END)
@@ -137,18 +138,18 @@ def intro():
     if bgm and selfmusic == "On":
         pygame.mixer.music.load("Music/Intro.mp3")
         pygame.mixer.music.play(fade_ms=100)
-    write_animation('Welcome to Hogwarts School of Witchcraft and Wizardry')
+    write_animation('\nWelcome to Hogwarts School of Witchcraft and Wizardry')
     sleep(selfsleep)
     write()
     write_animation("The Dark Lord Voldemort has taken over Hogwarts and opened multiple interdimensional gates, bringing hordes of enemies into the school. Your job as the chosen one is to traverse the school in order to locate The Shrieking Shack and thwart Voldemort's evil plan to take over the world.\n")
     sleep(selfsleep)
-    decision = get_input("Do you wish to enter the school?", ["Yes", "No"], None, False)
+    decision = get_input_animation("Do you wish to enter the school?", ["Yes", "No"], None, False)
     delete()
     pause_var.set("")
     
     if decision.lower() == "yes":
         text['state'] = 'normal'
-        text.insert(tk.END, "Wizard, key in your name: ")
+        write_animation("Wizard, key in your name: ", False)
         text['state'] = 'disabled'
         text.bind('<Key>', start_typing)
         root.bind(f'<{selfreturn}>', lambda x: pause_var.set("done"))
@@ -161,15 +162,17 @@ def intro():
         delete()
         selfcharacter.name = name
         # Check if the user used the secret easter egg name
-        if bgm and selfmusic == "On":
-            pygame.mixer.music.fadeout(100)
 
         if name == "meow":
             secret()
+            if bgm and selfmusic == "On":
+                pygame.mixer.music.fadeout(100)
             root.after(selfsleep*1000, run)
         else:
-            write("You boldly opened the front gates of the school and made your way into the first room")
+            write_animation("You boldly opened the front gates of the school and made your way into the first room")
             wait_for_key_press()
+            if bgm and selfmusic == "On":
+                pygame.mixer.music.fadeout(100)
             root.after(selfsleep*1000, run)
             
     elif decision.lower() == "no":
@@ -185,9 +188,10 @@ def intro():
         write("  | | \ \_/ / |_| | | |/ / _| |_| |___| |/ /")
         sleep(0.2)
         write("  \_/  \___/ \___/  |___/  \___/\____/|___/ ")
-        sleep(selfsleep)
-        end_game()
-        return
+        wait_for_key_press()
+        if bgm and selfmusic == "On":
+            pygame.mixer.music.stop()
+        root.destroy()
 
 def wait_for_key_press():
     write("\nPress any key to continue")
@@ -207,6 +211,23 @@ def show(prompt, options, deletebefore):
     # Displays the list of actions the user can do
     p = pointer.get()
     write(keep+prompt+"\n")
+    for i, e in enumerate(options):
+        arrow = " "
+        if p == i: arrow = ">"
+        write(f"{arrow} {e}")
+
+def show_animation(prompt, options, deletebefore):
+    data = text.get("1.0",'end-1c')
+    delete()
+    keep = ""
+    if not deletebefore:
+        keep = data.split(prompt)[0]
+        
+    """main action for user to get the list of possible actions"""
+    # Displays the list of actions the user can do
+    p = pointer.get()
+    write(keep)
+    write_animation(prompt+"\n")
     for i, e in enumerate(options):
         arrow = " "
         if p == i: arrow = ">"
@@ -248,6 +269,24 @@ def get_input(prompt, options, displayoptions = None, deletebefore = True):
     delete()
     return decision
 
+def get_input_animation(prompt, options, displayoptions = None, deletebefore = True):
+    """sub action for run() that prompts user for a main action"""
+    if displayoptions is None:
+        displayoptions = options
+    show_animation(prompt, displayoptions, deletebefore)
+    root.bind(f'<{selfreturn}>', lambda x: pause_var.set("done"))
+    root.bind(f"<{selfup}>", lambda e: up_action(prompt, displayoptions, deletebefore))
+    root.bind(f"<{selfdown}>", lambda e: down_action(prompt, displayoptions, deletebefore))
+    root.wait_variable(pause_var)
+    root.unbind(f'<{selfreturn}>')
+    root.unbind(f"<{selfup}>")
+    root.unbind(f"<{selfdown}>")
+    pause_var.set("")
+    decision = options[pointer.get()]
+    pointer.set(0)
+    delete()
+    return decision
+
         
 def run():
     global selfroom
@@ -260,6 +299,22 @@ def run():
     delete()
     update_hud(selfcharacter)
     """to be run in a loop to prompt user's action"""
+    upgrades = selfcharacter.get_upgrades()
+
+    if "Portal Gun" in upgrades and "Teleport" not in selfactions:
+        selfactions.insert(-1, "Teleport")
+
+    if "Shop" not in selfactions and selfcharacter.shop and selfroom.name == "The Forge":
+        selfactions.insert(-1, "Shop")
+
+    elif "Shop" in selfactions and selfroom.name != "The Forge":
+        selfactions.remove("Shop")
+
+    if "Gamble" not in selfactions and selfroom.name == "Kamurocho" and selfcharacter.gamble:
+        selfactions.insert(-1, "Gamble")
+
+    elif "Gamble" in selfactions and selfroom.name != "Kamurocho":
+        selfactions.remove("Gamble")
     # Checks if the player has entered the room before
     if selfroom not in selfrooms:
         # Displays a description of the room if the player has not been there before
@@ -324,27 +379,10 @@ def run():
             selfmap.walled_enter()
         elif selfroom.name == "The Last Resort":
             selfmap.last_resort_enter()
+        decision = get_input_animation("What do you wish to do?", selfactions, None, False)
     else:
         look(selfroom)
-
-    upgrades = selfcharacter.get_upgrades()
-
-    if "Portal Gun" in upgrades and "Teleport" not in selfactions:
-        selfactions.insert(-1, "Teleport")
-
-    if "Shop" not in selfactions and selfcharacter.shop and selfroom.name == "The Forge":
-        selfactions.insert(-1, "Shop")
-
-    elif "Shop" in selfactions and selfroom.name != "The Forge":
-        selfactions.remove("Shop")
-
-    if "Gamble" not in selfactions and selfroom.name == "Kamurocho" and selfcharacter.gamble:
-        selfactions.insert(-1, "Gamble")
-
-    elif "Gamble" in selfactions and selfroom.name != "Kamurocho":
-        selfactions.remove("Gamble")
-        
-    decision = get_input("What do you wish to do?", selfactions, None, False)
+        decision = get_input("What do you wish to do?", selfactions, None, False)
 
     # Does the action the user selected
         
@@ -381,9 +419,6 @@ def run():
 
     elif decision.lower() == "gamble":
         gamble()
-    
-    elif decision.lower() == "quit":
-        finish()
 
     if selfroom.enemy == None and selfroom.loot == None and not selfroom.secret and not selfroom.complete:
         if selfroom.name == "Dirtmouth":
@@ -449,11 +484,10 @@ def run():
 
     if not selfend:
         root.after(1,run)
-
-def finish():
-    if bgm and selfmusic == "On":
-        pygame.mixer.music.stop()
-    root.destroy()
+    else:
+        if bgm and selfmusic == "On":
+            pygame.mixer.music.stop()
+        root.destroy()
 
 def inventory(user):
     decision = get_input("", ["Equip", "Items", "Information"])
@@ -1256,7 +1290,7 @@ def win(weapon):
        
 def secret():
     """secret account that gives God like stats by setting name as meow"""
-    write("\nWelcome chosen one, the Gods smile upon you and have rained down their blessing")
+    write_animation("\nWelcome chosen one, the Gods smile upon you and have rained down their blessing")
     wait_for_key_press()
     selfcharacter.health = 999
     selfcharacter.max_health = 999
@@ -1384,6 +1418,7 @@ U|' \/ '|u\| ___"|/  \/"_ \/__        __
     wait_for_key_press()
     
 def settings():
+    global selfend
     """Show and change settings"""
     settings = []
     with open("settings.txt", "r") as f:
@@ -1407,8 +1442,7 @@ def settings():
             save()
 
         elif decision.lower() == "quit":
-            finish()
-
+            selfend = True
         elif decision.lower() == "music":
             new = set_music(settings_dict["Music"])
             settings_dict["Music"] = new
@@ -1891,7 +1925,7 @@ def gamble():
 if __name__ == "__main__":
     window_width = 1000
     text_width = 700
-    window_height = 5000
+    window_height = 700
     root = tk.Tk()
     pause_var = tk.StringVar()
     pointer = tk.IntVar()
