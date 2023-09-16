@@ -136,6 +136,13 @@ def update_hud(user):
     hud.insert(tk.END, "\nShield: ", ('default',))
     hud.insert(tk.END, f"{user.shield.name if not user.shield is None else 'Empty'}", ('white',))
     hud['state'] = 'disabled'
+
+def check_blank_name(e):
+    if len(text.get("1.0",'end-1c')[26:].strip()) > 0:
+        pause_var.set("done")
+    elif text.get("1.0",'end-1c') != 'Wizard, key in your name: ':
+        delete()
+        write("\nWizard, key in your name: ", False)
     
 def intro():
     """print introduction for the start of the game """
@@ -158,13 +165,12 @@ def intro():
         write_animation("\nWizard, key in your name: ", False)
         text['state'] = 'disabled'
         text.bind('<Key>', start_typing)
-        root.bind(f'<{selfreturn}>', lambda x: pause_var.set("done"))
+        root.bind(f'<{selfreturn}>', check_blank_name)
         root.wait_variable(pause_var)
         root.unbind(f'<{selfreturn}>')
         text.unbind('<Key>')
         pause_var.set("")
-        name = text.get("1.0",'end-1c')[26:]
-        name = name[:len(name)].strip()
+        name = text.get("1.0",'end-1c')[26:].strip()
         delete()
         selfcharacter.name = name
         # Check if the user used the secret easter egg name
