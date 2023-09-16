@@ -1259,6 +1259,7 @@ def end_game():
 
 def win(weapon):
     """displays scenario when user wins"""
+    hide_hud()
     write(f"\nUsing the almighty {weapon.name}, you struck Dio down, crippling him of all his powers and stopping his evil tyranny over the world")
     sleep(selfsleep)
     write(" _____ ___________   _____ _       ___  _____ _   _ ")
