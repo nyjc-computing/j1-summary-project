@@ -215,6 +215,9 @@ class encounter:
             state = self.over()
             if state != 0:
                 break
+
+            self.write("")
+            self.write(f"{'-'*50}")
             
             self.enemy_turn(decision)
 
@@ -258,13 +261,12 @@ class encounter:
         self.write("")
         for enemy in enemies:
             self.write_color(f"{enemy.name} has {enemy.health} health", "red")
-        self.delay()
 
         #print dead enemies
         for die in dead:
             self.write_color(f"{die.name} has 0 health", "grey")
-        if len(dead) != 0:
-            self.delay()
+            
+        self.delay()
     
     def get_choice(self) -> str:
         """
@@ -317,30 +319,10 @@ class encounter:
             self.delete()
             return self.enemies[0]
 
-        option_var = tk.StringVar()
-        cont_var = tk.StringVar()
-        def key_press(e):
-            option_var.set(e.char)
-            cont_var.set("go")
+        choices = self.enemies
+        display_options = [enemy.name for enemy in choices]
 
-        enemies = self.enemies
-        self.write("")
-        self.write("Which enemy do you want to attack?")
-        for i, enemy in enumerate(enemies):
-            self.write(f"[{i+1}] {enemy.name : <15} {str(enemy.health) + ' health remaining' : >25}")
-            self.root.bind(str(i+1), key_press)
-        self.write(f"[{len(enemies)+1}] Cancel Action")
-        self.root.bind(str(len(enemies)+1), key_press)
-
-        self.root.wait_variable(cont_var)
-        option = option_var.get()
-        
-        if option == str(len(enemies)+1):
-            return None
-        else:
-            self.delete()
-            return enemies[int(option)-1]
-        
+        return self.get_input("Which enemy do you want to attack?", choices, display_options, False) 
 
     def damage(self, weapon: "Weapon/Spell", target: "enemy") -> None:
         """
@@ -363,19 +345,51 @@ class encounter:
             self.dead.append(target)
             self.delay()
 
-    def attack(self) -> None:
+    def damage_all(self, weapon: "Weapon/Spell") -> None:
+        """
+        deal damage to all enemies using the weapon
+        """
+        self.write(f"{self.player.name}{weapon.move}, dealing damage to all enemies")
+        new = []
+        #loop through enemies
+        for enemy in self.enemies:
+            #calculate damage dealt
+            damage = max(1, weapon.attack + self.player.attack - enemy.defence)
+            enemy.health = enemy.health - damage
+
+            #check if enemy is dead
+            if enemy.health > 0:
+                self.write("")
+                self.write(f"{enemy.name} took {damage} damage")
+                self.delay()
+                new.append(enemy)
+            else:
+                self.write("")
+                self.write(f"{weapon.win_front}{enemy.name}{weapon.win_back}")
+                enemy.health = 0
+                self.dead.append(enemy)
+                self.delay
+
+        self.enemies = new
+
+    def attack(self) -> bool:
         """
         damages enemy using weapon
         return True if turn passes, return False if cancelled action
         """
-        
-        target = self.target()
-        if target == None:
-            return False
 
-        self.damage(self.player.weapon, target)
+        weapon = self.player.weapon
         
-        return True
+        if not weapon.aoe:
+            target = self.target()
+            
+            if target == None:
+                return False
+                
+            self.damage(weapon, target)
+            
+        else:
+            self.damage_all(weapon)
 
     def spell(self) -> bool:
         """
@@ -409,20 +423,29 @@ class encounter:
             elif choice.cost > self.player.mana:
                 self.write("")
                 self.write(f"You do not have enough mana to cast {choice.name}")
-                
 
             else:
                 valid = True
 
-        target = self.target()
-        if target == None:
-            return False
-        
-        self.player.mana = self.player.mana - choice.cost
-        self.write("")
-        self.write(f"You used up {choice.cost} mana points")
+        if not choice.aoe:
 
-        self.damage(choice, target)
+            target = self.target()
+            if target == None:
+                return False
+        
+            self.player.mana = self.player.mana - choice.cost
+            self.write("")
+            self.write(f"You used up {choice.cost} mana points")
+
+            self.damage(choice, target)
+
+        else:
+
+            self.player.mana = self.player.mana - choice.cost
+            self.write("")
+            self.write(f"You used up {choice.cost} mana points")
+
+            self.damage_all(choice)
 
         return True
 
@@ -770,3 +793,504 @@ class gabriel_fight(encounter):
         if self.timer == 0:
             self.write("")
             self.write("Gabriel is preparing something")
+
+class glados_fight(encounter):
+    """
+    an encounter that inherits from the encounter class
+    """
+
+    def __init__(self, enemy: "Enemy"):
+        super().__init__(enemy)
+        
+        self.intro_trigger = 0
+
+        self.turns = 1
+        
+        self.gas_state = 1
+
+        self.shield = True
+
+        self.stun = 0
+        
+        self.cores = 0
+        self.gauge = 0
+        self.transfer = False
+
+        self.turret_cooldown = 0
+        self.turret_times = 0
+
+        self.rocket_cooldown = 1
+        self.rocket_state = 0
+
+
+    def intro(self) -> None:
+        self.write("")
+        self.write("GLaDOS starts filling the room with deadly neurotoxins")
+        self.delay()
+        self.write("You will take 5 damage every turn, damage is not affected by defence")
+        self.delay()
+        self.write("")
+        self.write("GLaDOS activates bomb shields, reducing her incoming damage by 90%")
+
+    def fight(self, player: "character", root: "tk.Tk()", text: "tk.Text()") -> int:
+        """
+        main loop for the encounter, return 1 if player wins, 2 if player dies, 3 if player flees
+        'player' is the player character
+        'root' is the tk window
+        'text' is the text field to write messages to
+
+        changing this function to make neurotoxin progress
+        changing this method to allow core transfer
+        """
+        self.player = player
+        self.root = root
+        self.text = text
+        self.pause = tk.IntVar()
+        self.pointer = tk.IntVar()
+        self.pause_var = tk.StringVar()
+        with open("settings.txt", "r") as f:
+            out = f.readlines()
+            out = [x.split()[1] for x in out]
+        self.sleep = int(out[0])
+        self.up = out[1]
+        self.down = out[2]
+        self.enter = out[3]
+        #for the variable 'state', 0 means the fight is ongoing, 1 means the player wins, 2 means the player loses
+        self.delete()
+        state = 0
+        while state == 0:
+
+            #display state of player and enemies
+
+            self.status()
+
+            if self.intro_trigger == 0:
+                self.intro()
+                self.intro_trigger = 1
+
+            if self.turns == 20:
+                self.write("")
+                self.write("The neurotoxin concentration is getting dangerously high")
+                self.delay()
+                self.write("Damage per turn increased to 10")
+                self.gas_state = 2
+
+            if self.turns == 30:
+                self.gas_state = 3
+
+            self.core_corruption()
+            
+            advance = False
+            while not advance:
+
+                decision = self.get_choice()
+
+                if decision.lower() == "weapon":
+                    advance = self.attack()
+
+                elif decision.lower() == "spell":
+                    advance = self.spell()
+
+                elif decision.lower() == "flask":
+                    advance = self.flask()
+
+                elif decision.lower() == "defend":
+                    self.write(f"You raise up your {self.player.shield.name}")
+                    self.delay()
+                    advance = True
+
+                elif decision.lower() == "escape":
+                    self.reset()
+                    self.delete()
+                    self.write("You put on the shade cloak and dashed away from the enemy")
+                    self.delay()
+                    return 3
+
+                elif decision.lower() == "core transfer":
+                    if self.stun == 0:
+                        self.write("")
+                        self.write("You grab one of the cores and try to reach the core receptacle,")
+                        self.write("but GLaDOS raises the floor panels, blocking your path")
+                        self.delay()
+                    else:
+                        self.core_transfer()
+                    advance = True
+
+            self.check_gauge()
+
+            state = self.over()
+            if state != 0:
+                break
+
+            self.write("")
+            self.write(f"{'-'*50}")
+            
+            self.enemy_turn(decision)
+
+            self.write("")
+            self.write(f"{'-'*50}")
+
+            state = self.over()
+
+            self.rocket_cooldown -= 1
+            self.turret_cooldown -= 1
+            self.turns += 1
+
+        if state == 1:
+            return 1
+
+        elif state == 2:
+            self.end_game()
+            self.write("")
+            self.write(random.choice(self.tips))
+            return 2
+
+    def enemy_turn(self, player_choice: str) -> None:
+        """
+        let enemies attack
+
+        changing method to implement glados fight mechanics
+        """
+        #neurotoxins hit first
+
+        self.write("")
+        
+        if self.gas_state == 1:
+            
+            self.write("You take 5 damage from the neurotoxins")
+            self.delay()
+            self.player.health -= 5
+
+        elif self.gas_state == 2:
+            
+            self.write("You take 10 damage from the neurotoxins")
+            self.delay()
+            self.player.health -= 10
+
+        elif self.gas_state == 3:
+            
+            self.write("The neurotoxins have liquefied your brain matter")
+            self.delay()
+            self.player.health = 0
+
+        if self.player.health <= 0:
+            
+            return None
+
+        #glados turn if player is not dead
+
+        if self.stun <= 0:
+
+            if self.turret_cooldown <= 0:
+
+                if self.turret_times == 2:
+                    self.stunned()
+                    self.turret_times = 0
+                    
+                else:
+                    self.turrets()
+
+            if self.rocket_cooldown <= 0:
+                self.rocket()
+        else:
+
+            self.stun -= 1
+            
+            if self.stun == 0:
+                self.wake(player_choice)
+
+            else:
+                self.write("")
+                self.write("GLaDOS twitches erratically. Looks like she's still out of it")
+            
+            
+        #all other enemies take turns in random order
+        enemies = self.enemies[1:]
+        random.shuffle(enemies)
+        
+        for enemy in enemies:
+
+            #if rocket sentry, wait for rocket to arm before attacking
+            if enemy.name == "Rocket Sentry":
+                if self.rocket_state == 3:
+                    self.rocket_state = 2
+                    continue
+                elif self.rocket_state == 2:
+                    out = enemy
+                    self.rocket_state = 1
+
+            #negate damage if player is shielding
+            damage = max(1, enemy.attack - self.player.defence)
+            if player_choice.lower() == "defend":
+                damage = int((self.player.shield.negation/100)*(damage))
+                
+            self.player.health = self.player.health - damage
+            self.write("")
+            self.write(f"{enemy.name} used {enemy.move}, dealing {damage} damage to {self.player.name}")
+            self.delay()
+            
+            if self.player.health <= 0:
+                return None
+
+        if self.rocket_state == 1:
+            self.enemies.remove(out)
+            self.write("")
+            self.write(f"The Rocket Sentry retreats into the floor")
+            self.rocket_state = 0
+                
+    def damage(self, weapon: "Weapon/Spell", target: "enemy") -> None:
+        """
+        deal damage to target using the weapon
+
+        changing this method such that all damage dealt is dealt to glados as well
+        changing this method such that rocket sentries reset state when killed
+        changing this method to not record dead enemies to avoid flooding the window
+        """
+
+        #calculate damage dealt
+        damage = max(1, weapon.attack + self.player.attack - target.defence)
+        
+        if target.name == "GLaDOS":
+            damage = self.glados_damage(damage)
+            self.add_gauge(damage)
+        
+        target.health = target.health - damage
+        
+        #check if enemy is dead
+        if target.health > 0:
+            self.write("")
+            self.write(f"{self.player.name}{weapon.move}, dealing {damage} damage to {target.name}")
+            self.delay()
+        else:
+            
+            if target.name == "Rocket Sentry":
+                self.rocket_state = 2
+
+            self.write("")
+            self.write(f"{self.player.name}{weapon.win_front}{target.name}{weapon.win_back}")
+            self.enemies.remove(target)
+            target.health = 0
+            self.delay()
+
+        if target.name != "GLaDOS":
+            additional = self.glados_damage(damage)
+            self.initenemy.health = self.initenemy.health - additional
+            self.add_gauge(additional)
+            self.write("")
+            self.write(f"GLaDOS took {additional} damage")
+
+    def damage_all(self, weapon: "Weapon/Spell") -> None:
+        """
+        deal damage to all enemies using the weapon
+
+        changing this method such that all damage is dealt to glados as well
+        changing this method such that rocket sentries reset state when killed
+        changing this method to not record turrets under dead enemies to avoid flooding the window
+        """
+        self.write(f"{self.player.name}{weapon.move}, dealing damage to all enemies")
+        new = []
+        total = 0
+        #loop through enemies
+        for enemy in self.enemies:
+            #calculate damage dealt
+            damage = max(1, weapon.attack + self.player.attack - enemy.defence)
+
+            if enemy.name == "GLaDOS":
+                damage = self.glados_damage(damage)
+                self.add_gauge(damage)
+                
+            else:
+                total += damage
+
+            enemy.health = enemy.health - damage
+
+            #check if enemy is dead
+            if enemy.health > 0:
+                self.write("")
+                self.write(f"{enemy.name} took {damage} damage")
+                self.delay()
+                new.append(enemy)
+            else:
+
+                if enemy.name == "Rocket Sentry":
+                    self.rocket_state = 0
+                
+                self.write("")
+                self.write(f"{weapon.win_front}{enemy.name}{weapon.win_back}")
+                enemy.health = 0
+                self.delay
+
+        self.enemies = new
+
+        if total != 0:
+            additional = self.glados_damage(total)
+            self.initenemy.health = self.initenemy.health - additional
+            self.add_gauge(additional)
+            self.write("")
+            self.write(f"GLaDOS took an additional {additional} damage")
+
+    def glados_damage(self, damage) -> int:
+        """
+        reduce damage if shield is active
+        return damage as int
+        """
+
+        if self.shield == True:
+            damage = max(1, int(damage * 0.1))
+
+        return damage
+
+    def add_gauge(self, damage) -> None:
+        """
+        adds damage to self.gauge
+        """
+        self.gauge = self.gauge + damage
+
+    def check_gauge(self) -> None:
+        """
+        triggers self.core_drop() when self.gauge is higher than 400
+        resets self.gauge to 0
+        """
+        if self.gauge > 400:
+            if self.cores < 4:
+                self.core_drop()
+                self.gauge = 0
+
+    def get_choice(self) -> str:
+        """
+        get choice of action from user
+
+        changing this method to let player perform core transfer once conditions are fulfilled
+        """
+        valid = False
+
+        choices = ["Weapon", "Spell", "Flask"]
+
+        if self.player.shield != None:
+            choices.append("Defend")
+
+        if "Shade Cloak" in self.player.get_upgrades():
+            choices.append("Escape")
+
+        if self.transfer:
+            choices.append("Core Transfer")
+
+        self.write("")
+        return self.get_input("What do you want to use?", choices, None, False)
+
+    def core_drop(self) -> None:
+        """
+        drop a core from glados mainframe
+        if 4 cores have dropped, allow player to initiate core transfer
+        """
+        self.write("")
+        self.write("A white, spherical object screams as it falls from GLaDOS's body, landing with a resounding thump")
+        self.delay()
+        self.cores += 1
+        if self.cores == 4:
+            self.write("")
+            self.write('A voice announces over the speakers: "WARNING! CORE CORRUPTION AT 100 PERCENT"')
+            self.write('"MANUAL CORE REPLACEMENT REQUIRED"')
+            self.write("")
+            self.write("A core receptacle rises up out of the floor")
+            self.transfer = True
+    
+    def core_transfer(self) -> None:
+        """
+        kills glados
+        """
+        for enemy in self.enemies:
+            enemy.health = 0
+
+    def core_corruption(self) -> None:
+        """
+        outputs a message based on number of cores dropped
+        """
+        if self.cores == 0:
+            return
+        elif self.cores == 1:
+            self.write("")
+            self.write('A voice announces over the speakers: "WARNING! CORE CORRUPTION AT 29 PERCENT"')
+        elif self.cores == 2:
+            self.write("")
+            self.write('A voice announces over the speakers: "WARNING! CORE CORRUPTION AT 58 PERCENT"')
+        elif self.cores == 3:
+            self.write("")
+            self.write('A voice announces over the speakers: "WARNING! CORE CORRUPTION AT 85 PERCENT"')
+        elif self.cores > 3:
+            self.write("")
+            self.write('A voice announces over the speakers: "WARNING! CORE CORRUPTION AT 100 PERCENT"')
+            self.write('"MANUAL CORE REPLACEMENT REQUIRED"')
+
+    def stunned(self) -> None:
+
+        self.write("")
+        self.write("GLaDOS tries to deploy more turrets, but the pipe network jams")
+        self.delay()
+        self.write("There is an explosion overhead, bombarding GLaDOS with debris, stunning her")
+        self.delay()
+        self.write("")
+        self.write("GLaDOS's shields have been deactivated")
+
+        self.shield = False
+        self.stun = 2
+
+    def rocket(self) -> None:
+
+        self.enemies.append(e.Glados_Rocket())
+        self.write("")
+        self.write("A Rocket Turret rises up out of the ground")
+        self.delay()
+        self.write("It locks on to you and begins arming a rocket")
+        self.delay()
+        self.rocket_state = 3
+        self.rocket_cooldown = 4
+
+    def turrets(self) -> None:
+        
+        self.enemies.append(e.Glados_Turret())
+        self.enemies.append(e.Glados_Turret())
+        self.write("")
+        self.write("Sentry Turrets drop down from the pipe network above")
+        self.delay()
+        self.turret_times += 1
+        self.turret_cooldown = 2
+
+    def wake(self, player_choice) -> None:
+
+        self.write("GLaDOS has recovered, and she looks pissed")
+        self.delay()
+        self.write("")
+        self.write("GLaDOS's bomb shields are active again")
+        self.delay()
+        self.write("GLaDOS used Thermal Discouragement Beams, dealing 60 damage to everyone")
+        self.delay()
+
+        self.shield = True
+        self.enemies = [self.initenemy]
+        
+        damage = max(1, 60 - self.player.defence)
+        if player_choice.lower() == "defend":
+            damage = int((self.player.shield.negation/100)*(damage))
+
+        self.player.health = self.player.health - damage
+
+        self.write("")
+        self.write(f"You took {damage} damage")
+
+    def over(self):
+        """
+        determines whether the fight should continue and outcome of fight
+        return 0 for continue, 1 for player win, 2 for player loss
+        """
+        player = self.player
+        enemies = self.enemies
+        
+        if player.health <= 0:
+            return 2
+        
+        elif self.initenemy.health <= 0:
+            return 1
+        
+        else:
+            return 0

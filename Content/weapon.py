@@ -28,6 +28,7 @@ class Weapon:
         self.move = ""
         self.win_front = ""
         self.win_back = ""
+        self.aoe = False
 
     def get_save_name(self):
         return self.name.replace(" ", "")

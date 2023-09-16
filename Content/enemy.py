@@ -123,7 +123,7 @@ class Glados(Enemy):
     def __init__(self):
         super().__init__()
         self.name = "Glados"
-        self.health = 150
+        self.health = 3000
         self.description = "a malevolent AI antagonist, known for her dark sense of humor and penchant for testing subjects with life-threatening puzzles"
         self.attack = 20
         self.move = "Neurotoxin Gas"
@@ -512,3 +512,29 @@ class CalamityGanon(Enemy):
         self.attack = 50
         self.move = "Fire Axe"
         self.loot = HylianShield()
+
+class Glados_Turret(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
+    def __init__(self):
+        super().__init__()
+        self.name = "Turret"
+        self.health = 50
+        self.attack = 15
+        self.move = "Resolution Pellets"
+        self.loot = None
+
+class Glados_Rocket(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
+    def __init__(self):
+        super().__init__()
+        self.name = "Rocket Sentry"
+        self.health = 50
+        self.attack = 50
+        self.move = "Rocket Launcher"
+        self.loot = None
