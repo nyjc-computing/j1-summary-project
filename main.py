@@ -78,9 +78,10 @@ def hide_hud(fullscreen = True):
     hud.delete("1.0", tk.END)
     hud['state'] = 'disabled'
 def show_hud():
+    global selfcharacter
     text.place(x = 0, y= 0, height = window_height, width = text_width)
-    update_hud()
-def update_hud(user = selfcharacter):
+    update_hud(selfcharacter)
+def update_hud(user):
     
     hud['state'] = 'normal'
     hud.delete("1.0", tk.END)
@@ -1890,7 +1891,7 @@ def gamble():
                 
 if __name__ == "__main__":
     window_width = 1000
-    text_width = 700
+    text_width = 600
     window_height = 600
     root = tk.Tk()
     pause_var = tk.StringVar()
@@ -1906,7 +1907,7 @@ if __name__ == "__main__":
     if platform.system() == "Windows":
         text.config(font = windowsFont)
         hud.config(font = windowsFont)
-    text.place(x = 0, y= 0, height = window_height, width = 580)
+    text.place(x = 0, y= 0, height = window_height, width = text_width)
     hud.place(x = text_width+40, y = 0, height = window_height, width = window_width-(text_width+40))
     text.focus_set()
     if bgm and selfmusic == "On":
