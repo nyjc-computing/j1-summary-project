@@ -391,6 +391,8 @@ class encounter:
         else:
             self.damage_all(weapon)
 
+        return True
+
     def spell(self) -> bool:
         """
         deducts mana from player for using a spell
