@@ -1631,18 +1631,11 @@ def display_map():
     """
     Show the map
     """
-    if platform.system() == "Windows":
-        legend = """Legend:
-┌───┐                                   ┌───
+    legend = """Legend:
+┌───┐                                   ┌───*
 │   │ = Room has unfinished objectives  │   │ = Fully Cleared Room
 └───┘                                   └───┘
     """
-    else:
-        legend = """Legend:
-    ┌───┐                                   ╭━━━╮
-    │   │ = Room has unfinished objectives  ┃   ┃ = Fully Cleared Room
-    └───┘                                   ╰━━━╯
-        """
     for row in selfmap.map:
         write("".join(row))
     write(legend)
