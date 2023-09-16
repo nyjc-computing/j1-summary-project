@@ -587,9 +587,6 @@ def move(room):
     display_map()
     movement = get_input('Which direction do you wish to move in?', ['Left', 'Right', 'Forward','Back', "Cancel"], None, False)
 
-    if platform.system() == "Windows":
-        text.config(font = ("Courier New", 10, "normal"))
-
     if movement.lower() == "cancel":
         return
 
@@ -1631,17 +1628,21 @@ def teleport():
 def display_map():
     delete()
     #hide_hud()
-    if platform.system() == "Windows":
-        text.config(font = ("Meslo LG S", 9, "normal"))
     """
     Show the map
     """
-    
-    legend = """Legend:
-┌───┐                                   ╭━━━╮
-│   │ = Room has unfinished objectives  ┃   ┃ = Fully Cleared Room
-└───┘                                   ╰━━━╯
+    if platform.system() == "Windows":
+        legend = """Legend:
+┌───┐                                   ┌───
+│   │ = Room has unfinished objectives  │   │ = Fully Cleared Room
+└───┘                                   └───┘
     """
+    else:
+        legend = """Legend:
+    ┌───┐                                   ╭━━━╮
+    │   │ = Room has unfinished objectives  ┃   ┃ = Fully Cleared Room
+    └───┘                                   ╰━━━╯
+        """
     for row in selfmap.map:
         write("".join(row))
     write(legend)

@@ -1,32 +1,32 @@
-Save False
+Save True
 
 Room Midgar
 
-Rooms Dirtmouth Midgar
+Rooms Dirtmouth Midgar TheForge
 
 Character
 
-name meow
-health 999
-max_health 999
-spells WingardiumLeviosa 
-attack 999
-mana 999
-max_mana 999
-defence 999
+name ncerl
+health 100
+max_health 100
+spells WingardiumLeviosa VengefulSpirit 
+attack 0
+mana 50
+max_mana 50
+defence 0
 armour None
 armours None
 weapon Wand
 weapons Wand BusterSword 
 accessory None
 accessories None
-health_flask 1000
-mana_flask 999
-items DectusMedallion(left) DectusMedallion(right) MementoMortem BlackBox RustyKey RoboticArm ScotchWhiskey 
+health_flask 3
+mana_flask 2
+items None
 upgrades None
 shield None
 shields None
-money 1049
+money 100
 shop False
 shop_inventory ScotchWhiskey 
 gamble False
@@ -96,7 +96,7 @@ secret False
 TheForge
 
 enemy TheHighDragun
-loot FlaskofCeruleanTears
+loot FlaskofCrimsonTears
 secret True
 
 Midgar
@@ -107,9 +107,9 @@ secret False
 
 Dirtmouth
 
-enemy TheHollowKnight
+enemy None
 loot FlaskofCrimsonTears
-secret False
+secret True
 
 TheEndDimension
 
