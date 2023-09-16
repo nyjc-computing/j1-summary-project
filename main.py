@@ -17,14 +17,8 @@ try:
 except ModuleNotFoundError:
     bgm = False
 
-temp = setup()
 selfend = False
-selfroom = temp[0]
-selfcharacter = temp[1]
-selfrooms = []
-selfactions = ["Look", "Move", "Attack", "Loot", "Flask", "Equip", "Status", "Information", "Item", "Settings", "Map", "Meow", "Help"]
-selfdescription = ["Looks around the room","Move to another room", "Attack the enemny", "Search the room for loot", "Drink your flasks", "Change your equipment", "See your statistics", "Find out more about your items", "Use your item", "Change settings", "Shows map", "Meow"]
-selfmap = map.game_map()
+selfactions = ["Map", "Move", "Attack", "Loot", "Inventory", "Settings", "Meow"]
 currentPressedKey = ""
 out = []
 with open("settings.txt", "r") as f:
@@ -36,7 +30,6 @@ selfup = out[2]
 selfdown = out[3]
 selfreturn = out[4]
 selfsaveroom = None
-selfcompletion = 0
 selfsong = None
 
 def sleep(t):
@@ -124,7 +117,7 @@ def update_hud(user = selfcharacter):
     hud.insert(tk.END, "\nRunes: ", ('default',))
     hud.insert(tk.END, f"{user.money}", ('gold',))
     hud.insert(tk.END, "\nCompletion: ", ('default',))
-    hud.insert(tk.END, f"{int((selfcompletion/28)*100)}%", ('white',))
+    hud.insert(tk.END, f"{int((selfcharacter.completion/28)*100)}%", ('white',))
     hud.insert(tk.END, f"\n------------------\n\n", ('title',))
     hud.insert(tk.END, "Equipment\n", ('title',))
     hud.insert(tk.END, "\nArmour: ", ('default',))
@@ -141,6 +134,9 @@ def intro():
     """print introduction for the start of the game """
     hide_hud(False)
     # Displays the introduction messages
+    if bgm and selfmusic == "On":
+        pygame.mixer.music.load("Music/Intro.mp3")
+        pygame.mixer.music.play(fade_ms=100)
     write_animation('Welcome to Hogwarts School of Witchcraft and Wizardry')
     sleep(selfsleep)
     write()
@@ -152,7 +148,7 @@ def intro():
     
     if decision.lower() == "yes":
         text['state'] = 'normal'
-        text.insert(tk.END, "Tarnished, key in your name: ")
+        text.insert(tk.END, "Wizard, key in your name: ")
         text['state'] = 'disabled'
         text.bind('<Key>', start_typing)
         root.bind(f'<{selfreturn}>', lambda x: pause_var.set("done"))
@@ -160,11 +156,14 @@ def intro():
         root.unbind(f'<{selfreturn}>')
         text.unbind('<Key>')
         pause_var.set("")
-        name = text.get("1.0",'end-1c')[29:]
+        name = text.get("1.0",'end-1c')[26:]
         name = name[:len(name)-1]
         delete()
         selfcharacter.name = name
         # Check if the user used the secret easter egg name
+        if bgm and selfmusic == "On":
+            pygame.mixer.music.fadeout(100)
+
         if name == "meow":
             secret()
             root.after(selfsleep*1000, run)
@@ -253,7 +252,6 @@ def get_input(prompt, options, displayoptions = None, deletebefore = True):
 def run():
     global selfroom
     global selfend 
-    global selfcompletion
     global selfsong
     if bgm and selfmusic == "On" and selfsong != selfroom.music:
         pygame.mixer.music.load(f"Music/Room/{selfroom.music}")
@@ -262,11 +260,10 @@ def run():
     delete()
     update_hud(selfcharacter)
     """to be run in a loop to prompt user's action"""
-    display_room_name()
     # Checks if the player has entered the room before
-    if not selfroom.been_here:
+    if selfroom not in selfrooms:
         # Displays a description of the room if the player has not been there before
-        display_room_description()
+        look_animation(selfroom)
         selfrooms.append(selfroom)
         
         if selfroom.name == "Dirtmouth":
@@ -327,37 +324,31 @@ def run():
             selfmap.walled_enter()
         elif selfroom.name == "The Last Resort":
             selfmap.last_resort_enter()
+    else:
+        look(selfroom)
 
-    if "Save" not in selfactions and selfroom.save and selfroom.enemy == None:
-        selfactions.insert(-1, "Save")
-        selfdescription.append("Saves the game")
-    elif "Save" in selfactions and not selfroom.save:
-        selfactions.remove("Save")
-        selfdescription.remove("Saves the game")
+    upgrades = selfcharacter.get_upgrades()
+
+    if "Portal Gun" in upgrades and "Teleport" not in selfactions:
+        selfactions.insert(-1, "Teleport")
 
     if "Shop" not in selfactions and selfcharacter.shop and selfroom.name == "The Forge":
         selfactions.insert(-1, "Shop")
-        selfdescription.append("Buy stuff from the shop")
+
     elif "Shop" in selfactions and selfroom.name != "The Forge":
         selfactions.remove("Shop")
-        selfdescription.remove("Buy stuff from the shop")
 
     if "Gamble" not in selfactions and selfroom.name == "Kamurocho" and selfcharacter.gamble:
         selfactions.insert(-1, "Gamble")
-        selfdescription.append("Go to the Underground Casino")
+
     elif "Gamble" in selfactions and selfroom.name != "Kamurocho":
         selfactions.remove("Gamble")
-        selfdescription.remove("Go to the Underground Casino")
         
-    decision = get_input("What do you wish to do?", selfactions)
+    decision = get_input("What do you wish to do?", selfactions, None, False)
 
     # Does the action the user selected
-
-    if decision.lower() == "look":
-        display_room_name()
-        look(selfroom)
         
-    elif decision.lower() == "move":
+    if decision.lower() == "move":
         move(selfroom)
         
     elif decision.lower() == "attack":
@@ -366,17 +357,9 @@ def run():
     elif decision.lower() == "loot":
         loot(selfcharacter, selfroom.loot)
 
-    elif decision.lower() == "flask":
-        flask(selfcharacter)
 
-    elif decision.lower() == "equip":
-        equip(selfcharacter)
-
-    elif decision.lower() == "status":
-        status(selfcharacter)
-
-    elif decision.lower() == "information":
-        info(selfcharacter)
+    elif decision.lower() == "inventory":
+        inventory(selfcharacter)
 
     elif decision.lower() == "meow":
         meow()
@@ -390,20 +373,17 @@ def run():
     elif decision.lower() == "map":
         display_map()
 
-    elif decision.lower() == "help":
-        help()
-
     elif decision.lower() == "save":
         save()
-
-    elif decision.lower() == "item":
-        item()
 
     elif decision.lower() == "shop":
         shop()
 
     elif decision.lower() == "gamble":
         gamble()
+    
+    elif decision.lower() == "quit":
+        finish()
 
     if selfroom.enemy == None and selfroom.loot == None and not selfroom.secret and not selfroom.complete:
         if selfroom.name == "Dirtmouth":
@@ -464,30 +444,32 @@ def run():
             selfmap.walled_clear()
         elif selfroom.name == "The Last Resort":
             selfmap.last_resort_clear()
-        selfcompletion += 1
+        selfcharacter.completion += 1
         selfroom.complete = True
 
     if not selfend:
         root.after(1,run)
+
+def finish():
+    if bgm and selfmusic == "On":
+        pygame.mixer.music.stop()
+    root.destroy()
+
+def inventory(user):
+    decision = get_input("", ["Equip", "Items", "Information"])
+    if decision == "Equip":
+        equip(selfcharacter)
+    elif decision == "Items":
+        item()
+    elif decision == "Information":
+        info(selfcharacter)
         
 def look(room):
     """main action to look around the room including rooms linked to the room and enemies in the room"""
     write()
 
-    # Displays the connected rooms
-    if room.left != None:
-        write(f"To the left is {room.left.name}")
-        
-    if room.right != None:
-        write(f"To the right is {room.right.name}")
-        
-    if room.forward != None:
-        write(f"In front of you is {room.forward.name}")
-        
-    if room.back != None:
-        write(f"Behind you is {room.back.name}")
+    write(room.description)
 
-    sleep(selfsleep)
     upgrades = selfcharacter.get_upgrades()
 
     if "Virtual Boo" in upgrades:
@@ -516,26 +498,14 @@ def look(room):
 
     elif room.enemy == None and room.secret:
         write(f"\n{room.secret_message}")
-    wait_for_key_press()
+    write()
 
 def look_animation(room):
     """main action to look around the room including rooms linked to the room and enemies in the room"""
     write()
 
-    # Displays the connected rooms
-    if room.left != None:
-        write_animation(f"To the left is {room.left.name}")
-        
-    if room.right != None:
-        write_animation(f"To the right is {room.right.name}")
-        
-    if room.forward != None:
-        write_animation(f"In front of you is {room.forward.name}")
-        
-    if room.back != None:
-        write_animation(f"Behind you is {room.back.name}")
+    write_animation(room.description)
 
-    sleep(selfsleep)
     upgrades = selfcharacter.get_upgrades()
 
     if "Virtual Boo" in upgrades:
@@ -564,12 +534,15 @@ def look_animation(room):
 
     elif room.enemy == None and room.secret:
         write_animation(f"\n{room.secret_message}")
-    wait_for_key_press()
+    write()
 
 def move(room):
     global selfroom
     """main action for user to traverse from one room to another"""
-    movement = get_input('Which direction do you wish to move in?', ['Left', 'Right', 'Forward','Back'])
+    movement = get_input('Which direction do you wish to move in?', ['Left', 'Right', 'Forward','Back', "Cancel"])
+
+    if movement.lower() == "cancel":
+        return
 
     # Generate a random number to see if you managed to sneak past the enemy
     caught = False
@@ -715,15 +688,6 @@ def loot(user, loot):
             pygame.mixer.music.fadeout(100)
         attack(selfroom)
 
-def flask(user):
-    """main action for user to drink their flasks"""
-    # Check if the user still has available flasks
-    if (user.health_flask + user.mana_flask) == 0:
-        write("\nYou ran out of flasks\n")
-        wait_for_key_press()
-    else:
-        use_flask(user)
-
 def attack(room):
     global selfend
     """main action for user to attack the enemy in the room"""
@@ -735,9 +699,9 @@ def attack(room):
     else:
         outcome = room.encounter.fight(selfcharacter, root, text)
         if bgm and selfmusic == "On":
-            pygame.mixer.music.load(f"Music/Room/{selfroom.music}")
+            pygame.mixer.music.load(f"Music/Room/{room.music}")
             pygame.mixer.music.play(fade_ms=2000)
-        update_hud()
+        update_hud(selfcharacter)
         if outcome == 1:
             if room.enemy.name == "Voldemort":  
                 win(selfcharacter.weapon)
@@ -746,13 +710,6 @@ def attack(room):
             else:
                 drops(room)
                 money(room)
-                if selfroom.save == True:
-                    delete()
-                    write()
-                    write(selfroom.save_text)
-                    choice = get_input("\nDo you wish to save?", ["Yes", "No"], None, False)
-                    if choice == "Yes":
-                        save()
             if room.enemy.name == "Sentinels":
                 room.secret = True
                 delete()
@@ -793,6 +750,13 @@ def attack(room):
                 wait_for_key_press()
                 
             room.enemy = None
+            if room.save == True:
+                delete()
+                write()
+                write(room.save_text)
+                choice = get_input("\nDo you wish to save?", ["Yes", "No"], None, False)
+                if choice == "Yes":
+                    save()
         elif outcome == 2:
             room.encounter.reset()
             end_game()
@@ -825,104 +789,14 @@ def money(room):
         write(f"\nYou gained {room.enemy.money} runes from defeating {room.enemy.name}")
         sleep(selfsleep)
         selfcharacter.money += room.enemy.money
-        update_hud()
+        update_hud(selfcharacter)
         wait_for_key_press()
-                
-def use_flask(user):
-    """Function to allow the user to use flask but also allows them to cancel the action"""
-    display_stat(user)
-    sleep(selfsleep)
-    display_flask(user)
-    sleep(selfsleep)
-    selection = get_input("Which flask would you like to drink? ", ["Flask of Crimson Tears", "Flask of Cerulean Tears", "Cancel"], None, False)
-    valid = False
-    while not valid:
-        valid = True
-        # Checks if the user has enough flask of crimson tears
-        if selection == "Flask of Crimson Tears" and user.health_flask == 0:
-            write("\nYou ran out of Flask of Crimson Tears\n")
-            wait_for_key_press()
-            delete()
-            display_stat(user)
-            sleep(selfsleep)
-            display_flask(user)
-            sleep(selfsleep)
-            selection = get_input("Which flask would you like to drink? ", ["Flask of Crimson Tears", "Flask of Cerulean Tears", "Cancel"], None, False)
-            valid = False
-            
-        elif selection == "Flask of Crimson Tears" and user.health == user.max_health:
-            write("\nYou do not need to drink a Flask of Crimson Tears\n")
-            wait_for_key_press()
-            delete()
-            display_stat(user)
-            sleep(selfsleep)
-            display_flask(user)
-            sleep(selfsleep)
-            selection = get_input("Which flask would you like to drink? ", ["Flask of Crimson Tears", "Flask of Cerulean Tears", "Cancel"], None, False)
-            valid = False
-            
-        # Checks if the user has enough flask of cerulean tears
-        elif selection == "Flask of Cerulean Tears" and user.mana_flask == 0:
-            write("\nYou ran out of Flask of Cerulean Tears\n")
-            wait_for_key_press()
-            delete()
-            display_stat(user)
-            sleep(selfsleep)
-            display_flask(user)
-            sleep(selfsleep)
-            selection = get_input("Which flask would you like to drink? ", ["Flask of Crimson Tears", "Flask of Cerulean Tears", "Cancel"], None, False)
-            valid = False
-
-        elif selection == "Flask of Cerulean Tears" and user.mana == user.max_mana:
-            write("\nYou do not need to drink a Flask of Cerulean Tears\n")
-            wait_for_key_press()
-            delete()
-            display_stat(user)
-            sleep(selfsleep)
-            display_flask(user)
-            sleep(selfsleep)
-            selection = get_input("Which flask would you like to drink? ", ["Flask of Crimson Tears", "Flask of Cerulean Tears", "Cancel"], None, False)
-            valid = False
-
-        elif selection.lower() == "Cancel":
-            return
-
-    if selection.lower() == "flask of crimson tears":
-        # Makes sure the health healed does not exceed the maximum health
-        final_health = min(user.max_health, user.health + FlaskOfCrimsonTears().health)
-        healing = final_health - user.health
-        write(f"\nYou drank a Flask of Crimson Tears and gained {healing} health")
-        wait_for_key_press()
-        user.health = final_health
-        user.health_flask -= 1
-        delete()
-        use_flask(user)
         
-    elif selection.lower() == "flask of cerulean tears":
-        # Makes sure the mana gained does not exceed the maximum mana
-        final_mana = min(user.max_mana, user.mana + FlaskOfCeruleanTears().mana)
-        healing = final_mana - user.mana
-        write(f"\nYou drank a Flask of Cerulean Tears and gained {healing} mana")
-        wait_for_key_press()
-        user.mana = final_mana
-        user.mana_flask -= 1
-        delete()
-        use_flask(user)
-
-def display_stat(user):
-    write(f"Health : {user.health} / {user.max_health}")
-    write(f"Mana : {user.mana} / {user.max_mana}\n")
-
-def display_flask(user):
-    write(f"Flask of Crimson Tears : {user.health_flask}")
-    write(f"Flask of Cerulean Tears : {user.mana_flask}")
-    write("")
-        
-def equip(self):
+def equip(user):
     """main action for user to equip various items"""
 
-    display_equipment(selfcharacter)
-    if len(selfcharacter.get_shields()) == 0:
+    display_equipment(user)
+    if len(user.get_shields()) == 0:
         options = ["Armour", "Weapon", "Accessory", "Finish"]
     else:
         options = ["Armour", "Weapon", "Accessory", "Shield", "Finish"]
@@ -931,17 +805,17 @@ def equip(self):
         choice = get_input("\nwhat do you want to change?", options, None, False)
 
         if choice == "Armour":
-            equip_armour(selfcharacter)
+            equip_armour(user)
 
         elif choice == "Weapon":
-            equip_weapon(selfcharacter)
+            equip_weapon(UserWarning)
 
         elif choice == "Accessory":
-            equip_accessory(selfcharacter)
+            equip_accessory(user)
 
         elif choice == "Shield":
-            equip_shield(selfcharacter)
-        update_hud()
+            equip_shield(user)
+        update_hud(user)
     
 def display_equipment(user):
     """sub action for equip() to display equipments that the user have"""
@@ -1074,18 +948,6 @@ def equip_accessory(user):
             user.accessory = accessory
             delete()
             display_equipment(user)
-
-def status(user):
-    """main action that prints user's status"""
-    # Displays the users statistics
-    write(f"\nName: {user.name}")
-    write(f"Health: {user.health} / {user.max_health}")
-    write(f"Mana: {user.mana} / {user.max_mana}")
-    write(f"Defence: {user.defence}")
-    write(f"Strength: {user.attack}")
-    write(f"Runes : {user.money}")
-    write(f"Completion : {int((selfcompletion/28)*100)}%")
-    wait_for_key_press()
 
 def info(user):
     """main action that prompts user for the type of item to find out more information about"""
@@ -1298,26 +1160,6 @@ def upgrade_info(user):
             wait_for_key_press()
             delete()
             upgrade_info(user)
-                
-def display_room_name():
-    """prints the room's name in a cool way"""
-    write()
-    write("="*25)
-    space = " "*int((25-len(selfroom.name))/2)
-    write(f"{space}{selfroom.name}{space}")
-    write("="*25)
-
-def display_room_description():
-    hide_hud(False)
-    """prints the room's description"""
-    write()
-    write_animation(selfroom.description)
-    sleep(selfsleep)
-    look_animation(selfroom)
-    selfroom.been_here = True
-    show_hud()
-
-
 
 def collect_loot(attacker, loot):
     """sub method from attack() to collect loot of defeated monster"""
@@ -1340,9 +1182,6 @@ def collect_loot(attacker, loot):
     elif loot.type == "upgrade":
         attacker.upgrades.append(loot)
         write(f"\nYou obtained a {loot.name}, a powerful upgrade")
-        if loot.name == "Portal Gun":
-            selfactions.insert(-1, "Teleport")
-            selfdescription.append("Teleport to any room you have been to before")
 
     elif loot.type == "item":
         attacker.items.append(loot)
@@ -1387,7 +1226,7 @@ def win(weapon):
     write("| |_\ \ \_/ / |/ /  /\__/ / |____| | | |_| |_| |\  |")
     sleep(0.2)
     write(" \____/\___/|___/   \____/\_____/\_| |_/\___/\_| \_/")
-    if selfcompletion == 28:
+    if selfcharacter.completion == 28:
         write()
         write("Thanks for putting in the effort to 100% the game, hope you enjoyed playing :)")
         sleep(self.sleep)
@@ -1430,7 +1269,7 @@ def secret():
     selfcharacter.money = 999
     #selfcharacter.upgrades.append(ShadeCloak())
     #selfcharacter.upgrades.append(Shield())
-    selfmap.full_reveal()
+    #selfmap.full_reveal()
     selfcharacter.items.append(DectusMedallionLeft())
     selfcharacter.items.append(DectusMedallionRight())
     selfcharacter.items.append(MementoMortem())
@@ -1553,73 +1392,64 @@ def settings():
         for row in settings:
             key, val = row.split()
             settings_dict[key] = val
-    choice = ""
-    display_settings(settings_dict)
-    while choice != "finish":
-        choice = get_input("\nWhich setting do you want to change?", ["Sleep", "Music", "Controls", "Finish"], None, False)
 
-        if choice.lower() == "music":
+    choices = ["Controls", "Music", "Quit", "Finish"]
+
+    if selfroom.enemy == None:
+        choices = ["Controls", "Music", "Save", "Quit", "Finish"]
+
+    decision = ""
+
+    while decision != "finish":
+        decision = get_input("", choices)
+
+        if decision.lower() == "save":
+            save()
+
+        elif decision.lower() == "quit":
+            finish()
+
+        elif decision.lower() == "music":
             new = set_music(settings_dict["Music"])
             settings_dict["Music"] = new
 
-        if choice.lower() == "finish":
+        elif decision.lower() == "finish":
             with open("settings.txt", "w") as f:
                 for entry in settings_dict:
                     f.write(entry + " " + settings_dict[entry] + "\n")
             return
-        
-        if choice.lower() == "sleep":
-            new = set_sleep(settings_dict["Sleep"])
-            settings_dict["Sleep"] = new
 
-        elif choice.lower() == "controls":
+        elif decision.lower() == "controls":
             set_controls()
             settings_dict["Up"] = selfup
             settings_dict["Down"] = selfdown
             settings_dict["Enter"] = selfreturn
-
-        display_settings(settings_dict)
-
-def display_settings(settings):
-    """
-    display the settings passed in
-    """
-    write("\nCurrent Settings:\n")
-    for set in settings:
-        write(f"{set}: {settings[set]}")
-
-def set_sleep(current):
-    global selfsleep
-    """
-    Change the interval between messages
-    returns new value for sleep as string
-    """
-
-    write("\nsleep: the interval between messages sent by the game in seconds.")
-    write(f"Current value: {current}")
-    
-    accept = [str(x) for x in range(6)]
-    accept.append("cancel")
-
-    new = get_input("\nEnter a new value for sleep", accept)
-    
-    if new.lower() == "cancel":
-        return current
-    else:
-        selfsleep = int(new)
-        return new
     
 def set_music(current):
+    global selfsong
+    global selfmusic
 
     new = get_input("\nMusic: ", ["On", "Off", "Cancel"])
     
     if new.lower() == "cancel":
         return current
-    else:
-        return new
+    elif new.lower() == "off" and bgm:
+        pygame.mixer.music.stop()
+        selfsong = None
+    elif new.lower() == "on" and bgm and selfsong != selfroom.music:
+        pygame.mixer.music.load(f"Music/Room/{selfroom.music}")
+        pygame.mixer.music.play(fade_ms=1000)
+        selfsong = selfroom.music
+        
+    selfmusic = new
+    return new
 
 def set_controls():
-    choice = get_input("\nWhich control do you want to change?", ["Up", "Down", "Enter", "Finish"])
+    write(f"Up : {selfup}")
+    write(f"Down : {selfdown}")
+    write(f"Enter : {selfreturn}")
+
+    choice = get_input("\nWhich control do you want to change?", ["Up", "Down", "Enter", "Finish"], None, False)
 
     if choice == "Up":
         write("\nPress the key you want to change for scrolling up")
@@ -1645,8 +1475,10 @@ def set_controls():
         root.unbind("<Key>")
         delete()        
 
-    elif choice == "Cancel":
+    elif choice == "Finish":
         return
+    
+    set_controls()
 
 def change_up(e):
     global selfup
@@ -1713,17 +1545,182 @@ def display_map():
     wait_for_key_press()
     show_hud()
 
-def help():
-    for i in range(len(selfdescription)):
-        write(f"{selfactions[i]} : {selfdescription[i]}")
-    wait_for_key_press()
-
 def save():
     global selfsaveroom
     selfsaveroom = selfroom
     selfcharacter.health = selfcharacter.max_health
     selfcharacter.mana = selfcharacter.max_mana
     write(selfroom.save_message)
+
+    visited_rooms = []
+    for room in selfrooms:
+        visited_rooms.append(room.get_save_name())
+
+    with open("save.txt", "r") as f:
+        out = f.readlines()
+        all_rooms  = []
+        for i in range(28):
+            all_rooms.append([out[35+i*6].strip(), out[37+i*6].split()[1], out[38+i*6].split()[1], out[39+i*6].split()[1]])
+
+    stats = []
+    stats.append(["name", selfcharacter.name])
+    stats.append(["health", str(selfcharacter.health)])
+    stats.append(["max_health", str(selfcharacter.max_health)])
+
+    if len(selfcharacter.spells) == 0:
+            stats.append(["spells", "None"])
+    else:
+        temp = ""
+        for spell in selfcharacter.spells:
+            temp += spell.get_save_name()
+            temp += " "
+        stats.append(["spells", temp])
+
+    stats.append(["attack", str(selfcharacter.attack)])
+    stats.append(["mana", str(selfcharacter.mana)])
+    stats.append(["max_mana", str(selfcharacter.max_mana)])
+    stats.append(["defence", str(selfcharacter.defence)])
+
+    if selfcharacter.armour == None:
+        stats.append(["armour", "None"])
+    else:
+        stats.append(["armour", selfcharacter.armour.get_save_name()])
+
+    if len(selfcharacter.armours) == 0:
+            stats.append(["armours", "None"])
+    else:
+        temp = ""
+        for armour in selfcharacter.armours:
+            temp += armour.get_save_name()
+            temp += " "
+        stats.append(["armours", temp])
+
+    if selfcharacter.weapon == None:
+        stats.append(["weapon", "None"])
+    else:
+        stats.append(["weapon", selfcharacter.weapon.get_save_name()])
+
+    if len(selfcharacter.weapons) == 0:
+            stats.append(["weapons", "None"])
+    else:
+        temp = ""
+        for weapon in selfcharacter.weapons:
+            temp += weapon.get_save_name()
+            temp += " "
+        stats.append(["weapons", temp])
+
+    if selfcharacter.accessory == None:
+        stats.append(["accessory", "None"])
+    else:
+        stats.append(["accessory", selfcharacter.accessory.get_save_name()])
+
+    if len(selfcharacter.accessories) == 0:
+            stats.append(["accessories", "None"])
+    else:
+        temp = ""
+        for accessory in selfcharacter.accessories:
+            temp += accessory.get_save_name()
+            temp += " "
+        stats.append(["accessories", temp])
+    
+    stats.append(["health_flask", str(selfcharacter.health_flask)])
+    stats.append(["mana_flask", str(selfcharacter.mana_flask)])
+
+    if len(selfcharacter.items) == 0:
+            stats.append(["items", "None"])
+    else:
+        temp = ""
+        for item in selfcharacter.items:
+            temp += item.get_save_name()
+            temp += " "
+        stats.append(["items", temp])
+
+    if len(selfcharacter.upgrades) == 0:
+            stats.append(["upgrades", "None"])
+    else:
+        temp = ""
+        for upgrade in selfcharacter.upgrades:
+            temp += upgrade.get_save_name()
+            temp += " "
+        stats.append(["upgrades", temp])
+
+    if selfcharacter.shield == None:
+        stats.append(["shield", "None"])
+    else:
+        stats.append(["shield", selfcharacter.shield.get_save_name()])
+
+    if len(selfcharacter.shields) == 0:
+            stats.append(["shields", "None"])
+    else:
+        temp = ""
+        for shield in selfcharacter.shields:
+            temp += shield.get_save_name()
+            temp += " "
+        stats.append(["shields", temp])
+
+    stats.append(["money", str(selfcharacter.money)])
+
+    if selfcharacter.shop:
+        stats.append(["shop", "True"])
+    else:
+        stats.append(["shop", "False"])
+
+    if len(selfcharacter.shop_inventory) == 0:
+            stats.append(["shop_inventory", "None"])
+    else:
+        temp = ""
+        for item in selfcharacter.shop_inventory:
+            temp += item.get_save_name()
+            temp += " "
+        stats.append(["shop_inventory", temp])
+
+    if selfcharacter.gamble:
+        stats.append(["gamble", "True"])
+    else:
+        stats.append(["gamble", "False"])
+
+    if selfcharacter.additional_shop:
+        stats.append(["additional_shop", "True"])
+    else:
+        stats.append(["additional_shop", "False"])
+
+    stats.append(["completion", str(selfcharacter.completion)])
+
+    for i in range(len(all_rooms)):
+
+        if all_rooms[i][0] in visited_rooms:
+
+            current_room = selfrooms[visited_rooms.index(all_rooms[i][0])]
+
+            if current_room.enemy == None:
+                all_rooms[i][1] = "None"
+            else:
+                all_rooms[i][1] = current_room.enemy.get_save_name()
+
+            if current_room.loot == None:
+                all_rooms[i][2] = "None"
+            else:
+                all_rooms[i][2] = current_room.loot.get_save_name()
+            
+            if current_room.secret:
+                all_rooms[i][3] = "True"
+            else:
+                all_rooms[i][3] = "False"
+
+    with open("save.txt", "w") as f:
+        f.write("Save True\n\n")
+        f.write(f"Room {selfroom.get_save_name()}\n\n")
+        f.write(f"Rooms {' '.join(visited_rooms)}\n\n")
+        f.write("Character\n\n")
+        for stat in stats:
+            f.write(f"{stat[0]} {stat[1]}\n")
+        f.write("\n")
+        for room in all_rooms:
+            f.write(f"{room[0]}\n\n")
+            f.write(f"enemy {room[1]}\n")
+            f.write(f"loot {room[2]}\n")
+            f.write(f"secret {room[3]}\n\n")
+
     wait_for_key_press()
 
 def item():
@@ -1822,6 +1819,7 @@ def shop():
         write("The robot introduces himself as Ox")
         write()
         write("You notice that Ox is missing his left arm")
+        selfcharacter.additional_shop = True
         selfroom.secret_message = "You notice that Ox is missing his left arm"
     items = selfcharacter.shop_inventory.copy()
 
@@ -1903,14 +1901,57 @@ if __name__ == "__main__":
     windowsFont = ("Meslo LG S", 9, "normal")
     frame=tk.Frame(root, width=window_width, height=window_height, background = "black")
     frame.pack()
-    text = tk.Text(frame, background = "black", foreground = "white", font = windowsFont, borderwidth=0, highlightthickness = 0, wrap = tk.WORD)
-    hud = tk.Text(frame,  background = "black", foreground = "white", font = windowsFont, borderwidth=0, highlightthickness = 0)
+    text = tk.Text(frame, background = "black", foreground = "white", borderwidth=0, wrap = tk.WORD, highlightthickness=0)
+    hud = tk.Text(frame,  background = "black", foreground = "white", borderwidth=0, highlightthickness=0)
     if platform.system() == "Windows":
         text.config(font = windowsFont)
+        hud.config(font = windowsFont)
     text.place(x = 0, y= 0, height = window_height, width = 580)
     hud.place(x = text_width+40, y = 0, height = window_height, width = window_width-(text_width+40))
     text.focus_set()
-    #update_hud()
-    #write("This is an extremely long line of text to test if the word wrapping works. I need to make this line longer so these words exists. Hopefully I will be able to see the full sentence without having to expand the window screen")
-    root.after(0,intro)
+    if bgm and selfmusic == "On":
+        pygame.mixer.music.load(f"Music/Title.mp3")
+        pygame.mixer.music.play()
+    write("""  
+  _____            _                 _ _   _ 
+ |  __ \          | |               | | | (_)
+ | |__) |___  __ _| |_ __ ___  _   _| | |_ _ 
+ |  _  // _ \/ _` | | '_ ` _ \| | | | | __| |
+ | | \ \  __/ (_| | | | | | | | |_| | | |_| |
+ |_|  \_\___|\__,_|_|_| |_| |_|\__,_|_|\__|_|
+                                             
+                                             """)
+    wait_for_key_press()
+    with open("save.txt", "r") as f:
+        if f.readline().split()[1] == "True":
+            choice = ["Continue Game", "New Game"]
+        else:
+            choice = ["New Game"]
+    
+    while True:
+        decision = get_input("", choice)
+        if decision == "New Game" and len(choice) == 2:
+            selection = get_input("\nAre you sure you want to overwrite your save file?", ["Yes", "No"])
+            if selection == "Yes":
+                break
+
+        else:
+            break
+
+    if bgm and selfmusic == "On":
+        pygame.mixer.music.fadeout(100)
+    if decision == "New Game":
+        temp = setup()
+        selfroom = temp[0]
+        selfcharacter = temp[1]
+        selfrooms = temp[2]
+        selfmap = temp[3]
+        root.after(0,intro)
+    else:
+        temp = setup(True)
+        selfroom = temp[0]
+        selfcharacter = temp[1]
+        selfrooms = temp[2]
+        selfmap = temp[3]
+        root.after(0,run)
     root.mainloop()

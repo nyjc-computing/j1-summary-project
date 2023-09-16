@@ -5,6 +5,9 @@ class Upgrade:
         self.description = ""
         self.cost = 0
 
+    def get_save_name(self):
+        return self.name.replace(" ", "")
+
 class VirtualBoo(Upgrade):
 
     def __init__(self):

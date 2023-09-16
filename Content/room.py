@@ -41,15 +41,17 @@ class Room:
         self.right = None
         self.forward = None
         self.back = None
-        self.been_here = False
         self.loot = None
         self.secret = False
         self.secret_message = ""
-        self.save = False
-        self.save_text = ""
-        self.save_message = ""
+        self.save = True
+        self.save_text = "You notice a save point"
+        self.save_message = "You saved the game"
         self.complete = False
         self.music = "Kingdom_Of_Ku.mp3"
+        
+    def get_save_name(self):
+        return self.name.replace(" ", "")
         
 class Dirtmouth(Room):
     """

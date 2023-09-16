@@ -1,198 +1,203 @@
-Save True
+Save False
 
-Rooms 
+Room TheLastResort
+
+Rooms Dirtmouth Midgar TheForge Mementos Asphodel Commencement WalledCity99 TheLastResort
 
 Character
 
 name meow
-health 0
-max_health 0
-spells []
-attack 0
-mana 0
-max_mana 0
-defence 0
+health 999
+max_health 999
+spells WingardiumLeviosa 
+attack 999
+mana 999
+max_mana 999
+defence 999
 armour None
-armours []
-weapon None
-weapons []
+armours None
+weapon Wand
+weapons Wand 
 accessory None
-accessories []
-health_flask 0
-mana_flask 0
-items []
-upgrades []
+accessories None
+health_flask 999
+mana_flask 999
+items DectusMedallion(left) DectusMedallion(right) MementoMortem BlackBox RustyKey RoboticArm ScotchWhiskey 
+upgrades VirtualBoo 
 shield None
-shields []
-money 0
+shields None
+money 1099
 shop False
-shop_inventory [ScotchWhiskey]
+shop_inventory ScotchWhiskey 
 gamble False
+additional_shop False
+completion 0
 
-zebes
+Zebes
 
 enemy Ridley
-loot FlaskOfCrimsonTears
+loot DectusMedallion(left)
 secret False
 
-kingdomOfKu
+KingdomofKu
 
 enemy GeneralMugen
-loot FlaskOfCrimsonTears
+loot FlaskofCrimsonTears
 secret False
 
-bunker
+Bunker
 
 enemy Emil
-loot FlaskOfCrimsonTears
+loot BlackBox
 secret False
 
-greenhillZone 
+GreenhillZone
 
 enemy DoctorEggman
-loot FlaskOfCrimsonTears
+loot FlaskofCeruleanTears
 secret False
 
-theMushroomKingdom
+TheMushroomKingdom
 
 enemy Bowser
-loot FlaskOfCrimsonTears
+loot FlaskofCrimsonTears
 secret False
 
-asphodel
+Asphodel
 
-enemy TheBoneHyrda
-loot FlaskOfCrimsonTears
+enemy TheBoneHydra
+loot FlaskofCeruleanTears
 secret False
 
-commencement 
+Commencement
 
 enemy Mithrix
-loot FlaskOfCrimsonTears
+loot FlaskofCeruleanTears
 secret False
 
-walledCity99
+WalledCity99
 
-enemy Sentinels
-loot FlaskOfCrimsonTears 
+enemy None
+loot FlaskofCeruleanTears
 secret False
 
-mementos 
+Mementos
 
 enemy Yaldabaoth
-loot FlaskOfCrimsonTears 
+loot FlaskofCeruleanTears
 secret False
 
-shoresOfNine
+ShoresofNine
 
 enemy Freya
-loot FlaskOfCrimsonTears 
+loot FlaskofCeruleanTears
 secret False
 
-theForge
+TheForge
 
 enemy TheHighDragun
-loot FlaskOfCrimsonTears 
-secret False
+loot FlaskofCeruleanTears
+secret True
 
-midgar 
+Midgar
 
 enemy Sephiroth
-loot FlaskOfCrimsonTears 
-secret False 
+loot FlaskofCeruleanTears
+secret False
 
-dirtmouth 
+Dirtmouth
 
 enemy TheHollowKnight
-loot FlaskOfCrimsonTears 
-secret False 
+loot FlaskofCeruleanTears
+secret False
 
-theEndDimension
+TheEndDimension
 
-enemy TheEnderDragon
-loot FlaskOfCrimsonTears 
-secret False 
+enemy None
+loot FlaskofCrimsonTears
+secret False
 
-theShriekingShack
+TheShriekingShack
 
-enemy voldemort
-loot FlaskOfCrimsonTears 
-secret False 
+enemy Voldemort
+loot FlaskofCrimsonTears
+secret False
 
-hyruleKingdom 
+HyruleKingdom
 
 enemy Ganondorf
-loot FlaskOfCrimsonTears 
-secret False 
+loot FlaskofCeruleanTears
+secret False
 
-celestialResort 
+CelestialResort
 
 enemy MrOshiro
-loot FlaskOfCrimsonTears 
-secret False 
+loot FlaskofCeruleanTears
+secret False
 
-ascent 
+Ascent
 
 enemy Reyna
-loot FlaskOfCrimsonTears 
-secret False 
+loot FlaskofCeruleanTears
+secret False
 
-sixthCircleOfHell
+6thCircleofHell
 
-enemy Gabriel
-loot FlaskOfCrimsonTears 
-secret False 
+enemy Gabriel,ApostateofHate
+loot RoboticArm
+secret False
 
-towerOfFate 
+TowerofFate
 
 enemy Enchantress
-loot FlaskOfCrimsonTears 
-secret False 
+loot FlaskofCrimsonTears
+secret False
 
-miquellasHaligtree 
+Miquella'sHaligtree
 
-enemy Malenia
-loot FlaskOfCrimsonTears 
-secret False 
+enemy Malenia,BladeofMiquella
+loot RustyKey
+secret False
 
-theHallow
+TheHallow
 
 enemy TheMoonLord
-loot FlaskOfCrimsonTears 
-secret False 
+loot FlaskofCrimsonTears
+secret False
 
-theObraDinn
+TheObraDinn
 
 enemy TheKraken
-loot FlaskOfCrimsonTears 
-secret False 
+loot FlaskofCeruleanTears
+secret False
 
-kamurocho
+Kamurocho
 
 enemy Shibusawa
-loot FlaskOfCrimsonTears 
-secret False 
+loot FlaskofCeruleanTears
+secret False
 
-snowdin 
+Snowdin
 
 enemy Papyrus
-loot FlaskOfCrimsonTears 
-secret False 
+loot FlaskofCrimsonTears
+secret False
 
-theAstralPlane 
+TheAstralPlane
 
 enemy JenaAnderson
-loot FlaskOfCrimsonTears 
-secret False 
+loot FlaskofCrimsonTears
+secret False
 
-apertureLab
-
-enemy Glados
-loot FlaskOfCrimsonTears 
-secret False 
-
-theSealedTemple
+TheSealedTemple
 
 enemy TheHeir
-loot FlaskOfCrimsonTears 
-secret False 
+loot DectusMedallion(right)
+secret False
+
+TheLastResort
+
+enemy None
+loot FlaskofCrimsonTears
+secret False
+

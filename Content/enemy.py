@@ -38,6 +38,9 @@ class Enemy:
         self.money = 50
         self.music = "General_Mugen.mp3"
 
+    def get_save_name(self):
+        return self.name.replace(" ", "")
+
 
 class TheRadiance(Enemy):
     """
@@ -385,6 +388,21 @@ class Papyrus(Enemy):
         self.attack = 35
         self.move = "Flamethrower"
         self.loot = ToyKnife()
+        self.music = "Papyrus.mp3"
+
+class Sans(Enemy):
+    """
+    An enemey that inherits from the Enemy class
+    """
+    
+    def __init__(self):
+        super().__init__()
+        self.name = "Sans"
+        self.health = 350
+        self.description = "a malevolent flower with a cunning and manipulative personality"
+        self.attack = 35
+        self.move = ""
+        self.loot = None
         self.music = "Sans.mp3"
 
 class TheHeir(Enemy):

@@ -28,6 +28,9 @@ class Accessory:
         self.attack_boost = 0
         self.mana_boost = 0
         self.defence_boost = 0
+        
+    def get_save_name(self):
+        return self.name.replace(" ", "")
 
 class GoldenFeather(Accessory):
     """

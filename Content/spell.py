@@ -32,6 +32,9 @@ class Spell:
         self.win_front = ""
         self.win_back = ""
 
+    def get_save_name(self):
+        return self.name.replace(" ", "")
+
 class WingardiumLeviosa(Spell):
     """
     A spell that inherits from the Spell class
