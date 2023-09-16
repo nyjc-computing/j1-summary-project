@@ -587,6 +587,9 @@ def move(room):
     display_map()
     movement = get_input('Which direction do you wish to move in?', ['Left', 'Right', 'Forward','Back', "Cancel"], None, False)
 
+    if platform.system() == "Windows":
+        text.config(font = ("Courier New", 10, "normal"))
+
     if movement.lower() == "cancel":
         return
 
@@ -1627,6 +1630,8 @@ def teleport():
 def display_map():
     delete()
     #hide_hud()
+    if platform.system() == "Windows":
+        text.config(font = ("Meslo LG S", 9, "normal"))
     """
     Show the map
     """
@@ -2049,23 +2054,19 @@ def title():
         root.destroy()
                 
 if __name__ == "__main__":
-    window_width = 1300
-    text_width = 1000
-    window_height = 800
+    window_width = 1350
+    text_width = 1050
+    window_height = 750
     root = tk.Tk()
     pause_var = tk.StringVar()
     pointer = tk.IntVar()
     sleepCount = tk.IntVar()
     root.geometry(f'{window_width}x{window_height}')
     root.configure(bg='black')
-    windowsFont = ("Meslo LG S", 9, "normal")
     frame=tk.Frame(root, width=window_width, height=window_height, background = "black")
     frame.pack()
     text = tk.Text(frame, background = "black", foreground = "white", borderwidth=0, wrap = tk.WORD, highlightthickness=0)
     hud = tk.Text(frame,  background = "black", foreground = "white", borderwidth=0, highlightthickness=0)
-    if platform.system() == "Windows":
-        text.config(font = windowsFont)
-        hud.config(font = windowsFont)
     text.place(x = 0, y= 0, height = window_height, width = 1000)
     hud.place(x = text_width+40, y = 0, height = window_height, width = window_width-(text_width+40))
     text.focus_set()
