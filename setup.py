@@ -182,6 +182,7 @@ def setup(load=False) -> [Room, Character]:
              SmokeBombs().get_save_name() : SmokeBombs()}
 
     output_rooms = []
+    secret_passage = False
 
     if load:
         with open("save.txt", "r") as f:
@@ -197,8 +198,6 @@ def setup(load=False) -> [Room, Character]:
             output_rooms.append(rooms[room])
 
         all_room_names = []
-
-        secret_passage = False
 
         for room in all_rooms:
             all_room_names.append(room[0])
