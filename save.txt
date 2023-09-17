@@ -2,14 +2,14 @@ Save False
 
 Room Midgar
 
-Rooms Dirtmouth Midgar TheForge
+Rooms Dirtmouth Midgar
 
 Character
 
 name ncerl
 health 100
 max_health 100
-spells WingardiumLeviosa VengefulSpirit 
+spells WingardiumLeviosa 
 attack 0
 mana 50
 max_mana 50
@@ -20,18 +20,18 @@ weapon Wand
 weapons Wand BusterSword 
 accessory None
 accessories None
-health_flask 3
+health_flask 2
 mana_flask 2
 items None
 upgrades None
 shield None
 shields None
-money 100
+money 50
 shop False
 shop_inventory ScotchWhiskey 
 gamble False
 additional_shop False
-completion 1
+completion 0
 
 Zebes
 
@@ -102,14 +102,14 @@ secret True
 Midgar
 
 enemy None
-loot None
+loot FlaskofCrimsonTears
 secret False
 
 Dirtmouth
 
-enemy None
+enemy TheHollowKnight
 loot FlaskofCrimsonTears
-secret True
+secret False
 
 TheEndDimension
 
@@ -125,9 +125,9 @@ secret False
 
 HyruleKingdom
 
-enemy Ganondorf
+enemy None
 loot FlaskofCeruleanTears
-secret False
+secret True
 
 CelestialResort
 
