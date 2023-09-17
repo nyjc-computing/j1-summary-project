@@ -36,17 +36,23 @@ selfcharacter = None
 selfrooms = None
 selfmap = None
 selftaglines = []
+selfline = 0
 
 def sleep(t):
     root.after(int(t*1000), lambda: sleepCount.set(sleepCount.get()+1))
     root.wait_variable(sleepCount)
 
-def write(txt="", newline=True):
+def write(txt="", newline=True, color=None):
+    global selfline
     text['state'] = 'normal'
     text.insert(tk.END, txt)
     if newline:
         text.insert(tk.END, "\n")
     text['state'] = 'disabled'
+    selfline += 1
+    if color != None:
+        selftaglines.append([color, f"{selfline}.0", f"{selfline}.end"])
+        reapply_tag()
 
 def write_animation(txt="", newline=True):
     global time
@@ -65,10 +71,12 @@ def write_animation(txt="", newline=True):
         write()
 
 def delete(keeptag=False):
+    global selfline
     global selftaglines
     text['state'] = 'normal'
     text.delete("1.0", tk.END)
     text['state'] = 'disabled'
+    selfline = 0
 
     if not keeptag:
         selftaglines = []
@@ -532,30 +540,38 @@ def look(room):
 
     if "Virtual Boo" in upgrades:
         if room.enemy != None:
-            write(f"\nIn the middle of the room is {room.enemy.name}, {room.enemy.description}")
+            write()
+            write(f"In the middle of the room is {room.enemy.name}, {room.enemy.description}")
             sleep(selfsleep)
-            write(f"\n{room.enemy.name} has {room.enemy.health} health")
+            write()
+            write(f"{room.enemy.name} has {room.enemy.health} health")
             sleep(selfsleep)
         if room.loot != None:
-            write(f"\nThere is a {room.loot.name} hidden in {room.name}")
+            write()
+            write(f"There is a {room.loot.name} hidden in {room.name}")
             sleep(selfsleep)
         else:
-            write(f"\nThere is no loot hidden in {room.name}")
+            write()
+            write(f"There is no loot hidden in {room.name}")
             sleep(selfsleep)
         
     elif room.enemy != None:
     # Displays the enemy in the room
-        write(f"\nIn the middle of the room is {room.enemy.name}, {room.enemy.description}")
+        write()
+        write(f"In the middle of the room is {room.enemy.name}, {room.enemy.description}")
 
     if room.enemy == None and room.save:
-        write(f"\n{room.save_text}")
+        write()
+        write(f"{room.save_text}")
         
     if room.name == "The Forge":
         if room.enemy == None and room.secret and selfcharacter.shop:
-            write(f"\n{room.secret_message}")
+            write()
+            write(f"{room.secret_message}", True, "yellow")
 
     elif room.enemy == None and room.secret:
-        write(f"\n{room.secret_message}")
+        write()
+        write(f"{room.secret_message}", True, "yellow")
     write()
 
 def look_animation(room):
@@ -1744,6 +1760,7 @@ def save():
     selfsaveroom = selfroom
     selfcharacter.health = selfcharacter.max_health
     selfcharacter.mana = selfcharacter.max_mana
+    write()
     write(selfroom.save_message)
 
     visited_rooms = []

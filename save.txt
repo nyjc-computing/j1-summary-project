@@ -1,15 +1,15 @@
-Save False
+Save True
 
-Room Midgar
+Room CelestialResort
 
-Rooms Dirtmouth Midgar
+Rooms Dirtmouth HyruleKingdom CelestialResort
 
 Character
 
 name ncerl
 health 100
 max_health 100
-spells WingardiumLeviosa 
+spells WingardiumLeviosa VengefulSpirit 
 attack 0
 mana 50
 max_mana 50
@@ -17,16 +17,16 @@ defence 0
 armour None
 armours None
 weapon Wand
-weapons Wand BusterSword 
+weapons Wand MasterSword 
 accessory None
-accessories None
+accessories GoldenFeather 
 health_flask 2
 mana_flask 2
 items None
 upgrades None
 shield None
 shields None
-money 50
+money 150
 shop False
 shop_inventory ScotchWhiskey 
 gamble False
@@ -101,15 +101,15 @@ secret True
 
 Midgar
 
-enemy None
+enemy Sephiroth
 loot FlaskofCrimsonTears
 secret False
 
 Dirtmouth
 
-enemy TheHollowKnight
-loot FlaskofCrimsonTears
-secret False
+enemy None
+loot FlaskofCeruleanTears
+secret True
 
 TheEndDimension
 
@@ -131,7 +131,7 @@ secret True
 
 CelestialResort
 
-enemy MrOshiro
+enemy None
 loot FlaskofCeruleanTears
 secret False
 
