@@ -1,32 +1,32 @@
 Save True
 
-Room Snowdin
+Room Dirtmouth
 
-Rooms Dirtmouth HyruleKingdom CelestialResort 6thCircleofHell Ascent Miquella'sHaligtree Kamurocho Snowdin ApertureLab
+Rooms Dirtmouth
 
 Character
 
-name meow
-health 999
-max_health 999
-spells WingardiumLeviosa 
-attack 999
-mana 999
-max_mana 999
-defence 999
+name ncerl
+health 100
+max_health 100
+spells WingardiumLeviosa VengefulSpirit 
+attack 0
+mana 50
+max_mana 50
+defence 0
 armour None
 armours None
 weapon Wand
-weapons Wand ToyKnife 
+weapons Wand 
 accessory None
 accessories None
-health_flask 999
-mana_flask 999
-items DectusMedallion(left) DectusMedallion(right) MementoMortem BlackBox RustyKey RoboticArm ScotchWhiskey 
+health_flask 1
+mana_flask 0
+items None
 upgrades None
 shield None
-shields HylianShield 
-money 1049
+shields None
+money 50
 shop False
 shop_inventory ScotchWhiskey 
 gamble False
@@ -107,9 +107,9 @@ secret False
 
 Dirtmouth
 
-enemy TheHollowKnight
+enemy None
 loot FlaskofCrimsonTears
-secret False
+secret True
 
 TheEndDimension
 
@@ -201,8 +201,3 @@ enemy None
 loot FlaskofCrimsonTears
 secret False
 
-ApertureLab
-
-enemy Glados
-loot FlaskofCrimsonTears
-secret False

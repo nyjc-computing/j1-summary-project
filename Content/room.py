@@ -64,7 +64,7 @@ class Dirtmouth(Room):
         self.name = "Dirtmouth"
         self.description = "You stepped into Dirtmouth, a haunting cliffside town in the depths of Hallownest, standing as a silent sentinel overlooking a dark and mysterious underground world. Its dilapidated buildings and eerie stillness set the tone for your perilous journey"
         self.loot = FlaskOfCrimsonTears()
-        self.encounter = encounter.encounter(self.enemy)
+        self.encounter = encounter.hollow_knight_encounter(self.enemy)
         self.save = True
         self.save_text = "You notice a simple rustic bench in the corner of the room"
         self.save_message = "You sit on the bench, feeling more rejuvenated than ever"

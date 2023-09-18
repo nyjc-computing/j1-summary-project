@@ -103,6 +103,7 @@ def hide_hud(fullscreen = True):
 def show_hud():
     text.place(x = 0, y= 0, height = window_height, width = text_width)
     update_hud(selfcharacter)
+    
 def update_hud(user):
     
     hud['state'] = 'normal'

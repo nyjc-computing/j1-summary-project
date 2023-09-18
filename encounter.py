@@ -1307,3 +1307,93 @@ class glados_fight(encounter):
         
         else:
             return 0
+        
+class hollow_knight_encounter(encounter):
+
+    def __init__(self, enemy):
+        super().__init__(enemy)
+
+        self.timer = 4
+
+        self.enemy = self.enemies[0]
+
+        self.tips = [""]
+
+    def enemy_turn(self, player_choice: str) -> None:
+        """
+        let enemies attack
+        """
+
+        enemy = self.enemy
+
+        if self.timer == 4 or self.timer == 2:
+
+            damage = max(1, enemy.attack - self.player.defence)
+            if player_choice.lower() == "defend":
+                damage = int((self.player.shield.negation/100)*(damage))
+                
+            self.player.health = self.player.health - damage
+            self.write("")
+            self.write(f"The Hollow Knight swung his nail at you dealing {damage} damage to {self.player.name}")
+            self.delay()
+
+            if self.timer == 4:
+                self.write("")
+                self.write("The Hollow Knight takes a defensive stance with his nail")
+
+            if self.timer == 2:
+                self.write("")
+                self.write("The Hollow Knight is getting ready to unleash a powerful attack")
+
+            self.timer -= 1
+        
+        elif self.timer == 3:
+            
+            if player_choice.lower() == "weapon":
+                damage = max(1, (enemy.attack * 3) - self.player.defence)
+                if player_choice.lower() == "defend":
+                    damage = int((self.player.shield.negation/100)*(damage))
+
+                self.player.health = self.player.health - damage
+
+                self.write("")
+                self.write(f"The Hollow Knight parried your attack and retaliated with a triple slash dealing {damage} damage to {self.player.name}")
+            
+            else:
+
+                self.write("")
+                self.write("The Hollow Knight lowered his nail")
+            
+            self.timer -= 1
+
+        else:
+
+            if player_choice.lower() == "spell":
+                damage = max(1, (enemy.attack * 2) - self.player.defence)
+                if player_choice.lower() == "defend":
+                    damage = int((self.player.shield.negation/100)*(damage))
+
+                self.player.health = self.player.health - damage
+
+                self.write("")
+                self.write(f"The Hollow Knight lunged towards you catching you off guard after casting your spell")
+                self.write("")
+                self.write(f"The Hollow Knight's nail stabbed you directly, dealing {damage} damage to {self.player.name}")
+            
+            else:
+                damage = max(1, int((enemy.attack * 0.5) - self.player.defence))
+                if player_choice.lower() == "defend":
+                    damage = int((self.player.shield.negation/100)*(damage))
+
+                self.player.health = self.player.health - damage
+
+                self.write("")
+                self.write(f"The Hollow Knight lunged towards you but you managed to react fast enough")
+                self.write("")
+                self.write(f"The Hollow Knight's nail only grazed you, dealing {damage} damage to {self.player.name}")
+                
+
+            self.timer = 4
+
+
+                

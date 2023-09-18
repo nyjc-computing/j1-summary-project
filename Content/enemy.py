@@ -64,9 +64,9 @@ class TheHollowKnight(Enemy):
     def __init__(self):
         super().__init__()
         self.name = "The Hollow Knight"
-        self.health = 20
+        self.health = 100
         self.description = "a tall, armored, and humanoid figure with a dark, hollow, and mask-like visage. Its armor is ornate and tarnished, adorned with intricate patterns and spikes. It wields a large nail as a weapon, and its appearance exudes a sense of somber and eerie presence"
-        self.attack = 2
+        self.attack = 10
         self.move = "Triple Slash"
         self.loot = VengefulSpirit()
         self.music = "The_Hollow_Knight.mp3"
