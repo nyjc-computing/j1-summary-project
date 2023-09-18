@@ -46,7 +46,7 @@ def setup(load=False) -> [Room, Character]:
     midgar = Midgar()
     dirtmouth = Dirtmouth()
     theEndDimension = TheEndDimension()
-    theShriekingShack = TheShriekingShack()
+    principalsOffice = PrincipalsOffice()
     hyruleKingdom = HyruleKingdom()
     celestialResort = CelestialResort()
     ascent = Ascent()
@@ -110,7 +110,7 @@ def setup(load=False) -> [Room, Character]:
              midgar.get_save_name() : midgar, 
              dirtmouth.get_save_name() : dirtmouth, 
              theEndDimension.get_save_name() : theEndDimension, 
-             theShriekingShack.get_save_name() : theShriekingShack, 
+             principalsOffice.get_save_name() : principalsOffice, 
              hyruleKingdom.get_save_name() : hyruleKingdom, 
              celestialResort.get_save_name() : celestialResort, 
              ascent.get_save_name() : ascent, 
@@ -123,7 +123,8 @@ def setup(load=False) -> [Room, Character]:
              snowdin.get_save_name() : snowdin, 
              theAstralPlane.get_save_name() : theAstralPlane, 
              theSealedTemple.get_save_name() : theSealedTemple,
-             theLastResort.get_save_name() : theLastResort}
+             theLastResort.get_save_name() : theLastResort,
+             apertureLab.get_save_name() : apertureLab}
     
     loots = {FlaskOfCrimsonTears().get_save_name() : FlaskOfCeruleanTears(),
              FlaskOfCeruleanTears().get_save_name() : FlaskOfCeruleanTears(),
@@ -191,7 +192,7 @@ def setup(load=False) -> [Room, Character]:
             visited_rooms = out[4].split()
             character_stats = [x.split() for x in out[8:34]]
             all_rooms  = []
-            for i in range(28):
+            for i in range(29):
                 all_rooms.append([out[35+i*6].strip(), out[37+i*6].split()[1], out[38+i*6].split()[1], out[39+i*6].split()[1]])
 
         for room in visited_rooms[1:]:
@@ -266,7 +267,7 @@ def setup(load=False) -> [Room, Character]:
             elif rooms[room[0]].name == "Ascent":
                 output_map.ascent_enter()
             elif rooms[room[0]].name == "The Shrieking Shack":
-                output_map.shrieking_enter()
+                output_map.office_enter()
             elif rooms[room[0]].name == "6th Circle of Hell":
                 output_map.sixth_circle_enter()
             elif rooms[room[0]].name == "Snowdin":
@@ -326,7 +327,7 @@ def setup(load=False) -> [Room, Character]:
                 elif rooms[room[0]].name == "Ascent":
                     output_map.ascent_clear()
                 elif rooms[room[0]].name == "The Shrieking Shack":
-                    output_map.shrieking_clear()
+                    output_map.office_clear()
                 elif rooms[room[0]].name == "6th Circle of Hell":
                     output_map.sixth_circle_clear()
                 elif rooms[room[0]].name == "Snowdin":
@@ -357,7 +358,7 @@ def setup(load=False) -> [Room, Character]:
     link_right(theForge, midgar)
     link_right(midgar, dirtmouth)
     link_forward(dirtmouth, theEndDimension)
-    link_forward(theEndDimension, theShriekingShack)
+    link_forward(theEndDimension, principalsOffice)
     link_right(dirtmouth, hyruleKingdom)
     link_back(hyruleKingdom, celestialResort)
     link_back(celestialResort, sixthCircleOfHell)
