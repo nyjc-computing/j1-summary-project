@@ -976,35 +976,35 @@ class game_map:
     def bunker_current(self):
         return self.current(18,22,"Bunker")
 
-    def shrieking_enter(self) -> None:
+    def office_enter(self) -> None:
         """
-        updates map for first time visiting shrieking shack
+        updates map for first time visiting principals office
         """
         if self.e_trigger[28] != 0:
             return
         self.e_trigger[28] = 1
         #make room
-        self.make_room(2,60,"Shrieking Shack")
+        self.make_room(2,60,"Principal's Office")
 
         #make hidden rooms
 
         #(re)make paths
         self.vconnect(3,60,1)
 
-    def shrieking_clear(self) -> None:
+    def office_clear(self) -> None:
         """
-        updates map for fully clearing shrieking shack
+        updates map for fully clearing principals office
         """
         #make room
-        self.finish_room(2,60,"Shrieking Shack")
+        self.finish_room(2,60,"Principal's Office")
 
         #make hidden rooms
 
         #(re)make paths
         self.vconnect(3,60,1)
 
-    def shrieking_current(self):
-        return self.current(2,60,"Shrieking Shack")
+    def office_current(self):
+        return self.current(2,60,"Principal's Office")
 
     def full_reveal(self) -> None:
         """
@@ -1012,7 +1012,7 @@ class game_map:
         """
         self.dirtmouth_enter()
         self.end_dimension_enter()
-        self.shrieking_enter()
+        self.office_enter()
         self.hyrule_enter()
         self.celestial_resort_enter()
         self.sixth_circle_enter()
@@ -1046,7 +1046,7 @@ class game_map:
         """
         self.dirtmouth_clear()
         self.end_dimension_clear()
-        self.shrieking_clear()
+        self.office_clear()
         self.hyrule_clear()
         self.celestial_resort_clear()
         self.sixth_circle_clear()

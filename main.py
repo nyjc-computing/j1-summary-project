@@ -170,7 +170,7 @@ def intro():
     write_animation('\nWelcome to Hogwarts School of Witchcraft and Wizardry')
     sleep(selfsleep)
     write()
-    write_animation("The Dark Lord Voldemort has taken over Hogwarts and opened multiple interdimensional gates, bringing hordes of enemies into the school. Your job as the chosen one is to traverse the school in order to locate The Shrieking Shack and thwart Voldemort's evil plan to take over the world.\n")
+    write_animation("The Dark Lord Voldemort has taken over Hogwarts and opened multiple interdimensional gates, bringing hordes of enemies into the school. Your job as the chosen one is to traverse the school in order to locate Voldemort and thwart his evil plan to take over the world.\n")
     sleep(selfsleep)
     decision = get_input_animation("Do you wish to enter the school?", ["Yes", "No"], None, False)
     delete()
@@ -390,7 +390,7 @@ def run():
         elif selfroom.name == "Ascent":
             selfmap.ascent_enter()
         elif selfroom.name == "The Shrieking Shack":
-            selfmap.shrieking_enter()
+            selfmap.office_enter()
         elif selfroom.name == "6th Circle of Hell":
             selfmap.sixth_circle_enter()
         elif selfroom.name == "Snowdin":
@@ -490,7 +490,7 @@ def run():
         elif selfroom.name == "Ascent":
             selfmap.ascent_clear()
         elif selfroom.name == "The Shrieking Shack":
-            selfmap.shrieking_clear()
+            selfmap.office_clear()
         elif selfroom.name == "6th Circle of Hell":
             selfmap.sixth_circle_clear()
         elif selfroom.name == "Snowdin":
@@ -1735,7 +1735,7 @@ def display_map(moving = True):
     elif selfroom.name == "Ascent":
         selftaglines = selfmap.ascent_current()
     elif selfroom.name == "The Shrieking Shack":
-        selftaglines = selfmap.shrieking_current()
+        selftaglines = selfmap.office_current()
     elif selfroom.name == "6th Circle of Hell":
         selftaglines = selfmap.sixth_circle_current()
     elif selfroom.name == "Snowdin":
