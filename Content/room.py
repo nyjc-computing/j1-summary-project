@@ -129,6 +129,7 @@ class ApertureLab(Room):
         self.description = "You stepped into a sprawling maze of test chambers filled with menacingly cheery robots and the enigmatic AI, GLaDOS. Your journey through this surreal laboratory is a relentless quest for answers, a desperate struggle to escape its surreal confines and unmask the secrets lurking within."
         self.loot = FlaskOfCrimsonTears()
         self.encounter = encounter.glados_fight(self.enemy)
+        self.music = "Aperture.mp3"
 
 class Zebes(Room):
     """

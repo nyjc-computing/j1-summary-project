@@ -1,8 +1,6 @@
 #import builtins
 import random
-import time
 import tkinter as tk
-import string
 
 bgm = True
 try:
@@ -531,19 +529,6 @@ class encounter:
         self.write("")
         self.write(f"You drank a Flask of Cerulean Tears and gained {mana} mana")
         self.delay()
-
-    def shield(self) -> None:
-        """
-        deducts 10 mana from player for using shield
-        """
-        #get shield cost
-
-        self.delete()
-        self.player.mana = self.player.mana - cost
-        self.write("")
-        self.write(f"You used up {cost} mana points to empower your shield")
-        self.delay()
-        
 
     def over(self):
         """
