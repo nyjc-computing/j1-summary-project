@@ -26,6 +26,68 @@ class encounter:
                     "Other rooms may have useful drops that could make this fight easier"]
         self.taglines = []
 
+    def hide_hud(self, fullscreen=True):
+        w = self.window_width if fullscreen else self.text_width
+        self.text.place(x=0, y=0, height=self.window_height, width=w)
+        self.hud['state'] = 'normal'
+        self.hud.lower()
+        self.hud.delete("1.0", tk.END)
+        self.hud['state'] = 'disabled'
+
+    def show_hud(self):
+        self.text.place(x=0, y=0, height=self.window_height, width=self.text_width)
+        self.update_hud(self.player)
+
+    def update_hud(self, user):
+
+        self.hud['state'] = 'normal'
+        self.hud.delete("1.0", tk.END)
+
+        self.hud.tag_add('default', '1.0', tk.END)
+        self.hud.tag_config('default', foreground="#999594")
+        self.hud.tag_add('title', '1.0', tk.END)
+        self.hud.tag_config('title', foreground="#c9c0bf")
+        self.hud.tag_add('red', '1.0', tk.END)
+        self.hud.tag_config('red', foreground="red")
+        self.hud.tag_add('blue', '1.0', tk.END)
+        self.hud.tag_config('blue', foreground="#68c2f5")
+        self.hud.tag_add('green', '1.0', tk.END)
+        self.hud.tag_config('green', foreground="#67f55b")
+        self.hud.tag_add('gold', '1.0', tk.END)
+        self.hud.tag_config('gold', foreground="#d9a002")
+        self.hud.tag_add('white', '1.0', tk.END)
+        self.hud.tag_config('white', foreground="white")
+        self.hud.tag_add('room', '1.0', tk.END)
+        self.hud.tag_config('room', foreground="white")
+
+        self.hud.insert('1.0', f"\n{self.room}\n", ('room',))
+        self.hud.insert(tk.END, f"------------------\n\n", ('title',))
+
+        self.hud.insert(tk.END, "Attributes\n", ('title',))
+        self.hud.insert(tk.END, "\nHealth: ", ('default',))
+        self.hud.insert(tk.END, f"{user.health} / {user.max_health} ", ('green',))
+        self.hud.insert(tk.END, "\nMana: ", ('default',))
+        self.hud.insert(tk.END, f"{user.mana} / {user.max_mana}", ('blue',))
+        self.hud.insert(tk.END, "\nDefence: ", ('default',))
+        self.hud.insert(tk.END, f"{user.defence}", ('blue',))
+        self.hud.insert(tk.END, "\nStrength: ", ('default',))
+        self.hud.insert(tk.END, f"{user.attack}", ('red',))
+        self.hud.insert(tk.END, "\nRunes: ", ('default',))
+        self.hud.insert(tk.END, f"{user.money}", ('gold',))
+        self.hud.insert(tk.END, "\nCompletion: ", ('default',))
+        self.hud.insert(tk.END, f"{int((self.completion / 28) * 100)}%", ('white',))
+        self.hud.insert(tk.END, f"\n------------------\n\n", ('title',))
+        self.hud.insert(tk.END, "Equipment\n", ('title',))
+        self.hud.insert(tk.END, "\nArmour: ", ('default',))
+        self.hud.insert(tk.END, f"{user.armour.name if not user.armour is None else 'Empty'}", ('white',))
+        self.hud.insert(tk.END, "\nWeapon: ", ('default',))
+        self.hud.insert(tk.END, f"{user.weapon.name if not user.weapon is None else 'Empty'}", ('white',))
+        self.hud.insert(tk.END, "\nAccessory: ", ('default',))
+        self.hud.insert(tk.END, f"{user.accessory.name if not user.accessory is None else 'Empty'}", ('white',))
+        self.hud.insert(tk.END, "\nShield: ", ('default',))
+        self.hud.insert(tk.END, f"{user.shield.name if not user.shield is None else 'Empty'}", ('white',))
+        self.hud['state'] = 'disabled'
+
     def reapply_tag(self):
         for tag in self.text.tag_names():
             self.text.tag_delete(tag)
@@ -147,20 +209,29 @@ class encounter:
             self.root.after(self.sleep*1000, lambda: self.pause.set(self.pause.get()+1))
             self.root.wait_variable(self.pause)
 
-    def fight(self, player: "character", root: "tk.Tk()", text: "tk.Text()") -> int:
+    def fight(self, player: "character", root: "tk.Tk()", text: "tk.Text()", hud: "tk.Text()", room: str, dim: list) -> int:
         """
         main loop for the encounter, return 1 if player wins, 2 if player dies, 3 if player flees
         'player' is the player character
         'root' is the tk window
         'text' is the text field to write messages to
+        'hud' is the text field to display the hud
+        'room' is the name of the current room
+        'dim' is a list containing the window width, height, and the text width
         """
 
         self.player = player
+        self.completion = player.completion
         self.root = root
         self.text = text
+        self.hud = hud
+        self.room = room
         self.pause = tk.IntVar()
         self.pointer = tk.IntVar()
         self.pause_var = tk.StringVar()
+        self.window_width = dim[0]
+        self.window_height = dim[1]
+        self.text_width = dim[2]
         with open("settings.txt", "r") as f:
             out = f.readlines()
             out = [x.split()[1] for x in out]
@@ -181,7 +252,8 @@ class encounter:
 
             #display state of player and enemies
 
-            self.status()
+            self.enemy_status()
+            self.show_hud()
             
             advance = False
             while not advance:
@@ -238,22 +310,12 @@ class encounter:
             return 2
         
 
-    def status(self) -> None:
+    def enemy_status(self) -> None:
         """
         print the status of player and all enemies
         """
-        player = self.player
         enemies = self.enemies
         dead = self.dead
-
-        #print player health, mana, flasks
-        self.write("")
-        self.write(f"{player.name}")
-        self.write_color(f"Health : {player.health} / {player.max_health}", "green")
-        self.write_color(f"Mana : {player.mana} / {player.max_mana}", "blue")
-        self.write(f"Flask of Crimson Tears : {player.health_flask}")
-        self.write(f"Flask of Cerulean Tears : {player.mana_flask}")
-        self.delay()
 
         #print enemy health
         self.write("")
@@ -317,8 +379,10 @@ class encounter:
             self.delete()
             return self.enemies[0]
 
-        choices = self.enemies
+        choices = self.enemies.copy()
         display_options = [enemy.name for enemy in choices]
+        choices.append(None)
+        display_options.append("Cancel")
 
         return self.get_input("Which enemy do you want to attack?", choices, display_options, False) 
 
@@ -410,13 +474,13 @@ class encounter:
         while not valid:
             
             self.delay()
-            self.status()
+            self.enemy_status()
             self.delay()
             self.write("")
             choice = self.get_input("Which spell would you like to cast?", spells, spell_display, False)
 
             if choice == "Cancel":
-                self.status()
+                self.enemy_status()
                 self.delay()
                 return False
 
@@ -466,14 +530,14 @@ class encounter:
         while not valid:
 
             self.delay()
-            self.status()
+            self.enemy_status()
             self.delay()
             self.write("")
 
             choice = self.get_input("Which Flask would you like to drink?", flasks, display, False)
 
             if choice == "Cancel":
-                self.status()
+                self.enemy_status()
                 self.delay()
                 return False
 
@@ -627,21 +691,17 @@ class voldemort_fight(encounter):
         
         for enemy in enemies:
 
-            #negate damage if player is shielding
-            if player_choice == "shield":
-                self.write("")
-                self.write(f"{enemy.name} used {enemy.move}, but it was deflected by your shield")
-                self.delay()
+            # negate damage if player is shielding
+            damage = max(1, enemy.attack - self.player.defence)
+            if player_choice.lower() == "defend":
+                damage = int((self.player.shield.negation / 100) * (damage))
 
-            #deal damage to the player 
-            else:
-                damage = max(1, enemy.attack - self.player.defence)
-                self.player.health = self.player.health - damage
-                self.write("")
-                self.write(f"{enemy.name} used {enemy.move}, dealing {damage} damage to {self.player.name}")
-                self.delay()
-                if self.player.health <= 0:
-                    break
+            self.player.health = self.player.health - damage
+            self.write("")
+            self.write(f"{enemy.name} used {enemy.move}, dealing {damage} damage to {self.player.name}")
+            self.delay()
+            if self.player.health <= 0:
+                break
 
 class gabriel_fight(encounter):
     """
@@ -822,20 +882,30 @@ class glados_fight(encounter):
         self.write("")
         self.write("GLaDOS activates bomb shields, reducing her incoming damage by 90%")
 
-    def fight(self, player: "character", root: "tk.Tk()", text: "tk.Text()") -> int:
+    def fight(self, player: "character", root: "tk.Tk()", text: "tk.Text()", hud: "tk.Text()", room: str,
+              dim: list) -> int:
         """
         main loop for the encounter, return 1 if player wins, 2 if player dies, 3 if player flees
         'player' is the player character
         'root' is the tk window
         'text' is the text field to write messages to
+        'hud' is the text field to display the hud
+        'room' is the name of the current room
+        'dim' is a list containing the window width, height, and the text width
         """
 
         self.player = player
+        self.completion = player.completion
         self.root = root
         self.text = text
+        self.hud = hud
+        self.room = room
         self.pause = tk.IntVar()
         self.pointer = tk.IntVar()
         self.pause_var = tk.StringVar()
+        self.window_width = dim[0]
+        self.window_height = dim[1]
+        self.text_width = dim[2]
         with open("settings.txt", "r") as f:
             out = f.readlines()
             out = [x.split()[1] for x in out]
@@ -857,7 +927,8 @@ class glados_fight(encounter):
 
             #display state of player and enemies
 
-            self.status()
+            self.enemy_status()
+            self.show_hud()
 
             if self.intro_trigger == 0:
                 self.intro()

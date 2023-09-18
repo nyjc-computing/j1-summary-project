@@ -20,7 +20,6 @@ except ModuleNotFoundError:
 selfend = False
 selfactions = ["Map", "Move", "Attack", "Loot", "Inventory", "Settings", "Meow"]
 currentPressedKey = ""
-out = []
 with open("settings.txt", "r") as f:
     out = f.readlines()
     out = [x.split()[1] for x in out]
@@ -736,7 +735,7 @@ def attack(room):
         wait_for_key_press()
         
     else:
-        outcome = room.encounter.fight(selfcharacter, root, text)
+        outcome = room.encounter.fight(selfcharacter, root, text, hud, room.name, [window_width, window_height, text_width])
         if bgm and selfmusic == "On":
             pygame.mixer.music.load(f"Music/Room/{room.music}")
             pygame.mixer.music.play(-1, fade_ms=2000)
@@ -1268,7 +1267,7 @@ def win(weapon):
     if selfcharacter.completion == 28:
         write()
         write("Thanks for putting in the effort to 100% the game, hope you enjoyed playing :)")
-        sleep(self.sleep)
+        sleep(selfsleep)
     wait_for_key_press()
     delete()
     write()
