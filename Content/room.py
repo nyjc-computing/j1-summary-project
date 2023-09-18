@@ -347,7 +347,7 @@ class Ascent(Room):
         self.loot = FlaskOfCeruleanTears()
         self.encounter = encounter.encounter(self.enemy)
         
-class TheShriekingShack(Room):
+class PrincipalsOffice(Room):
     """
     A room that inherits from the Room class
     """
@@ -355,7 +355,7 @@ class TheShriekingShack(Room):
     def __init__(self):
         super().__init__()
         self.enemy = Voldemort()
-        self.name = "The Shrieking Shack"
+        self.name = "Principal's Office"
         self.description = "You step into a notorious and allegedly haunted building near Hogwarts School, known for its eerie and unsettling reputation as the most haunted building in Britain"
         
         self.loot = FlaskOfCrimsonTears()

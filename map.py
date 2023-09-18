@@ -16,6 +16,7 @@ class game_map:
         self.map = [[" " for x in range(130)] for x in range(32)]
         self.e_trigger = [0] * 29
         self.secret_trigger = 0
+        self.current_color = "red"
 
     def make_room(self, y: int, x: int, name: str) -> None:
         """
@@ -37,9 +38,11 @@ class game_map:
         draws a bold box, centered on coords (x,y) on the map
         name is the name of the room
         """
-        layer1 = "╭" + "━"*len(name) + "╮"
-        layer2 = "┃" + name + "┃"
-        layer3 = "╰"+ "━"*len(name) + "╯"
+
+        layer1 = "┌" + "─"*len(name) + "*"
+        layer2 = "│" + name + "│"
+        layer3 = "└"+ "─"*len(name) + "┘"
+
         box = [layer1, layer2, layer3]
         x = x - int(len(name)/2) - 1
         y = y - 1
@@ -64,6 +67,13 @@ class game_map:
         for i in range(l):   
             self.map[y+1+i][x] = "║"
         self.map[y+1+l][x] = "╩"
+    
+    def current(self, y, x, name):
+        x = x - int(len(name)/2) - 1
+        tag1 = [self.current_color, f"{y}.{x}", f"{y}.{x+len(name)+2}"]
+        tag2 = [self.current_color, f"{y+1}.{x}", f"{y+1}.{x+len(name)+2}"]
+        tag3 = [self.current_color, f"{y+2}.{x}", f"{y+2}.{x+len(name)+2}"]
+        return [tag1, tag2, tag3]
                 
     def dirtmouth_enter(self) -> None:
         """
@@ -97,6 +107,9 @@ class game_map:
         self.hconnect(10,65,1)
         self.vconnect(7,60,1)
 
+    def dirtmouth_current(self):
+        return self.current(10,60,"Dirtmouth")
+
     def end_dimension_enter(self) -> None:
         """
         updates map for first time visiting the end
@@ -124,6 +137,9 @@ class game_map:
         #(re)make paths
         self.vconnect(3,60,1)
         self.vconnect(7,60,1)
+
+    def end_dimension_current(self):
+        return self.current(6,60,"The End Dimension")
 
     def hyrule_enter(self) -> None:
         """
@@ -153,6 +169,9 @@ class game_map:
         self.hconnect(10,65,1)
         self.vconnect(11,75,1)
 
+    def hyrule_current(self):
+        return self.current(10,75,"Hyrule Kingdom")
+
     def celestial_resort_enter(self) -> None:
         """
         updates map for first time visiting celestial resort
@@ -181,6 +200,9 @@ class game_map:
         self.vconnect(11,75,1)
         self.vconnect(15,75,1)
 
+    def celestial_resort_current(self):
+        return self.current(14,75,"Celestial Resort")
+
     def sixth_circle_enter(self) -> None:
         """
         updates map for first time visiting 6th circle of hell
@@ -208,6 +230,9 @@ class game_map:
         #(re)make paths
         self.vconnect(15,75,1)
         self.hconnect(18,84,5)
+
+    def sixth_circle_current(self):
+        return self.current(18,75,"6th Circle Of Hell")
 
     def ascent_enter(self) -> None:
         """
@@ -240,6 +265,9 @@ class game_map:
         self.hconnect(18,97,7)
         self.vconnect(15,94,1)
 
+    def ascent_current(self):
+        return self.current(18,94,"Ascent")
+
     def tower_enter(self) -> None:
         """
         updates map for first time visiting tower of fate
@@ -264,6 +292,9 @@ class game_map:
 
         #(re)make paths
         self.vconnect(15,94,1)
+
+    def tower_current(self):
+        return self.current(14,94,"Tower of Fate")
 
     def haligtree_enter(self) -> None:
         """
@@ -296,6 +327,9 @@ class game_map:
         self.vconnect(19,114,4)
         self.hconnect(18,97,7)
 
+    def haligtree_current(self):
+        return self.current(18,116,"Miquella's Haligtree")
+
     def hallow_enter(self) -> None:
         """
         updates map for first time visiting the hallow
@@ -324,6 +358,9 @@ class game_map:
         self.vconnect(15,114,1)
         self.vconnect(11,114,1)
 
+    def hallow_current(self):
+        return self.current(14,114,"The Hallow")
+
     def obradinn_enter(self) -> None:
         """
         updates map for first time visiting the obra dinn
@@ -350,6 +387,9 @@ class game_map:
 
         #(re)make paths
         self.vconnect(11,114,1)
+
+    def obradinn_current(self):
+        return self.current(10,114,"The Obra Dinn")
 
     def kamurocho_enter(self) -> None:
         """
@@ -380,6 +420,9 @@ class game_map:
         #(re)make paths
         self.vconnect(19,114,4)
         self.hconnect(25,104,4)
+
+    def kamurocho_current(self):
+        return self.current(25,114,"Kamurocho")
 
     def snowdin_enter(self) -> None:
         """
@@ -415,6 +458,9 @@ class game_map:
         self.vconnect(22,100,1)
         self.vconnect(26,100,1)
 
+    def snowdin_current(self):
+        return self.current(25,100,"Snowdin")
+
     def aperture_enter(self) -> None:
         """
         updates map for first time visiting aperture
@@ -442,6 +488,9 @@ class game_map:
         #(re)make paths
         self.hconnect(25,91,4)
 
+    def aperture_current(self):
+        return self.current(25,84,"Aperture Labs")
+
     def astral_plane_enter(self) -> None:
         """
         updates map for first time visiting the astral plane
@@ -467,6 +516,9 @@ class game_map:
         #(re)make paths
         self.vconnect(22,100,1)
 
+    def astral_plane_current(self):
+        return self.current(21,100,"The Astral Plane")
+
     def sealed_temple_enter(self) -> None:
         """
         updates map for first time visiting the sealed temple
@@ -491,6 +543,9 @@ class game_map:
 
         #(re)make paths
         self.vconnect(26,100,1)
+
+    def sealed_temple_current(self):
+        return self.current(29,100,"The Sealed Temple")
 
     def midgar_enter(self) -> None:
         """
@@ -522,6 +577,9 @@ class game_map:
         self.hconnect(10,53,1)
         self.hconnect(10,44,1)
 
+    def midgar_current(self):
+        return self.current(10,50,"Midgar")
+
     def forge_enter(self) -> None:
         """
         updates map for first time visiting the forge
@@ -549,6 +607,9 @@ class game_map:
         #(re)make paths
         self.hconnect(10,44,1)
         self.vconnect(7,39,1)
+
+    def forge_current(self):
+        return self.current(10,39,"The Forge")
 
     def mementos_enter(self) -> None:
         """
@@ -581,6 +642,9 @@ class game_map:
         self.vconnect(3,39,1)
         self.hconnect(6,29,4)
 
+    def mementos_current(self):
+        return self.current(6,39,"Mementos")
+
     def shores_enter(self) -> None:
         """
         updates map for first time visiting shores of 9
@@ -607,6 +671,9 @@ class game_map:
 
         #(re)make paths
         self.vconnect(3,39,1)
+
+    def shores_current(self):
+        return self.current(2,39,"Shores of Nine")
 
     def asphodel_enter(self) -> None:
         """
@@ -643,6 +710,9 @@ class game_map:
         self.hconnect(14,25,2)
         self.map[14][25] = "╚"
 
+    def asphodel_current(self):
+        return self.current(6,25,"Asphodel")
+
     def commencement_enter(self) -> None:
         """
         updates map for first time visiting commencement
@@ -671,6 +741,9 @@ class game_map:
         self.hconnect(6,15,4)
         self.vconnect(7,8,1)
 
+    def commencement_current(self):
+        return self.current(6,9,"Commencement")
+
     def walled_enter(self) -> None:
         """
         updates map for first time visiting walled city 99
@@ -696,6 +769,9 @@ class game_map:
         #(re)make paths
         self.vconnect(7,8,1)
         self.vconnect(11,10,1)
+
+    def walled_current(self):
+        return self.current(10,9,"Walled City 99")
 
     def meow_reveal(self) -> None:
         """
@@ -735,6 +811,9 @@ class game_map:
         #(re)make paths
         self.vconnect(11,10,1)
 
+    def last_resort_current(self):
+        return self.current(14,10,"The Last Resort")
+
     def greenhill_enter(self) -> None:
         """
         updates map for first time visiting greenhill zone
@@ -769,6 +848,9 @@ class game_map:
         self.map[14][25] = "╚"
         self.hconnect(14,43,2)
         self.vconnect(15,36,1)
+
+    def greenhill_current(self):
+        return self.current(14,36,"Greenhill Zone")
         
     def mushroom_enter(self) -> None:
         """
@@ -796,6 +878,9 @@ class game_map:
 
         #(re)make paths
         self.hconnect(14,43,2)
+
+    def mushroom_current(self):
+        return self.current(14,55,"Mushroom Kingdom")
 
     def kingdom_ku_enter(self) -> None:
         """
@@ -828,6 +913,9 @@ class game_map:
         self.hconnect(18,45,1)
         self.hconnect(18,25,1)
 
+    def kingdom_ku_current(self):
+        return self.current(18,36,"The Kingdom of Ku")
+
     def zebes_enter(self) -> None:
         """
         updates map for first time visiting zebes
@@ -855,6 +943,9 @@ class game_map:
         #(re)make paths
         self.hconnect(18,45,1)
 
+    def zebes_current(self):
+        return self.current(18,50,"Zebes")
+
     def bunker_enter(self) -> None:
         """
         updates map for first time visiting bunker
@@ -881,33 +972,39 @@ class game_map:
 
         #(re)make paths
         self.hconnect(18,25,1)
+    
+    def bunker_current(self):
+        return self.current(18,22,"Bunker")
 
-    def shrieking_enter(self) -> None:
+    def office_enter(self) -> None:
         """
-        updates map for first time visiting shrieking shack
+        updates map for first time visiting principals office
         """
         if self.e_trigger[28] != 0:
             return
         self.e_trigger[28] = 1
         #make room
-        self.make_room(2,60,"Shrieking Shack")
+        self.make_room(2,60,"Principal's Office")
 
         #make hidden rooms
 
         #(re)make paths
         self.vconnect(3,60,1)
 
-    def shrieking_clear(self) -> None:
+    def office_clear(self) -> None:
         """
-        updates map for fully clearing shrieking shack
+        updates map for fully clearing principals office
         """
         #make room
-        self.finish_room(2,60,"Shrieking Shack")
+        self.finish_room(2,60,"Principal's Office")
 
         #make hidden rooms
 
         #(re)make paths
         self.vconnect(3,60,1)
+
+    def office_current(self):
+        return self.current(2,60,"Principal's Office")
 
     def full_reveal(self) -> None:
         """
@@ -915,7 +1012,7 @@ class game_map:
         """
         self.dirtmouth_enter()
         self.end_dimension_enter()
-        self.shrieking_enter()
+        self.office_enter()
         self.hyrule_enter()
         self.celestial_resort_enter()
         self.sixth_circle_enter()
@@ -949,7 +1046,7 @@ class game_map:
         """
         self.dirtmouth_clear()
         self.end_dimension_clear()
-        self.shrieking_clear()
+        self.office_clear()
         self.hyrule_clear()
         self.celestial_resort_clear()
         self.sixth_circle_clear()

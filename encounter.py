@@ -245,7 +245,7 @@ class encounter:
 
         if bgm and self.music == "On":
             pygame.mixer.music.load(f"Music/Enemy/{self.enemies[0].music}")
-            pygame.mixer.music.play(-1, fade_ms=2000)
+            pygame.mixer.music.play(-1, fade_ms=100)
 
         state = 0
         while state == 0:
@@ -279,7 +279,7 @@ class encounter:
                     self.write("You put on the shade cloak and dashed away from the enemy")
                     self.delay()
                     if bgm and self.music == "On":
-                        pygame.mixer.music.fadeout(1000)
+                        pygame.mixer.music.fadeout(100)
                     return 3
 
             state = self.over()
@@ -298,7 +298,7 @@ class encounter:
 
         if state == 1:
             if bgm and self.music == "On":
-                pygame.mixer.music.fadeout(1000)
+                pygame.mixer.music.fadeout(100)
             return 1
 
         elif state == 2:
@@ -306,7 +306,7 @@ class encounter:
             self.write("")
             self.write(random.choice(self.tips))
             if bgm and self.music == "On":
-                pygame.mixer.music.fadeout(1000)
+                pygame.mixer.music.fadeout(100)
             return 2
         
 
@@ -919,7 +919,7 @@ class glados_fight(encounter):
 
         if bgm and self.music == "On":
             pygame.mixer.music.load(f"Music/Enemy/{self.enemies[0].music}")
-            pygame.mixer.music.play(-1, fade_ms=2000)
+            pygame.mixer.music.play(-1, fade_ms=100)
             
         self.delete()
         state = 0

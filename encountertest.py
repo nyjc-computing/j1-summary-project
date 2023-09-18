@@ -38,7 +38,7 @@ try:
     pygame.mixer.init()
 except ModuleNotFoundError:
     bgm = False
-
+    
 def equip_armour(user, armour):
     # Adds the defence of the new armour
     user.defence = user.defence + armour.defence
@@ -70,12 +70,12 @@ player.spells.append(VengefulSpirit())
 player.spells.append(Megidolaon())
 player.spells.append(WillOTheWisp())
 
-player.weapon = Zenith()
+player.weapon = XBaton()
 
 armour = PowerSuit()
 equip_armour(player, armour)
 
-accessory = GoldenFeather()
+accessory = DragonAmulet()
 equip_accessory(player, accessory)
 
 shield = HylianShield()

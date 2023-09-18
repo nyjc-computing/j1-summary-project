@@ -1,8 +1,8 @@
-Save False
+Save True
 
-Room TheLastResort
+Room Snowdin
 
-Rooms Dirtmouth Midgar TheForge Mementos Asphodel Commencement WalledCity99 TheLastResort
+Rooms Dirtmouth HyruleKingdom CelestialResort 6thCircleofHell Ascent Miquella'sHaligtree Kamurocho Snowdin ApertureLab
 
 Character
 
@@ -17,16 +17,16 @@ defence 999
 armour None
 armours None
 weapon Wand
-weapons Wand 
+weapons Wand ToyKnife 
 accessory None
 accessories None
 health_flask 999
 mana_flask 999
 items DectusMedallion(left) DectusMedallion(right) MementoMortem BlackBox RustyKey RoboticArm ScotchWhiskey 
-upgrades VirtualBoo 
+upgrades None
 shield None
-shields None
-money 1099
+shields HylianShield 
+money 1049
 shop False
 shop_inventory ScotchWhiskey 
 gamble False
@@ -96,19 +96,19 @@ secret False
 TheForge
 
 enemy TheHighDragun
-loot FlaskofCeruleanTears
+loot FlaskofCrimsonTears
 secret True
 
 Midgar
 
 enemy Sephiroth
-loot FlaskofCeruleanTears
+loot FlaskofCrimsonTears
 secret False
 
 Dirtmouth
 
 enemy TheHollowKnight
-loot FlaskofCeruleanTears
+loot FlaskofCrimsonTears
 secret False
 
 TheEndDimension
@@ -179,13 +179,13 @@ secret False
 
 Snowdin
 
-enemy Papyrus
+enemy None
 loot FlaskofCrimsonTears
 secret False
 
 TheAstralPlane
 
-enemy JenaAnderson
+enemy None
 loot FlaskofCrimsonTears
 secret False
 
@@ -201,3 +201,8 @@ enemy None
 loot FlaskofCrimsonTears
 secret False
 
+ApertureLab
+
+enemy Glados
+loot FlaskofCrimsonTears
+secret False
