@@ -1381,4 +1381,6 @@ class hollow_knight_encounter(encounter):
             self.timer = 4
 
 
+        
+
                 
