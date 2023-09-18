@@ -1,32 +1,32 @@
-Save False
+Save True
 
-Room CelestialResort
+Room Snowdin
 
-Rooms Dirtmouth HyruleKingdom CelestialResort
+Rooms Dirtmouth HyruleKingdom CelestialResort 6thCircleofHell Ascent Miquella'sHaligtree Kamurocho Snowdin ApertureLab
 
 Character
 
-name ncerl
-health 100
-max_health 100
-spells WingardiumLeviosa VengefulSpirit 
-attack 0
-mana 50
-max_mana 50
-defence 0
+name meow
+health 999
+max_health 999
+spells WingardiumLeviosa 
+attack 999
+mana 999
+max_mana 999
+defence 999
 armour None
 armours None
 weapon Wand
-weapons Wand MasterSword 
+weapons Wand ToyKnife 
 accessory None
-accessories GoldenFeather 
-health_flask 2
-mana_flask 2
-items None
+accessories None
+health_flask 999
+mana_flask 999
+items DectusMedallion(left) DectusMedallion(right) MementoMortem BlackBox RustyKey RoboticArm ScotchWhiskey 
 upgrades None
 shield None
-shields None
-money 150
+shields HylianShield 
+money 1049
 shop False
 shop_inventory ScotchWhiskey 
 gamble False
@@ -107,9 +107,9 @@ secret False
 
 Dirtmouth
 
-enemy None
-loot FlaskofCeruleanTears
-secret True
+enemy TheHollowKnight
+loot FlaskofCrimsonTears
+secret False
 
 TheEndDimension
 
@@ -125,13 +125,13 @@ secret False
 
 HyruleKingdom
 
-enemy None
+enemy Ganondorf
 loot FlaskofCeruleanTears
-secret True
+secret False
 
 CelestialResort
 
-enemy None
+enemy MrOshiro
 loot FlaskofCeruleanTears
 secret False
 
@@ -179,13 +179,13 @@ secret False
 
 Snowdin
 
-enemy Papyrus
+enemy None
 loot FlaskofCrimsonTears
 secret False
 
 TheAstralPlane
 
-enemy JenaAnderson
+enemy None
 loot FlaskofCrimsonTears
 secret False
 
@@ -201,3 +201,8 @@ enemy None
 loot FlaskofCrimsonTears
 secret False
 
+ApertureLab
+
+enemy Glados
+loot FlaskofCrimsonTears
+secret False

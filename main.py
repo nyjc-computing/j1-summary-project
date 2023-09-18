@@ -1272,15 +1272,17 @@ def end_game():
     global selfend
     global selfroom
 
-    if selfsaveroom != None:
+    if check_save():
         choice = get_input_animation("\nDo you want to reload the last save?", ["Yes", "No"], None, False)
         if choice == "Yes":
             load_save()
 
         else:
+            wait_for_key_press()
             selfend = True
 
     else:
+        wait_for_key_press()
         selfend = True
 
 def load_save():
@@ -1412,6 +1414,7 @@ def secret():
     selfcharacter.items.append(RustyKey())
     selfcharacter.items.append(RoboticArm())
     selfcharacter.items.append(ScotchWhiskey())
+    selfcharacter.shields.append(HylianShield())
     selfactions.insert(-1, "Teleport")
 
 def meow():
@@ -2117,22 +2120,29 @@ def logo():
                                              
                                              """
 
+def check_save():
+    with open("save.txt", "r") as f:
+        if f.readline().split()[1] == "True":
+            return True
+        else:
+            return False
+
 def title():
     global selfroom
     global selfcharacter
     global selfrooms
     global selfmap
+    hide_hud()
     if bgm and selfmusic == "On":
         pygame.mixer.music.load(f"Music/Title.mp3")
         pygame.mixer.music.play(-1)
     delete()
     write(logo())
     wait_for_key_press()
-    with open("save.txt", "r") as f:
-        if f.readline().split()[1] == "True":
-            choice = ["Continue Game", "New Game", "Exit"]
-        else:
-            choice = ["New Game", "Exit"]
+    if check_save():
+        choice = ["Continue Game", "New Game", "Exit"]
+    else:
+        choice = ["New Game", "Exit"]
     
     while True:
         decision = get_input(logo(), choice, None, False)

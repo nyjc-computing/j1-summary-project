@@ -123,7 +123,8 @@ def setup(load=False) -> [Room, Character]:
              snowdin.get_save_name() : snowdin, 
              theAstralPlane.get_save_name() : theAstralPlane, 
              theSealedTemple.get_save_name() : theSealedTemple,
-             theLastResort.get_save_name() : theLastResort}
+             theLastResort.get_save_name() : theLastResort,
+             apertureLab.get_save_name() : apertureLab}
     
     loots = {FlaskOfCrimsonTears().get_save_name() : FlaskOfCeruleanTears(),
              FlaskOfCeruleanTears().get_save_name() : FlaskOfCeruleanTears(),
@@ -191,7 +192,7 @@ def setup(load=False) -> [Room, Character]:
             visited_rooms = out[4].split()
             character_stats = [x.split() for x in out[8:34]]
             all_rooms  = []
-            for i in range(28):
+            for i in range(29):
                 all_rooms.append([out[35+i*6].strip(), out[37+i*6].split()[1], out[38+i*6].split()[1], out[39+i*6].split()[1]])
 
         for room in visited_rooms[1:]:
