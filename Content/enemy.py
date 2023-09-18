@@ -122,7 +122,7 @@ class Glados(Enemy):
     
     def __init__(self):
         super().__init__()
-        self.name = "Glados"
+        self.name = "GLaDOS"
         self.health = 3000
         self.description = "a malevolent AI antagonist, known for her dark sense of humor and penchant for testing subjects with life-threatening puzzles"
         self.attack = 20
