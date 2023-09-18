@@ -375,6 +375,7 @@ class Gabriel(Enemy):
         self.attack = 20
         self.move = "Sword Throw"
         self.loot = MarksmanRevolver()
+        self.music = "Gabriel.mp3"
 
 class Papyrus(Enemy):
     """
