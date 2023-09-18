@@ -128,6 +128,7 @@ class Glados(Enemy):
         self.attack = 20
         self.move = "Neurotoxin Gas"
         self.loot = PortalGun()
+        self.music = "Glados.mp3"
 
 class Yaldabaoth(Enemy):
     """

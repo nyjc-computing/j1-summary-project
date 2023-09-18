@@ -20,6 +20,13 @@ text = tk.Text(root, height = 560, width = 560, background = "black", foreground
 text.pack()
 text.focus_set()
 
+bgm = True
+try:
+    import pygame
+    pygame.mixer.init()
+except ModuleNotFoundError:
+    bgm = False
+    
 def equip_armour(user, armour):
     # Adds the defence of the new armour
     user.defence = user.defence + armour.defence
