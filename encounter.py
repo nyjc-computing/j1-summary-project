@@ -1211,6 +1211,10 @@ class glados_fight(encounter):
         for enemy in self.enemies:
             enemy.health = 0
 
+        self.write("You grabbed a core and shoved it into the receptacle")
+        self.write("GLaDOS wakes up and tries to resist the transfer")
+        self.write("In her desperation, she blows up her mainframe, destroying herself")
+
     def core_corruption(self) -> None:
         """
         outputs a message based on number of cores dropped
