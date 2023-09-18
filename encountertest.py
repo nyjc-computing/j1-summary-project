@@ -56,10 +56,10 @@ def equip_accessory(user, accessory):
 
 player = character.Character()
 player.name = "awpik"
-player.health = 200
-player.max_health = 200
-player.mana = 400
-player.max_mana = 400
+player.health = 100
+player.max_health = 100
+player.mana = 100
+player.max_mana = 100
 player.attack = 0
 
 player.armours.append(OrnatePlate())
@@ -70,12 +70,12 @@ player.spells.append(VengefulSpirit())
 player.spells.append(Megidolaon())
 player.spells.append(WillOTheWisp())
 
-player.weapon = XBaton()
+player.weapon = Zenith()
 
-armour = PowerSuit()
+armour = OrnatePlate()
 equip_armour(player, armour)
 
-accessory = DragonAmulet()
+accessory = GoldenFeather()
 equip_accessory(player, accessory)
 
 shield = HylianShield()
@@ -86,4 +86,4 @@ player.mana_flask = 20
 
 fight = encounter.glados_fight(enemy.Glados())
 
-fight.fight(player, root, text, hud, "pissland", [window_width, window_height, text_width])
+fight.fight(player, root, text, hud, "penisland", [window_width, window_height, text_width])

@@ -376,6 +376,7 @@ class SixthCircleOfHell(Room):
         self.save = True
         self.save_text = "You See a floating translucent banner saying 'Checkpoint'"
         self.save_message = "You walk past the banner, feeling completely revitalised"
+        self.music = "SixthCircle.mp3"
 
 class Snowdin(Room):
     """
