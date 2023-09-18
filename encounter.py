@@ -22,6 +22,7 @@ class encounter:
         self.enemies = [enemy]
         self.dead = []
         self.line = 1
+        self.turns = 1
         self.tips = ["Remember to restore your health and mana before every fight",
                     "Other rooms may have useful drops that could make this fight easier"]
         self.taglines = []
@@ -86,6 +87,7 @@ class encounter:
         self.hud.insert(tk.END, f"{user.accessory.name if not user.accessory is None else 'Empty'}", ('white',))
         self.hud.insert(tk.END, "\nShield: ", ('default',))
         self.hud.insert(tk.END, f"{user.shield.name if not user.shield is None else 'Empty'}", ('white',))
+        self.hud.insert(tk.END, f"\n\nTurn {self.turns}")
         self.hud['state'] = 'disabled'
 
     def reapply_tag(self):
@@ -631,6 +633,16 @@ class encounter:
         short_del()
         self.write("  \_/  \___/ \___/  |___/  \___/\____/|___/ ")
 
+        self.update_hud(self.player)
+
+    def wait_for_key_press(self):
+        pause_var = tk.StringVar()
+        self.write("\nPress any key to continue")
+        self.root.bind('<Key>', lambda x: pause_var.set("done"))
+        self.root.wait_variable(pause_var)
+        self.root.unbind('<Key>')
+        pause_var.set("")
+
 class voldemort_fight(encounter):
     """
     an encounter that inherits from the encounter class
@@ -849,8 +861,6 @@ class glados_fight(encounter):
         super().__init__(enemy)
         
         self.intro_trigger = 0
-
-        self.turns = 1
         
         self.gas_state = 1
 
@@ -868,9 +878,14 @@ class glados_fight(encounter):
         self.rocket_cooldown = 1
         self.rocket_state = 0
 
-        self.tips = ["Damage dealt to turrets is dealt to GLaDOS as well.",
+        self.tips = ["Damage dealt to turrets is dealt to GLaDOS as well, but is still subject to GLaDOS's damage reduction. Generally, don't attack GLaDOS while the shield is up.",
                      "After taking a certain amount of damage, GLaDOS will drop a core. Do it enough times and maybe something will happen.",
-                     "Rocket Turrets deal a lot of damage, but they take a long time to arm. Destroy them before they can fire."]
+                     "Rocket Turrets deal a lot of damage, but they take a long time to arm. Destroy them before they can fire.",
+                     "Every third time GLaDOS deploys sentry turrets, she will fail and stun herself, deactivating her shields",
+                     "Make the most out of AOE attacks by maximising the number of enemies on the field",
+                     "GLaDOS will use a powerful attack when she recovers from being stunned. Make sure you can tank it.",
+                     "After a certain number of turns, the neurotoxins will immediately kill you. Every turn counts.",
+                     "Devs personally recommend the Dragon Amulet for this fight."]
 
 
     def intro(self) -> None:
@@ -934,14 +949,14 @@ class glados_fight(encounter):
                 self.intro()
                 self.intro_trigger = 1
 
-            if self.turns == 20:
+            if self.turns == 25:
                 self.write("")
                 self.write("The neurotoxin concentration is getting dangerously high")
                 self.delay()
                 self.write("Damage per turn increased to 10")
                 self.gas_state = 2
 
-            if self.turns == 30:
+            if self.turns == 36:
                 self.gas_state = 3
 
             self.core_corruption()
@@ -1009,6 +1024,7 @@ class glados_fight(encounter):
             self.end_game()
             self.write("")
             self.write(random.choice(self.tips))
+            self.wait_for_key_press()
             return 2
 
     def enemy_turn(self, player_choice: str) -> None:
@@ -1270,6 +1286,7 @@ class glados_fight(encounter):
         self.write("You grabbed a core and shoved it into the receptacle")
         self.write("GLaDOS wakes up and tries to resist the transfer")
         self.write("In her desperation, she blows up her mainframe, destroying herself")
+        self.wait_for_key_press()
 
     def core_corruption(self) -> None:
         """
