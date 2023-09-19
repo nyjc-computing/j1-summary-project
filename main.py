@@ -99,6 +99,7 @@ def hide_hud(fullscreen = True):
     hud.lower()
     hud.delete("1.0", tk.END)
     hud['state'] = 'disabled'
+
 def show_hud():
     text.place(x = 0, y= 0, height = window_height, width = text_width)
     update_hud(selfcharacter)
@@ -613,10 +614,12 @@ def look_animation(room):
 def move(room):
     global selfroom
     """main action for user to traverse from one room to another"""
+    hide_hud()
     display_map()
     movement = get_input('Which direction do you wish to move in?', ['Left', 'Right', 'Forward','Back', "Cancel"], None, False)
 
     if movement.lower() == "cancel":
+        show_hud()
         return
 
     # Generate a random number to see if you managed to sneak past the enemy
@@ -707,6 +710,8 @@ def move(room):
         if bgm and selfmusic == "On":
             pygame.mixer.music.fadeout(100)
         attack(room)
+
+    show_hud()
 
 def loot(user, loot):
     """main action for user to search the room for loot"""
@@ -2180,8 +2185,8 @@ def title():
         root.destroy()
                 
 if __name__ == "__main__":
-    window_width = 1350
-    text_width = 1050
+    window_width = 1000
+    text_width = 750
     window_height = 750
     root = tk.Tk()
     pause_var = tk.StringVar()

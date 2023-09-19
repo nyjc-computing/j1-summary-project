@@ -1,78 +1,78 @@
 Save True
 
-Room Dirtmouth
+Room Bunker
 
-Rooms Dirtmouth
+Rooms Dirtmouth Midgar TheForge Mementos Asphodel Commencement HyruleKingdom CelestialResort TheEndDimension ShoresofNine GreenhillZone TheMushroomKingdom KingdomofKu Zebes Bunker
 
 Character
 
-name awpik
+name ncerl
 health 100
 max_health 100
-spells WingardiumLeviosa VengefulSpirit 
+spells WingardiumLeviosa VengefulSpirit Megidolaon WillOTheWisp 
 attack 0
-mana 50
-max_mana 50
-defence 0
-armour None
-armours None
-weapon Wand
-weapons Wand 
-accessory None
-accessories None
-health_flask 1
-mana_flask 1
-items None
+mana 80
+max_mana 80
+defence 30
+armour PowerSuit
+armours NetheriteArmour Cappy DragonMail PowerSuit 
+weapon LeviathanAxe
+weapons Wand BusterSword Coronacht MasterSword LeviathanAxe VirtuousTreaty 
+accessory GoldenFeather
+accessories MasterRound GoldenFeather ChaosEmerald 
+health_flask 0
+mana_flask 2
+items DectusMedallion(left) 
 upgrades None
 shield None
 shields None
-money 50
+money 750
 shop False
 shop_inventory ScotchWhiskey 
 gamble False
 additional_shop False
-completion 0
+completion 8
 
 Zebes
 
-enemy Ridley
-loot DectusMedallion(left)
+enemy None
+loot None
 secret False
 
 KingdomofKu
 
-enemy GeneralMugen
-loot FlaskofCrimsonTears
+enemy None
+loot None
 secret False
 
 Bunker
 
-enemy Emil
+enemy None
 loot BlackBox
 secret False
 
 GreenhillZone
 
-enemy DoctorEggman
-loot FlaskofCeruleanTears
+enemy None
+loot None
 secret False
 
 TheMushroomKingdom
 
-enemy Bowser
-loot FlaskofCrimsonTears
-secret False
+enemy None
+loot None
+secret True
 
 Asphodel
 
-enemy TheBoneHydra
-loot FlaskofCeruleanTears
+enemy None
+loot None
 secret False
 
 Commencement
 
-enemy Mithrix
-loot FlaskofCeruleanTears
+enemy None
+loot None
 secret False
 
 WalledCity99
@@ -83,32 +83,32 @@ secret False
 
 Mementos
 
-enemy Yaldabaoth
-loot FlaskofCeruleanTears
+enemy None
+loot None
 secret False
 
 ShoresofNine
 
-enemy Freya
-loot FlaskofCeruleanTears
+enemy None
+loot None
 secret False
 
 TheForge
 
-enemy TheHighDragun
-loot FlaskofCrimsonTears
+enemy None
+loot None
 secret True
 
 Midgar
 
-enemy Sephiroth
-loot FlaskofCrimsonTears
+enemy None
+loot None
 secret False
 
 Dirtmouth
 
 enemy None
-loot FlaskofCrimsonTears
+loot None
 secret True
 
 TheEndDimension
@@ -125,13 +125,13 @@ secret False
 
 HyruleKingdom
 
-enemy Ganondorf
-loot FlaskofCeruleanTears
-secret False
+enemy None
+loot None
+secret True
 
 CelestialResort
 
-enemy MrOshiro
+enemy None
 loot FlaskofCeruleanTears
 secret False
 
