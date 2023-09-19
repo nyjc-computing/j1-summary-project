@@ -115,6 +115,24 @@ class encounter:
             if p == i: arrow = ">"
             self.write(f"{arrow} {e}")
         self.reapply_tag()
+
+    def show_animation(self, prompt, options, deletebefore):
+        data = self.text.get("1.0",'end-1c')
+        self.delete(True)
+        keep = ""
+        if not deletebefore:
+            keep = data.split(prompt)[0]
+            
+        """main action for user to get the list of possible actions"""
+        # Displays the list of actions the user can do
+        p = self.pointer.get()
+        self.write(keep, False)
+        self.write_animation(prompt+"\n")
+        for i, e in enumerate(options):
+            arrow = " "
+            if p == i: arrow = ">"
+            self.write(f"{arrow} {e}")
+        self.reapply_tag()
         
     def up_action(self, prompt, options, delete):
         p = self.pointer.get()
@@ -134,11 +152,14 @@ class encounter:
     
         self.show(prompt, options, delete)
     
-    def get_input(self, prompt, options, displayoptions = None, deletebefore = True):
+    def get_input(self, prompt, options, displayoptions = None, deletebefore = True, animation = False):
         """sub action for run() that prompts user for a main action"""
         if displayoptions is None:
             displayoptions = options
-        self.show(prompt, displayoptions, deletebefore)
+        if animation:
+            self.show_animation(prompt, displayoptions, deletebefore)
+        else:
+            self.show(prompt, displayoptions, deletebefore)
         self.root.bind(f'<{self.enter}>', lambda x: self.pause_var.set("done"))
         self.root.bind(f"<{self.up}>", lambda e: self.up_action(prompt, displayoptions, deletebefore))
         self.root.bind(f"<{self.down}>", lambda e: self.down_action(prompt, displayoptions, deletebefore))
@@ -151,6 +172,7 @@ class encounter:
         self.pointer.set(0)
         self.delete()
         return decision
+    
 
     def reset(self):
         """
@@ -277,12 +299,16 @@ class encounter:
             self.show_hud()
             
             advance = False
+            count = 0
             while not advance:
 
                 self.delete(True)
                 self.write(data, False)
 
-                decision = self.get_choice()
+                if count == 0:
+                    decision = self.get_choice(True)
+                else:
+                    decision = self.get_choice(False)
 
                 if decision.lower() == "weapon":
                     advance = self.attack()
@@ -306,6 +332,8 @@ class encounter:
                         pygame.mixer.music.fadeout(100)
                     return 3
 
+                count += 1
+
             state = self.over()
             if state != 0:
                 break
@@ -320,6 +348,8 @@ class encounter:
 
             data = self.text.get("1.0",'end-1c')
             state = self.over()
+            self.turns += 1
+            
 
         if state == 1:
             if bgm and self.music == "On":
@@ -327,6 +357,7 @@ class encounter:
             return 1
 
         elif state == 2:
+            self.wait_for_key_press()
             self.end_game()
             self.write("")
             self.write(random.choice(self.tips))
@@ -353,7 +384,7 @@ class encounter:
             
         self.delay(self.sleep)
     
-    def get_choice(self) -> str:
+    def get_choice(self, new) -> str:
         """
         get choice of action from user
         """
@@ -367,7 +398,10 @@ class encounter:
             choices.append("Escape")
 
         self.write("")
-        return self.get_input("What do you want to use?", choices, None, False)
+        if new:
+            return self.get_input("What do you want to use?", choices, None, False, True)
+        else:
+            return self.get_input("What do you want to use?", choices, None, False, False)
 
     def enemy_turn(self, player_choice: str) -> None:
         """
@@ -626,6 +660,8 @@ class encounter:
             return 0
         
     def end_game(self) -> None:
+
+        self.delete()
 
         def short_del():
             pause = tk.StringVar()
@@ -1402,7 +1438,7 @@ class hollow_knight_encounter(encounter):
 
         self.enemy = self.enemies[0]
 
-        self.tips = [""]
+        self.tips = ["The Hollow Knight will retaliate if you use a weapon when he is defending", "The Hollow Knight will catch you off guard if you use a spell when he charges at you"]
 
     def enemy_turn(self, player_choice: str) -> None:
         """
