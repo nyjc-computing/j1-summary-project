@@ -1775,7 +1775,7 @@ def save():
     with open("save.txt", "r") as f:
         out = f.readlines()
         all_rooms  = []
-        for i in range(28):
+        for i in range(29):
             all_rooms.append([out[35+i*6].strip(), out[37+i*6].split()[1], out[38+i*6].split()[1], out[39+i*6].split()[1]])
 
     stats = []
@@ -2172,6 +2172,7 @@ def title():
         root.after(0,intro)
     elif decision == "Continue Game":
         load_save()
+        show_hud()
     else:
         if bgm and selfmusic == "On":
             pygame.mixer.music.stop()

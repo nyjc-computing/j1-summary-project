@@ -21,7 +21,7 @@ weapons Wand
 accessory None
 accessories None
 health_flask 1
-mana_flask 0
+mana_flask 1
 items None
 upgrades None
 shield None
@@ -201,3 +201,8 @@ enemy None
 loot FlaskofCrimsonTears
 secret False
 
+ApertureLab
+
+enemy None
+loot FlaskofCrimsonTears
+secret False
