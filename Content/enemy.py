@@ -376,7 +376,7 @@ class Gabriel(Enemy):
         self.move = "Sword Throw"
         self.loot = MarksmanRevolver()
         self.music = "Gabriel.mp3"
-        
+
 class Papyrus(Enemy):
     """
     An enemey that inherits from the Enemy class
@@ -540,3 +540,10 @@ class Glados_Rocket(Enemy):
         self.attack = 50
         self.move = "Rocket Launcher"
         self.loot = None
+
+class Ender_Crystal(Enemy):
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.name = "Ender Crystal"
+        self.health = 10

@@ -360,7 +360,7 @@ class encounter:
             self.wait_for_key_press()
             self.end_game()
             self.write("")
-            self.write(random.choice(self.tips))
+            self.write_animation(random.choice(self.tips))
             if bgm and self.music == "On":
                 pygame.mixer.music.fadeout(100)
             return 2
@@ -793,13 +793,13 @@ class gabriel_fight(encounter):
 
             self.player.health = self.player.health - damage
             self.write("")
-            self.write(f"Gabriel used light combo, dealing {damage} damage to {self.player.name}")
+            self.write_animation(f"Gabriel used light combo, dealing {damage} damage to {self.player.name}")
             self.delay(self.sleep)
 
         if self.timer > 1:
             enemy.defence = 10
             self.spinning_blades = 1
-            self.write(f"Gabriel used spinning blades, increasing his defence by 10 for one turn")
+            self.write_animation(f"Gabriel used spinning blades, increasing his defence by 10 for one turn")
             self.delay(self.sleep)
 
         if self.timer == 1:
@@ -812,15 +812,15 @@ class gabriel_fight(encounter):
             
             if player_choice == "Weapon" and self.player.weapon.name.lower() in self.melee:
                 self.write("")
-                self.write("Gabriel used his special move, Sword Throw")
+                self.write_animation("Gabriel used his special move, Sword Throw")
                 self.delay(self.sleep)
                 self.write("")
-                self.write(f"As you swung the {self.player.weapon.name}, you +PARRIED Gabriel's Sword Throw")
+                self.write_animation(f"As you swung the {self.player.weapon.name}, you +PARRIED Gabriel's Sword Throw")
                 enemy.health = enemy.health - 100
                 if enemy.health <= 0:
-                    self.write("The Sword pierces Gabriel's armor and explodes, vanquishing the angel")
+                    self.write_animation("The Sword pierces Gabriel's armor and explodes, vanquishing the angel")
                 else:
-                    self.write("It rockets back towards Gabriel, exploding for 100 damage")
+                    self.write_animation("It rockets back towards Gabriel, exploding for 100 damage")
 
             else:
                 damage = max(1, 60 - self.player.defence)
@@ -829,7 +829,7 @@ class gabriel_fight(encounter):
                              
                 self.player.health = self.player.health - damage
                 self.write("")
-                self.write(f"Gabriel used his special move, Sword Throw, dealing {damage} damage to {self.player.name}")
+                self.write_animation(f"Gabriel used his special move, Sword Throw, dealing {damage} damage to {self.player.name}")
                 self.delay(self.sleep)
                 
         self.timer = self.timer - 1
@@ -847,12 +847,12 @@ class gabriel_fight(encounter):
         #check if enemy is dead
         if target.health > 0:
             self.write("")
-            self.write(f"{self.player.name}{weapon.move}, dealing {damage} damage to {target.name}")
+            self.write_animation(f"{self.player.name}{weapon.move}, dealing {damage} damage to {target.name}")
             self.delay(self.sleep)
             
         else:
             self.write("")
-            self.write(f"{self.player.name}{weapon.win_front}{target.name}{weapon.win_back}")
+            self.write_animation(f"{self.player.name}{weapon.win_front}{target.name}{weapon.win_back}")
             self.enemies.remove(target)
             target.health = 0
             self.dead.append(target)
@@ -862,9 +862,9 @@ class gabriel_fight(encounter):
             damage = max(1, self.enemy.attack - self.player.defence)
             self.player.health = self.player.health - damage
             self.write("")
-            self.write(f"Gabriel's spinning blades hit you as you attacked, dealing {damage} damage to you")
+            self.write_animation(f"Gabriel's spinning blades hit you as you attacked, dealing {damage} damage to you")
             if self.spin_warning == 0:
-                self.write("You would do well to keep your distance while this ability is active")
+                self.write_animation("You would do well to keep your distance while this ability is active")
                 self.spin_warning = 1
 
     def status(self) -> None:
@@ -898,7 +898,7 @@ class gabriel_fight(encounter):
         #telegraph for sword throw
         if self.timer == 0:
             self.write("")
-            self.write("Gabriel is preparing something")
+            self.write_animation("Gabriel is preparing something")
 
 class glados_fight(encounter):
     """
@@ -938,12 +938,12 @@ class glados_fight(encounter):
 
     def intro(self) -> None:
         self.write("")
-        self.write("GLaDOS starts filling the room with deadly neurotoxins")
+        self.write_animation("GLaDOS starts filling the room with deadly neurotoxins")
         self.delay(self.sleep)
-        self.write("You will take 5 damage every turn, damage is not affected by defence")
+        self.write_animation("You will take 5 damage every turn, damage is not affected by defence")
         self.delay(self.sleep)
         self.write("")
-        self.write("GLaDOS activates bomb shields, reducing her incoming damage by 90%")
+        self.write_animation("GLaDOS activates bomb shields, reducing her incoming damage by 90%")
 
     def fight(self, player: "character", root: "tk.Tk()", text: "tk.Text()", hud: "tk.Text()", room: str,
               dim: list) -> int:
@@ -989,8 +989,6 @@ class glados_fight(encounter):
         while state == 0:
 
             #display state of player and enemies
-
-            self.enemy_status()
             self.show_hud()
 
             if self.intro_trigger == 0:
@@ -999,9 +997,9 @@ class glados_fight(encounter):
 
             if self.turns == 25:
                 self.write("")
-                self.write("The neurotoxin concentration is getting dangerously high")
+                self.write_animation("The neurotoxin concentration is getting dangerously high")
                 self.delay(self.sleep)
-                self.write("Damage per turn increased to 10")
+                self.write_animation("Damage per turn increased to 10")
                 self.gas_state = 2
 
             if self.turns == 36:
@@ -1009,10 +1007,18 @@ class glados_fight(encounter):
 
             self.core_corruption()
             
+            data = self.text.get("1.0",'end-1c')
+
             advance = False
+            count = 0
             while not advance:
 
-                decision = self.get_choice()
+                self.delete(True)
+                self.write(data, False)
+                if count == 0:
+                    decision = self.get_choice(True)
+                else:
+                    decision = self.get_choice(False)
 
                 if decision.lower() == "weapon":
                     advance = self.attack()
@@ -1024,26 +1030,28 @@ class glados_fight(encounter):
                     advance = self.flask()
 
                 elif decision.lower() == "defend":
-                    self.write(f"You raise up your {self.player.shield.name}")
+                    self.write_animation(f"You raise up your {self.player.shield.name}")
                     self.delay(self.sleep)
                     advance = True
 
                 elif decision.lower() == "escape":
                     self.reset()
                     self.delete()
-                    self.write("You put on the shade cloak and dashed away from the enemy")
+                    self.write_animation("You put on the shade cloak and dashed away from the enemy")
                     self.delay(self.sleep)
                     return 3
 
                 elif decision.lower() == "core transfer":
                     if self.stun == 0:
                         self.write("")
-                        self.write("You grab one of the cores and try to reach the core receptacle,")
-                        self.write("but GLaDOS raises the floor panels, blocking your path")
+                        self.write_animation("You grab one of the cores and try to reach the core receptacle,")
+                        self.write_animation("but GLaDOS raises the floor panels, blocking your path")
                         self.delay(self.sleep)
                     else:
                         self.core_transfer()
                     advance = True
+                
+                count += 1
 
             self.check_gauge()
 
@@ -1087,19 +1095,19 @@ class glados_fight(encounter):
         
         if self.gas_state == 1:
             
-            self.write("You take 5 damage from the neurotoxins")
+            self.write_animation("You take 5 damage from the neurotoxins")
             self.delay(self.sleep)
             self.player.health -= 5
 
         elif self.gas_state == 2:
             
-            self.write("You take 10 damage from the neurotoxins")
+            self.write_animation("You take 10 damage from the neurotoxins")
             self.delay(self.sleep)
             self.player.health -= 10
 
         elif self.gas_state == 3:
             
-            self.write("The neurotoxins have liquefied your brain matter")
+            self.write_animation("The neurotoxins have liquefied your brain matter")
             self.delay(self.sleep)
             self.player.health = 0
 
@@ -1131,7 +1139,7 @@ class glados_fight(encounter):
 
             else:
                 self.write("")
-                self.write("GLaDOS twitches erratically. Looks like she's still out of it")
+                self.write_animation("GLaDOS twitches erratically. Looks like she's still out of it")
             
             
         #all other enemies take turns in random order
@@ -1156,7 +1164,7 @@ class glados_fight(encounter):
                 
             self.player.health = self.player.health - damage
             self.write("")
-            self.write(f"{enemy.name} used {enemy.move}, dealing {damage} damage to {self.player.name}")
+            self.write_animation(f"{enemy.name} used {enemy.move}, dealing {damage} damage to {self.player.name}")
             self.delay(self.sleep)
             
             if self.player.health <= 0:
@@ -1165,7 +1173,7 @@ class glados_fight(encounter):
         if self.rocket_state == 1:
             self.enemies.remove(out)
             self.write("")
-            self.write(f"The Rocket Sentry retreats into the floor")
+            self.write_animation(f"The Rocket Sentry retreats into the floor")
             self.rocket_state = 0
                 
     def damage(self, weapon: "Weapon/Spell", target: "enemy") -> None:
@@ -1189,7 +1197,7 @@ class glados_fight(encounter):
         #check if enemy is dead
         if target.health > 0:
             self.write("")
-            self.write(f"{self.player.name}{weapon.move}, dealing {damage} damage to {target.name}")
+            self.write_animation(f"{self.player.name}{weapon.move}, dealing {damage} damage to {target.name}")
             self.delay(self.sleep)
         else:
             
@@ -1197,7 +1205,7 @@ class glados_fight(encounter):
                 self.rocket_state = 2
 
             self.write("")
-            self.write(f"{self.player.name}{weapon.win_front}{target.name}{weapon.win_back}")
+            self.write_animation(f"{self.player.name}{weapon.win_front}{target.name}{weapon.win_back}")
             self.enemies.remove(target)
             target.health = 0
             self.delay(self.sleep)
@@ -1207,7 +1215,7 @@ class glados_fight(encounter):
             self.initenemy.health = self.initenemy.health - additional
             self.add_gauge(additional)
             self.write("")
-            self.write(f"GLaDOS took {additional} damage")
+            self.write_animation(f"GLaDOS took {additional} damage")
 
     def damage_all(self, weapon: "Weapon/Spell") -> None:
         """
@@ -1237,7 +1245,7 @@ class glados_fight(encounter):
             #check if enemy is dead
             if enemy.health > 0:
                 self.write("")
-                self.write(f"{enemy.name} took {damage} damage")
+                self.write_animation(f"{enemy.name} took {damage} damage")
                 self.delay(self.sleep)
                 new.append(enemy)
             else:
@@ -1246,7 +1254,7 @@ class glados_fight(encounter):
                     self.rocket_state = 0
                 
                 self.write("")
-                self.write(f"{weapon.win_front}{enemy.name}{weapon.win_back}")
+                self.write_animation(f"{weapon.win_front}{enemy.name}{weapon.win_back}")
                 enemy.health = 0
                 self.delay
 
@@ -1257,7 +1265,7 @@ class glados_fight(encounter):
             self.initenemy.health = self.initenemy.health - additional
             self.add_gauge(additional)
             self.write("")
-            self.write(f"GLaDOS took an additional {additional} damage")
+            self.write_animation(f"GLaDOS took an additional {additional} damage")
 
     def glados_damage(self, damage) -> int:
         """
@@ -1286,7 +1294,7 @@ class glados_fight(encounter):
                 self.core_drop()
                 self.gauge = 0
 
-    def get_choice(self) -> str:
+    def get_choice(self, new) -> str:
         """
         get choice of action from user
 
@@ -1305,7 +1313,10 @@ class glados_fight(encounter):
             choices.append("Core Transfer")
 
         self.write("")
-        return self.get_input("What do you want to use?", choices, None, False)
+        if new:
+            return self.get_input("What do you want to use?", choices, None, False, True)
+        else:
+            return self.get_input("What do you want to use?", choices, None, False)
     
     def core_drop(self) -> None:
         """
@@ -1313,15 +1324,15 @@ class glados_fight(encounter):
         if 4 cores have dropped, allow player to initiate core transfer
         """
         self.write("")
-        self.write("A white, spherical object screams as it falls from GLaDOS's body, landing with a resounding thump")
+        self.write_animation("A white, spherical object screams as it falls from GLaDOS's body, landing with a resounding thump")
         self.delay(self.sleep)
         self.cores += 1
         if self.cores == 4:
             self.write("")
-            self.write('A voice announces over the speakers: "WARNING! CORE CORRUPTION AT 100 PERCENT"')
-            self.write('"MANUAL CORE REPLACEMENT REQUIRED"')
+            self.write_animation('A voice announces over the speakers: "WARNING! CORE CORRUPTION AT 100 PERCENT"')
+            self.write_animation('"MANUAL CORE REPLACEMENT REQUIRED"')
             self.write("")
-            self.write("A core receptacle rises up out of the floor")
+            self.write_animation("A core receptacle rises up out of the floor")
             self.transfer = True
     
     def core_transfer(self) -> None:
@@ -1331,9 +1342,9 @@ class glados_fight(encounter):
         for enemy in self.enemies:
             enemy.health = 0
 
-        self.write("You grabbed a core and shoved it into the receptacle")
-        self.write("GLaDOS wakes up and tries to resist the transfer")
-        self.write("In her desperation, she blows up her mainframe, destroying herself")
+        self.write_animation("You grabbed a core and shoved it into the receptacle")
+        self.write_animation("GLaDOS wakes up and tries to resist the transfer")
+        self.write_animation("In her desperation, she blows up her mainframe, destroying herself")
         self.wait_for_key_press()
 
     def core_corruption(self) -> None:
@@ -1344,27 +1355,27 @@ class glados_fight(encounter):
             return
         elif self.cores == 1:
             self.write("")
-            self.write('A voice announces over the speakers: "WARNING! CORE CORRUPTION AT 29 PERCENT"')
+            self.write_animation('A voice announces over the speakers: "WARNING! CORE CORRUPTION AT 29 PERCENT"')
         elif self.cores == 2:
             self.write("")
-            self.write('A voice announces over the speakers: "WARNING! CORE CORRUPTION AT 58 PERCENT"')
+            self.write_animation('A voice announces over the speakers: "WARNING! CORE CORRUPTION AT 58 PERCENT"')
         elif self.cores == 3:
             self.write("")
-            self.write('A voice announces over the speakers: "WARNING! CORE CORRUPTION AT 85 PERCENT"')
+            self.write_animation('A voice announces over the speakers: "WARNING! CORE CORRUPTION AT 85 PERCENT"')
         elif self.cores > 3:
             self.write("")
-            self.write('A voice announces over the speakers: "WARNING! CORE CORRUPTION AT 100 PERCENT"')
-            self.write('"MANUAL CORE REPLACEMENT REQUIRED"')
+            self.write_animation('A voice announces over the speakers: "WARNING! CORE CORRUPTION AT 100 PERCENT"')
+            self.write_animation('"MANUAL CORE REPLACEMENT REQUIRED"')
 
     def stunned(self) -> None:
 
         self.write("")
-        self.write("GLaDOS tries to deploy more turrets, but the pipe network jams")
+        self.write_animation("GLaDOS tries to deploy more turrets, but the pipe network jams")
         self.delay(self.sleep)
-        self.write("There is an explosion overhead, bombarding GLaDOS with debris, stunning her")
+        self.write_animation("There is an explosion overhead, bombarding GLaDOS with debris, stunning her")
         self.delay(self.sleep)
         self.write("")
-        self.write("GLaDOS's shields have been deactivated")
+        self.write_animation("GLaDOS's shields have been deactivated")
 
         self.shield = False
         self.stun = 2
@@ -1373,9 +1384,9 @@ class glados_fight(encounter):
 
         self.enemies.append(e.Glados_Rocket())
         self.write("")
-        self.write("A Rocket Turret rises up out of the ground")
+        self.write_animation("A Rocket Turret rises up out of the ground")
         self.delay(self.sleep)
-        self.write("It locks on to you and begins arming a rocket")
+        self.write_animation("It locks on to you and begins arming a rocket")
         self.delay(self.sleep)
         self.rocket_state = 3
         self.rocket_cooldown = 4
@@ -1385,19 +1396,19 @@ class glados_fight(encounter):
         self.enemies.append(e.Glados_Turret())
         self.enemies.append(e.Glados_Turret())
         self.write("")
-        self.write("Sentry Turrets drop down from the pipe network above")
+        self.write_animation("Sentry Turrets drop down from the pipe network above")
         self.delay(self.sleep)
         self.turret_times += 1
         self.turret_cooldown = 2
 
     def wake(self, player_choice) -> None:
 
-        self.write("GLaDOS has recovered, and she looks pissed")
+        self.write_animation("GLaDOS has recovered, and she looks pissed")
         self.delay(self.sleep)
         self.write("")
-        self.write("GLaDOS's bomb shields are active again")
+        self.write_animation("GLaDOS's bomb shields are active again")
         self.delay(self.sleep)
-        self.write("GLaDOS used Thermal Discouragement Beams, dealing 60 damage to everyone")
+        self.write_animation("GLaDOS used Thermal Discouragement Beams, dealing 60 damage to everyone")
         self.delay(self.sleep)
 
         self.shield = True
@@ -1410,7 +1421,7 @@ class glados_fight(encounter):
         self.player.health = self.player.health - damage
 
         self.write("")
-        self.write(f"You took {damage} damage")
+        self.write_animation(f"You took {damage} damage")
 
     def over(self):
         """
@@ -1516,7 +1527,34 @@ class hollow_knight_encounter(encounter):
 
             self.timer = 4
 
+class ender_dragon_encounter(encounter):
 
+    def __init__(self, enemy):
+        super().__init__(enemy)
+
+        self.enemies += [e.Ender_Crystal] * 3
+
+    def enemy_turn(self, player_choice: str) -> None:
+        """
+        let enemies attack
+        """
+
+        #enemies take turns in random order
+        enemies = self.enemies.copy()
+        random.shuffle(enemies)
         
+        for enemy in enemies:
 
+            #negate damage if player is shielding
+            damage = max(1, enemy.attack - self.player.defence)
+            if player_choice.lower() == "defend":
+                damage = int((self.player.shield.negation/100)*(damage))
+                
+                
+            self.player.health = self.player.health - damage
+            self.write("")
+            self.write_animation(f"{enemy.name} used {enemy.move}, dealing {damage} damage to {self.player.name}")
+            self.delay(self.sleep)
+            if self.player.health <= 0:
+                break
                 
