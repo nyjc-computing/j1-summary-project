@@ -85,6 +85,6 @@ player.shield = shield
 player.health_flask = 20
 player.mana_flask = 20
 
-fight = encounter.glados_fight(enemy.Glados())
+fight = encounter.gabriel_fight(enemy.Gabriel())
 
 fight.fight(player, root, text, hud, "penisland", [window_width, window_height, text_width])

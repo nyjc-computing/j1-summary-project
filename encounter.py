@@ -276,12 +276,11 @@ class encounter:
             pygame.mixer.music.load(f"Music/Enemy/{self.enemies[0].music}")
             pygame.mixer.music.play(-1, fade_ms=100)
 
+        self.show_hud()
+
         state = 0
         data = self.text.get("1.0",'end-1c')
         while state == 0:
-
-            #display state of player and enemies
-            self.show_hud()
             
             advance = False
             while not advance:
@@ -313,6 +312,8 @@ class encounter:
                         pygame.mixer.music.fadeout(100)
                     return 3
 
+            self.show_hud()
+
             state = self.over()
             if state != 0:
                 break
@@ -328,15 +329,19 @@ class encounter:
             data = self.text.get("1.0",'end-1c')
             state = self.over()
 
+            self.show_hud()
+
         if state == 1:
             if bgm and self.music == "On":
                 pygame.mixer.music.fadeout(100)
+            self.wait_for_key_press()
             return 1
 
         elif state == 2:
             self.end_game()
             self.write("")
             self.write(random.choice(self.tips))
+            self.wait_for_key_press()
             if bgm and self.music == "On":
                 pygame.mixer.music.fadeout(100)
             return 2
@@ -787,6 +792,10 @@ class gabriel_fight(encounter):
                 
         self.timer = self.timer - 1
 
+        if self.timer == 0:
+            self.write("")
+            self.write("Gabriel is preparing something")
+
     def damage(self, weapon: "Weapon/Spell", target: "enemy") -> None:
         """
         deal damage to target using the weapon
@@ -819,39 +828,6 @@ class gabriel_fight(encounter):
             if self.spin_warning == 0:
                 self.write("You would do well to keep your distance while this ability is active")
                 self.spin_warning = 1
-
-    def status(self) -> None:
-        """
-        print the status of player and all enemies
-        """
-        player = self.player
-        enemies = self.enemies
-        dead = self.dead
-
-        #print player health, mana, flasks
-        self.write("")
-        self.write(f"{player.name}")
-        self.write_color(f"Health : {player.health} / {player.max_health}", "green")
-        self.write_color(f"Mana : {player.mana} / {player.max_mana}", "blue")
-        self.write(f"Flask of Crimson Tears : {player.health_flask}")
-        self.write(f"Flask of Cerulean Tears : {player.mana_flask}")
-        self.delay(self.sleep)
-
-        #print enemy health
-        self.write("")
-        for enemy in enemies:
-            self.write_color(f"{enemy.name} has {enemy.health} health", "red")
-
-        #print dead enemies
-        for die in dead:
-            self.write_color(f"{die.name} has 0 health", "grey")
-
-        self.delay(self.sleep)
-
-        #telegraph for sword throw
-        if self.timer == 0:
-            self.write("")
-            self.write("Gabriel is preparing something")
 
 class glados_fight(encounter):
     """
@@ -938,16 +914,16 @@ class glados_fight(encounter):
             pygame.mixer.music.play(-1, fade_ms=100)
 
         state = 0
+
+        if self.intro_trigger == 0:
+            self.intro()
+            self.intro_trigger = 1
+
         data = self.text.get("1.0", 'end-1c')
         while state == 0:
 
             #display state of player and enemies
-
             self.show_hud()
-
-            if self.intro_trigger == 0:
-                self.intro()
-                self.intro_trigger = 1
 
             if self.turns == 25:
                 self.write("")
@@ -964,6 +940,9 @@ class glados_fight(encounter):
             advance = False
             while not advance:
 
+                self.delete(True)
+                self.write(data, False)
+
                 decision = self.get_choice()
 
                 if decision.lower() == "weapon":
@@ -977,7 +956,6 @@ class glados_fight(encounter):
 
                 elif decision.lower() == "defend":
                     self.write(f"You raise up your {self.player.shield.name}")
-                    self.delay(self.sleep)
                     advance = True
 
                 elif decision.lower() == "escape":
@@ -985,6 +963,8 @@ class glados_fight(encounter):
                     self.delete()
                     self.write("You put on the shade cloak and dashed away from the enemy")
                     self.delay(self.sleep)
+                    if bgm and self.music == "On":
+                        pygame.mixer.music.fadeout(100)
                     return 3
 
                 elif decision.lower() == "core transfer":
@@ -1011,6 +991,7 @@ class glados_fight(encounter):
             self.write("")
             self.write(f"{'-'*50}")
 
+            data = self.text.get("1.0", 'end-1c')
             state = self.over()
 
             self.rocket_cooldown -= 1
@@ -1018,6 +999,8 @@ class glados_fight(encounter):
             self.turns += 1
 
         if state == 1:
+            if bgm and self.music == "On":
+                pygame.mixer.music.fadeout(100)
             return 1
 
         elif state == 2:
@@ -1025,6 +1008,8 @@ class glados_fight(encounter):
             self.write("")
             self.write(random.choice(self.tips))
             self.wait_for_key_press()
+            if bgm and self.music == "On":
+                pygame.mixer.music.fadeout(100)
             return 2
 
     def enemy_turn(self, player_choice: str) -> None:
