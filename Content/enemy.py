@@ -376,7 +376,7 @@ class Gabriel(Enemy):
         self.move = "Sword Throw"
         self.loot = MarksmanRevolver()
         self.music = "Gabriel.mp3"
-
+        
 class Papyrus(Enemy):
     """
     An enemey that inherits from the Enemy class

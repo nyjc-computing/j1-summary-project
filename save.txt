@@ -1,8 +1,8 @@
 Save False
 
-Room Dirtmouth
+Room TheEndDimension
 
-Rooms Dirtmouth
+Rooms Dirtmouth TheEndDimension
 
 Character
 
@@ -15,7 +15,7 @@ mana 50
 max_mana 50
 defence 0
 armour None
-armours None
+armours NetheriteArmour 
 weapon Wand
 weapons Wand 
 accessory None
@@ -26,7 +26,7 @@ items None
 upgrades None
 shield None
 shields None
-money 50
+money 100
 shop False
 shop_inventory ScotchWhiskey 
 gamble False
@@ -206,3 +206,4 @@ ApertureLab
 enemy None
 loot FlaskofCrimsonTears
 secret False
+

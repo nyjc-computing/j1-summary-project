@@ -668,7 +668,7 @@ def move(room):
                 write_animation("\nYou walked forward and smashed into a wall")
                 wait_for_key_press()
             # Check if you are going to the final boss room
-            elif room.forward.name == "The Shrieking Shack":
+            elif room.forward.name == "Principal's Office":
                 items = selfcharacter.get_items()
                 # Checks if you have the required items to enter the final boss room
                 if "Dectus Medallion (right)" in items and "Dectus Medallion (left)" in items:
@@ -678,7 +678,7 @@ def move(room):
                     if bgm and selfmusic == "On":
                         pygame.mixer.music.fadeout(100)
                 else:
-                    write_animation("\nYou tried entering the The Shrieking Shack but the door was locked by a powerful spell")
+                    write_animation("\nYou tried entering the Principal's Office but the door was locked by a powerful spell")
                     sleep(selfsleep)
                     write_animation("\nYou probably need to find a special item to break the spell (remember to loot all the rooms)")
                     wait_for_key_press()
@@ -1278,7 +1278,6 @@ def end_game():
             load_save()
 
         else:
-            wait_for_key_press()
             selfend = True
 
     else:
@@ -1298,6 +1297,7 @@ def load_save():
     root.after(0,run)
 
 def win(weapon):
+    global selfend
     """displays scenario when user wins"""
     hide_hud()
     write_animation(f"\nUsing the almighty {weapon.name}, you struck Dio down, crippling him of all his powers and stopping his evil tyranny over the world")
@@ -1347,6 +1347,7 @@ def win(weapon):
     write_animation("Vincent Tse")
     write_animation("Yi Heng")
     write_animation("Josiah Lin")
+    wait_for_key_press()
     delete()
     write(""" _____              _ _ _       
 /  __ \            | (_) |      
