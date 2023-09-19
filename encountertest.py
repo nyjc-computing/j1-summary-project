@@ -68,6 +68,7 @@ player.accessories.append(GoldenFeather())
 player.spells.append(WingardiumLeviosa())
 player.spells.append(VengefulSpirit())
 player.spells.append(Megidolaon())
+player.spells.append(GlintstoneCometshard())
 player.spells.append(WillOTheWisp())
 
 player.weapon = Zenith()
@@ -75,7 +76,7 @@ player.weapon = Zenith()
 armour = OrnatePlate()
 equip_armour(player, armour)
 
-accessory = GoldenFeather()
+accessory = DragonAmulet()
 equip_accessory(player, accessory)
 
 shield = HylianShield()
