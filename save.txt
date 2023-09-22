@@ -1,78 +1,78 @@
-Save False
+Save True
 
-Room TheLastResort
+Room Bunker
 
-Rooms Dirtmouth Midgar TheForge Mementos Asphodel Commencement WalledCity99 TheLastResort
+Rooms Dirtmouth Midgar TheForge Mementos Asphodel Commencement HyruleKingdom CelestialResort TheEndDimension ShoresofNine GreenhillZone TheMushroomKingdom KingdomofKu Zebes Bunker
 
 Character
 
-name meow
-health 999
-max_health 999
-spells WingardiumLeviosa 
-attack 999
-mana 999
-max_mana 999
-defence 999
-armour None
-armours None
-weapon Wand
-weapons Wand 
-accessory None
-accessories None
-health_flask 999
-mana_flask 999
-items DectusMedallion(left) DectusMedallion(right) MementoMortem BlackBox RustyKey RoboticArm ScotchWhiskey 
-upgrades VirtualBoo 
+name ncerl
+health 100
+max_health 100
+spells WingardiumLeviosa VengefulSpirit Megidolaon WillOTheWisp 
+attack 0
+mana 80
+max_mana 80
+defence 30
+armour PowerSuit
+armours NetheriteArmour Cappy DragonMail PowerSuit 
+weapon LeviathanAxe
+weapons Wand BusterSword Coronacht MasterSword LeviathanAxe VirtuousTreaty 
+accessory GoldenFeather
+accessories MasterRound GoldenFeather ChaosEmerald 
+health_flask 0
+mana_flask 2
+items DectusMedallion(left) 
+upgrades None
 shield None
 shields None
-money 1099
+money 750
 shop False
 shop_inventory ScotchWhiskey 
 gamble False
 additional_shop False
-completion 0
+completion 8
 
 Zebes
 
-enemy Ridley
-loot DectusMedallion(left)
+enemy None
+loot None
 secret False
 
 KingdomofKu
 
-enemy GeneralMugen
-loot FlaskofCrimsonTears
+enemy None
+loot None
 secret False
 
 Bunker
 
-enemy Emil
+enemy None
 loot BlackBox
 secret False
 
 GreenhillZone
 
-enemy DoctorEggman
-loot FlaskofCeruleanTears
+enemy None
+loot None
 secret False
 
 TheMushroomKingdom
 
-enemy Bowser
-loot FlaskofCrimsonTears
-secret False
+enemy None
+loot None
+secret True
 
 Asphodel
 
-enemy TheBoneHydra
-loot FlaskofCeruleanTears
+enemy None
+loot None
 secret False
 
 Commencement
 
-enemy Mithrix
-loot FlaskofCeruleanTears
+enemy None
+loot None
 secret False
 
 WalledCity99
@@ -83,33 +83,33 @@ secret False
 
 Mementos
 
-enemy Yaldabaoth
-loot FlaskofCeruleanTears
+enemy None
+loot None
 secret False
 
 ShoresofNine
 
-enemy Freya
-loot FlaskofCeruleanTears
+enemy None
+loot None
 secret False
 
 TheForge
 
-enemy TheHighDragun
-loot FlaskofCeruleanTears
+enemy None
+loot None
 secret True
 
 Midgar
 
-enemy Sephiroth
-loot FlaskofCeruleanTears
+enemy None
+loot None
 secret False
 
 Dirtmouth
 
-enemy TheHollowKnight
-loot FlaskofCeruleanTears
-secret False
+enemy None
+loot None
+secret True
 
 TheEndDimension
 
@@ -125,13 +125,13 @@ secret False
 
 HyruleKingdom
 
-enemy Ganondorf
-loot FlaskofCeruleanTears
-secret False
+enemy None
+loot None
+secret True
 
 CelestialResort
 
-enemy MrOshiro
+enemy None
 loot FlaskofCeruleanTears
 secret False
 
@@ -179,13 +179,13 @@ secret False
 
 Snowdin
 
-enemy Papyrus
+enemy None
 loot FlaskofCrimsonTears
 secret False
 
 TheAstralPlane
 
-enemy JenaAnderson
+enemy None
 loot FlaskofCrimsonTears
 secret False
 
@@ -196,6 +196,12 @@ loot DectusMedallion(right)
 secret False
 
 TheLastResort
+
+enemy None
+loot FlaskofCrimsonTears
+secret False
+
+ApertureLab
 
 enemy None
 loot FlaskofCrimsonTears

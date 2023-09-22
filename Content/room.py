@@ -64,7 +64,7 @@ class Dirtmouth(Room):
         self.name = "Dirtmouth"
         self.description = "You stepped into Dirtmouth, a haunting cliffside town in the depths of Hallownest, standing as a silent sentinel overlooking a dark and mysterious underground world. Its dilapidated buildings and eerie stillness set the tone for your perilous journey"
         self.loot = FlaskOfCrimsonTears()
-        self.encounter = encounter.encounter(self.enemy)
+        self.encounter = encounter.hollow_knight_encounter(self.enemy)
         self.save = True
         self.save_text = "You notice a simple rustic bench in the corner of the room"
         self.save_message = "You sit on the bench, feeling more rejuvenated than ever"
@@ -129,6 +129,7 @@ class ApertureLab(Room):
         self.description = "You stepped into a sprawling maze of test chambers filled with menacingly cheery robots and the enigmatic AI, GLaDOS. Your journey through this surreal laboratory is a relentless quest for answers, a desperate struggle to escape its surreal confines and unmask the secrets lurking within."
         self.loot = FlaskOfCrimsonTears()
         self.encounter = encounter.glados_fight(self.enemy)
+        self.music = "Aperture.mp3"
 
 class Zebes(Room):
     """
@@ -346,7 +347,7 @@ class Ascent(Room):
         self.loot = FlaskOfCeruleanTears()
         self.encounter = encounter.encounter(self.enemy)
         
-class TheShriekingShack(Room):
+class PrincipalsOffice(Room):
     """
     A room that inherits from the Room class
     """
@@ -354,7 +355,7 @@ class TheShriekingShack(Room):
     def __init__(self):
         super().__init__()
         self.enemy = Voldemort()
-        self.name = "The Shrieking Shack"
+        self.name = "Principal's Office"
         self.description = "You step into a notorious and allegedly haunted building near Hogwarts School, known for its eerie and unsettling reputation as the most haunted building in Britain"
         
         self.loot = FlaskOfCrimsonTears()
@@ -375,6 +376,7 @@ class SixthCircleOfHell(Room):
         self.save = True
         self.save_text = "You See a floating translucent banner saying 'Checkpoint'"
         self.save_message = "You walk past the banner, feeling completely revitalised"
+        self.music = "SixthCircle.mp3"
 
 class Snowdin(Room):
     """

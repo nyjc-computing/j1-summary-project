@@ -64,9 +64,9 @@ class TheHollowKnight(Enemy):
     def __init__(self):
         super().__init__()
         self.name = "The Hollow Knight"
-        self.health = 20
+        self.health = 100
         self.description = "a tall, armored, and humanoid figure with a dark, hollow, and mask-like visage. Its armor is ornate and tarnished, adorned with intricate patterns and spikes. It wields a large nail as a weapon, and its appearance exudes a sense of somber and eerie presence"
-        self.attack = 2
+        self.attack = 10
         self.move = "Triple Slash"
         self.loot = VengefulSpirit()
         self.music = "The_Hollow_Knight.mp3"
@@ -122,12 +122,13 @@ class Glados(Enemy):
     
     def __init__(self):
         super().__init__()
-        self.name = "Glados"
+        self.name = "GLaDOS"
         self.health = 3000
         self.description = "a malevolent AI antagonist, known for her dark sense of humor and penchant for testing subjects with life-threatening puzzles"
         self.attack = 20
         self.move = "Neurotoxin Gas"
         self.loot = PortalGun()
+        self.music = "Glados.mp3"
 
 class Yaldabaoth(Enemy):
     """
@@ -374,6 +375,7 @@ class Gabriel(Enemy):
         self.attack = 20
         self.move = "Sword Throw"
         self.loot = MarksmanRevolver()
+        self.music = "Gabriel.mp3"
 
 class Papyrus(Enemy):
     """
@@ -538,3 +540,10 @@ class Glados_Rocket(Enemy):
         self.attack = 50
         self.move = "Rocket Launcher"
         self.loot = None
+
+class Ender_Crystal(Enemy):
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.name = "Ender Crystal"
+        self.health = 10
