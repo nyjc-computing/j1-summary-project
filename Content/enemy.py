@@ -270,9 +270,9 @@ class Ganondorf(Enemy):
     def __init__(self):
         super().__init__()
         self.name = "Ganondorf"
-        self.health = 20
+        self.health = 130
         self.description = "a malevolent Gerudo sorcerer who seeks to obtain the Triforce's power and plunge Hyrule into darkness and chaos"
-        self.attack = 10
+        self.attack = 15
         self.move = "Dark Magic"
         self.loot = MasterSword()
         self.music = "Ganondorf.mp3"

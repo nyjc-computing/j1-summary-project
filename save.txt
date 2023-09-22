@@ -1,37 +1,37 @@
 Save True
 
-Room Bunker
+Room TheEndDimension
 
-Rooms Dirtmouth Midgar TheForge Mementos Asphodel Commencement HyruleKingdom CelestialResort TheEndDimension ShoresofNine GreenhillZone TheMushroomKingdom KingdomofKu Zebes Bunker
+Rooms Dirtmouth TheEndDimension
 
 Character
 
-name ncerl
+name a
 health 100
 max_health 100
-spells WingardiumLeviosa VengefulSpirit Megidolaon WillOTheWisp 
+spells WingardiumLeviosa VengefulSpirit 
 attack 0
-mana 80
-max_mana 80
-defence 30
-armour PowerSuit
-armours NetheriteArmour Cappy DragonMail PowerSuit 
-weapon LeviathanAxe
-weapons Wand BusterSword Coronacht MasterSword LeviathanAxe VirtuousTreaty 
-accessory GoldenFeather
-accessories MasterRound GoldenFeather ChaosEmerald 
-health_flask 0
-mana_flask 2
-items DectusMedallion(left) 
+mana 50
+max_mana 50
+defence 0
+armour None
+armours NetheriteArmour 
+weapon Wand
+weapons Wand 
+accessory None
+accessories None
+health_flask 1
+mana_flask 1
+items None
 upgrades None
 shield None
 shields None
-money 750
+money 100
 shop False
 shop_inventory ScotchWhiskey 
 gamble False
 additional_shop False
-completion 8
+completion 0
 
 Zebes
 
@@ -108,7 +108,7 @@ secret False
 Dirtmouth
 
 enemy None
-loot None
+loot FlaskofCeruleanTears
 secret True
 
 TheEndDimension

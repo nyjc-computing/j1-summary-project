@@ -1531,3 +1531,67 @@ class ender_dragon_encounter(encounter):
             if self.player.health <= 0:
                 break
                 
+class ganondorf_encounter(encounter):
+
+    def __init__(self, enemy):
+        super().__init__(enemy)
+
+        self.timer = 4
+
+        self.enemy = self.enemies[0]
+
+        self.tips = ["After charging at you, Ganondorf will slam the ground", "Use your shield to block charge attacks", "Ganodorf can remove your shield with his slam"]
+        self.shield_state = True
+
+    def enemy_turn(self, player_choice: str) -> None:
+        """
+        let enemies attack
+        """
+
+        enemy = self.enemy
+        
+        if self.timer == 3:
+
+            damage = max(1, enemy.attack - self.player.defence)
+            if player_choice.lower() == "defend" and self.shield_state:
+                damage = int((self.player.shield.negation/100)*(damage))
+                
+            self.player.health = self.player.health - damage
+            self.write("")
+            self.write_animation(f"Ganondorf swings at you, dealing {damage} damage to {self.player.name}")
+            self.delay(self.sleep)
+            self.write_animation("Ganondorf is preparing to charge")
+
+           
+        
+        elif self.timer == 2:
+            
+            if player_choice.lower() == "weapon" or player_choice.lower() == "spell":
+                damage = max(1, (enemy.attack * 3) - self.player.defence)
+                self.player.health = self.player.health - damage
+
+                self.write("")
+                self.write_animation(f"Ganondorf interrupted your attack and charged, dealing {damage} damage to {self.player.name}")
+            elif player_choice.lower() == "defend":
+                if self.shield_state:
+                    damage = 0
+                    self.write("")
+                    self.write_animation("Ganondorf's charge was stopped by your shield")
+                else:
+                    damage = max(1, (enemy.attack - self.player.defence)/1.5)
+                    self.write("")
+                    self.write_animation("Without a shield you were forced to dodge,")
+        else:
+            damage = max(1, round((enemy.attack - self.player.defence)*1.5))
+            self.player.health = self.player.health - damage
+            self.write("")
+            if player_choice.lower() == "spell":
+                lower_bound = 2.5
+                upper_bound = 1.5
+                damage = max(1, random.randint(round(damage/lower_bound), round(damage/upper_bound)))
+            else:
+                self.write_animation(f"Ganondorf slams the ground in front of you, dealing {damage} damage to {self.player.name}")
+            if player_choice.lower() == "defend":
+                self.write_animation(f"You tried to block the attack but the shield was knocked out of your hands")
+                self.shield_state = False
+        self.timer -= 1
