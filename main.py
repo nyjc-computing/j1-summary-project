@@ -2199,10 +2199,9 @@ if __name__ == "__main__":
     frame.pack()
     text = tk.Text(frame, background = "black", foreground = "white", borderwidth=0, wrap = tk.WORD, highlightthickness=0)
     hud = tk.Text(frame,  background = "black", foreground = "white", borderwidth=0, highlightthickness=0)
-    if platform.system() == "Windows":
-        windowsFont = ("Meslo LG S", 9, "normal")
-        text.config(font = windowsFont)
-        hud.config(font = windowsFont)
+    #windowsFont = ("Meslo LG S", 9, "normal")
+    #text.config(font = windowsFont)
+    #hud.config(font = windowsFont)
     text.place(x = 0, y= 0, height = window_height, width = window_width)
     hud.place(x = text_width+40, y = 0, height = window_height, width = window_width-(text_width+40))
     text.focus_set()
