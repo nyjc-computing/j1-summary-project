@@ -108,7 +108,7 @@ secret False
 Dirtmouth
 
 enemy None
-loot None
+loot FlaskofCeruleanTears
 secret True
 
 TheEndDimension
