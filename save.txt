@@ -1,37 +1,37 @@
 Save True
 
-Room TheForge
+Room TheEndDimension
 
-Rooms Dirtmouth HyruleKingdom Midgar TheForge CelestialResort TheEndDimension 6thCircleofHell Ascent Miquella'sHaligtree TowerofFate Mementos ShoresofNine Asphodel GreenhillZone Commencement WalledCity99 TheLastResort TheMushroomKingdom
+Rooms Dirtmouth Midgar TheEndDimension
 
 Character
 
-name Ben
-health 120
-max_health 120
-spells WingardiumLeviosa VengefulSpirit GlintstoneCometshard Megidolaon WillOTheWisp 
+name ncerl
+health 100
+max_health 100
+spells WingardiumLeviosa VengefulSpirit 
 attack 0
-mana 60
-max_mana 60
-defence 15
-armour OrnatePlate
-armours NetheriteArmour OrnatePlate Cappy 
-weapon RGXButterflyKnife
-weapons Wand MasterSword BusterSword MarksmanRevolver RGXButterflyKnife LeviathanAxe Coronacht 
-accessory ChaosEmerald
-accessories MasterRound GoldenFeather ChaosEmerald 
-health_flask 4
-mana_flask 3
-items ScotchWhiskey 
-upgrades VirtualBoo 
+mana 50
+max_mana 50
+defence 0
+armour None
+armours NetheriteArmour 
+weapon Wand
+weapons Wand 
+accessory None
+accessories None
+health_flask 0
+mana_flask 1
+items None
+upgrades None
 shield None
 shields None
-money 800
-shop True
-shop_inventory None
+money 100
+shop False
+shop_inventory ScotchWhiskey 
 gamble False
-additional_shop True
-completion 8
+additional_shop False
+completion 0
 
 Zebes
 
@@ -101,20 +101,20 @@ secret True
 
 Midgar
 
-enemy None
-loot FlaskofCeruleanTears
+enemy Sephiroth
+loot None
 secret False
 
 Dirtmouth
 
 enemy None
-loot FlaskofCeruleanTears
+loot None
 secret True
 
 TheEndDimension
 
 enemy None
-loot None
+loot FlaskofCrimsonTears
 secret False
 
 TheShriekingShack

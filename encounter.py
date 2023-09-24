@@ -1505,7 +1505,16 @@ class ender_dragon_encounter(encounter):
     def __init__(self, enemy):
         super().__init__(enemy)
 
-        self.enemies += [e.Ender_Crystal] * 3
+        self.timer = 4
+
+        self.poison = 0
+
+        self.poisoned = False
+
+        for i in range(5):
+            self.enemies.append(e.Ender_Crystal())
+
+        self.perched = True
 
     def enemy_turn(self, player_choice: str) -> None:
         """
@@ -1513,15 +1522,105 @@ class ender_dragon_encounter(encounter):
         """
 
         enemy = self.enemies[0]
+        crystals = self.enemies[1:]
 
-        damage = max(1, enemy.attack - self.player.defence)
-        if player_choice.lower() == "defend":
-            damage = int((self.player.shield.negation/100)*(damage))
-                
-        self.player.health = self.player.health - damage
-        self.write("")
-        self.write_animation(f"{enemy.name} used {enemy.move}, dealing {damage} damage to {self.player.name}")
-        self.delay(self.sleep)
+        if self.poisoned > 0:
+            damage = max(1, enemy.poison - self.player.defence)
+            self.player.health = self.player.health - damage
+            self.write()
+            self.write_animation(f"The lingering dragon's breath dealth {damage} damage")
+            self.poisoned -= 1
+
+        if self.timer == 4:
+            damage = max(1, enemy.attack - self.player.defence)
+            if player_choice.lower() == "defend":
+                damage = int((self.player.shield.negation/100)*(damage))
+            self.player.health = self.player.health - damage
+            self.write()
+            self.write_animation(f"{enemy.name} shot a fireball at {self.player.name}, dealing {damage} damage to you")
+
+        if self.timer == 3:
+            self.write()
+            self.write_animation(f"{enemy.name} flew away, circling high above you")
+            self.perched = False
+
+        if self.timer == 2:
+            if self.poison:
+                damage = max(1, enemy.poison - self.player.defence)
+                self.player.health = self.player.health - damage
+                self.write()
+                self.write_animation(f"{enemy.name} used dragon's breath on {self.player.name}, dealing {damage} damage")
+                self.poison = False
+                self.poisoned = 3
+            self.write()
+            self.write_animation(f"{enemy.name} is charging up an attack from high above")
+    
+        if self.timer == 1:
+            damage = max(1, int(enemy.attack * 1.5 - self.player.defence))
+            if player_choice.lower() == "defend":
+                damage = int((self.player.shield.negation/100)*(damage))
+            self.player.health = self.player.health - damage
+            self.write()
+            self.write_animation(f"{enemy.name} dove at you dealing {damage} damage")
+            if self.poison:
+                damage = max(1, enemy.poison - self.player.defence)
+                self.player.health = self.player.health - damage
+                self.write()
+                self.write_animation(f"{enemy.name} used dragon's breath on {self.player.name}, dealing {damage} damage")
+                self.poison = False
+                self.poisoned = 3
+            self.timer = 5
+        
+        self.timer -= 1
+
+        for crystal in crystals:
+            if enemy.health < enemy.max_health:
+                heal = min(crystal.attack, enemy.max_health - enemy.health)
+                enemy.health += heal
+                self.write("")
+                self.write_animation(f"{crystal.name} healed {enemy.name} by {heal} health")
+
+    def damage(self, weapon: "Weapon/Spell", target: "enemy") -> None:
+        """
+        deal damage to target using the weapon
+        """
+
+        if not self.perched and weapon.type == "weapon" and target.name == self.enemies[0].name:
+            self.write("")
+            self.write_animation(f"You tried to hit {target.name} but it was too far away")
+            self.poison = True
+        
+        else:
+            damage = max(1, weapon.attack + self.player.attack - target.defence)
+            target.health = target.health - damage
+            if target.health > 0:
+                self.write("")
+                self.write_animation(f"{self.player.name}{weapon.move}, dealing {damage} damage to {target.name}")
+                self.delay(self.sleep)
+            else:
+                self.write("")
+                self.write_animation(f"{self.player.name}{weapon.win_front}{target.name}{weapon.win_back}")
+                if target.name == "Ender Crystal":
+                    self.enemies.remove(target)
+                target.health = 0
+                self.delay(self.sleep)
+
+    def over(self):
+        """
+        determines whether the fight should continue and outcome of fight
+        return 0 for continue, 1 for player win, 2 for player loss
+        """
+        player = self.player
+        enemies = self.enemies
+        
+        if player.health <= 0:
+            return 2
+        
+        elif enemies[0].health <= 0:
+            return 1
+        
+        else:
+            return 0
                 
 class ganondorf_encounter(encounter):
 

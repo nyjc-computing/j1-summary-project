@@ -206,7 +206,7 @@ def intro():
             root.after(selfsleep*1000, run)
             
     elif decision.lower() == "no":
-        write_animation("Due to your utter cowardice, voldemort continued to gain power, spreading his control and chaos all over the world, leading to the complete annihilation of the human race.")
+        write_animation("\nDue to your utter cowardice, voldemort continued to gain power, spreading his control and chaos all over the world, leading to the complete annihilation of the human race.")
         write("__   _______ _   _  ______ _____ ___________")
         sleep(0.2)
         write("\ \ / /  _  | | | | |  _  \_   _|  ___|  _  \\")
@@ -784,6 +784,7 @@ def attack(room):
             pygame.mixer.music.play(-1, fade_ms=100)
         update_hud(selfcharacter)
         if outcome == 1:
+            delete()
             if room.enemy.name == "Voldemort":  
                 win(selfcharacter.weapon)
                 selfend = True

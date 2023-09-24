@@ -285,9 +285,11 @@ class TheEnderDragon(Enemy):
     def __init__(self):
         super().__init__()
         self.name = "The Ender Dragon"
-        self.health = 20
+        self.health = 150
+        self.max_health = self.health
         self.description = "a fearsome and colossal winged creature that challenges you with its destructive abilities and formidable strength"
-        self.attack = 10
+        self.attack = 20
+        self.poison = 5
         self.move = "Dragon's breath"
         self.loot = NetheriteArmour()
         self.music = "The_Ender_Dragon.mp3"
@@ -546,4 +548,5 @@ class Ender_Crystal(Enemy):
     def __init__(self) -> None:
         super().__init__()
         self.name = "Ender Crystal"
-        self.health = 10
+        self.health = 1
+        self.attack = 10

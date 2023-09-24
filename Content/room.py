@@ -273,7 +273,7 @@ class TheEndDimension(Room):
         self.name = "The End Dimension"
         self.description = "You stepped into a dark, space-like dimension consisting of separate islands in the void, made out of end stone. It is inhabited by endermen and shulkers."
         self.loot = FlaskOfCrimsonTears()
-        self.encounter = encounter.encounter(self.enemy)
+        self.encounter = encounter.ender_dragon_encounter(self.enemy)
 
 class Kamurocho(Room):
     """
