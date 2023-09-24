@@ -523,11 +523,11 @@ def run():
 def inventory(user):
     decision = get_input("", ["Equip", "Items", "Information", "Finish"])
     if decision == "Equip":
-        equip(selfcharacter)
+        equip(user)
     elif decision == "Items":
         item()
     elif decision == "Information":
-        info(selfcharacter)
+        info(user)
     elif decision == "Finish":
         return
         
@@ -1062,7 +1062,9 @@ def info(user):
     elif choice == "shields":
         shield_info(user)
 
-    inventory(user)
+    elif choice == "cancel":
+        inventory(user)
+        return
                 
 def weapon_info(user):
     """sub action from equip() that prompts user for specific weapon to find out more about"""
@@ -1957,6 +1959,7 @@ def item():
         choice = get_input("\nWhich item do you want to use?", items)
 
         if choice == "Cancel":
+            inventory(selfcharacter)
             return
     
         elif choice == "Memento Mortem" and selfroom.name == "Dirtmouth" and selfroom.secret:
@@ -2012,7 +2015,7 @@ def item():
 
 def secret_attack(boss):
     secret = encounter.encounter(boss)
-    outcome = secret.fight(selfcharacter, root, text)
+    outcome = secret.fight(selfcharacter, root, text, hud, selfroom.name, [window_width, window_height, text_width])
 
     if outcome == 1:
         write(f"\n{boss.name} dropped a {boss.loot.name}")

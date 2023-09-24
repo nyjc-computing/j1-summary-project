@@ -1,5 +1,5 @@
 Sleep 0
-Music Off
+Music On
 Up Up
 Down Down
 Enter Return

@@ -1,36 +1,36 @@
 Save True
 
-Room Bunker
+Room TheForge
 
-Rooms Dirtmouth Midgar TheForge Mementos Asphodel Commencement HyruleKingdom CelestialResort TheEndDimension ShoresofNine GreenhillZone TheMushroomKingdom KingdomofKu Zebes Bunker
+Rooms Dirtmouth HyruleKingdom Midgar TheForge CelestialResort TheEndDimension 6thCircleofHell Ascent Miquella'sHaligtree TowerofFate Mementos ShoresofNine Asphodel GreenhillZone Commencement WalledCity99 TheLastResort TheMushroomKingdom
 
 Character
 
-name ncerl
-health 100
-max_health 100
-spells WingardiumLeviosa VengefulSpirit Megidolaon WillOTheWisp 
+name Ben
+health 120
+max_health 120
+spells WingardiumLeviosa VengefulSpirit GlintstoneCometshard Megidolaon WillOTheWisp 
 attack 0
-mana 80
-max_mana 80
-defence 30
-armour PowerSuit
-armours NetheriteArmour Cappy DragonMail PowerSuit 
-weapon LeviathanAxe
-weapons Wand BusterSword Coronacht MasterSword LeviathanAxe VirtuousTreaty 
-accessory GoldenFeather
+mana 60
+max_mana 60
+defence 15
+armour OrnatePlate
+armours NetheriteArmour OrnatePlate Cappy 
+weapon RGXButterflyKnife
+weapons Wand MasterSword BusterSword MarksmanRevolver RGXButterflyKnife LeviathanAxe Coronacht 
+accessory ChaosEmerald
 accessories MasterRound GoldenFeather ChaosEmerald 
-health_flask 0
-mana_flask 2
-items DectusMedallion(left) 
-upgrades None
+health_flask 4
+mana_flask 3
+items ScotchWhiskey 
+upgrades VirtualBoo 
 shield None
 shields None
-money 750
-shop False
-shop_inventory ScotchWhiskey 
+money 800
+shop True
+shop_inventory None
 gamble False
-additional_shop False
+additional_shop True
 completion 8
 
 Zebes
@@ -61,7 +61,7 @@ TheMushroomKingdom
 
 enemy None
 loot None
-secret True
+secret False
 
 Asphodel
 
@@ -78,7 +78,7 @@ secret False
 WalledCity99
 
 enemy None
-loot FlaskofCeruleanTears
+loot None
 secret False
 
 Mementos
@@ -90,7 +90,7 @@ secret False
 ShoresofNine
 
 enemy None
-loot None
+loot FlaskofCeruleanTears
 secret False
 
 TheForge
@@ -102,7 +102,7 @@ secret True
 Midgar
 
 enemy None
-loot None
+loot FlaskofCeruleanTears
 secret False
 
 Dirtmouth
@@ -114,7 +114,7 @@ secret True
 TheEndDimension
 
 enemy None
-loot FlaskofCrimsonTears
+loot None
 secret False
 
 TheShriekingShack
@@ -137,26 +137,26 @@ secret False
 
 Ascent
 
-enemy Reyna
+enemy None
 loot FlaskofCeruleanTears
 secret False
 
 6thCircleofHell
 
-enemy Gabriel,ApostateofHate
+enemy None
 loot RoboticArm
 secret False
 
 TowerofFate
 
-enemy Enchantress
+enemy None
 loot FlaskofCrimsonTears
 secret False
 
 Miquella'sHaligtree
 
-enemy Malenia,BladeofMiquella
-loot RustyKey
+enemy None
+loot None
 secret False
 
 TheHallow
@@ -198,7 +198,7 @@ secret False
 TheLastResort
 
 enemy None
-loot FlaskofCrimsonTears
+loot None
 secret False
 
 ApertureLab

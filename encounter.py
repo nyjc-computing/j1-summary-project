@@ -1512,22 +1512,14 @@ class ender_dragon_encounter(encounter):
         let enemies attack
         """
 
-        #enemies take turns in random order
-        enemies = self.enemies.copy()
-        random.shuffle(enemies)
-        
-        for enemy in enemies:
+        enemy = self.enemies[0]
 
-            #negate damage if player is shielding
-            damage = max(1, enemy.attack - self.player.defence)
-            if player_choice.lower() == "defend":
-                damage = int((self.player.shield.negation/100)*(damage))
+        damage = max(1, enemy.attack - self.player.defence)
+        if player_choice.lower() == "defend":
+            damage = int((self.player.shield.negation/100)*(damage))
                 
-                
-            self.player.health = self.player.health - damage
-            self.write("")
-            self.write_animation(f"{enemy.name} used {enemy.move}, dealing {damage} damage to {self.player.name}")
-            self.delay(self.sleep)
-            if self.player.health <= 0:
-                break
+        self.player.health = self.player.health - damage
+        self.write("")
+        self.write_animation(f"{enemy.name} used {enemy.move}, dealing {damage} damage to {self.player.name}")
+        self.delay(self.sleep)
                 
