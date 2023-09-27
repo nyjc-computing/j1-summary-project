@@ -1,8 +1,8 @@
 Save True
 
-Room TheEndDimension
+Room 6thCircleofHell
 
-Rooms Dirtmouth Midgar TheEndDimension
+Rooms Dirtmouth TheEndDimension HyruleKingdom CelestialResort 6thCircleofHell
 
 Character
 
@@ -11,27 +11,27 @@ health 100
 max_health 100
 spells WingardiumLeviosa VengefulSpirit 
 attack 0
-mana 50
-max_mana 50
-defence 0
-armour None
+mana 80
+max_mana 80
+defence 10
+armour NetheriteArmour
 armours NetheriteArmour 
-weapon Wand
-weapons Wand 
-accessory None
-accessories None
+weapon MarksmanRevolver
+weapons Wand MasterSword MarksmanRevolver 
+accessory GoldenFeather
+accessories GoldenFeather 
 health_flask 0
-mana_flask 1
-items None
+mana_flask 2
+items RoboticArm 
 upgrades None
 shield None
 shields None
-money 100
+money 250
 shop False
 shop_inventory ScotchWhiskey 
 gamble False
 additional_shop False
-completion 0
+completion 3
 
 Zebes
 
@@ -102,7 +102,7 @@ secret True
 Midgar
 
 enemy Sephiroth
-loot None
+loot FlaskofCeruleanTears
 secret False
 
 Dirtmouth
@@ -114,7 +114,7 @@ secret True
 TheEndDimension
 
 enemy None
-loot FlaskofCrimsonTears
+loot None
 secret False
 
 TheShriekingShack
@@ -132,7 +132,7 @@ secret True
 CelestialResort
 
 enemy None
-loot FlaskofCeruleanTears
+loot None
 secret False
 
 Ascent
@@ -144,7 +144,7 @@ secret False
 6thCircleofHell
 
 enemy None
-loot RoboticArm
+loot None
 secret False
 
 TowerofFate

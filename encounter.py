@@ -1562,6 +1562,7 @@ class ender_dragon_encounter(encounter):
             self.player.health = self.player.health - damage
             self.write()
             self.write_animation(f"{enemy.name} dove at you dealing {damage} damage")
+            self.perched = True
             if self.poison:
                 damage = max(1, enemy.poison - self.player.defence)
                 self.player.health = self.player.health - damage
