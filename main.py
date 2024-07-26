@@ -6,4 +6,4 @@ class William:
 
 if __name__ == "__main__":
     william = William()
-    william.shout()
+    [william.shout() for _ in range(100)]
