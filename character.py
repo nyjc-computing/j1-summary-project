@@ -10,7 +10,7 @@ class Character():
         return f"Character: {self.type}\nHealth: {self.health}\nStrength: {self.strength}"  #Add items?
 
     def attack(self, character):
-        character.health -= self.strength
+        character.recieve_damage(self.strength)
         print("Die")
 
     def recieve_damage(self, damage):
