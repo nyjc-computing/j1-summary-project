@@ -4,7 +4,7 @@
 
 - Eu Xay
 - Kenneth
-- Manuel
+- Manuel G. Thomas
 - Kai Chen
 
 <Description of your project>
