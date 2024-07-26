@@ -1,8 +1,8 @@
 # Import statements
-import rng
-
+import random
+import Weapon
 #main game loop
-def main():
-    rng.rng_game()
+print(Weapon.Wooden_sword.__repr__())
+Weapon.Wooden_sword.combat()
 if __name__ == "__main__":
-    main()
+    pass
