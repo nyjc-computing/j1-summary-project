@@ -4,7 +4,7 @@
 
 - Shane
 - Jayven
-- Llyton
+- Lleyton
 - Xintong
 
 <Description of your project>
