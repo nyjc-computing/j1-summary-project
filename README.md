@@ -3,7 +3,7 @@
 ## Members
 
 - Corinne
-- William
+- William :)
 - Joshua
 - Steve
 
