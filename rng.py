@@ -85,19 +85,12 @@ while True:
         if num.isdigit():
             for i in range(int(num)):
                 print(rng_game())
-            restart = input("Continue? (Yes/No/Inventory):").lower()
+            restart = input("Continue? (Yes/No):").lower()
             if restart == "no":
                 print("Thanks for playing!")
                 pass
             elif restart == "yes":
                 continue
-        else:
-            continue
-    elif mode == "2":
-        num = input("Type in an integer:")
-        if num.isdigit():
-            for i in range(int(num)):
-                pass
-        else:
-            continue
+            else:
+                continue
     break
