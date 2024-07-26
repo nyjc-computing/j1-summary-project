@@ -1,6 +1,8 @@
 # Import statements
+import rng
+
+#main game loop
 def main():
-    print("test")
-    print("a Ok")
+    rng.rng_game()
 if __name__ == "__main__":
     main()
