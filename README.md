@@ -3,7 +3,7 @@
 ## Members
 
 - Mr Ng
-- Member 2
+- Zombie
 - Member 3
 - Member 4
 
