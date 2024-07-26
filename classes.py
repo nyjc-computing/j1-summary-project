@@ -13,7 +13,10 @@ class Player:
         return f"Name: {self.name}"
 
 
-class Backpack
+class Object:
+    def __init__(self, num, desc):
+        self.num = num
+        self.desc = desc
         
 class Enemy:
     def __init__(self, type):
