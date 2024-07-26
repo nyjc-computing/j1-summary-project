@@ -1,11 +1,10 @@
-
 if __name__ == "__main__":
-     game = Game()
+    game = Game()
+    game.start() # Welcomes the player, creates the map
     player = create_player()
     
     while not game.game_over():
-        options = game.options()
+        game.print_map()
+        options = game.options() # can put into game.do()
         choice = choose_option(options)
-        game.do(choice)
-        game.display()
-        
+        game.do(choice) # executes the option chosen
