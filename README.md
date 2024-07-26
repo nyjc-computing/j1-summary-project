@@ -2,9 +2,9 @@
 
 ## Members
 
-- Member 1
-- Member 2
-- Member 3
-- Member 4
+- Eu Xay
+- Kenneth
+- Manuel
+- Kai Chen
 
 <Description of your project>
