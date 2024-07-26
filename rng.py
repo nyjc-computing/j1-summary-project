@@ -56,7 +56,7 @@ def proceeding():
         print("Internalizing" + " " + "".join(progress_bar), end = "\r")
         time.sleep(0.5)
     print("\r")
-    print("Done!")
+    print(" Done!")
 
 def roll_animation():
     roll_list = [f"{Style.RESET_ALL}Common (1 in 2)                            ",
