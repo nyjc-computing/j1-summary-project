@@ -12,22 +12,20 @@ class Backpack: #store, display, check, destroy
         self.items = {}
         self.backpack_size = slots
 
-    def store(self, item):
-        if item in self.items:
-            self.items[item] += number
-            print(f'{item} * {number} has been stored')
+    def store(self, name, object):
+        if name in self.items:
+            self.items[name].num += object.num
+            print(f'{name} * {object.num} has been stored')
             return
         if len(self.items) >= self.backpack_size:
             print("Backpack is full!")
             return
-        self.items[item] = number
-        print(f'{item} * {number} has been stored.')
+        self.items[name] = object
+        print(f'{name} * {object.num} has been stored.')
         return
         
     def display(self):
-        lst = []
-        for item in self.items:
-            lst.append(item)
+        lst = [i for i in self.items.keys()]
         disp = ', '.join(lst)
         return disp
 
