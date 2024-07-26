@@ -2,8 +2,14 @@
 
 
 if __name__ == "__main__":
-    print("hi")
-    print('bye')
-    print('bye bye')
+    player = create_player()
+    game = Game()
+    game.setup()
+    while not game.over():
+        # get list of choices
+        choices = game.get_choices()
+        choice = get_player_choice(choices)
+        game.execute(choice)
+        
 
     
