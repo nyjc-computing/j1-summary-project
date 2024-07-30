@@ -1,7 +1,6 @@
 # Import statements
 import Game
 
-
 if __name__ == "__main__":
     game = Game()
     game.setup()
@@ -14,6 +13,4 @@ if __name__ == "__main__":
         choice = get_player_choice(choices)
         game.execute(choice)
 
-    
 
-    
