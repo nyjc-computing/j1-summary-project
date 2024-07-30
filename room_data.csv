@@ -1,1 +1,3 @@
-Bedroom, {north: hallway, }
+room, [direction, nx_room], enemy_num
+bedroom, [east, hallway], 2
+hallway, [west, bedroom], 3
