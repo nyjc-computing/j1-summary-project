@@ -1,4 +1,5 @@
 # Import statements
+import ctps
 
 if __name__ == "__main__":
     player = create_player()
@@ -9,4 +10,3 @@ if __name__ == "__main__":
         choices = game.get_choices()
         choice = get_player_choice(choices)
         game.execute(choice)
-
