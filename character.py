@@ -1,4 +1,4 @@
-class Character():
+class Character:
 
     def __init__(self, type, health, strength, items=[]):
         self.type = type
