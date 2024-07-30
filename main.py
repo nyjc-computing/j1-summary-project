@@ -9,4 +9,4 @@ if __name__ == "__main__":
         choices = game.get_choices()
         choice = get_player_choice(choices)
         game.execute(choice)
-        
+
