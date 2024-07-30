@@ -1,6 +1,3 @@
-# import character
-import csv
-
 class Room:
 
     def __init__(self, name, prev_room, next_room, enemy_num):
