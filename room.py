@@ -3,21 +3,24 @@ import csv
 
 class Room:
 
-    def __init__(self, name, next, enemy_num):
+    def __init__(self, name, prev_room, next_room, enemy_num):
         self.name = name
-        self.next = next
+        self.prev = prev_room
+        self.next = next_room
         self.enemy_num = enemy_num
 
-    def display(self):
-        print(f'name: {self.name}, next rooms: {self.next}, number of enemies: {self.enemy_num}')
+    def prev_room(self):
+        return self.prev
+        
+    def next_room(self):
+        return self.next
 
-with open('room_data.csv', 'r') as f:
-    header = f.readline().strip().split(',')
-    for room in f.readlines():
-        room = room.strip().split(',')
-        print(room)
-#         name = room[0]
-#         name = Room(room[0], room[1], room[2], room[3])
-#         name.display()
+    def get_enemy_num(self):
+        return self.enemy_num
 
-# bedroom.display()
+    def enemy_defeated(self):
+        self.enemy_num -= 1
+        if self.enemy_num <= 0:
+             print(f'Enemies in {self.name} have all been defeated!')
+
+    
