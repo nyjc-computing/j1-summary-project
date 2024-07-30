@@ -1,16 +1,12 @@
 # Import statements
 
 if __name__ == "__main__":
-  pass
-
-"""
-class game:
-  def __init__(self):
-    self.player = None
-    self.rooms = []
-    self.now = 0
-
-  def initialise(self):
-    self.player = Player()
-    self.rooms.append(Room("Toilet"))
-"""
+    player = create_player()
+    game = Game()
+    game.setup()
+    while not game.over():
+        # get list of choices
+        choices = game.get_choices()
+        choice = get_player_choice(choices)
+        game.execute(choice)
+        
