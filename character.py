@@ -25,6 +25,11 @@ class Character:
         self.health -= damage
         # print("Ouch")
 
+    def isdead(self):
+        return self.health <= 0
+
+    def isalive(self):
+        return self.health > 0
 
 
 class Player(Character):
