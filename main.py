@@ -7,4 +7,4 @@ if __name__ == "__main__":
         game.print_map()
         options = game.options() # can put into game.do()
         choice = choose_option(options)
-        game.do(choice) # executes the option chosen
+        game.do(choice) # executes the option
