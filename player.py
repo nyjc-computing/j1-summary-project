@@ -5,7 +5,6 @@ class Gears:
         self.leggings = (None)
         self.boots = (None)
         self.accessories = (None)
-        pass
         
 class Backpack: #store, display, check, destroy
     def __init__(self, slots):
