@@ -21,6 +21,9 @@ class Weapon:
         enemy.health -= self.attack * crit
         print(f"You dealt {self.attack * crit} damage to the {enemy}.")
         print(f"{enemy} current health:{enemy.health}")
+        if enemy.health <= 0:
+            enemy.health = 0
+            print(f"{enemy} fainted.")
     
             
          #format   att, critc
