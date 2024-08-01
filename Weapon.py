@@ -14,11 +14,13 @@ class Weapon:
             return True
         return False
         
-    def combat(self):
+    def combat(self, enemy):
         crit = 1 #if there is no crit does not change
         if self.crit():
-            crit = 2 # double the damage when it crits
-        print(f"You dealt {self.attack * crit} damage to the enemy.")
+            crit = 2 # double the damage when it crits   
+        enemy.health -= self.attack * crit
+        print(f"You dealt {self.attack * crit} damage to the {enemy}.")
+        print(f"{enemy} current health:{enemy.health}")
     
             
          #format   att, critc
