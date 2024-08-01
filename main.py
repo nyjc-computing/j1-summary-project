@@ -2,7 +2,7 @@
 import random
 import Weapon
 #main game loop
-print(Weapon.Wooden_sword.__repr__())
-Weapon.Wooden_sword.combat()
+print(Weapon.Ulti_blade.__repr__())
+Weapon.Ulti_blade.combat()
 if __name__ == "__main__":
     pass

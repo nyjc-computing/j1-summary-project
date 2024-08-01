@@ -1,12 +1,12 @@
 import random
+
 class Weapon:
     def __init__(self, data: list):
         self.attack = data[0]
         self.critc = data[1]
-        self.rarity = data[2]
-        self.passive = data[3]
+        
     def __repr__(self):
-        return f"Att:{self.attack} Crit:{self.critc}% Rarity:{self.rarity}"
+        return f"Att:{self.attack} Crit:{self.critc}%"
         
     def crit(self):
         x = random.randint(1, 100)
@@ -21,10 +21,23 @@ class Weapon:
         print(f"You dealt {self.attack * crit} damage to the enemy.")
     
             
-        
-Wooden_sword = Weapon([3,5, "Common", False], )
-Stone_sword = Weapon([5, 5, "Common", False])
-Iron_sword = Weapon([8, 10, "Uncommon", False])
-Steel_sword = Weapon([12, 8, "Uncommon", False])
-Fire_blade = Weapon([10, 5, "Rare", True])
+         #format   att, critc
+Wooden_sword = Weapon([3, 5], )
+Stone_sword = Weapon([5, 5])
+Iron_sword = Weapon([8, 10])
+
+Steel_sword = Weapon([12, 8])
+
+Fire_blade = Weapon([20, 5])
+Ice_blade = Weapon([12, 50])
+
+Diamond_sword = Weapon([25, 12])
+
+Soul_stealer = Weapon([5, 5]) #steal the attack of enemy and add it to weapon's attack.
+
+
 #fire blade does half of the damage dealt to the enemy, last 2 turns
+
+
+#dev weapon
+Ulti_blade = Weapon([100000000000000, 0])
