@@ -1,10 +1,13 @@
+from game import Game # IMPORT GAME
+
 if __name__ == "__main__":
     game = Game()
-    game.start() # Welcomes the player, creates the map
-    player = create_player()
-    
+    game.start()
+
     while not game.game_over():
-        game.print_map()
-        options = game.options() # can put into game.do()
-        choice = choose_option(options)
-        game.do(choice) # executes the option chosen
+        options = game.options()
+        choice = game.choose_option(options) 
+        if choice is not None:
+            game.do(choice) 
+        else:
+            print("Invalid choice. Please try again.")
