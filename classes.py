@@ -1,3 +1,38 @@
+class Gears:
+    def __init__(self):
+        self.helmet = (None)
+        self.chestplate = (None)
+        self.leggings = (None)
+        self.boots = (None)
+        self.accessories = (None)
+        pass
+        
+class Backpack: #store, display, check, destroy
+    def __init__(self, slots):
+        self.items = {}
+        self.backpack_size = slots
+
+    def store(self, name, object):
+        if name in self.items:
+            self.items[name].num += object.num
+            print(f'{name} * {object.num} has been stored')
+            return
+            
+        if len(self.items) >= self.backpack_size:
+            print("Backpack is full!")
+            return
+        self.items[name] = object
+        print(f'{name} * {object.num} has been stored.')
+        return
+        
+    def display(self):
+        lst = [i for i in self.items.keys()]
+        disp = ', '.join(lst)
+        return disp
+
+    def check(self, item):
+        pass
+
 class Player:
     def __init__(self, name):
         self.name = str(name)
@@ -24,5 +59,7 @@ class Enemy:
             self.health, self.attack, self.defense = 10, 2, 1
         else:
             self.health, self.attack, self.defense = 5, 1, 0
+            
     def attack(self, player_obj):
         pass
+
