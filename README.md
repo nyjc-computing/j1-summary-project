@@ -2,9 +2,9 @@
 
 ## Members
 
-- Laurel
-- Hardy
-- Three
-- Stooges
+- Member 1
+- Member 2
+- Member 3
+- Member 4
 
 <Description of your project>
