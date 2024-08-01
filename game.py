@@ -1,3 +1,4 @@
+from player import Player
 import random
 
 BLANK = 'X'
@@ -16,16 +17,6 @@ items = {
     }
 }
 
-class Player:
-
-    def __init__(self, name):
-        self.name = name
-        self.health = 100
-        self.attack = 10
-        self.position = (3, 3)
-        self.inventory = []
-
-
 class Game:
 
     def __init__(self):
@@ -38,3 +29,4 @@ class Game:
             ['X', 'X', 'X', 'X', 'X', 'X', 'X'],
             ['X', 'X', 'X', 'X', 'X', 'X', 'X'],
         ]
+        self.player = Player()
