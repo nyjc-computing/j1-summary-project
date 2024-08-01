@@ -8,7 +8,7 @@ class Player:
         self.speed = 1
         self.crit_chance = 0.05 
         self.crit_dmg = 2 #200%
-
+        
     def __repr__(self):
         return f"Name: {self.name}"
 
