@@ -56,7 +56,8 @@ def proceeding():
         print("Internalizing" + " " + "".join(progress_bar), end = "\r")
         time.sleep(0.5)
     print("\r")
-    print(" Done!")
+
+
 
 def roll_animation():
     roll_list = [f"{Style.RESET_ALL}Common (1 in 2)                            ",
@@ -70,34 +71,3 @@ def roll_animation():
              f"{Fore.GREEN}{Style.BRIGHT}INCOMPREHENSIBLE!!!! (1 in 40000)       ",
              f"{Fore.YELLOW}{Style.BRIGHT}JACKPOT!!!!!!! (1 in 1000000)                 "
              ]
-loading_percentage()
-time.sleep(1)
-proceeding()
-time.sleep(1)
-print("Welcome to RNG v0.2!             ")
-time.sleep(1)
-print("Bare-boned gameplay.")
-time.sleep(1)
-while True:
-    mode = input("Type 1 or 2 for a different experience:")
-    if mode == "1":
-        num = input("Type in an integer:")
-        if num.isdigit():
-            for i in range(int(num)):
-                print(rng_game())
-            restart = input("Continue? (Yes/No/Inventory):").lower()
-            if restart == "no":
-                print("Thanks for playing!")
-                pass
-            elif restart == "yes":
-                continue
-        else:
-            continue
-    elif mode == "2":
-        num = input("Type in an integer:")
-        if num.isdigit():
-            for i in range(int(num)):
-                pass
-        else:
-            continue
-    break
