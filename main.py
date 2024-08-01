@@ -7,8 +7,6 @@ def main():
     # object = classes.Object(3, "ee")
     # object2 = classes.Object(4, "dd")
     dict = {}
-    backpack = Backpack(10)
-    backpack.store
     # dict[1] = object
     # dict[2] = object2
     # print(dict)

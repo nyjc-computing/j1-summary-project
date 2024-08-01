@@ -43,12 +43,16 @@ class Player:
         self.speed = 1
         self.crit_chance = 0.05 
         self.crit_dmg = 2 #200%
-
+        
     def __repr__(self):
         return f"Name: {self.name}"
 
 
-        
+class Object:
+    def __init__(self, num, desc):
+        self.num = num
+        self.desc = desc
+
 class Enemy:
     def __init__(self, type):
         if type == "Brute":
