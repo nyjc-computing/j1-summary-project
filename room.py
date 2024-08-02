@@ -11,3 +11,7 @@ class Room:
         self.enemy_num -= 1
         if self.enemy_num <= 0:
              print(f'Enemies in {self.name} have all been defeated!')
+
+    def get_name(self):
+        return self.name
+
