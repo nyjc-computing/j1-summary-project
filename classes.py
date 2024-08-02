@@ -5,7 +5,7 @@ class Gears:
         self.leggings = (None)
         self.boots = (None)
         self.accessories = (None)
-        pass
+
         
 class Backpack: #store, display, check, destroy
     def __init__(self, slots):
@@ -39,10 +39,7 @@ class Player:
         self.health = 10
         self.defense = 0
         self.attack = 1
-        self.dodge = 0.05 #5%
         self.speed = 1
-        self.crit_chance = 0.05 
-        self.crit_dmg = 2 #200%
         
     def __repr__(self):
         return f"Name: {self.name}"
@@ -60,6 +57,11 @@ class Object:
 class Enemy:
     def __init__(self, type):
         if type == "Brute":
+            self.name = "Brute"
             self.health, self.attack, self.defense = 10, 2, 1
+        elif type == "Armored Gorilla":
+            self.name = "Armored Gorilla"
+            self.health, self.attack, self.defense = 10, 0, 1000
         else:
             self.health, self.attack, self.defense = 5, 1, 0
+Goblin = Enemy("Brute")      

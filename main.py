@@ -1,10 +1,11 @@
 
 # Import statements
 import random
-import Weapon
+import item
+import classes
 #main game loop
 
-import time, classes
+import time
 import rng
 intro_text = "Myserious voice: 'I don't care! I seriously DON'T CARE! I have locked you up in my dungeon and you will never ever have the slightest of slimmer of hope in having the ability to even attempt to escape from this hell Ho of mine!"
 
@@ -28,4 +29,9 @@ def main():
                 
 
 if __name__ == "__main__":
-    main()
+    Brute = classes.Enemy("Armored Gorilla")
+    print(Brute.health)
+    stats = item.Wooden_sword.__repr__()
+    print(stats)
+    item.Wooden_sword.combat(Brute)
+    
