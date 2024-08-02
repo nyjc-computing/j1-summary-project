@@ -1,4 +1,5 @@
 from character import *
+from room import *
 
 class Game:
     def __init__(self):
@@ -9,15 +10,11 @@ class Game:
 
     def setup(self):
         self.player = Player(1, 1, [])
-        self.rooms.append(Bedroom())
-
-    def isdead(self):
-        return self.player.isdead()
+        self.princess = Princess(1, 1)
+        self.rooms.append(Room("Bedroom", 3))
 
     def isover(self):
-        return self.isdead()
-
-
+        return self.player.isdead() or self.princess.isdead()
 
     def next_room(self):
         self.now += 1
