@@ -1,13 +1,13 @@
 class Character:
 
     def __init__(self, _type, health, strength, items=[]):
-        self.type = _type
+        self._type = _type
         self.health = health
         self.strength = strength
         self.items = items
 
     def __repr__(self):
-        return f"Character: {self.type}\n\
+        return f"Character: {self._type}\n\
                  Health: {self.health}\n\
                  Strength: {self.strength}"  #Add items?
 
