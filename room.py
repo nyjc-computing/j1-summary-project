@@ -12,15 +12,7 @@ class Room:
         if self.enemy_num <= 0:
              print(f'Enemies in {self.name} have all been defeated!')
 
+    def get_name(self):
+        return self.name
 
 
-
-def get_choice(self):
-    print(f'You are in {self.get_now_room()}')
-    print(f'-Choices- \n 1. next room: {self.nextroom} \n 2. prev room: {self.prev_room} \n 3. look around')
-    choice = input("type your choice here: ")
-    if choice not in '123':
-        print('error')
-    elif choice == 1:
-        pass
-    
