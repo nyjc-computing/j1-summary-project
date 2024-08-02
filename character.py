@@ -1,7 +1,7 @@
 class Character:
 
-    def __init__(self, type, health, strength, items=[]):
-        self.type = type
+    def __init__(self, _type, health, strength, items=[]):
+        self.type = _type
         self.health = health
         self.strength = strength
         self.items = items
