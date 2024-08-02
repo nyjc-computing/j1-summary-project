@@ -12,5 +12,6 @@ class Room:
         if self.enemy_num <= 0:
              print(f'Enemies in {self.name} have all been defeated!')
 
-    def __repr__(self):
-        return f"Name: {self.name}\nNumber of enemies: {self.enemy_num}"
+    def get_name(self):
+        return self.name
+
