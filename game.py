@@ -1,4 +1,5 @@
-
+import Character
+import Dialogue
 
 class Game:
     def start():
@@ -8,5 +9,9 @@ class Game:
 
 
     def setup():
+        
+
+    def create_player():
+        
     
         

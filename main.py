@@ -5,7 +5,7 @@ if __name__ == "__main__":
     game = Game()
     game.setup()
     game.welcome()
-    player = create_player()
+    player = Game.create_player()
     
     while not game.over():
         # Get list of choices
@@ -13,4 +13,5 @@ if __name__ == "__main__":
         choice = get_player_choice(choices)
         game.execute(choice)
 
-
+    game.game_over()
+    game.prompt_restart()
