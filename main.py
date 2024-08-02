@@ -2,15 +2,5 @@
 import entities
 
 if __name__ == "__main__":
+    pass
 
-    print("Welcome")
-    print("Aloha!")
-
-print("what the sigma")
-
-
-
-
-
-    
-    
