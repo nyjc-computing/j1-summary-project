@@ -7,9 +7,7 @@ class Character:
         self.items = items
 
     def __repr__(self):
-        return f"Character: {self._type}\n\
-                 Health: {self.health}\n\
-                 Strength: {self.strength}"  #Add items?
+        return f"Character: {self._type}\nHealth: {self.health}\nStrength: {self.strength}"  #Add items?
 
     def attack(self, character):
         """
