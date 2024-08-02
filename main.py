@@ -1,7 +1,8 @@
 
 # Import statements
 import random
-import Weapon
+import item
+import classes
 #main game loop
 
 import time, character, intro
@@ -11,3 +12,4 @@ def main():
     intro.intro()
 if __name__ == "__main__":
     main()
+    
