@@ -1,17 +1,12 @@
 # Import statements
-import Game
+from ctps import *
+
 
 if __name__ == "__main__":
     game = Game()
     game.setup()
-    game.welcome()
-    player = Game.create_player()
-    
-    while not game.over():
-        # Get list of choices
-        choices = game.get_choices()
-        choice = get_player_choice(choices)
-        game.execute(choice)
+    for i in range(5):
+        game.get_choice()
+        game.next_room()
 
-    game.game_over()
-    game.prompt_restart()
+    print(game.isover())

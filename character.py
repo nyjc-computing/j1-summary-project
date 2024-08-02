@@ -1,15 +1,13 @@
 class Character:
 
-    def __init__(self, type, health, strength, items=[]):
-        self.type = type
+    def __init__(self, _type, health, strength, items=[]):
+        self._type = _type
         self.health = health
         self.strength = strength
         self.items = items
 
     def __repr__(self):
-        return f"Character: {self.type}\n\
-                 Health: {self.health}\n\
-                 Strength: {self.strength}"  #Add items?
+        return f"Character: {self._type}\nHealth: {self.health}\nStrength: {self.strength}"  #Add items?
 
     def attack(self, character):
         """
@@ -25,6 +23,11 @@ class Character:
         self.health -= damage
         # print("Ouch")
 
+    def isdead(self):
+        return self.health <= 0
+
+    def isalive(self):
+        return self.health > 0
 
 
 class Player(Character):
