@@ -44,14 +44,14 @@ class Player:
         if item in self.items.keys():
             print(f'Name: {item}')
             print(f'Amount:{self.items[item].num}')
-            print(f'Description:{self.items[item].desc}')t
+            print(f'Description:{self.items[item].desc}')
             return
         print('Item not in Backpack')
         return
     #Gears
     def equip(self, gear):
         if gear not in self.items:
-            print('You don't have that gear!')
+            print("You don't have that gear!")
         
 class Object:
     def __init__(self, num, desc):
