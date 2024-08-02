@@ -16,17 +16,39 @@ class Entity():
     def set_health(self,health):
         self.health = health
 
-    def move(self, position, move):
-        if move == "W":
-            position[1] += 1
-        elif move == "A":
-            position[0] -= 1
-        elif move == "S":
-            position[1] -= 1
-        elif move == "D":
-            position[0] += 1
-            
+    def get_position(self):
+        return self.position
+
+    def set_position(self,position):
+        self.position = position
+
+    def move(self, move, adjacent_tiles):
         
+        if move == "W":
+            if adjacent_tiles["North"] is None:
+                return "invalid"
+            else:
+                self.position[1] += 1
+                
+        elif move == "A":
+            if adjacent_tiles["West"] is None:
+                return "invalid"
+            else:
+                self.position[0] -= 1
+            
+        elif move == "S":
+            if adjacent_tiles["South"] is None:
+                return "invalid"
+            else:
+                self.position[1] -= 1
+    
+            
+        elif move == "D":
+            if adjacent_tiles["East"] is None:
+                return "invalid"
+            else:
+                self.position[0] += 1
+            
     
 
 
