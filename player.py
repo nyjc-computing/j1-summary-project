@@ -46,11 +46,15 @@ class Player:
     def __repr__(self):
         return f"Name: {self.name}"
 
+class Backpack:
+    pass
+        
 
 class Object:
     def __init__(self, num, desc):
         self.num = num
         self.desc = desc
+
 
 class Enemy:
     def __init__(self, type):
@@ -58,7 +62,3 @@ class Enemy:
             self.health, self.attack, self.defense = 10, 2, 1
         else:
             self.health, self.attack, self.defense = 5, 1, 0
-            
-    def attack(self, player_obj):
-        pass
-
