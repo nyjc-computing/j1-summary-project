@@ -1,6 +1,6 @@
 import room
 import character
-
+import json
 
 def createRooms() -> list[room.Room]:
     """
@@ -17,13 +17,23 @@ def createRooms() -> list[room.Room]:
 
     return list_of_rooms
     
+with open('data.json', 'r' ) as f:
+    char_data = json.load(f)
 
-
-def createPlayer() -> character.Player:
     
-    return character.Player(1,1, [])
+def createPlayer() -> character.Player:
+    """
+    
+    """
+    record = char_data["player"]
+    return character.Player(record["hp"] , record["str"], record["items"])
 
 
 def createPrincess() -> character.Princess:
+    record = char_data["princess"]
+    return character.Princess(record["hp"], record["str"])
 
-    return character.Princess(1,1)
+if __name__ == "__main__":
+    print(createPlayer())
+    print(createPrincess())
+    print(createRooms())
