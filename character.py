@@ -1,10 +1,10 @@
 class Character:
 
-    def __init__(self, _type, health, strength, items=[]):
+    def __init__(self, _type, health, strength, items=None):
         self._type = _type
         self.health = health
         self.strength = strength
-        self.items = items
+        self.items = items or []
 
     def __repr__(self):
         return f"Character: {self._type}\nHealth: {self.health}\nStrength: {self.strength}"  #Add items?
@@ -13,10 +13,10 @@ class Character:
         """
         Deal damage to another character object
         """
-        character.recieve_damage(self.strength)
+        character.receive_damage(self.strength)
         # print("Die")
 
-    def recieve_damage(self, damage):
+    def receive_damage(self, damage):
         """
         Remove health
         """
