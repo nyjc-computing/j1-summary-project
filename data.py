@@ -33,7 +33,3 @@ def createPrincess() -> character.Princess:
     record = char_data["princess"]
     return character.Princess(record["hp"], record["str"])
 
-if __name__ == "__main__":
-    print(createPlayer())
-    print(createPrincess())
-    print(createRooms())
