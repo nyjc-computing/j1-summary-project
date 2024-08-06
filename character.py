@@ -24,10 +24,10 @@ class Character:
         # print("Ouch")
 
     def isdead(self):
+        """
+        Returns status of character (dead or alive)
+        """
         return self.health <= 0
-
-    def isalive(self):
-        return self.health > 0
 
 
 class Player(Character):

@@ -17,17 +17,23 @@ class Game:
         self.rooms.append(Room("Toilet :)", 3))
         self.rooms.append(Room("Bedroom", 3))
 
+        #self.player = data.createPlayer()
+        #self.princess = data.createPrincess()
+        #self.rooms = data.createRooms()
+
     def isover(self):
         return self.player.isdead() or self.princess.isdead()
 
     def next_room(self):
-        self.now += 1
-
+        if self.now < len(self.rooms):
+            self.now += 1
+            
     def get_next_room(self):
         return self.rooms[(self.now + 1) % 5].get_name()
         
     def prev_room(self):
-        self.now -= 1
+        if self.now > 0:
+            self.now -= 1
     
     def get_prev_room(self):
         return self.rooms[(self.now - 1) % 5].get_name()

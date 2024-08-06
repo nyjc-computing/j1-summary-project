@@ -6,7 +6,7 @@ if __name__ == "__main__":
     game = Game()
     game.setup()
     for i in range(5):
-        game.get_choice()
+        print(game.get_now_room())
         game.next_room()
 
     print(game.isover())
