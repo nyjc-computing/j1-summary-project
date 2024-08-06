@@ -1,5 +1,4 @@
-from character import *
-from room import *
+import data
 
 class Game:
     def __init__(self):
@@ -9,17 +8,9 @@ class Game:
         self.now = 0
 
     def setup(self):
-        self.player = Player(1, 1, [])
-        self.princess = Princess(1, 1)
-        self.rooms.append(Room("Dungeon", 3))
-        self.rooms.append(Room("Kitchen", 3))
-        self.rooms.append(Room("Hall", 3))
-        self.rooms.append(Room("Toilet :)", 3))
-        self.rooms.append(Room("Bedroom", 3))
-
-        #self.player = data.createPlayer()
-        #self.princess = data.createPrincess()
-        #self.rooms = data.createRooms()
+        self.player = data.createPlayer()
+        self.princess = data.createPrincess()
+        self.rooms = data.createRooms()
 
     def isover(self):
         return self.player.isdead() or self.princess.isdead()
