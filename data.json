@@ -1,0 +1,11 @@
+{
+    "player": {
+        "hp": 1,
+        "str": 1,
+        "items": []
+    },
+    "princess": {
+        "hp": 1,
+        "str": 1
+    }    
+}
