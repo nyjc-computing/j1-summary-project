@@ -8,3 +8,7 @@ exit_screen = {
 
 
 }
+
+room_menu = {
+'options': ['Look around', 'Move to next room', 'Move to previous room']
+}
