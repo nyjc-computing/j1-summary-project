@@ -24,30 +24,34 @@ class Entity():
 
     def move(self, move, adjacent_tiles):
         
-        if move == "W":
-            if adjacent_tiles["North"] is None:
+        if move == "UP":
+            if adjacent_tiles[move] is None:
                 return "invalid"
             else:
                 self.position[1] += 1
+                return self.get_position()
                 
-        elif move == "A":
-            if adjacent_tiles["West"] is None:
+        elif move == "LEFT":
+            if adjacent_tiles[move] is None:
                 return "invalid"
             else:
                 self.position[0] -= 1
+                return self.get_position()
             
-        elif move == "S":
-            if adjacent_tiles["South"] is None:
+        elif move == "DOWN":
+            if adjacent_tiles[move] is None:
                 return "invalid"
             else:
                 self.position[1] -= 1
+                return self.get_position()
     
             
-        elif move == "D":
-            if adjacent_tiles["East"] is None:
+        elif move == "RIGHT":
+            if adjacent_tiles[move] is None:
                 return "invalid"
             else:
                 self.position[0] += 1
+                return self.get_position()
             
     
 
@@ -104,8 +108,17 @@ class Creature(Entity):
     def set_damage(self, damage):
         self.damage = damage
 
-        
-        
+
+# test
+# person1 = Player("Lleyton",100000,10,[1,2])
+
+# adj_tiles = {
+#     "UP" : [1,3],
+#     "DOWN" : [1,1],
+#     "RIGHT" : [2,2],
+#     "LEFT" : None
+# }
+# print(person1.move("RIGHT",adj_tiles))
     
     
     
