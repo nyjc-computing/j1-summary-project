@@ -37,3 +37,6 @@ class Game:
 
     def final_battle(self):
         print("you fought and won")
+
+    def game_over(self, player):
+        return player.get_hp() <= 0
