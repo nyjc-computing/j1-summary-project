@@ -1,7 +1,6 @@
 from moves import Moves
 
 class Character:
-
     def __init__(self, name = "", hp = 0, attack = 0):
         self.name = name
         self.hp = hp
