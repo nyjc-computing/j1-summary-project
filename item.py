@@ -76,3 +76,10 @@ speed_potion = Potions(["Add 5 speed to the player's speed stats", 5])
 almond_potion = Potions(["Add 2 to each of the player's stat"])
 
 bleach = Potions(["Kills you instantly, toddler approved!", -9999999999999])
+
+class Item:
+    def __init__(self, num, desc, name, weight):
+        self.name = name
+        self.num = num
+        self.desc = desc
+        self.weight = weight

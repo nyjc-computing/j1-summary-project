@@ -103,11 +103,6 @@ class Player:
         print(f'{self.gears[section].name} unequipped')
         return True
         
-class Item:
-    def __init__(self, num, desc, name):
-        self.name = name
-        self.num = num
-        self.desc = desc
 
 class Enemy:
     def __init__(self, type):
