@@ -40,8 +40,6 @@ class Player:
         self.defense = 0
         self.attack = 1
         self.speed = 1
-        self.crit_chance = 0.05 
-        self.crit_dmg = 2 #200%
         #Backpack
         self.items = {}
         self.backpack_size = slots
@@ -72,8 +70,7 @@ class Player:
         lst = [i for i in self.items.keys()]
         disp = ', '.join(lst) #all items in backpack
         return disp
-
-
+        
     def check(self, item_name):
         if item_name in self.items.keys():
             print(f'Name: {item_name}')
