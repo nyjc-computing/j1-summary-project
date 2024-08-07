@@ -24,7 +24,7 @@ class storyline:
         return map
         
     def place_walls(self):
-        grid = self.map_creation()
+        grid = self.map_creation
         wall_pos = 43
         checker = []
         for element in range(6):
@@ -37,6 +37,28 @@ class storyline:
                 if pos == check:       
                     grid[pos] = " "
         return grid
- 
+
+    def map_load(self):
+        lst = []
+        map = ''
+        with open('level1.txt','r') as f:
+            for x in f.readlines():
+                lst.append(x)
+        for tile in lst:
+            map += tile
+        return map
+
+    def tile_info(self):
+        dict = {
+            "D": "hehehhe",
+            "C":
+            
+        }
+        map = self.map_load()
+        map = map.split()
+        
+                
+        return map
 test = storyline()
-print(test.map_display())
+print(test.map_load())
+print(test.tile_info())
