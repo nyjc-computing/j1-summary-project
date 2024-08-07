@@ -78,8 +78,8 @@ almond_potion = Potions(["Add 2 to each of the player's stat"])
 bleach = Potions(["Kills you instantly, toddler approved!", -9999999999999])
 
 class Item:
-    def __init__(self, num, desc, name, weight):
+    def __init__(self, num, desc, name, spec_weight):
         self.name = name
         self.num = num
         self.desc = desc
-        self.weight = weight
+        self.weight = spec_weight * num
