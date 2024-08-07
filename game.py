@@ -34,6 +34,7 @@ class Game():
             # Check if its valid
             if self.actions.actionList.count(playerInput) == 1:
                 #TODO: carry out action
+                
                 pass
             #TODO: add monster validation logic
     
@@ -49,10 +50,16 @@ class Game():
     def findAdjacentTiles(self, targetTileCoord):
         """
         Utility function for finding tiles.
-        Takes a coordinate and returns a tile object
+        Takes a coordinate and returns a list of adjacent tile objects
         """
         db = {}
         for tile in self.level.tileList:
             if tile.position == targetTileCoord:
-                
-                
+                # We have our target tile
+                return {
+                    "UP":  self.findTile([tile.position[0], tile.position[1] + 1]),
+                    "DOWN":  self.findTile([tile.position[0], tile.position[1] - 1]),
+                    "LEFT":  self.findTile([tile.position[0] - 1, tile.position[1]]),
+                    "RIGHT":  self.findTile([tile.position[0] + 1, tile.position[1]]),
+                }
+               
