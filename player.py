@@ -1,8 +1,10 @@
-class Player:
+from moves import Moves
+from character import Character
 
-    def __init__(self, name):
-        self.name = name
-        self.health = 100
-        self.attack = 10
-        self.position = (3, 3)
-        self.inventory = []
+class Player(Character):
+    def set_name(self):
+        self.name = input("Enter the name of user: ")
+        
+    def display_stats(self):
+        print(f"HP: {self.hp}")
+        print(f"Attack: {self.attack}")
