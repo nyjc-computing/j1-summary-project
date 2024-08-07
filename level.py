@@ -5,8 +5,8 @@ class Level:
     generate new level by the size given
     level_num --> int
     """
-    def __init__(self, xtile, ytile):
-         self.tile_list = [[0] * xtile for i in range(ytile)]
+    def __init__(self, tile_list):
+         self.tile_list = tile_list
     
     def get_levelnumber(self):
         """print the level number"""
@@ -15,6 +15,15 @@ class Level:
     def get_floorplan(self):
         """return the level generated"""
         return self.tile_list
+
+    def spawn_monster(self, monster_name,):
+        """
+        randomly add monster into tiles
+        """
+        temp = random.choice(tile_list)
+        y_cor = tile_list.index(temp)
+        x_cor = random.choice(temp)
+        return (x_cor, y_cor)
 
 
 class Tile:
@@ -30,14 +39,8 @@ class Tile:
         self.monster_list = monster_list
         self.item_list = item_list
 
-    def spawn_monsters(self, monster_name):
-        """
-        randomly add monster into tiles
-        """
+
         
-        for monster in monster_list:
-            #set posotion of monster
-            
             
 
     def add_items(self, data):
