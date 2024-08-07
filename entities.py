@@ -16,17 +16,43 @@ class Entity():
     def set_health(self,health):
         self.health = health
 
-    def move(self, position, move):
-        if move == "W":
-            position[1] += 1
-        elif move == "A":
-            position[0] -= 1
-        elif move == "S":
-            position[1] -= 1
-        elif move == "D":
-            position[0] += 1
-            
+    def get_position(self):
+        return self.position
+
+    def set_position(self,position):
+        self.position = position
+
+    def move(self, move, adjacent_tiles):
         
+        if move == "UP":
+            if adjacent_tiles[move] is None:
+                return "invalid"
+            else:
+                self.position[1] += 1
+                return self.get_position()
+                
+        elif move == "LEFT":
+            if adjacent_tiles[move] is None:
+                return "invalid"
+            else:
+                self.position[0] -= 1
+                return self.get_position()
+            
+        elif move == "DOWN":
+            if adjacent_tiles[move] is None:
+                return "invalid"
+            else:
+                self.position[1] -= 1
+                return self.get_position()
+    
+            
+        elif move == "RIGHT":
+            if adjacent_tiles[move] is None:
+                return "invalid"
+            else:
+                self.position[0] += 1
+                return self.get_position()
+            
     
 
 
@@ -82,8 +108,17 @@ class Creature(Entity):
     def set_damage(self, damage):
         self.damage = damage
 
-        
-        
+
+# test
+# person1 = Player("Lleyton",100000,10,[1,2])
+
+# adj_tiles = {
+#     "UP" : [1,3],
+#     "DOWN" : [1,1],
+#     "RIGHT" : [2,2],
+#     "LEFT" : None
+# }
+# print(person1.move("RIGHT",adj_tiles))
     
     
     
