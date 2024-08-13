@@ -1,16 +1,22 @@
 import random
+import Character
 
 class Battle:
-  def __init__(self, player_hp, enemy_hp):
-    self.player_hp = player_hp
-    self.enemy_hp = enemy_hp
-    self.damage = random.randint(1, 10)
+    def __init__(self, player, enemies: list):
+        self.player = player
+        self.enemies = enemies
+        self.damage = random.randint(2, 10)
 
-  def player_attack(self):
-    self.enemy_hp -= self.damage
+    def player_attack(self):
+        self.player.attack(self.enemies[0])
 
-  def enemy_attack(self):
-    self.player_hp -= self.damage
+    def enemy_attack(self):
+        self.enemies[0].attack(self.player])
 
-  def battle_over(self):
-    return self.player_hp == 0 or self.enemy_hp == 0
+    def battle_over(self):
+        if self.player_hp == 0:
+            return True
+        for i in self.enemy:
+            if i != 0:
+                return False
+        return True
