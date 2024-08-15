@@ -56,19 +56,13 @@ class Object:
 
 
 class Enemy:
-    def __init__(self, type):
-        if type == "Brute":
-            self.name = "Brute"
-            self.health, self.attack, self.defense = 10, 2, 1
-        elif type == "Armored Gorilla":
-            self.name = "Armored Gorilla"
-            self.health, self.attack, self.defense = 10, 0, 1000
-        else:
-            self.health, self.attack, self.defense = 5, 1, 0
+    def __init__(self):
+        pass
+    def __repr__(self):
+        return "E"
 
 
-
-player = Player("NaMe", 20)
-object1 = Object("Object1", 7, "Object1 desc")
-player.store(object1)
-print(player.backpack_isFull())
+# player = Player("NaMe", 20)
+# object1 = Object("Object1", 7, "Object1 desc")
+# player.store(object1)
+# print(player.backpack_isFull())
