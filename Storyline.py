@@ -1,4 +1,5 @@
 import random
+import json
 class storyline:
     def __init__(self):
         self.size = 200
@@ -48,17 +49,13 @@ class storyline:
             map += tile
         return map
 
-    def tile_info(self):
-        dict = {
-            "D": "hehehhe",
-            "C":
-            
-        }
-        map = self.map_load()
-        map = map.split()
+    def get_tile_info(self):
+        pass
         
                 
-        return map
+                
+        
+                 
 test = storyline()
 print(test.map_load())
-print(test.tile_info())
+print(test.get_tile_info())
