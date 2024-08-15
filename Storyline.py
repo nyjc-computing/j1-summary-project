@@ -50,8 +50,9 @@ class storyline:
         return map
 
     def get_tile_info(self):
-        pass
-        
+        with open('Tile_data.txt', 'r', encoding='utf-8') as f:
+            data_dict = json.load(f)
+        return data_dict
                 
                 
         
