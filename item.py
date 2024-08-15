@@ -5,7 +5,9 @@ class Weapon:
         self.attack = data[0] 
         self.critc = data[1]
         self.name = data[2]
-
+        self.description = None
+        self.num = 1
+        
     def __repr__(self):
         return f"Att:{self.attack} Crit:{self.critc}% Name:{self.name}"
 
@@ -62,6 +64,8 @@ class Potions:
         self.desc = data[0]
         self.buff = data[1]
         self.type = data[2]
+        self.name = data[3]
+        self.num = 1
         
     def __repr__(self):
         return self.desc 
@@ -84,13 +88,13 @@ class Potions:
             
 
 #Potion list
-lesser_healing_potion = Potions(["Heals 2 hp to the player", 2, "healing"])
-normal_healing_potion = ["Heals 5 hp to the player", 5, "healing"]
-greater_healing_potion = ["Heals 10 hp to the player ", 10, "healing"]
-supreme_healing_potion = ["Heals 20 hp to the player", 20, "healing"]
+lesser_healing_potion = Potions(["Heals 2 hp to the player", 2, "healing", "lesser healing potion"])
+normal_healing_potion = ["Heals 5 hp to the player", 5, "healing", "normal healing potion"]
+greater_healing_potion = ["Heals 10 hp to the player ", 10, "healing", "greater healing potion"]
+supreme_healing_potion = ["Heals 20 hp to the player", 20, "healing", "supreme healing potion"]
 
-strength_potion = Potions(["Add 10 att to the player's strength stats", 10, "attack"])
-speed_potion = Potions(["Add 5 speed to the player's speed stats", 5, "speed"])
-almond_potion = Potions(["Add 2 to each of the player's stat", 2, "all-in-one"])
+strength_potion = Potions(["Add 10 att to the player's strength stats", 10, "attack", "strength potion"])
+speed_potion = Potions(["Add 5 speed to the player's speed stats", 5, "speed", "speed potion"])
+almond_potion = Potions(["Add 2 to each of the player's stat", 2, "all-in-one", "almond potion"])
 
-bleach = Potions(["Kills you instantly, toddler approved!", -9999999999999, "health"])
+bleach = Potions(["Kills you instantly, toddler approved!", -9999999999999, "health", "Bleach nine-year war"])

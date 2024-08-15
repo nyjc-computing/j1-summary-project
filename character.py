@@ -1,3 +1,4 @@
+
 class Gears:
     def __init__(self):
         self.helmet = (None)
@@ -33,6 +34,7 @@ class Backpack: #store, display, check, destroy
     def check(self, item):
         pass
 
+
 class Player:
     def __init__(self, name, slots):
         self.name = str(name)
@@ -43,23 +45,30 @@ class Player:
         self.speed = 1
         self.items = {}
         self.backpack_size = slots
+
         
     def __repr__(self):
         return f"Name: {self.name}"
-    #Backpack
-    def store(self, name, object):
-        if self.name in self.items: #same type items stack
-            self.items[name].num += object.num
-            print(f'{name} * {object.num} has been stored')
-            return
+        
 
-        if len(self.items) >= self.backpack_size: #backback full
-            print("Backpack is full!")
-            return
+    def backpack_isFull(self):
+        total = 0
+        for item in self.items.values():
+            total += item.num
+        return total >= self.backpack_size
 
-        self.items[name] = object #normal store with sufficient space
-        print(f'{name} * {object.num} has been stored.')
-        return
+    def store(self, object):
+        if self.backpack_isFull():
+            print("Unable to store. Backpack is full.")
+        else:
+            if object.name in self.items: #item present
+                self.items[object.name].num += object.num
+                print(f'{object.num} {object.name} has been stored')
+            else: #new item
+                self.items[object.name] = object
+                print(f'{object.num} {object.name} has been stored.')
+        
+
 
     def display(self):
         lst = [i for i in self.items.keys()]
@@ -78,11 +87,13 @@ class Player:
     def equip(self, gear):
         if gear not in self.items:
             print("You don't have that gear!")
-        
+
+
 class Object:
-    def __init__(self, num, desc):
+    def __init__(self, name, num, description):
+        self.name = name
         self.num = num
-        self.desc = desc
+        self.description = description
 
 
 class Enemy:
@@ -93,6 +104,11 @@ class Enemy:
         elif type == "Armored Gorilla":
             self.name = "Armored Gorilla"
             self.health, self.attack, self.defense = 10, 0, 1000
-        else:
+        elif type == "Slime":
             self.health, self.attack, self.defense = 5, 1, 0
+
+
+
+
+
 
