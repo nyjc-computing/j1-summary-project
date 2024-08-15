@@ -1,5 +1,5 @@
 
-class Entity():
+class Entity:
 
     def __init__(self, name, health, aura, position):
         self.name = name
@@ -13,14 +13,14 @@ class Entity():
     def get_health(self):
         return self.health
 
-    def set_health(self,health):
-        self.health = health
+    def gain_health(self, gained_health):
+        self.health += gained_health
 
+    def take_damage(self, damage):
+        self.health -= damage
+    
     def get_position(self):
         return self.position
-
-    def set_position(self,position):
-        self.position = position
 
     def move(self, move, adjacent_tiles):
         
