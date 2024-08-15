@@ -1,7 +1,13 @@
+from time import sleep
 import storyline
 import level
 import entities
-class Game():
+
+# Util function for clearing console
+def clearConsole():
+    print("\033c", end="", flush=True)
+
+class Game:
     def __init__(self):
         self.storyData = storyline.Storyline()
         self.level = level.level()
@@ -9,19 +15,28 @@ class Game():
         self.currentTilePos = self.storyData.starting_tile
         self.levelEnded = False
         self.hasIntroduced = False
+        
         # TODO: read tile data from storyline and populate level tilelist
     
     def runGame(self, currentLevel):
+        """
+        Get current tile info
+        This stores tile with all its data. 
+        self.currentTile stores the coordinates
+        """
         while not self.levelEnded:
             # Do an intro, if necessary
             if self.hasIntroduced == False:
+                print("Brave adventurer! What is your name?")
+                name = input()
+                # Init player object
+                self.player = entities.Player(name, 100, 100, self.currentTilePos)
                 intro = self.storyData.getIntro(currentLevel)
+                
                 print(intro)
-            """
-            Get current tile info
-            This stores tile with all its data. 
-            self.currentTile stores the coordinates
-            """
+                sleep(3000)
+                clearConsole()
+            
             currTile = self.findTile(self.currentTilePos)
             
             # Display description
