@@ -1,5 +1,5 @@
 
-class Entity():
+class Entity:
 
     def __init__(self, name, health, aura, position):
         self.name = name
