@@ -10,14 +10,13 @@ class Game:
         player.set_name()
 
     def display_options(self): # change later
-        print("""
+        self.choice = input("""
 What would you like to do?
 1. Exercise
 2. Eat
 3. Sleep 
 4. Display Stats
 Enter option: """)
-        self.choice = input()
 
     def do(self, player): # changer later also
         if self.choice == "1":
@@ -32,6 +31,8 @@ Enter option: """)
             print("you slept")
             self.exercise(player)
             self.turns_to_monster -= 1
+        elif self.choice == "4":
+            player.display_stats()
         else:
             print("invalid choice")
             self.display_options()
@@ -53,4 +54,4 @@ Enter option: """)
         player.recharge_hp(0.5)
 
     def eat(self, player):
-        player.change_hp(10)
+        player.increase_hp(10)
