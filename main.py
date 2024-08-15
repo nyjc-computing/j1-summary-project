@@ -1,9 +1,13 @@
-from game import Game # IMPORT GAME
+from game import Game
 
 if __name__ == "__main__":
+    player = Player()
     game = Game()
-    game.start()
+    #monster = Monster()
+    game.start(player)
 
-    while not game.game_over():
+    while not game.game_over(player):
         choice = game.options()
-        game.do(choice) 
+        game.do(choice)
+
+    print("Died")
