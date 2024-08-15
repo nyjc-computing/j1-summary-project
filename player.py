@@ -12,3 +12,6 @@ class Player(Character):
     def display_stats(self):
         print(f"HP: {self.hp}")
         print(f"Attack: {self.attack}")
+
+    def recharge_hp(self,percentage):
+        self.change_hp(self.hp * percentage)
