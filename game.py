@@ -17,7 +17,14 @@ What would you like to do?
 3. Sleep 
 4. Display Stats
 Enter option: """)
-
+        
+    def option_input(self):
+        option = input()
+        select_option(option)
+        
+    def select_option(self,opt):
+        self.choice = opt
+    
     def do(self, player): # changer later also
         if self.choice == "1":
             print("you exercised")
