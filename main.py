@@ -9,6 +9,10 @@ def main():
     Board = game.Game("Jian Lin")
     Board.random_map()
     Board.printmap()
+    while True:
+        Board.play()
+        Board.update_position()
+        Board.printmap()
 if __name__ == "__main__":
     main()
     

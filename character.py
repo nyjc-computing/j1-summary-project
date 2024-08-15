@@ -3,15 +3,16 @@ from item import Gear
 from typing import Any, Dict
 
 class Player:
-    def __init__(self, name, max_load):
+    def __init__(self, name):
         self.name = str(name)
         self.health = 10
         self.defense = 0
         self.attack = 1
         self.speed = 1
-
+        self.coords = (0, 0)
+        self.last_move = (0, 0)
         self.items = {}
-        self.mload = max_load
+        self.mload = 10
 
         self.gears: Dict[str, Any]= {
             'helm': None, 
@@ -23,7 +24,7 @@ class Player:
         }
 
     def __repr__(self):
-        return f"Name: {self.name}"
+        return "P"
 
     def backpack_isFull(self):
         total = 0
