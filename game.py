@@ -10,7 +10,7 @@ def clearConsole():
 class Game:
     def __init__(self):
         self.storyData = storyline.Storyline()
-        self.level = level.level()
+        self.level = level.Level()
         
         self.currentTilePos = self.storyData.starting_tile
         self.levelEnded = False
