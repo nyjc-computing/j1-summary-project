@@ -1,4 +1,5 @@
 from game import Game
+from player import Player
 
 if __name__ == "__main__":
     player = Player()
@@ -7,7 +8,6 @@ if __name__ == "__main__":
     game.start(player)
 
     while not game.game_over(player):
-        choice = game.options()
-        game.do(choice)
+        choice = game.display_options()
 
     print("Died")

@@ -3,7 +3,7 @@ from character import Character
 
 class Player(Character):
     def __init__(self):
-        super().__init__
+        super().__init__()
         self.moves = []
     
     def set_name(self):
