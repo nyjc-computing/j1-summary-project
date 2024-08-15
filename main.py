@@ -9,5 +9,6 @@ if __name__ == "__main__":
 
     while not game.game_over(player):
         choice = game.display_options()
+        game.do(choice)
 
     print("Died")
