@@ -36,7 +36,7 @@ class Game:
         for i in self.enemies:
             self.map[i[0]][i[1]] = character.Enemy(["Enemy", 5, 1, 1, 1]) #enter value next time
 
-    def play(self):
+    def player_input(self):
         while True:
             move = input("Enter move: ")
             if move=='w' and self.player.coords[0] > 0:
@@ -62,7 +62,7 @@ class Game:
             elif not move in ["w", "a", "s", "d"]:
                 print("Invalid move")
             else:
-                print("You've reached the end of the room")
+                print("You've reached the end of the dungeon")
                 
     
     def update_position(self):

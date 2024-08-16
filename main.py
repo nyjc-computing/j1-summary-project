@@ -10,7 +10,7 @@ def main():
     Board.random_map()
     Board.printmap()
     while True:
-        Board.play()
+        Board.player_input()
         Board.update_position()
         Board.printmap()
         Board.check_event()
