@@ -1,0 +1,39 @@
+
+[
+    {
+        "position": [1,1],
+        "description": "Starting Point"
+    },
+    {
+        "position": [3,3],
+        "description": "Getting closer"
+    },
+    {
+        "position": [9,3],
+        "description": "Entered Hallway"
+    },
+    {
+        "position": [9,5],
+        "description": "Walking Through Hallway"
+    },
+    {
+        "position": [19,2],
+        "description": "Classroom A"
+    },
+    {
+        "position": [19,5],
+        "description": "Classroom B"
+    },
+    {
+        "position": [19,8],
+        "description": "Classroom C"
+    },
+    {
+        "position": [18,10],
+        "description": "Level Boss"
+    },
+    {
+        "position": [16,10],
+        "description": "Boss nearby"
+    }
+]
