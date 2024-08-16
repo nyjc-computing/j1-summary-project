@@ -1,4 +1,4 @@
-import data, interface
+import data, interface, battle
 
 class Game:
     def __init__(self):
@@ -51,6 +51,9 @@ class Game:
             self.prev_room()
         elif choice == '3':
             print("LOOKING AROUND")
+            combat = battle.Battle(self.player, self.get_now_room())
+            
+        
         else:
             print("Invalid choice")
 
