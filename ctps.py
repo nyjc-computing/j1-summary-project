@@ -42,22 +42,6 @@ class Game:
         else:
             return "WALL"
 
-    
-    def get_choice(self):
-        now_room = self.get_now_room()
-        choices = ["Look around"]
-        if now_room != "Bedroom":
-            choices.append(f"Next room: {self.get_next_room()}")
-        if now_room != "Dungeon":
-            choices.append(f"Previous room: {self.get_prev_room()}")
-
-        print(f"You are in {self.get_now_room()}")
-        print("-choices-")
-        for num, choice in enumerate(choices):
-            print(f"{num+1}. {choice}")
-
-
-
     def get_choice(self):
         "Dispalys and gets player choice. Display results afterwards"
         choice = input("Enter choice: ")
