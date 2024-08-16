@@ -7,7 +7,6 @@ class Interface:
 
     def start_menu(self):
         print(script.start_menu['title'])
-
         [print(f"{num+1}: {value}") for num, value in enumerate(script.start_menu["options"])]
         choice = int(input(script.prompt))
         return script.start_menu['options'][choice - 1]
