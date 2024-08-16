@@ -77,4 +77,18 @@ class Game:
                     "LEFT":  self.findTile([tile.position[0] - 1, tile.position[1]]),
                     "RIGHT":  self.findTile([tile.position[0] + 1, tile.position[1]]),
                 }
-               
+
+
+def get_options(self) -> list[str]:
+    """Returns player's current options as a list of strs"""
+    options = []
+    return options
+
+def enter(self, choice: str) -> None:
+    """Carry out player choice"""
+    pass
+
+def show_status(self) -> None:
+    """Display player's current status"""
+    pass
+
