@@ -55,25 +55,15 @@ class Game:
         print("Now:", self.get_now_room_name())
         print("Next:", self.get_next_room_name())
         print("Prev:", self.get_prev_room_name())
-        self.interface.func_map[self.get_now_room_name()]()
-        choice = input("Enter choice: ")
-        if choice == '2':
+        choice = self.interface.func_map[self.get_now_room_name()]()
+        print(choice)
+        if choice == 'Move to next room':
             self.next_room()
-        elif choice == '3':
-            print("LOOKING AROUND")
-            combat = battle.Battle(self.player, self.get_now_room())
-            i = 0
-            while combat.battle_over is False:
-                if i%2 == 0:
-                    combat.player_attack()
-                    print('You attacked!')
-                    #
-                elif i%2 == 1:
-                    combat.enemy_attack()
-                    print('The enemy attacked!')
-                    # 
-                i += 1
-                time.sleep(1)
+        elif choice == 'Move to previous room':
+            self.prev_room()
+        elif choice == 'Look around':
+            print("YOU FOUND ENEMIES!!!!")
+            print(self.get_now_room().get_enemies())
         else:
             print("Invalid choice")
         print()
