@@ -7,7 +7,7 @@ class Battle:
         self.player.attack(self.room.get_enemies()[0])
 
     def enemy_attack(self):
-        self.room.enemy[0].attack(self.player)
+        self.room.enemies[0].attack(self.player)
 
     def get_enemy_health(self):
         return self.room.get_enemies()[0].get_health()
