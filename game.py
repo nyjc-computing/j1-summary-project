@@ -1,5 +1,5 @@
 from random import randint
-import character
+import character, sys
 class Game:
     def __init__(self, name):
         self.n = 5
@@ -18,8 +18,15 @@ class Game:
         print(f"Current Event:{self.player.event_queue}", type(self.player.event_queue))
 
     def random_map(self): #randomise events in map
-        #enemies
+        #player spawn
         self.map[0][0] = self.player
+        #boss spawn
+        while True:
+            coords = (randint(0, self.n-1), randint(0, self.n-1))
+            if self.map[coords[0]][coords[1]] == ".":
+                self.map[coords[0]][coords[1]] = character.Boss(["Overlord", 1, 5, 3, 1])
+                break
+        #enemies spawn
         for i in range(self.e):
             while True:
                 coords = (randint(0, self.n-1), randint(0, self.n-1))
@@ -27,7 +34,7 @@ class Game:
                     self.enemies[coords] = True
                     break
         for i in self.enemies:
-            self.map[i[0]][i[1]] = character.Enemy(["Enemy", 100, 1, 1, 1]) #enter value next time
+            self.map[i[0]][i[1]] = character.Enemy(["Enemy", 5, 1, 1, 1]) #enter value next time
 
     def play(self):
         while True:
@@ -82,6 +89,15 @@ class Game:
                 i = 0
             else:
                 i += 1
+        if result == -1:
+            sys.exit()
+        elif result == -666:
+            print("The final boss has killed you...")
+            sys.exit()
+        elif result == -888:
+            print("You have defeated the final boss")
+            sys.exit()
+        
             
             
         

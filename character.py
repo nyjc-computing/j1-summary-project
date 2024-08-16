@@ -138,6 +138,8 @@ class Player:
         if enemy.health <= 0:
             enemy.health = 0
             print(f"{enemy} fainted.")
+            if isinstance(enemy, Boss):
+                return -888
             return True
         else:
             return False
@@ -173,6 +175,37 @@ class Enemy:
         if player.health <= 0:
             player.health = 0
             print("You fainted. Skill Issue.")
-            return True
+            return -1
         else:
             return False
+
+class Boss(Enemy):
+    def __init__(self, data):
+        super().__init__(data)
+        
+    def __repr__(self):
+        return "B"
+
+    def combat(self, player: "Player"):
+        print("\n")
+        time.sleep(0.5)
+        damage = (self.attack - player.defense) #enemy doesn't crit
+
+
+        if damage < 0:
+            damage = 1
+
+        player.health -= damage #lose health
+
+        print(f"You received {damage} damage from the {self.name}.")#print damage to player
+
+
+        print(f"{player.name} current health:{player.health}") #print hp left
+
+        if player.health <= 0:
+            player.health = 0
+            print("You fainted. Skill Issue.")
+            return -666
+        else:
+            return False
+        
