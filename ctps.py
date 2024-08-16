@@ -1,4 +1,4 @@
-import data, interface
+import data, interface, battle, time
 
 class Game:
     def __init__(self):
@@ -7,7 +7,6 @@ class Game:
         self.princess = None
         self.rooms = []
         self.now = 0
-        
 
     def setup(self):
         self.interface = interface.Interface()
@@ -19,6 +18,9 @@ class Game:
             exit()
         
 
+    def get_player_health(self):
+        return self.player.get_health()
+        
     def isover(self):
         return self.player.isdead() or self.princess.isdead()
 
@@ -62,7 +64,6 @@ class Game:
         elif choice == 'Look around':
             print("YOU FOUND ENEMIES!!!!")
             print(self.get_now_room().get_enemies())
-            
         else:
             print("Invalid choice")
         print()
