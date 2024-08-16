@@ -6,8 +6,6 @@ class Character:
         self.strength = strength
         self.items = items or []
 
-    def __repr__(self):
-        return f"Character: {self._type}\nHealth: {self.health}\nStrength: {self.strength}"  #Add items?
 
     def attack(self, character):
         """
