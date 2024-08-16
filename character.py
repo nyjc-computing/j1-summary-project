@@ -1,12 +1,10 @@
-from item import Item
-from item import Gear
+import item
 from typing import Any, Dict
-from item import Weapon
 
 class Player:
     def __init__(self, name):
         self.name = str(name)
-        self.health = 10
+        self.health = [10,10]
         self.defense = 0
         self.attack = 1
         self.speed = 1
@@ -28,8 +26,8 @@ class Player:
 
     def backpack_isFull(self):
         total = 0
-        for item in self.items.values():
-            total += item.weight
+        for itm in self.items.values():
+            total += itm.weight
         print(total)
         return total >= self.mload
 
@@ -76,7 +74,7 @@ class Player:
         return disp
 
 
-    def check(self, item):
+    def check(self, object):
         if item in self.items.keys():
             print(f'Name: {item}')
             print(f'Amount:{self.items[item].num}')
@@ -86,14 +84,16 @@ class Player:
         return False
 
     #Gears
-    def equip(self, gear: 'Gear'):
+    def equip(self, gear):#gear is type armor
         if gear.name not in self.items:
             print("You don't have that gear!")
             return False
         #if that section is full, say you have it on
+        
         if self.gears[gear.section] is not None:
             print(f'You already have a {gear.section} equipped.')
             return False
+            
         #else, equip that gear
         self.gears[gear.section] = gear
         print(f'{gear.name} is equipped')
@@ -121,7 +121,7 @@ class Player:
             
         damage = (self.gears['weapon'].attack + self.attack - enemy.defense) * crit
         
-        if damage < 0:
+        if damage <= 0:
             damage = 1
             
         enemy.health -= damage
@@ -145,19 +145,19 @@ class Enemy:
 
 
     def combat(self, player: "Player"):
-        damage = (self.attack - player.defense) #enemy doesn't crit
+        damage = (int(self.attack) - int(player.defense)) #enemy doesn't crit
 
 
         if damage < 0:
             damage = 1
 
-        player.health -= damage #lose health
+        player.health[0] -= damage #lose health
 
         print(f"You received {damage} damage from the {self.name}.")#print damage to player
 
 
         print(f"{player.name} current health:{player.health}") #print hp left
 
-        if player.health <= 0:
-            player.health = 0
+        if player.health[0] <= 0:
+            player.health[0] = 0
             print("You fainted. Skill Issue.")
