@@ -53,14 +53,15 @@ class Game:
         print("Now:", self.get_now_room_name())
         print("Next:", self.get_next_room_name())
         print("Prev:", self.get_prev_room_name())
-        self.interface.func_map[self.get_now_room_name()]()
-        choice = input("Enter choice: ")
-        if choice == '2':
+        choice = self.interface.func_map[self.get_now_room_name()]()
+        print(choice)
+        if choice == 'Move to next room':
             self.next_room()
-        elif choice == '3':
+        elif choice == 'Move to previous room':
             self.prev_room()
-        elif choice == '1':
+        elif choice == 'Look around':
             print("YOU FOUND ENEMIES!!!!")
+            print(self.get_now_room().get_enemies())
             
         else:
             print("Invalid choice")
