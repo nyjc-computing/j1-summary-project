@@ -115,8 +115,10 @@ normal_healing_potion = ["Heals 5 hp to the player", 5, "healing", "normal heali
 greater_healing_potion = ["Heals 10 hp to the player ", 10, "healing", "greater healing potion"]
 supreme_healing_potion = ["Heals 20 hp to the player", 20, "healing", "supreme healing potion"]
 
+
 strength_potion = Potions(["Add 10 att to the player's strength stats", 10, "attack", "strength potion"])
 speed_potion = Potions(["Add 5 speed to the player's speed stats", 5, "speed", "speed potion"])
 almond_potion = Potions(["Add 2 to each of the player's stat", 2, "all-in-one", "almond potion"])
-bleach = Potions(["Kills you instantly, toddler approved!", -9999999999999, "health", "Bleach nine-year war"])
+bleach = Potions(["Kills you instantly, toddler approved!", -9999999999999, "health", "Bleach ninety-year war", -9999999999999])
+
 

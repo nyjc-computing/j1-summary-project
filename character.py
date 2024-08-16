@@ -42,16 +42,17 @@ from typing import Any, Dict
 
 
 class Player:
-    def __init__(self, name, max_load):
+    def __init__(self, name):
         self.name = str(name)
         self.max_health = 10
         self.current_health = 10
         self.defense = 0
         self.attack = 1
         self.speed = 1
-
+        self.coords = (0, 0)
+        self.last_move = (0, 0)
         self.items = {}
-        self.mload = max_load
+        self.mload = 10
 
         self.gears: Dict[str, Any]= {
             'helm': None, 
@@ -67,15 +68,14 @@ class Player:
         return f"Name: {self.name}"
         
 
+
+
     def backpack_isFull(self):
         total = 0
         for item in self.items.values():
-
             total += item.num
         return total >= self.backpack_size
-            total += item.weight
-        print(total)
-        return total >= self.mload
+
 
 
     def store(self, object):
@@ -112,9 +112,6 @@ class Player:
         
 
                 return True
-                
-        else:
-            print("Unable to store. Backpack is full.")
             return False
 
 
@@ -191,5 +188,8 @@ player = Player("NaMe", 20)
 object1 = Item("Object1", 7, "Object1 desc", 10)
 player.store(object1)
 print(player.backpack_isFull())
+
+
+
 
 

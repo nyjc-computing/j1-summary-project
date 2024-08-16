@@ -1,12 +1,13 @@
 
 # Import statements
+
 import random
 import item
 import character
 
-#main game loop
 
-import time, character, intro
+
+import time, character, intro, game
 import rng
 
 # def main():
@@ -27,6 +28,14 @@ import rng
 #             else:
 #                 print("Answer the question please")
 
+def main():
+    Board = game.Game("Jian Lin")
+    Board.random_map()
+    Board.printmap()
+    while True:
+        Board.play()
+        Board.update_position()
+        Board.printmap()
 
 if __name__ == "__main__":
     pass
