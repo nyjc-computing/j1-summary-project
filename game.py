@@ -3,7 +3,8 @@ class Game:
     def __init__(self, name):
         self.n = 10
         self.e = 5
-        self.x = 0, self.y = 0
+        self.x = 0 
+        self.y = 0
         self.enemies = {}
         map = [['.'for i in range(10)]]
         player = Player(name)

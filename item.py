@@ -1,11 +1,33 @@
 import random
 
-class Weapon:
+class Item:
+    def __init__(self, data: list):# name, desc, num, spec_weight
+        self.name = data[0]
+        self.desc = data[1]
+        self.num = data[2]
+        self.weight = data[3] * self.num
+wooden_helmet = ["Wooden helmet", "nil", 1, 1]
+wooden_chestplate = ["Wooden chestplate", "nil", 1, 2]
+wooden_leggings = ["Wooden leggings", "nil", 1, 1]
+wooden_boots = ["Wooden boots", "nil", 1, 1]
+
+class Gear(Item):
+    def __init__(self, section, data: list):
+        super().__init__(data)
+        self.section = section
+
+
+
+
+
+class Weapon(Gear):
     def __init__(self, data: list):
+
         self.attack = data[0] 
+        self.section = 'weapon'
+        self.attack = data[0]
         self.critc = data[1]
         self.name = data[2]
-        self.description = None
         self.num = 1
         
     def __repr__(self):
@@ -96,5 +118,5 @@ supreme_healing_potion = ["Heals 20 hp to the player", 20, "healing", "supreme h
 strength_potion = Potions(["Add 10 att to the player's strength stats", 10, "attack", "strength potion"])
 speed_potion = Potions(["Add 5 speed to the player's speed stats", 5, "speed", "speed potion"])
 almond_potion = Potions(["Add 2 to each of the player's stat", 2, "all-in-one", "almond potion"])
-
 bleach = Potions(["Kills you instantly, toddler approved!", -9999999999999, "health", "Bleach nine-year war"])
+
