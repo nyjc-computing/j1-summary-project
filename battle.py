@@ -10,8 +10,4 @@ class Battle:
         self.room.enemy[0].attack(self.player)
 
     def battle_over(self):
-        if self.player.health == 0:
-            return True
-        elif self.room.get_enemies == []:
-            return True
-        return False
+        return self.player.health == 0 or self.room.get_enemies() == [] 

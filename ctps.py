@@ -53,7 +53,7 @@ class Game:
         print("Now:", self.get_now_room_name())
         print("Next:", self.get_next_room_name())
         print("Prev:", self.get_prev_room_name())
-        self.interface.room_menu()
+        self.interface.func_map[self.get_now_room_name()]()
         choice = input("Enter choice: ")
         if choice == '2':
             self.next_room()
