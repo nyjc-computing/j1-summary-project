@@ -8,9 +8,26 @@ exit_screen = {
 'message': 'See you next time!'
 }
 
-room_menu = {
+dungeon_menu = {
+'options': ['Look around', 'Move to next room']
+}
+
+kitchen_menu = {
 'options': ['Look around', 'Move to next room', 'Move to previous room']
 }
+
+hall_menu = {
+'options': ['Look around', 'Move to next room', 'Move to previous room']
+}
+
+toilet_menu = {
+'options': ['Look around', 'Move to next room', 'Move to previous room']
+}
+
+bedroom_menu = {
+'options': ['Look around', 'Move to previous room']
+}
+
 
 story_menu = {
 'message': 'Once upon a time, there was a powerful kingdom called “The Light Nation “. ', 'options': ['Previous Line', 'Next Line']
