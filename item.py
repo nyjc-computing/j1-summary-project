@@ -1,23 +1,29 @@
 import random
 
 class Item:
-    def __init__(self, data: list):# name, desc, num, spec_weight
+    def __init__(self, data: list):# name, num, desc, spec_weight
         self.name = data[0]
-        self.desc = data[1]
-        self.num = data[2]
+        self.num = data[1]
+        self.desc = data[2]
+        self.weight = data[3] * self.num
+        
+
+class Gear:
+    def __init__(self, section, data: list):#name, num, defense, spec_weight
+        self.section = section
+        self.name = data[0]
+        self.num = data[1]
+        self.defense = data[2]
         self.weight = data[3] * self.num
 
-class Gear(Item):
-    def __init__(self, section, data: list):
-        super().__init__(data)
-        self.section = section
-
-class Weapon(Gear):
-    def __init__(self, data: list):
+class Weapon:
+    def __init__(self, data: list):#attack, critc, name, num, spec_weight
         self.section = 'weapon'
         self.attack = data[0]
         self.critc = data[1]
         self.name = data[2]
+        self.num = data[3]
+        self.weight = data[4] * self.num
 
     def __repr__(self):
         return f"Att:{self.attack} Crit:{self.critc}% Name:{self.name}"
@@ -28,44 +34,30 @@ class Weapon(Gear):
             return True
         return False
 
-    def combat(self, enemy, Player):
-        crit = 1  #if there is no crit does not change
-        if self.crit():
-            crit = 2  # double the damage when it crits
-        damage = (self.attack + Player.attack - enemy.defense) * crit
-        if damage < 0:
-            damage = 1
-        enemy.health -= damage
-        print(f"You dealt {damage} damage to the {enemy.name}.")
-        print(f"{enemy.name} current health:{enemy.health}")
-        if enemy.health <= 0:
-            enemy.health = 0
-            print(f"{enemy} fainted.")
-
 
 #Weapon list
 #format   att, critc
-Wooden_sword = Weapon([3, 5, "Wooden Sword"])
-Stone_sword = Weapon([5, 5, "Stone Sword"])
-Iron_sword = Weapon([8, 10, "Iron Sword"])
+wooden_sword = Weapon([3, 5, "Wooden Sword", 1, 2])
+stone_sword = Weapon([5, 5, "Stone Sword", 1, 3])
+iron_sword = Weapon([8, 10, "Iron Sword", 1, 4])
 
-Steel_sword = Weapon([12, 8, "Steel Sword"])
+steel_sword = Weapon([12, 8, "Steel Sword", 1, 5])
 
-Fire_blade = Weapon([20, 5, "Fire Blade"])
-Ice_blade = Weapon([12, 50, "Ice Blade"])
+fire_blade = Weapon([20, 5, "Fire Blade", 1, 0])
+ice_blade = Weapon([12, 50, "Ice Blade", 1, 2])
 
-Diamond_sword = Weapon([25, 12, "Diamond Sword"])
-Forty_metre_long_sword = Weapon([40, 40, "40m-long-sword"])
+diamond_sword = Weapon([25, 12, "Diamond Sword", 1, 2])
+forty_metre_long_sword = Weapon([40, 40, "40m-long-sword", 1, 40])
 
-Soul_stealer = Weapon(
-    [5, 5, "Soul Stealer"])  #steal the attack of enemy and add it to weapon's attack.
+soul_stealer = Weapon(
+    [5, 5, "Soul Stealer", 1, 2])  #steal the attack of enemy and add it to weapon's attack.
 
 #fire blade does half of the damage dealt to the enemy, last 2 turns
 
 #dev weapon
-Ulti_blade = Weapon([100000000000000, 0, "Ulti-Blade"])
+ulti_blade = Weapon([100000000000000, 0, "Ulti-Blade", 1, 0])
 
-
+#Armors
 
 class Potions:
     def __init__(self, data):

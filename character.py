@@ -1,6 +1,7 @@
 from item import Item
 from item import Gear
 from typing import Any, Dict
+from item import Weapon
 
 class Player:
     def __init__(self, name):
@@ -19,7 +20,6 @@ class Player:
             'chest': None, 
             'leg': None, 
             'boots': None, 
-            'accessory': None, 
             'weapon': None
         }
 
@@ -43,6 +43,7 @@ class Player:
                     weight += item.weight
                 if weight > self.mload:
                     print("That's too much for your bag to handle!")
+                    
                     self.items[object.name].num -= object.num #Take back item
                     return False
                     
@@ -111,16 +112,52 @@ class Player:
         self.gears[section] = None
         print(f'{self.gears[section].name} unequipped')
         return True
+
+    def combat(self, enemy: "Enemy"):
+        crit = 1  #if there is no crit does not change
         
+        if self.gears["weapon"].crit():
+            crit = 2  # double the damage when it crits
+            
+        damage = (self.gears['weapon'].attack + self.attack - enemy.defense) * crit
+        
+        if damage < 0:
+            damage = 1
+            
+        enemy.health -= damage
+        
+        print(f"You dealt {damage} damage to the {enemy.name}.")
+        
+        print(f"{enemy.name} current health:{enemy.health}")
+        
+        if enemy.health <= 0:
+            enemy.health = 0
+            print(f"{enemy} fainted.")
+
+
 class Enemy:
-    def __init__(self):
-        pass
-    def __repr__(self):
-        return "E"
+    def __init__(self, data: list): #name, health, defense, attack, speed
+        self.name = data[0]
+        self.health = data[1]
+        self.defense = data[2]
+        self.attack = data[3]
+        self.speed = data[4]
 
 
-# player = Player("NaMe", 20)
-# object1 = Object("Object1", 7, "Object1 desc")
-# player.store(object1)
-# print(player.backpack_isFull())
+    def combat(self, player: "Player"):
+        damage = (self.attack - player.defense) #enemy doesn't crit
 
+
+        if damage < 0:
+            damage = 1
+
+        player.health -= damage #lose health
+
+        print(f"You received {damage} damage from the {self.name}.")#print damage to player
+
+
+        print(f"{player.name} current health:{player.health}") #print hp left
+
+        if player.health <= 0:
+            player.health = 0
+            print("You fainted. Skill Issue.")
