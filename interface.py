@@ -11,8 +11,20 @@ class Interface:
         choice = int(input(script.prompt))
         return script.start_menu['options'][choice - 1]
     
-    def room_menu(self):
+    def dungeon_menu(self):
         [print(f"{num+1}: {value}") for num, value in enumerate(script.room_menu["options"])]
+
+    def kitchen_menu(self):
+    [print(f"{num+1}: {value}") for num, value in enumerate(script.room_menu["options"])]
+
+    def hall_menu(self):
+    [print(f"{num+1}: {value}") for num, value in enumerate(script.room_menu["options"])]
+
+    def toilet_menu(self):
+    [print(f"{num+1}: {value}") for num, value in enumerate(script.room_menu["options"])]
+
+    def bedroom_menu(self):
+    [print(f"{num+1}: {value}") for num, value in enumerate(script.room_menu["options"])]
 
     def exit_screen(self):
         print(script.exit_screen['message'])
