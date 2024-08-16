@@ -1,5 +1,0 @@
-room, [direction, nx_room], enemy_num
-bedroom, [east, hallway], 4
-hallway, [[west, bedroom], [south, diningroom]], 3
-diningroom, [north, hallway], 2
-dungeon, [east, diningroom], 3
