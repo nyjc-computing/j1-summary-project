@@ -1,6 +1,4 @@
-import random
-import json
-class storyline:
+class map:
     def map_list(self):
         lst = []
         with open('level1.txt','r') as f:
@@ -18,12 +16,15 @@ class storyline:
         with open('Tile_data.txt', 'r', encoding='utf-8') as f:
             data_dict = json.load(f)
         return data_dict
-
-    def get_intro(self):
-        return "Welcome to the game!"
-                
-        
-                 
-test = storyline()
-print(test.map_load())
-print(test.get_tile_info())
+    def get_starting_tile(self):
+        x = 1
+        y = 1
+        lst = self.map_list()
+        for text in lst:
+            for e in text:
+                if e == "S":
+                    return x,y
+                else:
+                    x += 1
+            x = 1
+            y += 1
