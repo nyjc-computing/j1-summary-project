@@ -13,6 +13,7 @@ def main():
         Board.play()
         Board.update_position()
         Board.printmap()
+        Board.check_event()
 if __name__ == "__main__":
     main()
     

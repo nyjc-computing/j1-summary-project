@@ -15,6 +15,7 @@ class Game:
                 output += str(self.map[i][j])
             print(output)
         print("\n")
+        print(f"Current Event:{self.player.event_queue}", type(self.player.event_queue))
 
     def random_map(self): #randomise events in map
         #enemies
@@ -26,10 +27,10 @@ class Game:
                     self.enemies[coords] = True
                     break
         for i in self.enemies:
-            self.map[i[0]][i[1]] = character.Enemy()
+            self.map[i[0]][i[1]] = character.Enemy(["Enemy", 100, 1, 1, 1]) #enter value next time
 
     def play(self):
-        while True: #check doesnt work fix this shit
+        while True:
             move = input("Enter move: ")
             if move=='w' and self.player.coords[0] > 0:
                 self.player.event_queue = self.map[self.player.coords[0] - 1][self.player.coords[1]]
@@ -41,19 +42,20 @@ class Game:
                 self.player.last_move = self.player.coords
                 self.player.coords =(self.player.coords[0], self.player.coords[1] - 1)
                 break
-            elif move=='s' and self.player.coords[0] < self.n:
+            elif move=='s' and self.player.coords[0] < self.n - 1:
                 self.player.event_queue = self.map[self.player.coords[0] + 1][self.player.coords[1]]
                 self.player.last_move = self.player.coords
                 self.player.coords =(self.player.coords[0] + 1, self.player.coords[1])
                 break
-            elif move=='d' and self.player.coords[1] < self.n:
+            elif move=='d' and self.player.coords[1] < self.n - 1:
                 self.player.event_queue = self.map[self.player.coords[0]][self.player.coords[1] + 1]
                 self.player.last_move = self.player.coords
                 self.player.coords =(self.player.coords[0], self.player.coords[1] + 1)
                 break
+            elif not move in ["w", "a", "s", "d"]:
+                print("Invalid move")
             else:
-                print("Invalid Move!")
-        print(f"\nCurrent Event:{self.player.event_queue}", type(self.player.event_queue))
+                print("You've reached the end of the room")
                 
     
     def update_position(self):
@@ -61,10 +63,25 @@ class Game:
         self.map[self.player.last_move[0]][self.player.last_move[1]] = "X"
 
     def check_event(self):
-        pass
+        if isinstance(self.player.event_queue, character.Enemy):
+            print("You have encountered an enemy.")
+            self.event_fight(self.player, self.player.event_queue)
+        else:
+            print("nothing")
 
-    def win(self):
-        print("You have arrived safely. Well done!")
+    def event_fight(self, player, enemy):
+        result = False
+        turn_order = [player, enemy]
+        if player.speed >= enemy.speed:
+            i = 0
+        else:
+            i = 1
+        while not result:
+            result = turn_order[i].combat(turn_order[i - 1]) #if i = 0 i.e. player, i - 1 will become -1 which points to enemy as intended
+            if i == 1:
+                i = 0
+            else:
+                i += 1
+            
+            
         
-    def lose(self):
-        print("Game over")

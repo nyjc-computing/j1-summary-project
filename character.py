@@ -1,7 +1,9 @@
-from item import Item
-from item import Gear
+# from item import Item
+# from item import Gear
 from typing import Any, Dict
-from item import Weapon
+# from item import Weapon
+import item
+import time
 
 class Player:
     def __init__(self, name):
@@ -21,7 +23,7 @@ class Player:
             'chest': None, 
             'leg': None, 
             'boots': None, 
-            'weapon': None
+            'weapon': item.wooden_sword
         }
 
     def __repr__(self):
@@ -87,7 +89,7 @@ class Player:
         return False
 
     #Gears
-    def equip(self, gear: 'Gear'):
+    def equip(self, gear: 'Armor'):
         if gear.name not in self.items:
             print("You don't have that gear!")
             return False
@@ -115,6 +117,8 @@ class Player:
         return True
 
     def combat(self, enemy: "Enemy"):
+        print("\n")
+        time.sleep(0.5)
         crit = 1  #if there is no crit does not change
         
         if self.gears["weapon"].crit():
@@ -134,6 +138,9 @@ class Player:
         if enemy.health <= 0:
             enemy.health = 0
             print(f"{enemy} fainted.")
+            return True
+        else:
+            return False
 
 
 class Enemy:
@@ -144,8 +151,12 @@ class Enemy:
         self.attack = data[3]
         self.speed = data[4]
 
-
+    def __repr__(self):
+        return "E"
+        
     def combat(self, player: "Player"):
+        print("\n")
+        time.sleep(0.5)
         damage = (self.attack - player.defense) #enemy doesn't crit
 
 
@@ -162,3 +173,6 @@ class Enemy:
         if player.health <= 0:
             player.health = 0
             print("You fainted. Skill Issue.")
+            return True
+        else:
+            return False
