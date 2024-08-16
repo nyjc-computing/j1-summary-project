@@ -1,5 +1,5 @@
 
-class Entity():
+class Entity:
 
     def __init__(self, name, health, aura, position):
         self.name = name
@@ -13,15 +13,15 @@ class Entity():
     def get_health(self):
         return self.health
 
-    def set_health(self,health):
-        self.health = health
+    def gain_health(self, gained_health):
+        self.health += gained_health
 
+    def take_damage(self, damage):
+        self.health -= damage
+    
     def get_position(self):
         return self.position
-
-    def set_position(self,position):
-        self.position = position
-
+    
     def move(self, move, adjacent_tiles):
         
         if move == "UP":
@@ -73,6 +73,16 @@ class Player(Entity):
 
     def remove_item(self,item):
         self.inventory.remove(item)
+
+    def punch(self, monster):
+        monster.take_damage(5)
+
+    def kick(self, monster):
+        monster.take_damage(10)
+
+    def use_item(self, item_index):
+        item = self.inventory[item_index - 1]
+        item.use_item()
 
     def get_inventory(self):
         return self.inventory
