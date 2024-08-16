@@ -11,6 +11,7 @@ class Player:
         self.speed = 1
         self.coords = (0, 0)
         self.last_move = (0, 0)
+        self.event_queue = ""
         self.items = {}
         self.mload = 10
 

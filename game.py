@@ -1,5 +1,5 @@
 from random import randint
-import character, colorama
+import character
 class Game:
     def __init__(self, name):
         self.n = 5
@@ -32,31 +32,36 @@ class Game:
         while True: #check doesnt work fix this shit
             move = input("Enter move: ")
             if move=='w' and self.player.coords[0] > 0:
+                self.player.event_queue = self.map[self.player.coords[0] - 1][self.player.coords[1]]
                 self.player.last_move = self.player.coords
                 self.player.coords =(self.player.coords[0] - 1, self.player.coords[1])
                 break
             elif move=='a' and self.player.coords[1] > 0:
+                self.player.event_queue = self.map[self.player.coords[0]][self.player.coords[1] - 1]
                 self.player.last_move = self.player.coords
                 self.player.coords =(self.player.coords[0], self.player.coords[1] - 1)
                 break
             elif move=='s' and self.player.coords[0] < self.n:
+                self.player.event_queue = self.map[self.player.coords[0] + 1][self.player.coords[1]]
                 self.player.last_move = self.player.coords
                 self.player.coords =(self.player.coords[0] + 1, self.player.coords[1])
                 break
             elif move=='d' and self.player.coords[1] < self.n:
+                self.player.event_queue = self.map[self.player.coords[0]][self.player.coords[1] + 1]
                 self.player.last_move = self.player.coords
                 self.player.coords =(self.player.coords[0], self.player.coords[1] + 1)
                 break
             else:
                 print("Invalid Move!")
+        print(f"\nCurrent Event:{self.player.event_queue}", type(self.player.event_queue))
                 
     
     def update_position(self):
         self.map[self.player.coords[0]][self.player.coords[1]] = self.player
         self.map[self.player.last_move[0]][self.player.last_move[1]] = "X"
 
-    def fight(self, enemy):
-        return False
+    def check_event(self):
+        pass
 
     def win(self):
         print("You have arrived safely. Well done!")
