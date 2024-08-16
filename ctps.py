@@ -1,4 +1,4 @@
-import data, interface
+import data, interface, battle, time
 
 class Game:
     def __init__(self):
@@ -7,7 +7,6 @@ class Game:
         self.princess = None
         self.rooms = []
         self.now = 0
-        
 
     def setup(self):
         self.interface = interface.Interface()
@@ -19,6 +18,9 @@ class Game:
             exit()
         
 
+    def get_player_health(self):
+        return self.player.get_health()
+        
     def isover(self):
         return self.player.isdead() or self.princess.isdead()
 
@@ -58,10 +60,20 @@ class Game:
         if choice == '2':
             self.next_room()
         elif choice == '3':
-            self.prev_room()
-        elif choice == '1':
-            print("YOU FOUND ENEMIES!!!!")
-            
+            print("LOOKING AROUND")
+            combat = battle.Battle(self.player, self.get_now_room())
+            i = 0
+            while combat.battle_over is False:
+                if i%2 == 0:
+                    combat.player_attack()
+                    print('You attacked!')
+                    #
+                elif i%2 == 1:
+                    combat.enemy_attack()
+                    print('The enemy attacked!')
+                    # 
+                i += 1
+                time.sleep(1)
         else:
             print("Invalid choice")
         print()
