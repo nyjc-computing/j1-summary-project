@@ -2,6 +2,7 @@
 import entities
 from game import Game
 
+
 LEVEL = 1
 
 if __name__ == "__main__":
