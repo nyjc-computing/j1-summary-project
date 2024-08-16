@@ -78,7 +78,7 @@ supreme_healing_potion = ["Heals 20 hp to the player", 20]
 
 strength_potion = Potions(["Add 10 att to the player's strength stats", 10])
 speed_potion = Potions(["Add 5 speed to the player's speed stats", 5])
-almond_potion = Potions(["Add 2 to each of the player's stat"])
+almond_potion = Potions(["Add 2 to each of the player's stat", -0])
 
 bleach = Potions(["Kills you instantly, toddler approved!", -9999999999999])
 
