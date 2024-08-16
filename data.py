@@ -7,13 +7,18 @@ def createRooms() -> list[room.Room]:
     Must follow order of room: Dungeon, Kitchen, Hall, Toilet, Bedroom
     Store Name & Number of enemies
     """
-    list_of_rooms = [
-        room.Room("Dungeon", 3),
-        room.Room("Kitchen", 3),
-        room.Room("Hall", 3),
-        room.Room("Toilet", 3),
-        room.Room("Bedroom", 3)
-    ]
+
+    list_of_rooms = []
+    room_name_enemy_num = {"Dungeon":3, 
+                           "Kitchen":3, 
+                           "Hall":3, 
+                           "Toilet":3, 
+                           "Bedroom":3}
+    for name, num in room_name_enemy_num.items():
+        temp = room.Room(name)
+        for _ in range(num):
+            temp.add_enemy(character.Soldier(1, 1))
+        list_of_rooms.append(temp)
 
     return list_of_rooms
     
