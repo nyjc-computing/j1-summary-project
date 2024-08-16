@@ -19,7 +19,11 @@ class Interface:
         [print(f"{num+1}: {value}") for num, value in enumerate(script.start_menu["options"])]
         choice = int(input(script.prompt))
         return script.start_menu['options'][choice - 1]
-    
+
+    def combat_menu(self, turn):
+        print(f"Your health: {player_health}")
+        print(f"Enemy health: {enemy_health}")
+        
     def dungeon_menu(self):
         [print(f"{num+1}: {value}") for num, value in enumerate(script.dungeon_menu["options"])]
 
@@ -37,11 +41,4 @@ class Interface:
 
     def exit_screen(self):
         print(script.exit_screen['message'])
-
-    # def toilet_menu(self):
-    #     print(script.toilet_menu['message'])
-    #     [print(f"{num+1}: {value}") for num, value in enumerate(script.toilet_menu["options"])]
-    #     choice = int(input(script.prompt))
-    #     return script.toilet_menu['options'][choice - 1]
-
 
