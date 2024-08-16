@@ -13,7 +13,10 @@ class Game:
         self.player = data.createPlayer()
         self.princess = data.createPrincess()
         self.rooms = data.createRooms()
-        self.interface.start_menu()
+        if self.interface.start_menu() == 'exit':
+            print("Exiting game...")
+            exit()
+        
 
     def get_player_health(self):
         return self.player.get_health()
@@ -31,14 +34,17 @@ class Game:
     
     def get_now_room(self):
         return self.rooms[self.now]
+
+    def get_now_room_name(self):
+        return self.rooms[self.now].get_name()
         
-    def get_next_room(self):
+    def get_next_room_name(self):
         if self.now < len(self.rooms) - 1:
             return self.rooms[self.now + 1].get_name()
         else:
             return "WALL"
     
-    def get_prev_room(self):
+    def get_prev_room_name(self):
         if self.now - 1 >= 0:
             return self.rooms[self.now - 1].get_name()
         else:
@@ -46,11 +52,13 @@ class Game:
 
     def get_choice(self):
         "Dispalys and gets player choice. Display results afterwards"
+        print("Now:", self.get_now_room_name())
+        print("Next:", self.get_next_room_name())
+        print("Prev:", self.get_prev_room_name())
+        self.interface.func_map[self.get_now_room_name()]()
         choice = input("Enter choice: ")
-        if choice == '1':
+        if choice == '2':
             self.next_room()
-        elif choice == '2':
-            self.prev_room()
         elif choice == '3':
             print("LOOKING AROUND")
             combat = battle.Battle(self.player, self.get_now_room())
@@ -66,9 +74,7 @@ class Game:
                     # 
                 i += 1
                 time.sleep(1)
-            
-            
-        
         else:
             print("Invalid choice")
+        print()
 
