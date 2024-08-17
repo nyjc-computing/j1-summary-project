@@ -43,27 +43,21 @@
     },
     {
         "type": "HealthPotion",
-        "name": "Minor Healing Brew",
-        "description": "A basic potion that restores health slightly.",
-        "health_gain": 30
+        "name": "Herbal Tonic",
+        "description": "A restorative potion made from rare herbs.",
+        "health_gain": 60
     },
     {
         "type": "HealthPotion",
-        "name": "Greater Healing Potion",
+        "name": "Phoenix Feather Elixir",
+        "description": "Grants the drinker the vitality of a phoenix.",
+        "health_gain": 350
+    },
+    {
+        "type": "HealthPotion",
+        "name": "Dragon's Blood Potion",
         "description": "Restores a significant amount of health.",
-        "health_gain": 150
-    },
-    {
-        "type": "HealthPotion",
-        "name": "Potion of Vitality",
-        "description": "Increases overall vitality, restoring a lot of health.",
         "health_gain": 400
-    },
-    {
-        "type": "HealthPotion",
-        "name": "Life Essence",
-        "description": "A rare potion that fully revitalizes the user.",
-        "health_gain": 600
     },
     {
         "type": "AuraPotion",
@@ -85,39 +79,33 @@
     },
     {
         "type": "AuraPotion",
-        "name": "Grand Aura Elixir",
-        "description": "Greatly enhances aura for a short period.",
+        "name": "Elixir of Radiance",
+        "description": "A powerful potion that boosts aura significantly.",
         "aura_gain": 100
     },
     {
         "type": "AuraPotion",
         "name": "Mystic Aura Potion",
-        "description": "Boosts aura to its maximum capacity.",
+        "description": "Increases aura and enhances mystical abilities.",
         "aura_gain": 120
     },
     {
         "type": "AuraPotion",
-        "name": "Potion of Spiritual Energy",
-        "description": "Refills aura with a mystical boost.",
+        "name": "Potion of Enlightenment",
+        "description": "Boosts the drinker's aura to a higher state.",
         "aura_gain": 80
     },
     {
         "type": "AuraPotion",
-        "name": "Elixir of the Ancients",
-        "description": "Infuses the user with ancient aura energy.",
-        "aura_gain": 140
+        "name": "Ancient Aura Potion",
+        "description": "Grants the power of ancient auras.",
+        "aura_gain": 150
     },
     {
         "type": "AuraPotion",
-        "name": "Arcane Aura Elixir",
-        "description": "Increases aura to near limitless levels.",
+        "name": "Celestial Aura Potion",
+        "description": "Blesses the drinker with celestial aura.",
         "aura_gain": 200
-    },
-    {
-        "type": "AuraPotion",
-        "name": "Divine Aura Potion",
-        "description": "Grants divine aura power for a short time.",
-        "aura_gain": 180
     },
     {
         "type": "Weapon",
@@ -181,32 +169,14 @@
     },
     {
         "type": "Weapon",
-        "name": "Plasma Rifle",
-        "description": "A futuristic weapon that shoots plasma bolts.",
-        "damage": 150
-    },
-    {
-        "type": "Weapon",
-        "name": "Dragon Slayer",
-        "description": "A legendary sword designed to defeat dragons.",
-        "damage": 200
-    },
-    {
-        "type": "Weapon",
-        "name": "Vampire Fang",
-        "description": "A weapon imbued with vampire essence.",
-        "damage": 140
-    },
-    {
-        "type": "Weapon",
-        "name": "Phoenix Feather Bow",
-        "description": "A bow made with feathers of the Phoenix, capable of shooting fiery arrows.",
+        "name": "Crystal Spear",
+        "description": "A spear made of pure crystal, sharp and powerful.",
         "damage": 130
     },
     {
         "type": "Weapon",
-        "name": "Doomhammer",
-        "description": "A mythical hammer that brings destruction upon its target.",
-        "damage": 160
+        "name": "Flame Bow",
+        "description": "A bow that shoots flaming arrows.",
+        "damage": 85
     }
 ]

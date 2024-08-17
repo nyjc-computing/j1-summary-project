@@ -6,6 +6,7 @@ import storyline
 from level import Tile
 import json
 from map import Map
+from time import sleep
 # Util function for clearing console
 
 with open("Tile_data.json") as f:
@@ -134,17 +135,18 @@ class Game:
                 return 'invalid'
 
         elif choice in "Vv":
-            x = int(input("Enter Item number"))
+            x = int(input("Enter Item number "))
             item = self.player.inventory[x]
             item.display_item()
+            sleep(5)
 
         elif choice in "Dd":
-            x = int(input("Enter Item number"))
+            x = int(input("Enter Item number "))
             item = self.player.inventory[x]
             self.player.remove_item(x)
             print(f'{item.get_name()} removed')
 
-        elif choice in "Pd":
+        elif choice in "Pp":
             player_tile = self.get_player_tile()
             tile_item = player_tile.get_item()
             if tile_item is not None:
@@ -200,6 +202,7 @@ class Game:
         player_tile = self.get_player_tile()
         if player_tile.get_monster().dead():
             self.player.gain_health(100)
+            self.player.gain_aura(10)
             player_tile.set_monster(None)
             print("You have killed the monster and gained 100 health")
 

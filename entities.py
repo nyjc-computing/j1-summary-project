@@ -74,6 +74,9 @@ class Player(Entity):
     def set_aura(self,aura):
         self.aura = aura
 
+    def gain_aura(self,aura_gained):
+        self.aura += aura_gained
+    
     def add_item(self,item):
         self.inventory[len(self.inventory) + 1] = item
 

@@ -14,7 +14,8 @@ class Map:
 
     def set_player_position(self, new_x, new_y):
         old_x, old_y = self.player_position
-        self.grid[old_y][old_x] = '.'
+        if self.grid[old_y][old_x] == 'P':
+            self.grid[old_y][old_x] = '.'
         if 0 <= new_x < self.width and 0 <= new_y < self.height:
             self.player_position = [new_x, new_y]
             self.grid[new_y][new_x] = 'P'

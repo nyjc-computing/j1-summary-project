@@ -20,7 +20,7 @@ if __name__ == "__main__":
             
         
         print("\033c", end="", flush=True)
-        
+        game.show_status()
     if game.win():
         print("You win")
     else:
