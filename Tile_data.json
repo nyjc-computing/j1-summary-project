@@ -1,0 +1,122 @@
+[
+    {
+        "position": [1,1],
+        "description": "Starting Point"
+    },
+    {
+        "position": [3,3],
+        "description": "Ancient Ruins"
+    },
+    {
+        "position": [9,3],
+        "description": "Mystic Grove"
+    },
+    {
+        "position": [9,5],
+        "description": "Forgotten Fountain"
+    },
+    {
+        "position": [19,2],
+        "description": "Enchanted Clearing"
+    },
+    {
+        "position": [19,5],
+        "description": "Hidden Cave"
+    },
+    {
+        "position": [19,8],
+        "description": "Abandoned Temple"
+    },
+    {
+        "position": [19,10],
+        "description": "Dragon's Lair"
+    },
+    {
+        "position": [16,10],
+        "description": "Elder Tree"
+    },
+    {
+        "position": [20,10],
+        "description": "FINAL BOSS"
+    },
+    {
+        "position": [5,5],
+        "description": "Crystal Lake"
+    },
+    {
+        "position": [7,2],
+        "description": "Goblin's Hideout"
+    },
+    {
+        "position": [11,7],
+        "description": "Ancient Battlefield"
+    },
+    {
+        "position": [13,5],
+        "description": "Moonlit Meadow"
+    },
+    {
+        "position": [15,8],
+        "description": "Mysterious Altar"
+    },
+    {
+        "position": [18,3],
+        "description": "Witch's Hut"
+    },
+    {
+        "position": [10,9],
+        "description": "Ruined Watchtower"
+    },
+    {
+        "position": [6,10],
+        "description": "Overgrown Garden"
+    },
+    {
+        "position": [14,12],
+        "description": "Sunken Crypt"
+    },
+    {
+        "position": [18,15],
+        "description": "Glimmering Cavern"
+    },
+    {
+        "position": [2,7],
+        "description": "Hidden Spring"
+    },
+    {
+        "position": [4,11],
+        "description": "Echoing Grotto"
+    },
+    {
+        "position": [8,13],
+        "description": "Serpent's Nest"
+    },
+    {
+        "position": [10,15],
+        "description": "Twilight Grove"
+    },
+    {
+        "position": [12,3],
+        "description": "Crystal Cavern"
+    },
+    {
+        "position": [17,7],
+        "description": "Phantom Ridge"
+    },
+    {
+        "position": [14,4],
+        "description": "Ancient Obelisk"
+    },
+    {
+        "position": [16,2],
+        "description": "Celestial Plateau"
+    },
+    {
+        "position": [3,9],
+        "description": "Forgotten Path"
+    },
+    {
+        "position": [19,12],
+        "description": "Spectral Forest"
+    }
+]

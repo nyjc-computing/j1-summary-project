@@ -1,39 +1,35 @@
-class map:
-    def map_list(self):
-        """
-        Creates a list of each row of the map
-        """
-        lst = []
-        with open('level1.txt','r') as f:
-            for line in f.readlines():
-                lst.append(line)
-        return lst
-    def map_load(self):
-        """
-        Displays Map for testing
-        """
-        map = ''
-        lst = self.map_list()
-        for tile in lst:
-            map += tile
-        return map
+class Map:
+    def __init__(self, width=20, height=20):
+        self.width = width
+        self.height = height
+        self.grid = [['.' for _ in range(width)] for _ in range(height)]
+        self.player_position = [0, 0]  
+        self.final_boss_position = [19,19]
+        self.grid[self.player_position[1]][self.player_position[0]] = 'P'
+        self.grid[self.final_boss_position[1]][self.final_boss_position[0]] = 'B'
+        
 
-    def get_tile_info(self):
+    def get_player_position(self):
+        return self.player_position
+
+    def set_player_position(self, new_x, new_y):
+        old_x, old_y = self.player_position
+        self.grid[old_y][old_x] = '.'
+        if 0 <= new_x < self.width and 0 <= new_y < self.height:
+            self.player_position = [new_x, new_y]
+            self.grid[new_y][new_x] = 'P'
+        else:
+            print(f"Position ({new_x}, {new_y}) is out of bounds!")
+
+    def set_monsters_position(self, x, y):
+        if 0 <= x < self.width and 0 <= y < self.height:
+            self.grid[y][x] = 'M'
+        else:
+            print(f"Position ({new_x}, {new_y}) is out of bounds!")
+
+    def display_map(self):
         """
-        Returns a list containing dictionaries of tiles with descriptions and their corresponding position
+        Prints the current state of the map.
         """
-        with open('Tile_data.txt', 'r', encoding='utf-8') as f:
-            data_dict = json.load(f)
-        return data_dict
-    def get_starting_tile(self):
-        x = 1
-        y = 1
-        lst = self.map_list()
-        for text in lst:
-            for e in text:
-                if e == "S":
-                    return x,y
-                else:
-                    x += 1
-            x = 1
-            y += 1
+        for row in self.grid:
+            print(' '.join(row))
