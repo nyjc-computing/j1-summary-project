@@ -1,10 +1,9 @@
 
 class Entity:
 
-    def __init__(self, name, health, aura, position):
+    def __init__(self, name, health, position):
         self.name = name
         self.health = health
-        self.aura = aura
         self.position = position
 
     def get_name(self):
@@ -21,33 +20,36 @@ class Entity:
     
     def get_position(self):
         return self.position
+
+    def dead(self):
+        return self.health <= 0
     
     def move(self, move, adjacent_tiles):
         
         if move == "UP":
-            if adjacent_tiles[move] is None:
+            if self.get_position()[1] <= 1:
                 return "invalid"
             else:
-                self.position[1] += 1
+                self.position[1] -= 1
                 return self.get_position()
                 
         elif move == "LEFT":
-            if adjacent_tiles[move] is None:
+            if self.get_position()[0] <= 1:
                 return "invalid"
             else:
                 self.position[0] -= 1
                 return self.get_position()
             
         elif move == "DOWN":
-            if adjacent_tiles[move] is None:
+            if self.get_position()[1] >= 10:
                 return "invalid"
             else:
-                self.position[1] -= 1
+                self.position[1] += 1
                 return self.get_position()
     
             
         elif move == "RIGHT":
-            if adjacent_tiles[move] is None:
+            if self.get_position()[0] <= 20:
                 return "invalid"
             else:
                 self.position[0] += 1
@@ -58,9 +60,10 @@ class Entity:
 
 class Player(Entity):
 
-    def __init__(self, name, health, aura, position,inventory = []):
-        super().__init__(name, health, aura, position)
+    def __init__(self, name, health, aura, position, inventory = []):
+        super().__init__(name, health, position)
         self.inventory = inventory
+        self.aura = aura
 
     def get_aura(self):
         return self.aura
@@ -87,27 +90,11 @@ class Player(Entity):
     def get_inventory(self):
         return self.inventory
 
-    
-class Monster(Entity):
-    
-    def __init__(self, name, health, aura, position, damage, description, inventory = []):
-        super().__init__(name, health, aura, position)
-        self.damage = damage
-        self.description = description
-        self.inventory = inventory
         
+class Monsters(Entity):
 
-    def pickup_item(self,item):
-        self.inventory.append(item)
-
-    def get_inventory(self):
-        return self.inventory
-    
-        
-class Creature(Entity):
-
-    def __init__(self, name, health, aura, position, damage, description):
-        super().__init__(name, health, aura, position)
+    def __init__(self, name, health, position, damage, description):
+        super().__init__(name, health, position)
         self.damage = damage
         self.description = description
 
@@ -118,6 +105,9 @@ class Creature(Entity):
     def set_damage(self, damage):
         self.damage = damage
 
+
+        
+        
 
 # test
 # person1 = Player("Lleyton",100000,10,[1,2])

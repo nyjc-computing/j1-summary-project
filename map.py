@@ -1,4 +1,6 @@
-class map:
+import json
+
+class Map:
     def map_list(self):
         """
         Creates a list of each row of the map
@@ -25,6 +27,7 @@ class map:
         with open('Tile_data.txt', 'r', encoding='utf-8') as f:
             data_dict = json.load(f)
         return data_dict
+        
     def get_starting_tile(self):
         x = 1
         y = 1

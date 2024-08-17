@@ -1,6 +1,6 @@
 import random
 import json
-class storyline:
-    def get_intro(self):
-        return "Welcome to the game!"
+class Storyline:
+    def do_intro(self):
+        print("Welcome to the game!")
             
