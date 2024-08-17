@@ -1,18 +1,29 @@
 # Import statements
 import entities
 from game import Game
-
-
-LEVEL = 1
-
+from time import sleep
 if __name__ == "__main__":
+
     game = Game()
     game.start()
-    while not game.levelEnded:
-        # TODO: Create method to initialise player
-
-        options = game.get_options()
-        choice = prompt_player(options)
-        game.enter(choice)
-        game.show_status()
-    storyline.end()
+    while not game.win() and not game.lose():
+        
+        x = 'invalid'
+        while x == 'invalid':
+            game.show_status()
+            options = game.get_options()
+            choice = game.prompt_player(''.join(options))
+            x = game.enter(choice)
+            if x == 'invalid':
+                sleep(1)
+                print("\033c", end="", flush=True)
+            
+        
+        print("\033c", end="", flush=True)
+        
+    if game.win():
+        print("You win")
+    else:
+        print("You Lose")
+        
+            

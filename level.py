@@ -5,24 +5,16 @@ import entities
 import items
 
 
-
 class Level:
     """
     generate new level by the size given
     level_num --> int
     """
-    def __init__(self, tile_list, level_num):
+    def __init__(self, tile_list,monsters_list,items_list):
         self.tile_list = tile_list
-        self.level_num = level_num
-        self.monsters_list = []
-        self.items_list = []
-        self.BigBoss = entities.Monsters("BIGBOSS", 1000, [20,10], 90, "FINAL BOSS, Defeat to Complete Level")
-
-    def get_levelnumber(self):
-        """
-        print the level number
-        """
-        print(self.level_num)
+        self.monsters_list = monsters_list
+        self.items_list = items_list
+        self.BigBoss = entities.Monsters("BIGBOSS", 1000, [20,10], 250, "FINAL BOSS, Defeat to Complete Level")
 
     def get_floorplan(self):
         """
@@ -30,15 +22,11 @@ class Level:
         """
         return self.tile_list
 
-    def take_monster(self, monster: entities.Monsters) -> None:
-        self.monsters_list.append(monster)
-
-    def take_item(self, item: items.Item) -> None:
-        self.items_list.append(item)
 
     def spawn_BigBoss(self):
-        last_tile = Tile([20,10], "FINAL TILE")
+        last_tile = self.tile_list[-1]
         last_tile.set_monster(self.BigBoss)
+        self.BigBoss.position = last_tile
         
     def spawn_monsters(self):
         """

@@ -1,0 +1,122 @@
+[
+    {
+        "name": "Goblin",
+        "health": 100,
+        "damage": 20,
+        "description": "A small, mischievous creature."
+    },
+    {
+        "name": "Orc",
+        "health": 200,
+        "damage": 40,
+        "description": "A large, brutish monster with immense strength."
+    },
+    {
+        "name": "Troll",
+        "health": 300,
+        "damage": 60,
+        "description": "A giant with regenerative abilities."
+    },
+    {
+        "name": "Dragon",
+        "health": 500,
+        "damage": 100,
+        "description": "A fearsome, fire-breathing beast."
+    },
+    {
+        "name": "Zombie",
+        "health": 80,
+        "damage": 15,
+        "description": "An undead creature with a hunger for brains."
+    },
+    {
+        "name": "Vampire",
+        "health": 150,
+        "damage": 35,
+        "description": "A nocturnal predator with a thirst for blood."
+    },
+    {
+        "name": "Werewolf",
+        "health": 180,
+        "damage": 45,
+        "description": "A lycanthrope that transforms under the full moon."
+    },
+    {
+        "name": "Lich",
+        "health": 250,
+        "damage": 50,
+        "description": "An ancient sorcerer with dark magical powers."
+    },
+    {
+        "name": "Golem",
+        "health": 350,
+        "damage": 70,
+        "description": "A massive construct animated by magic."
+    },
+    {
+        "name": "Demon",
+        "health": 400,
+        "damage": 80,
+        "description": "A malevolent entity from another realm."
+    },
+    {
+        "name": "Imp",
+        "health": 50,
+        "damage": 10,
+        "description": "A tiny, mischievous creature with fiery powers."
+    },
+    {
+        "name": "Wisp",
+        "health": 40,
+        "damage": 8,
+        "description": "A glowing, ethereal spirit with minimal physical presence."
+    },
+    {
+        "name": "Skeleton Warrior",
+        "health": 70,
+        "damage": 12,
+        "description": "A reanimated skeleton armed with a rusty sword."
+    },
+    {
+        "name": "Shade",
+        "health": 60,
+        "damage": 14,
+        "description": "A shadowy figure that strikes from the darkness."
+    },
+    {
+        "name": "Mimic",
+        "health": 90,
+        "damage": 18,
+        "description": "A deceptive creature that disguises itself as an object."
+    },
+    {
+        "name": "Hobgoblin",
+        "health": 85,
+        "damage": 22,
+        "description": "A larger and stronger version of a goblin."
+    },
+    {
+        "name": "Gremlin",
+        "health": 55,
+        "damage": 11,
+        "description": "A small, troublemaking creature known for sabotage."
+    },
+    {
+        "name": "Banshee",
+        "health": 45,
+        "damage": 20,
+        "description": "A ghostly figure with a wail that causes fear."
+    },
+    {
+        "name": "Giant Spider",
+        "health": 75,
+        "damage": 16,
+        "description": "A large spider with venomous fangs."
+    },
+    {
+        "name": "Fire Beetle",
+        "health": 30,
+        "damage": 6,
+        "description": "A small beetle with the ability to emit fire."
+    }
+]

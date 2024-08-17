@@ -1,0 +1,212 @@
+[
+    {
+        "type": "HealthPotion",
+        "name": "Small Health Potion",
+        "description": "Restores a small amount of health.",
+        "health_gain": 20
+    },
+    {
+        "type": "HealthPotion",
+        "name": "Medium Health Potion",
+        "description": "Restores a moderate amount of health.",
+        "health_gain": 50
+    },
+    {
+        "type": "HealthPotion",
+        "name": "Large Health Potion",
+        "description": "Restores a large amount of health.",
+        "health_gain": 100
+    },
+    {
+        "type": "HealthPotion",
+        "name": "Elixir of Life",
+        "description": "Fully restores health.",
+        "health_gain": 200
+    },
+    {
+        "type": "HealthPotion",
+        "name": "Mega Health Potion",
+        "description": "Restores a massive amount of health.",
+        "health_gain": 300
+    },
+    {
+        "type": "HealthPotion",
+        "name": "Ultimate Health Potion",
+        "description": "Maximizes the player's health.",
+        "health_gain": 500
+    },
+    {
+        "type": "HealthPotion",
+        "name": "Mystic Elixir",
+        "description": "Heals all wounds and grants extra health.",
+        "health_gain": 250
+    },
+    {
+        "type": "HealthPotion",
+        "name": "Minor Healing Brew",
+        "description": "A basic potion that restores health slightly.",
+        "health_gain": 30
+    },
+    {
+        "type": "HealthPotion",
+        "name": "Greater Healing Potion",
+        "description": "Restores a significant amount of health.",
+        "health_gain": 150
+    },
+    {
+        "type": "HealthPotion",
+        "name": "Potion of Vitality",
+        "description": "Increases overall vitality, restoring a lot of health.",
+        "health_gain": 400
+    },
+    {
+        "type": "HealthPotion",
+        "name": "Life Essence",
+        "description": "A rare potion that fully revitalizes the user.",
+        "health_gain": 600
+    },
+    {
+        "type": "AuraPotion",
+        "name": "Small Aura Potion",
+        "description": "Increases aura by a small amount.",
+        "aura_gain": 15
+    },
+    {
+        "type": "AuraPotion",
+        "name": "Medium Aura Potion",
+        "description": "Increases aura by a moderate amount.",
+        "aura_gain": 30
+    },
+    {
+        "type": "AuraPotion",
+        "name": "Large Aura Potion",
+        "description": "Increases aura by a large amount.",
+        "aura_gain": 60
+    },
+    {
+        "type": "AuraPotion",
+        "name": "Grand Aura Elixir",
+        "description": "Greatly enhances aura for a short period.",
+        "aura_gain": 100
+    },
+    {
+        "type": "AuraPotion",
+        "name": "Mystic Aura Potion",
+        "description": "Boosts aura to its maximum capacity.",
+        "aura_gain": 120
+    },
+    {
+        "type": "AuraPotion",
+        "name": "Potion of Spiritual Energy",
+        "description": "Refills aura with a mystical boost.",
+        "aura_gain": 80
+    },
+    {
+        "type": "AuraPotion",
+        "name": "Elixir of the Ancients",
+        "description": "Infuses the user with ancient aura energy.",
+        "aura_gain": 140
+    },
+    {
+        "type": "AuraPotion",
+        "name": "Arcane Aura Elixir",
+        "description": "Increases aura to near limitless levels.",
+        "aura_gain": 200
+    },
+    {
+        "type": "AuraPotion",
+        "name": "Divine Aura Potion",
+        "description": "Grants divine aura power for a short time.",
+        "aura_gain": 180
+    },
+    {
+        "type": "Weapon",
+        "name": "Iron Sword",
+        "description": "A sturdy iron sword.",
+        "damage": 50
+    },
+    {
+        "type": "Weapon",
+        "name": "Silver Dagger",
+        "description": "A sharp dagger made of silver.",
+        "damage": 30
+    },
+    {
+        "type": "Weapon",
+        "name": "Fire Staff",
+        "description": "A staff imbued with the power of fire.",
+        "damage": 80
+    },
+    {
+        "type": "Weapon",
+        "name": "Lightning Bow",
+        "description": "A bow that shoots electrified arrows.",
+        "damage": 70
+    },
+    {
+        "type": "Weapon",
+        "name": "Ice Wand",
+        "description": "A wand that casts freezing spells.",
+        "damage": 60
+    },
+    {
+        "type": "Weapon",
+        "name": "Shadow Blade",
+        "description": "A blade that strikes with the power of shadows.",
+        "damage": 90
+    },
+    {
+        "type": "Weapon",
+        "name": "Thunder Hammer",
+        "description": "A hammer that calls down thunder upon impact.",
+        "damage": 110
+    },
+    {
+        "type": "Weapon",
+        "name": "Poisoned Dagger",
+        "description": "A dagger coated with a deadly poison.",
+        "damage": 40
+    },
+    {
+        "type": "Weapon",
+        "name": "War Axe",
+        "description": "A heavy axe designed for battle.",
+        "damage": 95
+    },
+    {
+        "type": "Weapon",
+        "name": "Holy Sword",
+        "description": "A sword blessed with divine power.",
+        "damage": 120
+    },
+    {
+        "type": "Weapon",
+        "name": "Plasma Rifle",
+        "description": "A futuristic weapon that shoots plasma bolts.",
+        "damage": 150
+    },
+    {
+        "type": "Weapon",
+        "name": "Dragon Slayer",
+        "description": "A legendary sword designed to defeat dragons.",
+        "damage": 200
+    },
+    {
+        "type": "Weapon",
+        "name": "Vampire Fang",
+        "description": "A weapon imbued with vampire essence.",
+        "damage": 140
+    },
+    {
+        "type": "Weapon",
+        "name": "Phoenix Feather Bow",
+        "description": "A bow made with feathers of the Phoenix, capable of shooting fiery arrows.",
+        "damage": 130
+    },
+    {
+        "type": "Weapon",
+        "name": "Doomhammer",
+        "description": "A mythical hammer that brings destruction upon its target.",
+        "damage": 160
+    }
+]
