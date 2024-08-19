@@ -7,7 +7,7 @@ if __name__ == "__main__":
     game = Game()
     game.start()
     while not game.win() and not game.lose():
-        
+
         x = 'invalid'
         while x == 'invalid':
             game.show_status()
@@ -17,13 +17,13 @@ if __name__ == "__main__":
             if x == 'invalid':
                 sleep(1)
                 print("\033c", end="", flush=True)
-            
-        
+
+
         print("\033c", end="", flush=True)
-        game.show_status()
+    game.show_status()
     if game.win():
         print("You win")
     else:
         print("You Lose")
-        
-            
+
+
