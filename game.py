@@ -103,9 +103,14 @@ class Game:
         check = self.player.move(choice)
         if check == "invalid":
             print("This tile does not exist, try moving to another tile")
+            sleep(1)
             return 'invalid'
 
     def use_item(self,choice):
+        if int(choice) > len(self.player.inventory):
+            print("Item not in inventory")
+            sleep(1)
+            return 'invalid'
         item = self.player.inventory[int(choice) - 1]
         if item.get_type() == "HealthPotion" or item.get_type() == "AuraPotion":
             self.player.use_item(int(choice) - 1,self.get_player_tile().get_monster())
@@ -120,6 +125,7 @@ class Game:
                 sleep(1)
             else:
                 print("No monster on tile")
+                sleep(1)
                 return 'invalid'
 
     def punch(self):
@@ -127,6 +133,7 @@ class Game:
             self.player.punch(self.get_player_tile().get_monster())
         else:
             print("No monster on tile")
+            sleep(1)
             return 'invalid'
 
     def kick(self):
@@ -134,16 +141,25 @@ class Game:
             self.player.kick(self.get_player_tile().get_monster())
         else:
             print("No monster on tile")
+            sleep(1)
             return 'invalid'
 
     def view_item(self):
         x = int(input("Enter Item number "))
+        if int(x) > len(self.player.inventory):
+            print("Item not in inventory")
+            sleep(1)
+            return 'invalid'
         item = self.player.inventory[x - 1]
         item.display_item()
         sleep(5)
 
     def drop_item(self):
         x = int(input("Enter Item number "))
+        if int(x) > len(self.player.inventory):
+            print("Item not in inventory")
+            sleep(1)
+            return 'invalid'
         item = self.player.inventory[x - 1]
         self.player.remove_item(x)
         print(f'{item.get_name()} removed')
@@ -159,6 +175,7 @@ class Game:
             sleep(1)
         else: 
             print("No item on tile")
+            sleep(1)
             return 'invalid'
 
     def enter(self, choice: str):
@@ -172,7 +189,7 @@ class Game:
             self.kick()
         elif choice in "Vv":
             self.view_item()
-        elif choice in "Dd":
+        elif choice in "Rr":
             self.drop_item()
         elif choice in "Pp":
             self.pick_up_item()
@@ -180,6 +197,7 @@ class Game:
             self.player.health = 0
         else:
             print("This is not an option, enter again")
+            sleep(1)
             return 'invalid'
 
         if self.get_player_tile().get_monster() is not None:
@@ -225,6 +243,7 @@ class Game:
             self.player.gain_aura(10)
             player_tile.set_monster(None)
             print("You have killed the monster and gained 100 health")
+            sleep(1)
 
     def damaged_by_monster(self):
         player_tile = self.get_player_tile()

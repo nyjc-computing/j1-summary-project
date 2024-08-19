@@ -15,7 +15,6 @@ if __name__ == "__main__":
             choice = game.prompt_player(''.join(options))
             x = game.enter(choice)
             if x == 'invalid':
-                sleep(1)
                 print("\033c", end="", flush=True)
 
 
