@@ -60,6 +60,36 @@
         "health_gain": 400
     },
     {
+        "type": "HealthPotion",
+        "name": "Vampire's Draught",
+        "description": "Absorbs life from enemies and restores health.",
+        "health_gain": 200
+    },
+    {
+        "type": "HealthPotion",
+        "name": "Healing Waters",
+        "description": "A rare potion made from enchanted spring water.",
+        "health_gain": 150
+    },
+    {
+        "type": "HealthPotion",
+        "name": "Spirit Elixir",
+        "description": "Restores health and cleanses negative effects.",
+        "health_gain": 120
+    },
+    {
+        "type": "HealthPotion",
+        "name": "Potion of Rejuvenation",
+        "description": "Rejuvenates the body, restoring a large amount of health.",
+        "health_gain": 180
+    },
+    {
+        "type": "HealthPotion",
+        "name": "Elixir of Vitality",
+        "description": "Boosts health and stamina.",
+        "health_gain": 220
+    },
+    {
         "type": "AuraPotion",
         "name": "Small Aura Potion",
         "description": "Increases aura by a small amount.",
@@ -106,6 +136,42 @@
         "name": "Celestial Aura Potion",
         "description": "Blesses the drinker with celestial aura.",
         "aura_gain": 200
+    },
+    {
+        "type": "AuraPotion",
+        "name": "Divine Essence",
+        "description": "A potion made from divine energy, greatly enhancing aura.",
+        "aura_gain": 250
+    },
+    {
+        "type": "AuraPotion",
+        "name": "Potion of Clarity",
+        "description": "Enhances aura and mental focus.",
+        "aura_gain": 70
+    },
+    {
+        "type": "AuraPotion",
+        "name": "Elixir of the Ancients",
+        "description": "Boosts aura with the wisdom of the ancients.",
+        "aura_gain": 180
+    },
+    {
+        "type": "AuraPotion",
+        "name": "Phantom Elixir",
+        "description": "Enhances aura with a mysterious, ghostly power.",
+        "aura_gain": 140
+    },
+    {
+        "type": "AuraPotion",
+        "name": "Starlight Potion",
+        "description": "Increases aura with the power of the stars.",
+        "aura_gain": 160
+    },
+    {
+        "type": "AuraPotion",
+        "name": "Elixir of Shadows",
+        "description": "Increases aura and grants stealthy abilities.",
+        "aura_gain": 90
     },
     {
         "type": "Weapon",
@@ -178,5 +244,47 @@
         "name": "Flame Bow",
         "description": "A bow that shoots flaming arrows.",
         "damage": 85
+    },
+    {
+        "type": "Weapon",
+        "name": "Meteor Sword",
+        "description": "A sword forged from a fallen meteor, infused with cosmic energy.",
+        "damage": 140
+    },
+    {
+        "type": "Weapon",
+        "name": "Dark Scythe",
+        "description": "A scythe that harvests the souls of its enemies.",
+        "damage": 150
+    },
+    {
+        "type": "Weapon",
+        "name": "Frost Hammer",
+        "description": "A hammer that freezes anything it strikes.",
+        "damage": 100
+    },
+    {
+        "type": "Weapon",
+        "name": "Vampire's Fang",
+        "description": "A blade that drains the life force of enemies.",
+        "damage": 110
+    },
+    {
+        "type": "Weapon",
+        "name": "Dragon's Claw",
+        "description": "A claw-shaped weapon imbued with dragon's fire.",
+        "damage": 135
+    },
+    {
+        "type": "Weapon",
+        "name": "Gale Bow",
+        "description": "A bow that fires arrows with the force of a gale.",
+        "damage": 90
+    },
+    {
+        "type": "Weapon",
+        "name": "Rune Axe",
+        "description": "An axe inscribed with powerful runes.",
+        "damage": 125
     }
 ]
