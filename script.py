@@ -9,33 +9,29 @@ exit_screen = {
 }
 
 dungeon_menu = {
+'message': """YOU last remembered the warmth of the blood flowing out of your chest and started to feel the drop in your body temperature. YOU eyesight blurred until it was complete darkness.In that void, YOU asked yourself when and why  it had gone wrong.The person YOU once loved turned her back against YOU. Love is now pure hatred. YOU want to avenge. YOU want answers.But YOU are dead. Acceptance is the only thing YOU can do.
+YOU woke up. """,
 'options': ['Look around', 'Move to next room']
 }
 
 kitchen_menu = {
+'message': 'You are in the kitchen',
 'options': ['Look around', 'Move to next room', 'Move to previous room']
 }
 
 hall_menu = {
+'message': 'You are in the hall',
 'options': ['Look around', 'Move to next room', 'Move to previous room']
 }
 
 toilet_menu = {
+'message': 'You are in the toilet',
 'options': ['Look around', 'Move to next room', 'Move to previous room']
 }
 
 bedroom_menu = {
+'message': 'You are in the bedroom',
 'options': ['Look around', 'Move to previous room']
-}
-
-
-story_menu = {
-'message': 'Once upon a time, there was a powerful kingdom called “The Light Nation “. ', 'options': ['Previous Line', 'Next Line']
-   
-}
-
-toilet_menu = {
-'message': 'You are currently in the toilet.', 'options': ['Skibidi', 'Investigate (count how many guards in the toilet)', 'Fight', ' Use items', 'Move to another room (this one idk how its gonna work _ need clarification guys)']
 }
 
 combat_menu = {
