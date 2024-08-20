@@ -53,3 +53,5 @@ class Interface:
     def exit_screen(self):
         print(script.exit_screen['message'])
 
+# m = Interface()
+# m.combat_menu
