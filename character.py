@@ -1,9 +1,8 @@
 class Character:
 
-    def __init__(self, _type, health, strength, items=None):
+    def __init__(self, _type, health, items=None):
         self._type = _type
         self.health = health
-        self.strength = strength
         self.items = items or []
 
 
@@ -27,6 +26,8 @@ class Character:
         """
         return self.health <= 0
 
+    def get_health(self):
+        return self.health
 
 class Player(Character):
 
