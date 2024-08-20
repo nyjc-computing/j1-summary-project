@@ -55,7 +55,7 @@ class Game:
         print("Now:", self.get_now_room_name())
         print("Next:", self.get_next_room_name())
         print("Prev:", self.get_prev_room_name())
-        choice = self.interface.func_map[self.get_now_room_name()]()
+        choice = eval(f"self.interface.{self.get_now_room_name().lower()}_menu()")
         print(choice)
         if choice == 'Move to next room':
             self.next_room()
