@@ -225,7 +225,7 @@ class Game:
             print("There is no item on this Tile\n")
 
         if tile_monster is not None:
-            print("There's an Monster on this Tile\n")
+            print("There's a Monster on this Tile\n")
             tile_monster.display_monster()
         else:
             print("There is no Monster on this Tile\n")
