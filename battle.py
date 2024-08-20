@@ -2,6 +2,7 @@ class Battle:
     def __init__(self, player, room):
         self.player = player
         self.room = room
+        
 
     def player_attack(self):
         self.player.attack(self.room.get_enemies()[0])
