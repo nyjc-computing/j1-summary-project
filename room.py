@@ -20,4 +20,5 @@ class Room:
     def get_name(self):
         return self.name
 
-
+    def remove_enemy(self):
+        self.enemies.pop(0)
