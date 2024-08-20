@@ -20,7 +20,7 @@ def createRooms() -> list[room.Room]:
     for name, num in room_name_enemy_num.items():
         temp = room.Room(name)
         for _ in range(num):
-            temp.add_enemy(character.Soldier(1))
+            temp.add_enemy(character.Soldier(20))
         list_of_rooms.append(temp)
 
     return list_of_rooms
