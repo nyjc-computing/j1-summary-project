@@ -17,9 +17,6 @@ class Game:
             print("Exiting game...")
             exit()
         
-
-    def get_player_health(self):
-        return self.player.get_health()
         
     def isover(self):
         return self.player.isdead() or self.princess.isdead()
@@ -63,7 +60,9 @@ class Game:
             self.prev_room()
         elif choice == 'Look around':
             print("YOU FOUND ENEMIES!!!!")
-            print(self.get_now_room().get_enemies())
+            combat = battle.Battle(self.player, self.get_now_room())
+            combat.battle_start()
+        
         else:
             print("Invalid choice")
         print()

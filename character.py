@@ -1,16 +1,18 @@
+import random
+
 class Character:
 
-    def __init__(self, _type, health, items=None):
+    def __init__(self, _type, health):
         self._type = _type
         self.health = health
-        self.items = items or []
+        self.damage = random.randint(2, 7)
 
 
     def attack(self, character):
         """
         Deal damage to another character object
         """
-        character.receive_damage(self.strength)
+        character.receive_damage(self.damage)
         # print("Die")
 
     def receive_damage(self, damage):
@@ -31,17 +33,17 @@ class Character:
 
 class Player(Character):
 
-    def __init__(self, health, strength, items=[]):
-        super().__init__("Player", health, strength, items)
+    def __init__(self, health, items=[]):
+        super().__init__("Player", health)
 
 
 class Soldier(Character):
 
-    def __init__(self, health, strength):
-        super().__init__("Soldier", health, strength)
+    def __init__(self, health):
+        super().__init__("Soldier", health)
 
 
 class Princess(Character):
 
-    def __init__(self, health, strength):
-        super().__init__("Princess", health, strength)
+    def __init__(self, health):
+        super().__init__("Princess", health)
