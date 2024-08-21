@@ -1,10 +1,57 @@
+
+
+class Gears:
+    def __init__(self):
+        self.helmet = (None)
+        self.chestplate = (None)
+        self.leggings = (None)
+        self.boots = (None)
+        self.accessories = (None)
+        
+        
+class Backpack: #store, display, check, destroy
+    def __init__(self, slots):
+        self.items = {}
+        self.backpack_size = slots
+
+    def store(self, name, object):
+        if name in self.items:
+            self.items[name].num += object.num
+            print(f'{name} * {object.num} has been stored')
+            return
+            
+        if len(self.items) >= self.backpack_size:
+            print("Backpack is full!")
+            return
+        self.items[name] = object
+        print(f'{name} * {object.num} has been stored.')
+        return
+        
+    def display(self):
+        lst = [i for i in self.items.keys()]
+        disp = ', '.join(lst)
+        return disp
+
+    def check(self, item):
+        pass
+
+
+from item import Item
+from item import Armor
+
+
 from typing import Any, Dict
+
 import item
 import time
+
 
 class Player:
     def __init__(self, name):
         self.name = str(name)
+
+        self.max_health = 10
+        self.current_health = 10
         self.health = [10,10]
         self.defense = 0
         self.attack = 1
@@ -23,14 +70,21 @@ class Player:
             'weapon': item.wooden_sword
         }
 
+        
     def __repr__(self):
-        return "P"
+        return f"Name: {self.name}"
+        
+
+
 
     def backpack_isFull(self):
         total = 0
         for itm in self.items.values():
             total += itm.weight
         return total >= self.mload
+
+ 
+
 
     def store(self, object):
         if not self.backpack_isFull():
@@ -61,10 +115,13 @@ class Player:
                     return False
                     
                 print(f'{object.num} {object.name} has been stored.')
-                return True
-                
+
+        
+
+                return True          
         else:
             print("Unable to store. Backpack is full.")
+
 
 
 
@@ -98,6 +155,14 @@ class Player:
         self.gears[gear.section] = gear
         print(f'{gear.name} is equipped')
         return True
+
+
+class Object:
+    def __init__(self, name, num, description):
+        self.name = name
+        self.num = num
+        self.description = description
+
 
     def unequip(self, section):
         if self.gears[section] is None:
@@ -143,6 +208,21 @@ class Player:
 
 
 class Enemy:
+    def __init__(self, type):
+        if type == "Brute":
+            self.name = "Brute"
+            self.health, self.attack, self.defense = 10, 2, 1
+        elif type == "Armored Gorilla":
+            self.name = "Armored Gorilla"
+            self.health, self.attack, self.defense = 10, 1, 1000
+        elif type == "Slime":
+            self.health, self.attack, self.defense = 5, 1, 0
+
+
+
+
+
+
     def __init__(self, data: list): #name, health, defense, attack, speed
         self.name = data[0]
         self.health = data[1]
@@ -164,7 +244,6 @@ class Enemy:
             damage = 1
 
         player.health[0] -= damage #lose health
-
         print(f"You received {damage} damage from the {self.name}.")#print damage to player
 
 
@@ -193,15 +272,15 @@ class Boss(Enemy):
         if damage < 0:
             damage = 1
 
-        player.health -= damage #lose health
+        player.health[0] -= damage #lose health
 
         print(f"You received {damage} damage from the {self.name}.")#print damage to player
 
 
         print(f"{player.name} current health:{player.health}") #print hp left
 
-        if player.health <= 0:
-            player.health = 0
+        if player.health[0] <= 0:
+            player.health[0] = 0
             print("You fainted. Skill Issue.")
             return -666
         else:
