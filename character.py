@@ -38,7 +38,11 @@ class Backpack: #store, display, check, destroy
 
 from item import Item
 from item import Gear
+
 from typing import Any, Dict
+
+import item
+import time
 
 
 class Player:
@@ -51,6 +55,7 @@ class Player:
         self.speed = 1
         self.coords = (0, 0)
         self.last_move = (0, 0)
+        self.event_queue = ""
         self.items = {}
         self.mload = 10
 
@@ -59,8 +64,7 @@ class Player:
             'chest': None, 
             'leg': None, 
             'boots': None, 
-            'accessory': None, 
-            'weapon': None
+            'weapon': item.wooden_sword
         }
 
         
@@ -90,6 +94,7 @@ class Player:
                     weight += item.weight
                 if weight > self.mload:
                     print("That's too much for your bag to handle!")
+                    
                     self.items[object.name].num -= object.num #Take back item
                     return False
                     
@@ -133,7 +138,7 @@ class Player:
         return False
 
     #Gears
-    def equip(self, gear: 'Gear'):
+    def equip(self, gear: 'Armor'):
         if gear.name not in self.items:
             print("You don't have that gear!")
             return False
@@ -167,7 +172,36 @@ class Object:
         self.gears[section] = None
         print(f'{self.gears[section].name} unequipped')
         return True
+
+    def combat(self, enemy: "Enemy"):
+        print("\n")
+        time.sleep(0.5)
+        crit = 1  #if there is no crit does not change
         
+        if self.gears["weapon"].crit():
+            crit = 2  # double the damage when it crits
+            
+        damage = (self.gears['weapon'].attack + self.attack - enemy.defense) * crit
+        
+        if damage < 0:
+            damage = 1
+            
+        enemy.health -= damage
+        
+        print(f"You dealt {damage} damage to the {enemy.name}.")
+        
+        print(f"{enemy.name} current health:{enemy.health}")
+        
+        if enemy.health <= 0:
+            enemy.health = 0
+            print(f"{enemy} fainted.")
+            if isinstance(enemy, Boss):
+                return -888
+            return True
+        else:
+            return False
+
+
 class Enemy:
     def __init__(self, type):
         if type == "Brute":
@@ -184,5 +218,67 @@ class Enemy:
 
 
 
+    def __init__(self, data: list): #name, health, defense, attack, speed
+        self.name = data[0]
+        self.health = data[1]
+        self.defense = data[2]
+        self.attack = data[3]
+        self.speed = data[4]
+
+    def __repr__(self):
+        return "E"
+        
+    def combat(self, player: "Player"):
+        print("\n")
+        time.sleep(0.5)
+        damage = (self.attack - player.defense) #enemy doesn't crit
 
 
+        if damage < 0:
+            damage = 1
+
+
+        player.health -= damage #lose health
+
+        print(f"You received {damage} damage from the {self.name}.")#print damage to player
+
+
+        print(f"{player.name} current health:{player.health}") #print hp left
+
+        if player.health <= 0:
+            player.health = 0
+            print("You fainted. Skill Issue.")
+            return -1
+        else:
+            return False
+
+class Boss(Enemy):
+    def __init__(self, data):
+        super().__init__(data)
+        
+    def __repr__(self):
+        return "B"
+
+    def combat(self, player: "Player"):
+        print("\n")
+        time.sleep(0.5)
+        damage = (self.attack - player.defense) #enemy doesn't crit
+
+
+        if damage < 0:
+            damage = 1
+
+        player.health -= damage #lose health
+
+        print(f"You received {damage} damage from the {self.name}.")#print damage to player
+
+
+        print(f"{player.name} current health:{player.health}") #print hp left
+
+        if player.health <= 0:
+            player.health = 0
+            print("You fainted. Skill Issue.")
+            return -666
+        else:
+            return False
+        
