@@ -287,4 +287,35 @@
         "description": "An axe inscribed with powerful runes.",
         "damage": 125
     }
+    {
+        "type": "Weapon",
+        "name": "Blazing Mace",
+        "description": "A mace engulfed in eternal flames.",
+        "damage": 105
+    },
+    {
+        "type": "Weapon",
+        "name": "Storm Blade",
+        "description": "A sword that crackles with lightning.",
+        "damage": 115
+    },
+    {
+        "type": "Weapon",
+        "name": "Venomous Whip",
+        "description": "A whip laced with potent venom.",
+        "damage": 85
+    },
+    {
+        "type": "Weapon",
+        "name": "Crystal Flail",
+        "description": "A flail with a head made of sharp crystal shards.",
+        "damage": 95
+    },
+    {
+        "type": "Weapon",
+        "name": "Solar Sword",
+        "description": "A sword that radiates the power of the sun.",
+        "damage": 130
+    }
+
 ]
