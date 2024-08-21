@@ -16,6 +16,13 @@ class Armor:
         self.num = data[2]
         self.weight = data[3] * self.num
 
+    def __repr__(self):
+        return f"{self.name}"
+    
+    def get_stats(self):
+        return f"Item Description\n-----\nName: {self.name}\nDefense: {self.defense}\nItem Stack: {self.num}\nTotal Weight: {self.weight}\n-----"
+
+
 class Weapon:
     def __init__(self, data: list):#attack, critc, name, num, spec_weight
         self.section = 'weapon'
@@ -26,7 +33,10 @@ class Weapon:
         self.weight = data[4] * self.num
 
     def __repr__(self):
-        return f"Att:{self.attack} Crit:{self.critc}% Name:{self.name}"
+        return f"{self.name}"
+
+    def get_stats(self):
+        return f"Item Description\n-----\nName: {self.name}\nAttack: {self.attack}\nCrit Chance: {self.critc}\nItem Stack: {self.num}\nTotal Weight: {self.weight}\n-----"
 
     def crit(self):
         x = random.randint(1, 100)
@@ -34,6 +44,7 @@ class Weapon:
             return True
         return False
 
+    
 
 #Weapon list
 #format   att, critc
@@ -60,15 +71,15 @@ ulti_blade = Weapon([100000000000000, 0, "Ulti-Blade", 1, 0])
 #Armors #wood 1, iron 2, diamond 3
 #helm, boots 1, legs 2, chest 3
 
-iron_helmet = Armor('helm', ['iron_helmet', 2, 1, 10])
-iron_chestplate = Armor('chest', ['iron_chestplate', 6, 1, 16])
-iron_leggings = Armor('leg', ['iron_leggings', 4, 1, 14])
-iron_boots = Armor('boots', ['iron_boots', 2, 1, 8])
+iron_helmet = Armor('helm', ['Iron Helmet', 2, 1, 10])
+iron_chestplate = Armor('chest', ['Iron Chestplate', 6, 1, 16])
+iron_leggings = Armor('leg', ['Iron Leggings', 4, 1, 14])
+iron_boots = Armor('boots', ['Iron Boots', 2, 1, 8])
 
-diamond_helmet = Armor('helm', ['diamond_helmet', 3, 1, 5])
-diamond_chestplate = Armor('chest', ['diamond_chestplate', 9, 1, 8])
-diamond_leggings = Armor('leg', ['diamond_leggings', 6, 1, 7])
-diamond_boots = Armor('boots', ['diamond_boots', 3, 1, 4])
+diamond_helmet = Armor('helm', ['Diamond Helmet', 3, 1, 5])
+diamond_chestplate = Armor('chest', ['Diamond Chestplate', 9, 1, 8])
+diamond_leggings = Armor('leg', ['Diamond Leggings', 6, 1, 7])
+diamond_boots = Armor('boots', ['Diamond Boots', 3, 1, 4])
 
 class Potions:
     def __init__(self, data):
@@ -92,3 +103,5 @@ speed_potion = Potions(["Add 5 speed to the player's speed stats", 5])
 almond_potion = Potions(["Add 2 to each of the player's stat", -0])
 
 bleach = Potions(["Kills you instantly, toddler approved!", -9999999999999])
+
+loot_table = [wooden_sword, stone_sword, iron_sword, steel_sword, fire_blade, ice_blade, diamond_sword, forty_metre_long_sword, iron_helmet, iron_chestplate, iron_leggings, iron_boots, diamond_helmet, diamond_chestplate, diamond_leggings, diamond_boots]

@@ -5,16 +5,16 @@ import time
 class Player:
     def __init__(self, name):
         self.name = str(name)
-        self.health = [10,10]
+        self.health = 10
+        self.max_health = self.health
         self.defense = 0
         self.attack = 1
         self.speed = 1
         self.coords = (0, 0)
-        self.last_move = (0, 0)
-        self.event_queue = ""
+        self.last_move = (0, 0) #tracks the player's position last turn
+        self.event_queue = None #stores the event that the player is moving to (e.g. enemy fight)
         self.items = {}
-        self.mload = 10
-
+        self.mload = 10000000000000000000000 #fuck it who cares
         self.gears = {
             'helm': None, 
             'chest': None, 
@@ -46,7 +46,7 @@ class Player:
                     self.items[object.name].num -= object.num #Take back item
                     return False
 
-                print(f'{object.num} {object.name} has been stored')
+                print(f'1 {object.name} has been stored')
                 return True
 
             else: #new item
@@ -68,12 +68,18 @@ class Player:
 
 
 
-    def display(self):
-        lst = [i for i in self.items.keys()]
-        disp = ', '.join(lst) #all items in backpack
-        return disp
+    def display_inv(self):
+        print("-----\nInventory\n")
+        for i in self.items.keys():
+            print(i, self.items[i].num)
+        print("-----\n")
 
-
+    def display_gears(self):
+        print("-----\nGears\n")
+        for i in self.gears.keys():
+            print(f"{i}: {self.gears[i]}")
+        print("-----\n")
+        
     def check(self, object):
         if item in self.items.keys():
             print(f'Name: {item}')
@@ -83,8 +89,15 @@ class Player:
         print('Item not in Backpack')
         return False
 
+    def trash(self, object):
+        if object.name not in self.items:
+            print("Invalid object entered")
+        else:
+            self.items[object.name].num -= 1
+            if self.items[object.name].num <= 0:
+                del self.items[object.name]
     #Gears
-    def equip(self, gear):#gear is type armor
+    def equip(self, gear): #accepts object class
         if gear.name not in self.items:
             print("You don't have that gear!")
             return False
@@ -97,9 +110,10 @@ class Player:
         #else, equip that gear
         self.gears[gear.section] = gear
         print(f'{gear.name} is equipped')
+        self.trash(self.gears[gear.section])
         return True
 
-    def unequip(self, section):
+    def unequip(self, section): #accepts string of equipment type
         if self.gears[section] is None:
             print('Nothing is equipped there.')
             return False
@@ -163,15 +177,15 @@ class Enemy:
         if damage < 0:
             damage = 1
 
-        player.health[0] -= damage #lose health
+        player.health -= damage #lose health
 
         print(f"You received {damage} damage from the {self.name}.")#print damage to player
 
 
         print(f"{player.name} current health:{player.health}") #print hp left
 
-        if player.health[0] <= 0:
-            player.health[0] = 0
+        if player.health <= 0:
+            player.health = 0
             print("You fainted. Skill Issue.")
             return -1
         else:
