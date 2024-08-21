@@ -88,12 +88,21 @@ class Game:
 
     def get_options(self) -> list[str]:
         """Returns player's current options as a list of strs"""
+        move_options = ["W ", "A ", "S ", "D "]
+        combat_options = ["Z X (item number)\n"]
+        inventory_options = ["V ", "D ", "P ", "help " "quit "]
+
+    
+        
+
+        return move_options + combat_options + inventory_options
+    def help(self):
         move_options = ["To move up, enter W\n", "To move down, enter S\n", "To move left, enter A\n", "To move right, enter D\n"]
         combat_options = ["To use Item, enter the item number\n", "To Punch (5 Damage), enter Z\n", "To kick(10 Damage), enter X\n"]
         inventory_options = ["To view Item, enter V, followed by the item number\n", "To Drop Item, enter D, followed by the item number\n", "To pick up Item, enter P\n"]
-
-        return move_options + combat_options + inventory_options + ["To Quit, enter 'quit'\n"]
-
+        for x in (move_options + combat_options + inventory_options + ["To Quit, enter 'quit'\n"]): 
+            print(x)
+        sleep(5)
     def prompt_player(self, options):
         choice = input(options)
         return choice
@@ -193,7 +202,9 @@ class Game:
             self.drop_item()
         elif choice in "Pp":
             self.pick_up_item()
-        elif choice == 'quit':
+        elif choice in "Hh" or choice.lower() == "help":
+            self.help()
+        elif choice.lower() == 'quit':
             self.player.health = 0
         else:
             print("This is not an option, enter again")
