@@ -27,7 +27,7 @@ import rng
 
 
 def main():
-    Board = game.Game("Jian Lin")
+    Board = game.Game(player.name)
     Board.random_map()
     Board.printmap()
     while True:
@@ -38,4 +38,4 @@ def main():
 
 
 if __name__ == "__main__":
-    pass
+    main()

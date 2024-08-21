@@ -8,17 +8,28 @@ class Item:
         self.weight = data[3] * self.num
         
 
-class Gear:
-    def __init__(self, section, data: list):#name, num, defense, spec_weight
-        self.section = section
+class Armor:
+    def __init__(self, section, data: list):#name, defense, num, spec_weight
+        self.section = section #helm, chest, leg, boots
         self.name = data[0]
-        self.num = data[1]
-        self.defense = data[2]
+        self.defense = data[1]
+        self.num = data[2]
         self.weight = data[3] * self.num
-wooden_helmet = Gear("helmet", ["Wooden helmet", "nil", 1, 1])
-wooden_chestplate = Gear("chest", ["Wooden chestplate", "nil", 1, 2])
-wooden_leggings = Gear("leggings", ["Wooden leggings", "nil", 1, 1]
-wooden_boots = Gear("boots", ["Wooden boots", "nil", 1, 1])
+wooden_helmet = Armor("helm", ["Wooden helmet", 1, 1, 1])
+wooden_chestplate = Armor("chest", ["Wooden chestplate", 3, 1, 2])
+wooden_leggings = Armor("leg", ["Wooden leggings", 2, 1, 1])
+wooden_boots = Armor("boots", ["Wooden boots", 1, 1, 1])
+
+iron_helmet = Armor("helm", ["Wooden helmet",  2, 1, 1])
+iron_chestplate = Armor("chest", ["Wooden chestplate", 6, 1, 2])
+iron_leggings = Armor("leg", ["Wooden leggings", 4, 1, 1])
+iron_boots = Armor("boots", ["Wooden boots", 2, 1, 1])
+
+diamond_helmet = Armor("helm", ["Diamond helmet", 3, 1, 1])
+diamond_chestplate = Armor("chest", ["Diamond chestplate", 9, 1, 2])
+diamond_leggings = Armor("leg", ["Diamond leggings", 6, 1, 1])
+diamond_boots = Armor("boots", ["Diamond boots", 3, 1, 1])
+
 
 
 
@@ -81,14 +92,25 @@ diamond_sword = Weapon([25, 12, "Diamond Sword", 1, 2])
 forty_metre_long_sword = Weapon([40, 40, "40m-long-sword", 1, 40])
 
 soul_stealer = Weapon(
-    [5, 5, "Soul Stealer", 1, 2])  #steal the attack of enemy and add it to weapon's attack.
+    [5, 5, "Soul Stealer", 1, 0])  #steal the attack of enemy and add it to weapon's attack.
 
 #fire blade does half of the damage dealt to the enemy, last 2 turns
 
 #dev weapon
 ulti_blade = Weapon([100000000000000, 0, "Ulti-Blade", 1, 0])
 
-#Armors
+#Armors #wood 1, iron 2, diamond 3
+#helm, boots 1, legs 2, chest 3
+
+iron_helmet = Armor('helm', ['iron_helmet', 2, 1, 10])
+iron_chestplate = Armor('chest', ['iron_chestplate', 6, 1, 16])
+iron_leggings = Armor('leg', ['iron_leggings', 4, 1, 14])
+iron_boots = Armor('boots', ['iron_boots', 2, 1, 8])
+
+diamond_helmet = Armor('helm', ['diamond_helmet', 3, 1, 5])
+diamond_chestplate = Armor('chest', ['diamond_chestplate', 9, 1, 8])
+diamond_leggings = Armor('leg', ['diamond_leggings', 6, 1, 7])
+diamond_boots = Armor('boots', ['diamond_boots', 3, 1, 4])
 
 class Potions:
     def __init__(self, data):
