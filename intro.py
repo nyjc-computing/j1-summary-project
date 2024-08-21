@@ -14,5 +14,5 @@ def intro():
                 yes = False
             elif confirm == "n":
                   player = classes.Player(str(input("What is your name?")))
-                
-
+            else:
+                print("Answer the question please")

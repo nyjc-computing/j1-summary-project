@@ -1,18 +1,13 @@
 from random import randint
-
-import character
-
 import character, sys
-
 class Game:
     def __init__(self, name):
-
         self.n = 5
         self.e = 12
         self.enemies = {}
         self.map = [['.' for i in range(self.n)] for i in range(self.n)]
         self.player = character.Player(name)
-        
+
     def printmap(self):
         for i in range(self.n):
             output = ""
@@ -68,8 +63,8 @@ class Game:
                 print("Invalid move")
             else:
                 print("You've reached the end of the dungeon")
-                
-    
+
+
     def update_position(self):
         self.map[self.player.coords[0]][self.player.coords[1]] = self.player
         self.map[self.player.last_move[0]][self.player.last_move[1]] = "X"
@@ -102,7 +97,3 @@ class Game:
         elif result == -888:
             print("You have defeated the final boss")
             sys.exit()
-        
-            
-            
-        
