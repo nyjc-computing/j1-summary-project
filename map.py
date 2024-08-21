@@ -26,7 +26,13 @@ class Map:
         if 0 <= x < self.width and 0 <= y < self.height:
             self.grid[y][x] = 'M'
         else:
-            print(f"Position ({new_x}, {new_y}) is out of bounds!")
+            print(f"Position ({x}, {y}) is out of bounds!")
+
+    def set_item_position(self, x, y):
+        if 0 <= x < self.width and 0 <= y < self.height:
+            self.grid[y][x] = 'I'
+        else:
+            print(f"Position ({x}, {y}) is out of bounds!")
 
     def display_map(self):
         """
