@@ -18,7 +18,7 @@ class Player:
         self.items = {}
         self.mload = 10
 
-        self.gears: Dict[str, Any]= {
+        self.gears = {
             'helm': None, 
             'chest': None, 
             'leg': None, 
