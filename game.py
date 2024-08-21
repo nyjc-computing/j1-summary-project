@@ -145,7 +145,12 @@ class Game:
             return 'invalid'
 
     def view_item(self):
-        x = int(input("Enter Item number "))
+        x = input("Enter Item number ")
+        if x.isnumeric() is False:
+            print("Invalid Input")
+            sleep(1)
+            return 'invalid'
+        x = int(x)
         if int(x) > len(self.player.inventory):
             print("Item not in inventory")
             sleep(1)
@@ -155,7 +160,12 @@ class Game:
         sleep(5)
 
     def drop_item(self):
-        x = int(input("Enter Item number "))
+        x = input("Enter Item number ")
+        if x.isnumeric() is False:
+            print("Invalid Input")
+            sleep(1)
+            return 'invalid'
+        x = int(x)
         if int(x) > len(self.player.inventory):
             print("Item not in inventory")
             sleep(1)
@@ -231,8 +241,13 @@ class Game:
             print("There is no Monster on this Tile\n")
 
         self.map.set_player_position(self.get_player_position()[0] - 1, self.get_player_position()[1] - 1)
+        
+        if tile_item is not None:
+            self.map.set_item_position(self.get_player_position()[0] - 1, self.get_player_position()[1] - 1)
+            
         if tile_monster is not None:
             self.map.set_monsters_position(self.get_player_position()[0] - 1, self.get_player_position()[1] - 1)
+            
         self.map.display_map()
 
 
