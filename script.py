@@ -5,7 +5,7 @@ start_menu = {
 }
 
 exit_screen = {
-'message': 'See you next time!'
+'message': 'Exiting game...... See you next time!'
 }
 
 dungeon_menu = {

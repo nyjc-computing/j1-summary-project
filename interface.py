@@ -1,15 +1,6 @@
 import script
 
 class Interface:
-    def __init__(self):
-        self.func_map = {
-            "Dungeon": self.dungeon_menu,
-            "Kitchen": self.kitchen_menu,
-            "Hall": self.hall_menu,
-            "Toilet": self.toilet_menu,
-            "Bedroom": self.bedroom_menu
-        }
-
     def prompt(self):
         return script.prompt
 
@@ -35,7 +26,6 @@ class Interface:
         choice = int(input(script.prompt))
         return script.kitchen_menu['options'][choice - 1]
 
-
     def hall_menu(self):
         print(script.hall_menu['message'])
         [print(f"{num+1}: {value}") for num, value in enumerate(script.hall_menu["options"])]
@@ -53,8 +43,6 @@ class Interface:
         [print(f"{num+1}: {value}") for num, value in enumerate(script.bedroom_menu["options"])]
         choice = int(input(script.prompt))
         return script.bedroom_menu['options'][choice - 1]
-
-    
 
     def exit_screen(self):
         print(script.exit_screen['message'])

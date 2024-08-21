@@ -22,6 +22,7 @@ def createRooms() -> list[room.Room]:
         for _ in range(num):
             temp.add_enemy(character.Soldier(20))
         list_of_rooms.append(temp)
+    temp.add_enemy(character.Princess(1))
 
     return list_of_rooms
 
@@ -35,7 +36,7 @@ def createPlayer() -> character.Player:
     
     """
     record = char_data["player"]
-    return character.Player(record["hp"], record["items"])
+    return character.Player(record["hp"], record["str"])
 
 
 def createPrincess() -> character.Princess:

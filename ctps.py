@@ -14,7 +14,7 @@ class Game:
         self.princess = data.createPrincess()
         self.rooms = data.createRooms()
         if self.interface.start_menu() == 'exit':
-            print("Exiting game...")
+            self.interface.exit_screen()
             exit()
         
         
@@ -49,11 +49,11 @@ class Game:
 
     def get_choice(self):
         "Dispalys and gets player choice. Display results afterwards"
-        print("Now:", self.get_now_room_name())
-        print("Next:", self.get_next_room_name())
-        print("Prev:", self.get_prev_room_name())
+        # print("Now:", self.get_now_room_name())
+        # print("Next:", self.get_next_room_name())
+        # print("Prev:", self.get_prev_room_name())
         choice = eval(f"self.interface.{self.get_now_room_name().lower()}_menu()")
-        print(choice)
+        print(choice+'\n')
         if choice == 'Move to next room':
             self.next_room()
         elif choice == 'Move to previous room':
