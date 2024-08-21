@@ -90,7 +90,7 @@ class Game:
         """Returns player's current options as a list of strs"""
         move_options = ["W ", "A ", "S ", "D "]
         combat_options = ["Z X (item number)\n"]
-        inventory_options = ["V ", "D ", "P ", "help " "quit "]
+        inventory_options = ["V ", "R ", "P ", "help " "quit "]
 
     
         
@@ -99,7 +99,7 @@ class Game:
     def help(self):
         move_options = ["To move up, enter W\n", "To move down, enter S\n", "To move left, enter A\n", "To move right, enter D\n"]
         combat_options = ["To use Item, enter the item number\n", "To Punch (5 Damage), enter Z\n", "To kick(10 Damage), enter X\n"]
-        inventory_options = ["To view Item, enter V, followed by the item number\n", "To Drop Item, enter D, followed by the item number\n", "To pick up Item, enter P\n"]
+        inventory_options = ["To view Item, enter V, followed by the item number\n", "To Drop Item, enter R, followed by the item number\n", "To pick up Item, enter P\n"]
         for x in (move_options + combat_options + inventory_options + ["To Quit, enter 'quit'\n"]): 
             print(x)
         sleep(5)
