@@ -8,13 +8,15 @@ class Game:
         self.player = character.Player(name)
 
     def printmap(self):
+        print("\n-----\nMap\n\n")
         for i in range(self.n):
             output = ""
             for j in range(self.n):
                 output += str(self.map[i][j])+" "
             print(output)
-        print("\n")
         print(f"Current Event:{self.player.event_queue}", type(self.player.event_queue))
+        print("-----\n")
+        
 
     def random_map(self): #randomise events in map
         #player spawn
@@ -126,6 +128,7 @@ class Game:
             print("You have defeated the final boss")
             sys.exit()
         elif result == True: #win against normal enemy
+            print("\n")
             self.player.health = self.player.max_health
             reward = random.choice(item.loot_table)
             print(f"You have obtained {reward}")
