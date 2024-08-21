@@ -142,9 +142,9 @@ class Potions:
 
 #Potion list
 lesser_healing_potion = Potions(["Heals 2 hp to the player", 2, "healing", "lesser healing potion"])
-normal_healing_potion = ["Heals 5 hp to the player", 5, "healing", "normal healing potion"]
-greater_healing_potion = ["Heals 10 hp to the player ", 10, "healing", "greater healing potion"]
-supreme_healing_potion = ["Heals 20 hp to the player", 20, "healing", "supreme healing potion"]
+normal_healing_potion = Potions(["Heals 5 hp to the player", 5, "healing", "normal healing potion"])
+greater_healing_potion = Potions(["Heals 10 hp to the player ", 10, "healing", "greater healing potion"])
+supreme_healing_potion = Potions(["Heals 20 hp to the player", 20, "healing", "supreme healing potion"])
 
 
 strength_potion = Potions(["Add 10 att to the player's strength stats", 10, "attack", "strength potion"])
