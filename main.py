@@ -1,11 +1,8 @@
-
 # Import statements
 
 import random
 import item
 import character
-
-
 
 import time, character, intro, game
 import rng
@@ -28,6 +25,7 @@ import rng
 #             else:
 #                 print("Answer the question please")
 
+
 def main():
     Board = game.Game("Jian Lin")
     Board.random_map()
@@ -37,6 +35,7 @@ def main():
         Board.update_position()
         Board.printmap()
         Board.check_event()
+
 
 if __name__ == "__main__":
     pass
