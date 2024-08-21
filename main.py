@@ -1,9 +1,13 @@
-
 # Import statements
-#main game loop
+
+import random
+import item
+import character
 
 import time, character, intro, game, item
 import rng
+
+
 
 def main():
     Board = game.Game("Jian Lin")
@@ -18,4 +22,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    

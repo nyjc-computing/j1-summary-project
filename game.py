@@ -1,7 +1,12 @@
 from random import randint
+
+import character
+
 import character, sys
+
 class Game:
     def __init__(self, name):
+
         self.n = 5
         self.e = 12
         self.enemies = {}
