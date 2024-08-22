@@ -201,7 +201,7 @@ class Player:
             return False
     def use(self, life_crystal):
         print("You gained 10 hp!")
-        self.health += life_crystal.buff
+        self.max_health += life_crystal.buff
         del self.items[life_crystal.name]
 
 
@@ -232,7 +232,7 @@ class Enemy:
         print(f"You received {damage} damage from the {self.name}.")#print damage to player
 
 
-        print(f"{player.name} current health:{player.health}") #print hp left
+        print(f"{player.name}'s current health:{player.health}") #print hp left
 
         if player.health <= 0:
             player.health = 0
