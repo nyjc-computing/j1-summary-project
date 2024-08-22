@@ -35,14 +35,12 @@ class Player:
     def store(self, object):
         if not self.backpack_isFull():
             if object.name in self.items: #item present
-                self.items[object.name].num += object.num
-
+                self.items[object.name].num += 1
                 weight = 0
                 for item in self.items.values():
                     weight += item.weight
                 if weight > self.mload:
                     print("That's too much for your bag to handle!")
-
                     self.items[object.name].num -= object.num #Take back item
                     return False
 
