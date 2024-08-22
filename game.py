@@ -27,7 +27,7 @@ class Game:
         while True:
             coords = (random.randint(0, self.n-1), random.randint(0, self.n-1))
             if self.map[coords[0]][coords[1]] == ".":
-                self.map[coords[0]][coords[1]] = character.Boss(["Overlord", 125, 20, 5, 0.5]) #change values as needed
+                self.map[coords[0]][coords[1]] = character.Boss(["Overlord", 125, 5, 10, 0.5]) #change values as needed
                 break
         #enemies spawn
         for i in range(self.e):
