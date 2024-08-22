@@ -15,21 +15,6 @@ class Armor:
         self.defense = data[1]
         self.num = data[2]
         self.weight = data[3] * self.num
-wooden_helmet = Armor("helm", ["Wooden helmet", 1, 1, 1])
-wooden_chestplate = Armor("chest", ["Wooden chestplate", 3, 1, 2])
-wooden_leggings = Armor("leg", ["Wooden leggings", 2, 1, 1])
-wooden_boots = Armor("boots", ["Wooden boots", 1, 1, 1])
-
-iron_helmet = Armor("helm", ["Wooden helmet",  2, 1, 1])
-iron_chestplate = Armor("chest", ["Wooden chestplate", 6, 1, 2])
-iron_leggings = Armor("leg", ["Wooden leggings", 4, 1, 1])
-iron_boots = Armor("boots", ["Wooden boots", 2, 1, 1])
-
-diamond_helmet = Armor("helm", ["Diamond helmet", 3, 1, 1])
-diamond_chestplate = Armor("chest", ["Diamond chestplate", 9, 1, 2])
-diamond_leggings = Armor("leg", ["Diamond leggings", 6, 1, 1])
-diamond_boots = Armor("boots", ["Diamond boots", 3, 1, 1])
-
 
 
 
@@ -101,6 +86,10 @@ ulti_blade = Weapon([100000000000000, 0, "Ulti-Blade", 1, 0])
 
 #Armors #wood 1, iron 2, diamond 3
 #helm, boots 1, legs 2, chest 3
+wooden_helmet = Armor("helm", ["Wooden helmet", 1, 1, 1])
+wooden_chestplate = Armor("chest", ["Wooden chestplate", 3, 1, 2])
+wooden_leggings = Armor("leg", ["Wooden leggings", 2, 1, 1])
+wooden_boots = Armor("boots", ["Wooden boots", 1, 1, 1])
 
 iron_helmet = Armor('helm', ['iron_helmet', 2, 1, 10])
 iron_chestplate = Armor('chest', ['iron_chestplate', 6, 1, 16])

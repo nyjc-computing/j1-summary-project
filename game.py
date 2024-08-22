@@ -101,6 +101,7 @@ class Game:
             sys.exit()
         elif result == -888:
             print("You have defeated the final boss")
+            print("You WIN!!!")
             sys.exit()
         
             

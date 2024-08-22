@@ -1,5 +1,3 @@
-
-
 class Gears:
     def __init__(self):
         self.helmet = (None)
@@ -67,7 +65,7 @@ class Player:
             'chest': None, 
             'leg': None, 
             'boots': None, 
-            'weapon': item.wooden_sword
+            'weapon': item.wooden_sword.name
         }
 
         
@@ -155,6 +153,19 @@ class Player:
         self.gears[gear.section] = gear
         print(f'{gear.name} is equipped')
         return True
+    def unequip(self, section):
+        if self.gears[section] is None:
+            print('Nothing is equipped there.')
+            return False
+
+        if self.backpack_isFull():
+            print(f'Backpack Full! {section} cannot be unequipped!')
+            return False 
+        else:    
+            self.store(self.gears[section])
+            print(f'{self.gears[section].name} unequipped')
+            self.gears[section] = None
+            return True
 
 
 class Object:
