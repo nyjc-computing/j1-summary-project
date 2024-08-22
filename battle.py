@@ -20,7 +20,7 @@ class Battle:
                 time.sleep(0.1)
             print("Battle over!")
         else:
-            print("All enemies in the room have been defeated already!")
+            print("All soldiers in the room have been defeated already!")
 
     def player_attack(self):
         source = self.player
@@ -29,20 +29,20 @@ class Battle:
         print(f"You attacked the {target.get_type()}! {target.get_type()} health: {target.get_health()}")
         if target.get_health() <= 0:
             if target.get_type() == "Princess":
-                print("Princess is now unconcious!")
+                print("Princess is now unconcious! Time to escape!")
             else:
-                print("Enemy defeated!")
+                print("Soldier defeated!")
             self.room.remove_enemy()
         if self.room.all_enemies_defeated():
-            print("All enemies defeated!")
+            print("All soldiers in the room are defeated!")
 
     def enemy_attack(self):
         source = self.room.get_enemies()[0]
         target = self.player
         source.attack(target)
         print(f"{source.get_type()} attacked you! Your health: {target.get_health()}")
-        if target.get_health() <= 0:
-            print("You died! WEAK!")
+        # if target.get_health() <= 0:
+        #     print("You died! WEAK!")
 
     def battle_over(self):
         return self.player.get_health() <= 0 or self.room.all_enemies_defeated()
