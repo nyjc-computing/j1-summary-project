@@ -2,10 +2,10 @@ import random
 
 class Character:
 
-    def __init__(self, _type, health):
+    def __init__(self, _type, health, damage = 0):
         self._type = _type
         self.health = health
-        self.damage = random.randint(2, 7)
+        self.damage = damage
 
 
     def attack(self, character):
@@ -31,17 +31,20 @@ class Character:
     def get_health(self):
         return self.health
 
+    def get_type(self):
+        return self._type
+
 class Player(Character):
 
-    def __init__(self, health, items=[]):
-        super().__init__("Player", health)
+    def __init__(self, health, damage):
+        super().__init__("Player", health, damage)
 
 
 class Soldier(Character):
 
     def __init__(self, health):
         super().__init__("Soldier", health)
-
+        self.damage = random.randint(2,7)
 
 class Princess(Character):
 

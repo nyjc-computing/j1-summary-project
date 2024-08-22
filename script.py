@@ -5,7 +5,7 @@ start_menu = {
 }
 
 exit_screen = {
-'message': 'See you next time!'
+'message': 'Exiting game...... See you next time!'
 }
 
 dungeon_menu = {
@@ -64,3 +64,9 @@ combat_menu = {
 'message': 'You have encountered ____', 'options': ['Roll a dice']
 
 }
+
+death_msg = 'You died! Try again next time'
+
+win_msg = 'You knocked the princess unconcious and caputured her! Congratulations!'
+
+caught_msg = 'Oh no! You did not defeat all the soldier! You have been caught capturing the princess! Try again next time!'

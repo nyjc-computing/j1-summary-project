@@ -1,25 +1,33 @@
-import data, interface, battle, time
+import data, interface, battle
 
 class Game:
     def __init__(self):
-        self.interface = None
+        self.interface = None #
         self.player = None
         self.princess = None
         self.rooms = []
         self.now = 0
 
     def setup(self):
-        self.interface = interface.Interface()
+        self.interface = interface.Interface() #
         self.player = data.createPlayer()
-        self.princess = data.createPrincess()
         self.rooms = data.createRooms()
-        if self.interface.start_menu() == 'exit':
-            print("Exiting game...")
+        self.princess = self.rooms[-1].get_enemies()[-1]
+        if self.interface.start_menu() == 'exit': #if interface.start_menu() == 'exit':
+            self.interface.exit_screen() #interface.exit_screen()
             exit()
         
-        
     def isover(self):
-        return self.player.isdead() or self.princess.isdead()
+        if self.player.isdead():
+            self.interface.death_msg() #interface.death_msg()
+            return True
+        elif self.princess.isdead():
+            if all([room.all_enemies_defeated() for room in self.rooms]):
+                self.interface.win_msg() #interface.win_msg()
+            else:
+                self.interface.caught_msg() #interface.caught_msg()
+            return True
+        return False
 
     def next_room(self):
         if self.now < len(self.rooms) - 1:
@@ -49,17 +57,14 @@ class Game:
 
     def get_choice(self):
         "Dispalys and gets player choice. Display results afterwards"
-        print("Now:", self.get_now_room_name())
-        print("Next:", self.get_next_room_name())
-        print("Prev:", self.get_prev_room_name())
-        choice = self.interface.func_map[self.get_now_room_name()]()
-        print(choice)
+        choice = eval(f"self.interface.{self.get_now_room_name().lower()}_menu()") #choice = eval(f"interface.{self.get_now_room_name().lower()}_menu()")
+        print(choice+'\n')
         if choice == 'Move to next room':
             self.next_room()
         elif choice == 'Move to previous room':
             self.prev_room()
         elif choice == 'Look around':
-            print("YOU FOUND ENEMIES!!!!")
+            
             combat = battle.Battle(self.player, self.get_now_room())
             combat.battle_start()
         
