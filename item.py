@@ -6,7 +6,7 @@ class Item:
         self.num = data[1]
         self.desc = data[2]
         self.weight = data[3] * self.num
-        
+
 
 class Armor:
     def __init__(self, section, data: list):#name, defense, num, spec_weight
@@ -17,13 +17,15 @@ class Armor:
         self.weight = data[3] * self.num
 
 
-
-
+    def __repr__(self):
+        return f"{self.name}"
+    
+    def get_stats(self):
+        return f"Item Description\n-----\nName: {self.name}\nDefense: {self.defense}\nItem Stack: {self.num}\nTotal Weight: {self.weight}\n-----"
 
 
 class Weapon:
     def __init__(self, data: list):#attack, critc, name, num, spec_weight
-
         self.section = 'weapon'
         self.attack = data[0]
         self.critc = data[1]
@@ -31,9 +33,11 @@ class Weapon:
         self.num = data[3]
         self.weight = data[4] * self.num
 
-
     def __repr__(self):
-        return f"Att:{self.attack} Crit:{self.critc}% Name:{self.name}"
+        return f"{self.name}"
+
+    def get_stats(self):
+        return f"Item Description\n-----\nName: {self.name}\nAttack: {self.attack}\nCrit Chance: {self.critc}\nItem Stack: {self.num}\nTotal Weight: {self.weight}\n-----"
 
     def crit(self):
         x = random.randint(1, 100)
@@ -41,39 +45,20 @@ class Weapon:
             return True
         return False
 
-    def combat(self, enemy, Player):
-        crit = 1  #if there is no crit does not change
-        if self.crit():
-            crit = 2  # double the damage when it crits
-        damage = (self.attack + Player.attack - enemy.defense) * crit
-        if damage < 0:
-            damage = 1
-        enemy.health -= damage
-        print(f"You dealt {damage} damage to the {enemy.name}.")
-        print(f"{enemy.name} current health:{enemy.health}")
-        if enemy.health <= 0:
-            enemy.health = 0
-            print(f"{enemy} fainted.")
-            
-
+    
 
 #Weapon list
 #format   att, critc
-wooden_sword = Weapon([3, 5, "Wooden Sword", 1, 2])
-stone_sword = Weapon([5, 5, "Stone Sword", 1, 3])
-iron_sword = Weapon([8, 10, "Iron Sword", 1, 4])
+wooden_sword = Weapon([5, 5, "Wooden Sword", 1, 2])
+stone_sword = Weapon([8, 5, "Stone Sword", 1, 3])
+iron_sword = Weapon([10, 10, "Iron Sword", 1, 4])
 
+steel_sword = Weapon([12, 12, "Steel Sword", 1, 5])
 
+fire_blade = Weapon([15, 10, "Fire Blade", 1, 0])
+ice_blade = Weapon([10, 50, "Ice Blade", 1, 2])
 
-steel_sword = Weapon([12, 8, "Steel Sword", 1, 5])
-sword_of_baguette = Weapon([8, 28, "Bagutte Sword?", 1, 1])
-
-
-
-fire_blade = Weapon([20, 5, "Fire Blade", 1, 0])
-ice_blade = Weapon([12, 50, "Ice Blade", 1, 2])
-
-diamond_sword = Weapon([25, 12, "Diamond Sword", 1, 2])
+diamond_sword = Weapon([20, 20, "Diamond Sword", 1, 2])
 forty_metre_long_sword = Weapon([40, 40, "40m-long-sword", 1, 40])
 
 soul_stealer = Weapon(
@@ -86,59 +71,34 @@ ulti_blade = Weapon([100000000000000, 0, "Ulti-Blade", 1, 0])
 
 #Armors #wood 1, iron 2, diamond 3
 #helm, boots 1, legs 2, chest 3
-wooden_helmet = Armor("helm", ["Wooden helmet", 1, 1, 1])
-wooden_chestplate = Armor("chest", ["Wooden chestplate", 3, 1, 2])
-wooden_leggings = Armor("leg", ["Wooden leggings", 2, 1, 1])
-wooden_boots = Armor("boots", ["Wooden boots", 1, 1, 1])
+wooden_helmet = Armor("helm", ["Wooden Helmet", 1, 1, 1])
+wooden_chestplate = Armor("chest", ["Wooden Chestplate", 2, 1, 2])
+wooden_leggings = Armor("leg", ["Wooden Leggings", 2, 1, 1])
+wooden_boots = Armor("boots", ["Wooden Boots", 1, 1, 1])
 
-iron_helmet = Armor('helm', ['iron_helmet', 2, 1, 10])
-iron_chestplate = Armor('chest', ['iron_chestplate', 6, 1, 16])
-iron_leggings = Armor('leg', ['iron_leggings', 4, 1, 14])
-iron_boots = Armor('boots', ['iron_boots', 2, 1, 8])
+iron_helmet = Armor('helm', ['Iron Helmet', 2, 1, 10])
+iron_chestplate = Armor('chest', ['Iron Chestplate', 3, 1, 16])
+iron_leggings = Armor('leg', ['Iron Leggings', 3, 1, 14])
+iron_boots = Armor('boots', ['Iron Boots', 2, 1, 8])
 
-diamond_helmet = Armor('helm', ['diamond_helmet', 3, 1, 5])
-diamond_chestplate = Armor('chest', ['diamond_chestplate', 9, 1, 8])
-diamond_leggings = Armor('leg', ['diamond_leggings', 6, 1, 7])
-diamond_boots = Armor('boots', ['diamond_boots', 3, 1, 4])
+diamond_helmet = Armor('helm', ['Diamond Helmet', 3, 1, 5])
+diamond_chestplate = Armor('chest', ['Diamond Chestplate', 4, 1, 8])
+diamond_leggings = Armor('leg', ['Diamond Leggings', 4, 1, 7])
+diamond_boots = Armor('boots', ['Diamond Boots', 3, 1, 4])
 
-class Potions:
+class Boost:
     def __init__(self, data):
-        self.desc = data[0]
+        self.name = data[0]
         self.buff = data[1]
-        self.type = data[2]
-        self.name = data[3]
-        self.num = 1
-        
-    def __repr__(self):
-        return self.desc 
+        self.weight = data[2]
+        self.num = data[3]
 
-    def potion_buff(self, player):
-        if self.type == "healing":
-            player.health += self.buff
-            
-        elif self.type == "attack":
-            player.attack += self.buff
-            
-        elif self.type == "speed":
-            player.speed += self.buff
-            
-        elif self.type == "all-in-one":
-            player.health += self.buff
-            player.attack += self.buff
-            player.speed += self.buff
-            player.defense += self.buff
-            
+    def __repr__(self):
+        return self.name
 
 #Potion list
-lesser_healing_potion = Potions(["Heals 2 hp to the player", 2, "healing", "lesser healing potion"])
-normal_healing_potion = Potions(["Heals 5 hp to the player", 5, "healing", "normal healing potion"])
-greater_healing_potion = Potions(["Heals 10 hp to the player ", 10, "healing", "greater healing potion"])
-supreme_healing_potion = Potions(["Heals 20 hp to the player", 20, "healing", "supreme healing potion"])
+life_crystal = Boost(["Life Crystal", 10, 1, 1])
 
 
-strength_potion = Potions(["Add 10 att to the player's strength stats", 10, "attack", "strength potion"])
-speed_potion = Potions(["Add 5 speed to the player's speed stats", 5, "speed", "speed potion"])
-almond_potion = Potions(["Add 2 to each of the player's stat", 2, "all-in-one", "almond potion"])
-bleach = Potions(["Kills you instantly, toddler approved!", -9999999999999, "health", "Bleach ninety-year war", -9999999999999])
 
-
+loot_table = [wooden_boots, wooden_chestplate, wooden_helmet, wooden_leggings, stone_sword, iron_helmet, iron_chestplate, iron_leggings, iron_boots, iron_sword, steel_sword,life_crystal, diamond_helmet, diamond_chestplate, diamond_leggings, diamond_boots, fire_blade, ice_blade, diamond_sword, forty_metre_long_sword]
