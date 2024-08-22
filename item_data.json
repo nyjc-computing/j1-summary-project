@@ -286,7 +286,7 @@
         "name": "Rune Axe",
         "description": "An axe inscribed with powerful runes.",
         "damage": 125
-    }
+    },
     {
         "type": "Weapon",
         "name": "Blazing Mace",
