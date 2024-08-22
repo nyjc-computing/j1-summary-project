@@ -90,8 +90,8 @@ class Player:
                 return True
 
             else: #new item
-                self.items[object.name].num = 1
                 self.items[object.name] = object
+                self.items[object.name].num = 1
 
             
 
