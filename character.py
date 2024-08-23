@@ -32,10 +32,9 @@ class Character:
         return self.health
 
 class Player(Character):
-
+    
     def __init__(self, health, items=[]):
         super().__init__("Player", health)
-
 
 class Soldier(Character):
 

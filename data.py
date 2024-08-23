@@ -31,7 +31,7 @@ def createPlayer() -> character.Player:
     
     """
     record = char_data["player"]
-    return character.Player(record["hp"], record["items"])
+    return character.Player(record["hp"], record["str"])
 
 
 def createPrincess() -> character.Princess:
