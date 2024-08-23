@@ -274,7 +274,8 @@ class Game:
     def damaged_by_monster(self):
         player_tile = self.get_player_tile()
         tile_monster = player_tile.get_monster()
-        self.player.lose_health(tile_monster.get_damage())         
+        if not tile_monster.dead() and not self.player.dead():
+            self.player.lose_health(tile_monster.get_damage())         
 
     def get_player_position(self):
         return self.player.get_position()

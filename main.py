@@ -1,5 +1,5 @@
 # Import statements
-import entities
+
 from game import Game
 from time import sleep
 if __name__ == "__main__":
@@ -20,9 +20,12 @@ if __name__ == "__main__":
 
         print("\033c", end="", flush=True)
     game.show_status()
+    sleep(3)
+    print("\033c", end="", flush=True)
+    
     if game.win():
-        print("You win")
+        print("You have slained the BigBoss, you win")
     else:
-        print("You Lose")
+        print("You died, restart as you are unworthy")
 
 
